@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Card — InstantWins.co.uk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/*
+  THE CARD — the site's heartbeat. A draw off every five minutes,
+  £1,000 Hourly Grand on the hour. Demo mode: entries are play-money,
+  sold counts simulated; production swaps in Supabase (same pattern
+  as the games' pool engine).
+*/
+:root{--ink:#17233B;--soft:#6B7A99;--line:#E3EAF5;--wash:#F2F8FE;--buy:#1D4ED8;--match:#0E9F6E;--gold:#B8860B;--goldbg:#FBF6E4;--goldline:#EAD9A8}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Archivo',sans-serif;background:#fff;color:var(--ink)}
+.topbar{display:flex;gap:4px;padding:12px 16px;border-bottom:1px solid var(--line);font-weight:700;font-size:13px;max-width:960px;margin:0 auto}
+.topbar a{color:#31415E;text-decoration:none;padding:6px 10px;border-radius:8px}
+.topbar a.on{background:#EAF2FD;color:var(--buy)}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+.head{display:flex;justify-content:space-between;align-items:baseline;padding:22px 0 4px}
+.head h1{font-size:1.5rem;font-weight:900;letter-spacing:-.02em}
+.balance{font-family:'IBM Plex Mono',monospace;font-size:.8rem;font-weight:600;color:var(--soft)}
+.balance b{color:var(--buy)}
+
+/* next draw hero */
+.nextdraw{border:1px solid var(--line);border-radius:16px;padding:20px 18px;margin-top:12px;background:var(--wash);position:relative;overflow:hidden}
+.nextdraw.grand{background:var(--goldbg);border-color:var(--goldline)}
+.nd-label{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--soft)}
+.nextdraw.grand .nd-label{color:var(--gold)}
+.nd-row{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px}
+.nd-clock{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:2.6rem;color:var(--buy);line-height:1}
+.nextdraw.grand .nd-clock{color:var(--gold)}
+.nd-prize{font-size:1.05rem;font-weight:900}
+.nd-prize b{font-family:'IBM Plex Mono',monospace;font-size:1.5rem;color:var(--match)}
+.nextdraw.grand .nd-prize b{color:var(--gold)}
+.nd-meta{font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--soft);margin-top:8px}
+.nd-meta b{color:var(--ink)}
+.nd-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;align-items:center}
+.enterbtn{border:none;background:var(--buy);color:#fff;font-family:'Archivo';font-weight:800;font-size:.9rem;padding:13px 22px;border-radius:10px;cursor:pointer}
+.enterbtn:disabled{opacity:.5;cursor:not-allowed}
+.nextdraw.grand .enterbtn{background:var(--gold)}
+.freebtn{color:var(--buy);border:2px dashed var(--buy);background:none;font-family:'Archivo';font-weight:800;font-size:.72rem;padding:11px 16px;border-radius:10px;cursor:pointer;text-transform:uppercase;letter-spacing:.05em}
+.myentries{font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--match);font-weight:600}
+.offbanner{position:absolute;inset:0;background:rgba(23,35,59,.92);color:#fff;display:none;align-items:center;justify-content:center;flex-direction:column;gap:8px;text-align:center;padding:16px}
+.offbanner.show{display:flex}
+.offbanner .big{font-family:'IBM Plex Mono',monospace;font-size:1.6rem;font-weight:700;color:#FFD34D}
+.offbanner .sub{font-size:.8rem;font-weight:700}
+.offbanner .win{color:#3DDC84;font-size:1.1rem;font-weight:900}
+
+/* board + results */
+.sechead{display:flex;justify-content:space-between;align-items:baseline;padding:20px 0 6px}
+.sechead h2{font-size:1.05rem;font-weight:900}
+.sechead span{font-size:.66rem;color:var(--soft);font-weight:600}
+.board{border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.brow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);font-size:.8rem}
+.brow:last-child{border-bottom:none}
+.brow .t{font-family:'IBM Plex Mono',monospace;font-weight:700;min-width:52px}
+.brow .nm{font-weight:800;flex:1}
+.brow .pz{font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--match)}
+.brow.grand{background:var(--goldbg)}
+.brow.grand .pz{color:var(--gold)}
+.brow .st{font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+.brow.next .st{color:var(--buy)}
+.results .brow .who{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--soft)}
+.results .brow .who b{color:var(--ink)}
+.results .brow.me{background:#EDFAF4}
+.fairline{margin-top:14px;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:.7rem;color:var(--soft);line-height:1.6}
+.fairline b{color:var(--ink)}
+.fairline .hash{font-family:'IBM Plex Mono',monospace;font-size:.6rem;word-break:break-all;color:var(--match)}
+footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;color:var(--soft);font-size:.66rem;line-height:1.7;text-align:center;max-width:960px;margin-left:auto;margin-right:auto}
+.modal{position:fixed;inset:0;background:rgba(23,35,59,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal.open{display:flex}
+.mcard{background:#fff;border-radius:16px;padding:22px;max-width:400px;width:100%;border:1px solid var(--line)}
+.mcard h3{font-weight:900;margin-bottom:10px}
+.mcard p{font-size:.8rem;line-height:1.6;margin-bottom:8px}
+.mcard .addr{font-family:'IBM Plex Mono',monospace;font-size:.75rem;background:var(--wash);border-radius:8px;padding:12px;margin:8px 0;line-height:1.6}
+.mcard p.small{font-size:.68rem;color:var(--soft)}
+.mclose{width:100%;margin-top:6px;background:var(--buy);border:none;border-radius:10px;padding:12px;color:#fff;font-family:'Archivo';font-weight:800;cursor:pointer}
+</style>
+</head>
+<body>
+<nav class="topbar">
+  <a href="index.html">Home</a>
+  <a href="card.html" class="on">Card</a>
+  <a href="games.html">Games</a>
+  <a href="results.html">Results</a>
+  <a href="free-entry.html">Free entry</a>
+  <a href="fairness.html">Fairness</a>
+</nav>
+
+<div class="wrap">
+  <div class="head">
+    <h1>The Card</h1>
+    <div class="balance">Credit <b id="bal">£20.00</b></div>
+  </div>
+
+  <div class="nextdraw" id="fiveCard">
+    <div class="nd-label">NEXT FIVE-MINUTE DRAW · <span id="fiveId">—</span></div>
+    <div class="nd-row">
+      <div class="nd-clock" id="fiveClock">--:--</div>
+      <div class="nd-prize">One winner takes <b>£100</b></div>
+    </div>
+    <div class="nd-meta"><b id="fiveSold">—</b> entries in · £1 each · winner drawn at the off</div>
+    <div class="nd-actions">
+      <button class="enterbtn" id="fiveEnter">ENTER · £1</button>
+      <button class="freebtn" id="freeBtn">Enter free by post</button>
+      <span class="myentries" id="fiveMine"></span>
+    </div>
+    <div class="offbanner" id="fiveOff"></div>
+  </div>
+
+  <div class="nextdraw grand" id="grandCard" style="margin-top:10px">
+    <div class="nd-label">HOURLY GRAND · ON THE HOUR · <span id="grandId">—</span></div>
+    <div class="nd-row">
+      <div class="nd-clock" id="grandClock">--:--</div>
+      <div class="nd-prize">One winner takes <b>£1,000</b></div>
+    </div>
+    <div class="nd-meta"><b id="grandSold">—</b> entries in · £2 each · winner drawn on the hour</div>
+    <div class="nd-actions">
+      <button class="enterbtn" id="grandEnter">ENTER · £2</button>
+      <span class="myentries" id="grandMine"></span>
+    </div>
+    <div class="offbanner" id="grandOff"></div>
+  </div>
+
+  <div class="sechead"><h2>Coming up</h2><span>a draw off every five minutes, all day</span></div>
+  <div class="board" id="upcoming"></div>
+
+  <div class="sechead"><h2>Just gone</h2><span>latest winners on the card</span></div>
+  <div class="board results" id="results"></div>
+
+  <div class="fairline">
+    <b>Locked before you enter.</b> Every draw's result seed is fixed and fingerprinted before entries open —
+    this draw's commitment: <span class="hash" id="fiveHash">computing…</span>
+    The seed is revealed at the off so anyone can check the winning number was set all along. Full detail on
+    the <a href="fairness.html" style="color:var(--buy)">Fairness page</a>.
+  </div>
+</div>
+
+<footer>
+  The Card is part of the single continuous arrangement of free-entry prize draws on InstantWins.co.uk,
+  structured under the free-entry provisions of Schedule 2 of the Gambling Act 2005 — it is not gambling and
+  no licence is required. Every draw may be entered free by post with identical odds; free entries are
+  processed ahead of paid sales. Demo mode: all credit is play-money. Structure subject to solicitor
+  sign-off before launch. 18+. UK residents only. Promoter: IGX Ltd.
+</footer>
+
+<div class="modal" id="freeModal">
+  <div class="mcard">
+    <h3>ENTER FREE BY POST</h3>
+    <p>Send an unenclosed postcard with your full name, address, date of birth and email to:</p>
+    <div class="addr">InstantWins Free Entry<br>IGX Ltd, PO Box (TBC)<br>United Kingdom</div>
+    <p class="small">Name a draw ("Five-Minute Draw" or "Hourly Grand", with a time if you like) or name
+    nothing — your entry joins the next open draw at processing, ahead of paid sales, with identical odds.
+    One entry per postcard. No purchase necessary.</p>
+    <button class="mclose" id="freeClose">GOT IT</button>
+  </div>
+</div>
+
+<script>
+/* ================= helpers ================= */
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,'0');
+const fmt=n=>'£'+n.toLocaleString('en-GB',{minimumFractionDigits:2});
+function hashStr(s){let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h;}
+async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');}
+function nextBoundary(mins){const d=new Date();d.setSeconds(0,0);d.setMinutes(d.getMinutes()-(d.getMinutes()%mins)+mins);return d;}
+function idFor(prefix,t){return prefix+'-'+pad(t.getHours())+pad(t.getMinutes());}
+const FIRSTNAMES=['Dave','Sarah','Mo','Kelly','Tom','Priya','Gareth','Lisa','Jamal','Ffion','Steve','Aisha','Rhys','Donna','Marek','Jo'];
+const TOWNS=['Cardiff','Leeds','Barry','Swindon','Glasgow','Luton','Wrexham','Hull','Derby','Newport','Bolton','Penarth'];
+
+/* ================= state ================= */
+let balance=20.00;
+let five={}, grand={};
+
+function newDraw(kind){
+  // kind: 'five' | 'grand'
+  const isG = kind==='grand';
+  const end = isG ? nextBoundary(60) : nextBoundary(5);
+  const id  = idFor(isG?'GRAND':'FIVE', end);
+  const d = {
+    kind, end, id,
+    price: isG?2:1,
+    prize: isG?1000:100,
+    sold: (isG?420:38) + hashStr(id)%(isG?260:70),  // believable demo entries
+    mine: [],
+    seed: id+'|'+crypto.getRandomValues(new Uint32Array(3)).join('-'),
+  };
+  sha256(d.seed).then(h=>{d.hash=h; if(kind==='five')$('fiveHash').textContent=h;});
+  return d;
+}
+
+/* ================= render ================= */
+function renderTop(){
+  $('bal').textContent=fmt(balance);
+  $('fiveId').textContent=five.id;
+  $('grandId').textContent=grand.id;
+  $('fiveSold').textContent=five.sold.toLocaleString();
+  $('grandSold').textContent=grand.sold.toLocaleString();
+  $('fiveMine').textContent=five.mine.length?('You\u2019re in \u00D7'+five.mine.length+' (entry '+five.mine.join(', ')+')'):'';
+  $('grandMine').textContent=grand.mine.length?('You\u2019re in \u00D7'+grand.mine.length):'';
+  $('fiveEnter').disabled=balance<five.price;
+  $('grandEnter').disabled=balance<grand.price;
+}
+function renderUpcoming(){
+  const rows=[];
+  let t=new Date(five.end);
+  for(let i=0;i<6;i++){
+    const isHour=t.getMinutes()===0;
+    rows.push('<div class="brow'+(i===0?' next':'')+(isHour?' grand':'')+'">'
+      +'<span class="t">'+pad(t.getHours())+':'+pad(t.getMinutes())+'</span>'
+      +'<span class="nm">'+(isHour?'Hourly Grand':'Five-Minute Draw')+'</span>'
+      +'<span class="pz">'+(isHour?'\u00A31,000':'\u00A3100')+'</span>'
+      +'<span class="st">'+(i===0?'ENTRIES OPEN':'UPCOMING')+'</span></div>');
+    t=new Date(t.getTime()+5*60000);
+  }
+  $('upcoming').innerHTML=rows.join('');
+}
+let results=[];
+function seedResults(){
+  // a believable recent history
+  let t=new Date(five.end.getTime()-5*60000);
+  for(let i=0;i<5;i++){
+    const isHour=t.getMinutes()===0;
+    results.push(fakeResult(t,isHour));
+    t=new Date(t.getTime()-5*60000);
+  }
+  renderResults();
+}
+function fakeResult(t,isHour){
+  const id=idFor(isHour?'GRAND':'FIVE',t);
+  const sold=(isHour?420:38)+hashStr(id)%(isHour?260:70);
+  return {time:pad(t.getHours())+':'+pad(t.getMinutes()), grand:isHour,
+    prize:isHour?1000:100, entry:1+hashStr(id+'w')%sold,
+    who:FIRSTNAMES[hashStr(id+'n')%FIRSTNAMES.length]+' from '+TOWNS[hashStr(id+'t')%TOWNS.length], me:false};
+}
+function renderResults(){
+  $('results').innerHTML=results.slice(0,7).map(r=>
+    '<div class="brow'+(r.grand?' grand':'')+(r.me?' me':'')+'">'
+    +'<span class="t">'+r.time+'</span>'
+    +'<span class="nm">'+(r.grand?'Hourly Grand':'Five-Minute Draw')
+    +' <span class="who">entry <b>#'+r.entry+'</b> \u00B7 '+r.who+'</span></span>'
+    +'<span class="pz">\u00A3'+r.prize.toLocaleString()+'</span></div>').join('');
+}
+
+/* ================= entering ================= */
+function enter(d){
+  if(balance<d.price)return;
+  balance-=d.price;
+  d.sold++;
+  d.mine.push(d.sold);   // your entry number
+  renderTop();
+}
+$('fiveEnter').addEventListener('click',()=>enter(five));
+$('grandEnter').addEventListener('click',()=>enter(grand));
+
+/* ================= the off ================= */
+function drawOff(d, bannerEl){
+  const winner=1+Math.floor(Math.random()*d.sold);
+  const iWon=d.mine.includes(winner);
+  const who=iWon?'YOU':(FIRSTNAMES[Math.floor(Math.random()*FIRSTNAMES.length)]+' from '+TOWNS[Math.floor(Math.random()*TOWNS.length)]);
+  if(iWon)balance+=d.prize;
+  const b=$(bannerEl);
+  b.innerHTML='<div class="sub">'+(d.kind==='grand'?'HOURLY GRAND':'FIVE-MINUTE DRAW')+' \u2014 OFF!</div>'
+    +'<div class="big">WINNING ENTRY #'+winner+'</div>'
+    +(iWon?'<div class="win">THAT\u2019S YOU \u2014 \u00A3'+d.prize.toLocaleString()+' WON!</div>'
+          :'<div class="sub">'+who+' takes \u00A3'+d.prize.toLocaleString()+'</div>')
+    +'<div class="sub" style="opacity:.7">seed revealed \u00B7 next draw opening\u2026</div>';
+  b.classList.add('show');
+  results.unshift({time:pad(d.end.getHours())+':'+pad(d.end.getMinutes()), grand:d.kind==='grand',
+    prize:d.prize, entry:winner, who:iWon?'YOU':who, me:iWon});
+  renderResults();
+  setTimeout(()=>{b.classList.remove('show');},3800);
+}
+
+/* ================= clock ================= */
+function tick(){
+  const now=new Date();
+  const f=(five.end-now)/1000, g=(grand.end-now)/1000;
+  if(f<=0){
+    drawOff(five,'fiveOff');
+    five=newDraw('five');
+    renderUpcoming();
+  }
+  if(g<=0){
+    drawOff(grand,'grandOff');
+    grand=newDraw('grand');
+  }
+  const fs=Math.max(Math.floor((five.end-new Date())/1000),0);
+  const gs=Math.max(Math.floor((grand.end-new Date())/1000),0);
+  $('fiveClock').textContent=pad(Math.floor(fs/60))+':'+pad(fs%60);
+  $('grandClock').textContent=pad(Math.floor(gs/60))+':'+pad(gs%60);
+  // demo: entries trickle in as the off approaches
+  if(Math.random()<(fs<60?.45:.12)){five.sold++;$('fiveSold').textContent=five.sold.toLocaleString();}
+  if(Math.random()<.08){grand.sold++;$('grandSold').textContent=grand.sold.toLocaleString();}
+}
+
+/* ================= wiring ================= */
+$('freeBtn').addEventListener('click',()=>$('freeModal').classList.add('open'));
+$('freeClose').addEventListener('click',()=>$('freeModal').classList.remove('open'));
+$('freeModal').addEventListener('click',e=>{if(e.target.id==='freeModal')$('freeModal').classList.remove('open');});
+
+five=newDraw('five');
+grand=newDraw('grand');
+renderTop();
+renderUpcoming();
+seedResults();
+setInterval(()=>{tick();renderTop();},1000);
+</script>
+</body>
+</html>
