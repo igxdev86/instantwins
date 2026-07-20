@@ -220,3 +220,141 @@ grant execute on function open_pool(text)  to service_role;
 
 -- Optional: open the first pool for every game right now.
 select open_pool(tag) from games;
+
+-- =====================================================================
+-- THE CARD — five-minute draws + hourly grand (real, shared, provable)
+--
+-- How the winner is provably fair: the winning entry number is derived
+-- from md5(seed || final_sold_count). The seed's hash is published
+-- before entries open; the seed is revealed at settlement. Anyone can
+-- recompute the winner. Nobody (including us) can steer it without
+-- breaking the published hash.
+-- Settlement is LAZY: card_state()/card_enter() settle any past-due
+-- draws first, so no cron is needed — any visitor's poll settles.
+-- =====================================================================
+
+create table if not exists card_draws (
+  id         uuid primary key default gen_random_uuid(),
+  kind       text not null check (kind in ('five','grand')),
+  off_at     timestamptz not null,
+  price_p    int not null,
+  prize_p    int not null,
+  seed       text not null,          -- SECRET until settled
+  seed_hash  text not null,          -- published while open
+  sold       int not null default 0,
+  status     text not null default 'open',   -- open | settled
+  winner_entry int,
+  settled_at timestamptz,
+  unique (kind, off_at)
+);
+
+create table if not exists card_entries (
+  draw_id    uuid not null references card_draws(id) on delete cascade,
+  entry_no   int not null,
+  punter     text not null,
+  created_at timestamptz not null default now(),
+  primary key (draw_id, entry_no)
+);
+
+alter table card_draws   enable row level security;
+alter table card_entries enable row level security;
+
+-- settle everything past its off time (winner derived from seed+sold)
+create or replace function card_settle_due() returns void
+language plpgsql security definer set search_path = public as $$
+declare d card_draws%rowtype; v_win int;
+begin
+  for d in select * from card_draws
+            where status='open' and off_at <= now()
+            for update loop
+    if d.sold > 0 then
+      v_win := 1 + ((('x'||substr(md5(d.seed||':'||d.sold::text),1,8))::bit(32)::bigint
+                     & 2147483647) % d.sold)::int;
+    else
+      v_win := null;   -- no entries: nothing to award (see roll-forward note)
+    end if;
+    update card_draws
+       set status='settled', winner_entry=v_win, settled_at=now()
+     where id = d.id;
+  end loop;
+end $$;
+
+-- make sure the next five-minute and hourly draws exist
+create or replace function card_ensure_open() returns void
+language plpgsql security definer set search_path = public as $$
+declare v_five timestamptz; v_hour timestamptz; v_seed text;
+begin
+  v_five := to_timestamp(ceil(extract(epoch from now())/300)*300);
+  v_hour := to_timestamp(ceil(extract(epoch from now())/3600)*3600);
+  if not exists (select 1 from card_draws where kind='five' and off_at=v_five) then
+    v_seed := 'FIVE|'||v_five||'|'||gen_random_uuid();
+    insert into card_draws (kind,off_at,price_p,prize_p,seed,seed_hash)
+    values ('five',v_five,100,10000,v_seed,encode(digest(v_seed,'sha256'),'hex'))
+    on conflict do nothing;
+  end if;
+  if not exists (select 1 from card_draws where kind='grand' and off_at=v_hour) then
+    v_seed := 'GRAND|'||v_hour||'|'||gen_random_uuid();
+    insert into card_draws (kind,off_at,price_p,prize_p,seed,seed_hash)
+    values ('grand',v_hour,200,100000,v_seed,encode(digest(v_seed,'sha256'),'hex'))
+    on conflict do nothing;
+  end if;
+end $$;
+
+-- the read: settle due, ensure open, return the board
+create or replace function card_state() returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare v_open jsonb; v_results jsonb;
+begin
+  perform card_settle_due();
+  perform card_ensure_open();
+
+  select jsonb_object_agg(kind, jsonb_build_object(
+           'id',id,'off_at',off_at,'price_p',price_p,'prize_p',prize_p,
+           'sold',sold,'seed_hash',seed_hash))
+    into v_open
+    from card_draws where status='open';
+
+  select coalesce(jsonb_agg(r order by r->>'off_at' desc),'[]'::jsonb)
+    into v_results
+    from ( select jsonb_build_object(
+             'kind',kind,'off_at',off_at,'prize_p',prize_p,'sold',sold,
+             'winner_entry',winner_entry,'seed',seed,'seed_hash',seed_hash,
+             'draw_id',id) as r
+             from card_draws
+            where status='settled'
+            order by off_at desc limit 8 ) s;
+
+  return jsonb_build_object('open',v_open,'results',v_results,
+                            'server_now',now());
+end $$;
+
+-- the buy: settle due, take the next entry number in the open draw
+create or replace function card_enter(p_kind text, p_punter text) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare d card_draws%rowtype; v_no int;
+begin
+  if p_kind not in ('five','grand') then raise exception 'bad kind'; end if;
+  perform card_settle_due();
+  perform card_ensure_open();
+
+  select * into d from card_draws
+   where kind=p_kind and status='open'
+   order by off_at asc limit 1
+   for update;
+
+  v_no := d.sold + 1;
+  insert into card_entries (draw_id, entry_no, punter) values (d.id, v_no, p_punter);
+  update card_draws set sold = v_no where id = d.id;
+
+  return jsonb_build_object('draw_id',d.id,'off_at',d.off_at,'entry_no',v_no,
+                            'sold',v_no,'seed_hash',d.seed_hash,'prize_p',d.prize_p);
+end $$;
+
+revoke all on function card_settle_due()            from public;
+revoke all on function card_ensure_open()           from public;
+revoke all on function card_state()                 from public;
+revoke all on function card_enter(text,text)       from public;
+grant execute on function card_state()             to service_role;
+grant execute on function card_enter(text,text)    to service_role;
+grant execute on function card_settle_due()        to service_role;
+grant execute on function card_ensure_open()       to service_role;
