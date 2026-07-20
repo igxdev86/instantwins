@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>LUCKY DICE — InstantWins.co.uk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Bungee&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/*
+  LUCKY DICE — pool-based instant game, InstantWins.co.uk
+  -----------------------------------------------------
+  Part of the site's single continuous arrangement of free-entry prize
+  draws (Schedule 2, Gambling Act 2005). Framework invariants:
+  - Each numbered pool is a sub-draw with a fixed set of numbered
+    entries, fixed pot, and a fresh shuffled ticket-to-prize allocation
+    committed (SHA-256) before the pool opens.
+  - Outcome ALWAYS pre-set by hidden ticket number; the game is pure
+    reveal theatre routed to the pre-assigned prize.
+  - Seed revealed the moment the pool sells out; anyone can verify. Any
+    pool still open after 28 days settles then, unsold-entry prizes
+    drawn among its entrants.
+  - Free postal route at equal prominence, processed ahead of paid sales.
+  Legal note: structure subject to solicitor sign-off before launch.
+*/
+:root{
+  --ink:#0A0D1C;
+  --panel:#141936;
+  --panel-edge:#232B5C;
+  --acc:#6FD3FF;
+  --acc-deep:#2A8CC0;
+  --gold:#F5C542;
+  --win:#3DDC84;
+  --text:#EAECF6;
+  --muted:#8B92B0;
+  --mono:'IBM Plex Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--ink);color:var(--text);font-family:'Space Grotesk',sans-serif;overscroll-behavior:none}
+body{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+.sitenav{background:#fff;display:flex;gap:4px;padding:10px 12px;font-family:'Archivo',sans-serif;font-weight:700;font-size:12px}
+.sitenav a{color:#31415E;text-decoration:none;padding:5px 9px;border-radius:7px}
+.sitenav a.on{background:#EAF2FD;color:#1D4ED8}
+header{padding:14px 16px 6px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Bungee',cursive;font-size:17px;color:var(--acc);letter-spacing:.5px;line-height:1}
+.logo span{display:block;font-size:9px;font-family:'Space Grotesk';font-weight:700;letter-spacing:2.5px;color:var(--muted)}
+.balance{font-family:var(--mono);font-size:13px;background:var(--panel);border:1px solid var(--panel-edge);border-radius:20px;padding:7px 13px}
+.balance b{color:var(--gold)}
+.guarantee{margin:8px 16px 0;text-align:center;font-size:10px;font-weight:700;letter-spacing:1.6px;color:var(--acc);border:1px dashed var(--acc-deep);border-radius:8px;padding:7px 4px;text-transform:uppercase}
+.drawbar{margin:10px 16px 0;display:flex;justify-content:space-between;align-items:center;background:var(--panel);border:1px solid var(--panel-edge);border-radius:10px;padding:9px 12px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.drawbar b{color:var(--text)}
+.drawbar .off{color:var(--acc);font-weight:600}
+.drawbar .off b{color:var(--acc);font-size:13px}
+.poolref{margin:5px 16px 0;text-align:center;font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.5px}
+.progwrap{margin:6px 16px 0;height:6px;background:var(--panel);border:1px solid var(--panel-edge);border-radius:4px;overflow:hidden}
+.prog{height:100%;width:0;background:linear-gradient(90deg,var(--acc-deep),var(--acc));transition:width .3s}
+.comp{margin:8px 16px 0;display:flex;justify-content:space-between;gap:8px}
+.comp .stat{flex:1;background:var(--panel);border:1px solid var(--panel-edge);border-radius:10px;padding:8px 4px;text-align:center}
+.comp .stat b{display:block;font-family:'Bungee';font-size:14px;color:var(--text)}
+.comp .stat i{font-style:normal;font-size:8.5px;letter-spacing:1.2px;color:var(--muted);text-transform:uppercase}
+.comp .stat.gold b{color:var(--gold)}
+.stage-wrap{margin:12px 12px 0;position:relative;background:radial-gradient(ellipse at 50% -10%, #1E2650 0%, var(--panel) 60%);border:1px solid var(--panel-edge);border-radius:16px;overflow:hidden;min-height:340px}
+canvas{display:block;width:100%}
+.result-pop{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%) scale(.6);opacity:0;pointer-events:none;text-align:center;transition:all .25s cubic-bezier(.2,1.6,.4,1);z-index:5}
+.result-pop.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.result-pop .amt{font-family:'Bungee';font-size:42px;color:var(--win);text-shadow:0 0 24px rgba(61,220,132,.6)}
+.result-pop .amt.big{color:var(--gold);text-shadow:0 0 30px rgba(245,197,66,.7)}
+.result-pop .amt.zero{color:var(--muted);font-size:24px;text-shadow:none}
+.result-pop .lbl{font-size:11px;letter-spacing:2px;color:var(--text);text-transform:uppercase;font-weight:700}
+.controls{margin:14px 16px 0;display:flex;gap:10px}
+.btn{flex:1;border:none;border-radius:12px;padding:15px 8px;font-family:'Bungee';font-size:15px;cursor:pointer;letter-spacing:.5px;transition:transform .08s}
+.btn:active{transform:scale(.97)}
+.btn-go{background:linear-gradient(180deg,var(--acc) 0%,var(--acc-deep) 100%);color:#141414;box-shadow:0 4px 18px rgba(0,0,0,.35)}
+.btn-go:disabled{filter:grayscale(.7);opacity:.55;cursor:not-allowed;box-shadow:none}
+.btn-free{background:transparent;color:var(--acc);border:2px dashed var(--acc-deep);font-size:11px;font-family:'Space Grotesk';font-weight:700;letter-spacing:1px;text-transform:uppercase;line-height:1.35}
+.ticket-line{margin:8px 16px 0;text-align:center;font-family:var(--mono);font-size:10.5px;color:var(--muted);min-height:14px}
+.ticket-line b{color:var(--text)}
+.panel{margin:16px 16px 0;background:var(--panel);border:1px solid var(--panel-edge);border-radius:14px;padding:14px}
+.panel h2{font-family:'Bungee';font-size:12px;color:var(--acc);letter-spacing:1px;margin-bottom:10px}
+.prow{display:flex;justify-content:space-between;font-size:12.5px;padding:6px 0;border-bottom:1px solid rgba(139,146,176,.12)}
+.prow:last-child{border-bottom:none}
+.prow .pv{font-family:var(--mono);font-weight:600}
+.prow .pc{color:var(--muted);font-family:var(--mono);font-size:11.5px}
+.odds-line{margin-top:10px;font-size:11px;color:var(--muted);line-height:1.5}
+.odds-line b{color:var(--text)}
+.fair-toggle{width:100%;background:none;border:none;color:var(--acc);font-family:'Space Grotesk';font-weight:700;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 0;cursor:pointer;text-align:left}
+.fair-body{display:none;margin-top:10px}
+.fair-body.open{display:block}
+.hash{font-family:var(--mono);font-size:9.5px;word-break:break-all;color:var(--win);background:rgba(61,220,132,.07);border:1px solid rgba(61,220,132,.2);border-radius:8px;padding:8px;margin:6px 0 10px}
+.hash.prev{color:var(--gold);background:rgba(245,197,66,.06);border-color:rgba(245,197,66,.25)}
+.fair-body p{font-size:11.5px;color:var(--muted);line-height:1.55;margin-bottom:8px}
+.fair-body p b{color:var(--text)}
+.log{max-height:150px;overflow-y:auto;font-family:var(--mono);font-size:9.5px}
+.log div{padding:4px 0;border-bottom:1px solid rgba(139,146,176,.1);color:var(--muted)}
+.log b{color:var(--text)}
+.log .lw{color:var(--win)}
+.modal{position:fixed;inset:0;background:rgba(10,13,28,.9);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal.open{display:flex}
+.modal-card{background:var(--panel);border:1px solid var(--acc-deep);border-radius:16px;padding:22px;max-width:400px;width:100%}
+.modal-card h3{font-family:'Bungee';font-size:15px;color:var(--acc);margin-bottom:12px}
+.modal-card p{font-size:13px;line-height:1.6;color:var(--text);margin-bottom:10px}
+.modal-card p.small{font-size:11px;color:var(--muted)}
+.modal-card .addr{font-family:var(--mono);font-size:12px;background:var(--ink);border-radius:8px;padding:12px;margin:10px 0;line-height:1.6}
+.modal-close{width:100%;margin-top:8px;background:var(--acc);border:none;border-radius:10px;padding:12px;font-family:'Bungee';font-size:13px;color:#141414;cursor:pointer}
+footer{margin:20px 16px 24px;font-size:9.5px;color:var(--muted);line-height:1.65;text-align:center}
+footer b{color:var(--text)}
+@media (prefers-reduced-motion: reduce){.result-pop{transition:none}}
+
+.dcwrap{min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px}
+.dice{display:flex;gap:16px}
+.die{width:84px;height:84px;border-radius:16px;background:#EAECF6;color:#141414;font-size:72px;line-height:84px;text-align:center;box-shadow:0 6px 0 #9FB0CC;transition:transform .12s}
+.die.spin{animation:dspin .12s infinite}
+@keyframes dspin{0%{transform:rotate(-6deg) translateY(-2px)}50%{transform:rotate(6deg) translateY(2px)}100%{transform:rotate(-6deg) translateY(-2px)}}
+.die.hot{background:linear-gradient(160deg,#FFF3CE,#F5C542);box-shadow:0 6px 0 #C79A1B}
+.dclegend{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--muted);letter-spacing:.5px;text-align:center}
+
+</style>
+</head>
+<body>
+
+<nav class="sitenav">
+  <a href="index.html">Home</a>
+  <a href="card.html">Card</a>
+  <a href="games.html" class="on">Games</a>
+  <a href="results.html">Results</a>
+  <a href="free-entry.html">Free entry</a>
+  <a href="fairness.html">Fairness</a>
+</nav>
+
+<header>
+  <div class="logo">LUCKY DICE<span>INSTANT GAMES · INSTANTWINS.CO.UK</span></div>
+  <div class="balance">Credit <b id="bal">—</b></div>
+</header>
+
+<div class="guarantee">Every prize below will be won — guaranteed &amp; verifiable</div>
+
+<div class="drawbar">
+  <span id="topLine">—</span>
+  <span class="off"><b id="leftCt">—</b> LEFT</span>
+</div>
+<div class="progwrap"><div class="prog" id="prog"></div></div>
+<div class="poolref">pool <span id="poolNo">—</span> · every pool verifiable in the fairness panel below</div>
+
+<div class="comp">
+  <div class="stat gold"><b>£500</b><i>Pot / pool</i></div>
+  <div class="stat"><b>£2</b><i>Per roll</i></div>
+  <div class="stat"><b>86</b><i>Winners /500</i></div>
+  <div class="stat"><b>1-in-5.8</b><i>Win odds</i></div>
+</div>
+
+<div class="stage-wrap" id="stage">
+  <div class="dcwrap">
+    <div class="dice"><div class="die" id="d0">⚀</div><div class="die" id="d1">⚀</div><div class="die" id="d2">⚀</div></div>
+    <div class="dclegend">TRIPLE 6 £100 · ANY TRIPLE £20 · RUN £10 · PAIR £5 · ALL ODD £2</div>
+  </div>
+  <div class="result-pop" id="pop"><div class="amt" id="popAmt"></div><div class="lbl" id="popLbl"></div></div>
+</div>
+
+<div class="controls">
+  <button class="btn btn-go" id="goBtn">ROLL · £2</button>
+  <button class="btn btn-free" id="freeBtn">Enter free<br>by post</button>
+</div>
+<div class="ticket-line" id="ticketLine">Every entry has its prize locked in before you buy — play to reveal yours</div>
+
+<div class="panel">
+  <h2>PRIZE TABLE</h2>
+  <div class="prow"><span class="pv" style="color:var(--gold)">£100</span><span class="pc" id="t0">1 of 1 left</span></div>
+  <div class="prow"><span class="pv">£20</span><span class="pc" id="t1">5 of 5 left</span></div>
+  <div class="prow"><span class="pv">£10</span><span class="pc" id="t2">10 of 10 left</span></div>
+  <div class="prow"><span class="pv">£5</span><span class="pc" id="t3">20 of 20 left</span></div>
+  <div class="prow"><span class="pv">£2</span><span class="pc" id="t4">50 of 50 left</span></div>
+  <div class="odds-line"><b>86 winners in every 500 entries — the odds never change.</b> £2 a go, prizes £2 to £100, and every time 500 entries sell out the full prize table above resets. Every prize is locked in before anyone buys, and you can check it — the how lives in the fairness panel below. Combos: triple six £100 · any other triple £20 · straight run £10 · any pair £5 · all odd £2.</div>
+</div>
+
+<div class="panel">
+  <button class="fair-toggle" id="fairToggle">&#9656; Provably fair — verify this draw</button>
+  <div class="fair-body" id="fairBody">
+    <p>Before each pool opens, a fresh shuffled ticket&rarr;prize allocation is fixed and its SHA-256 hash published below. Your play reveals the prize already attached to your numbered entry — the game is presentation only and changes nothing.</p>
+    <p><b>This pool's commitment:</b></p>
+    <div class="hash" id="commitHash">computing…</div>
+    <p><b>Previous pool <span id="prevId">—</span> — seed revealed at sell-out:</b></p>
+    <div class="hash prev" id="prevSeed">awaiting first sell-out this session…</div>
+    <p>Hash the revealed seed yourself and confirm it matches the commitment published while that pool was live. Any pool still open 28 days after opening settles then, with unsold-entry prizes drawn among its entrants. Reveal log:</p>
+    <div class="log" id="log"><div data-empty="1">No plays yet this session.</div></div>
+  </div>
+</div>
+
+<footer>
+  <b>LUCKY DICE</b> runs as a series of numbered entry pools within the single continuous arrangement of free-entry prize draws on InstantWins.co.uk, structured under the free-entry provisions of Schedule 2 of the Gambling Act 2005 — it is not gambling and no licence is required. Every pool may be entered free by post with identical odds; free entries are processed ahead of paid sales. A pool closes and its seed is revealed the moment its final entry sells; any pool still open 28 days after opening settles then, with unsold-entry prizes drawn among its entrants. The dice are presentation only. 18+, UK residents only. Full T&amp;Cs apply. Structure subject to solicitor sign-off before launch. Promoter: IGX Ltd.
+</footer>
+
+<div class="modal" id="freeModal">
+  <div class="modal-card">
+    <h3>ENTER FREE BY POST</h3>
+    <p>Every draw on InstantWins.co.uk can be entered completely free, with identical odds to a paid entry. Send an unenclosed postcard with your full name, address, date of birth and email to:</p>
+    <div class="addr">InstantWins Free Entry<br>IGX Ltd, PO Box (TBC)<br>United Kingdom</div>
+    <p class="small">Name the game (e.g. &ldquo;LUCKY DICE&rdquo;) and optionally a pool number, or name nothing — your entry joins that game&rsquo;s open pool (or the next open pool on the site) at processing. One entry per postcard. Free entries are injected ahead of paid sales, from the same numbered sequence, with exactly equal chances of every prize. No purchase necessary.</p>
+    <button class="modal-close" id="freeClose">GOT IT</button>
+  </div>
+</div>
+
+<script>
+/* ================= SHARED CHASSIS ================= */
+const PRICE=2;
+const CAP=500;
+const TIERS=[{v:100,total:1,left:1},{v:20,total:5,left:5},{v:10,total:10,left:10},{v:5,total:20,left:20},{v:2,total:50,left:50}];
+let ticketsLeft=CAP, nextTicket=1, nonce=0, balance=20.00, busy=false;
+const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $=id=>document.getElementById(id);
+const fmt=n=>'£'+n.toLocaleString('en-GB',{minimumFractionDigits:2});
+const pad=n=>String(n).padStart(2,'0');
+
+function drawHiddenTicket(){
+  // Weighted draw across the window's remaining allocation — stands in
+  // for the server-side lookup of this entry in the committed map.
+  let r=Math.random()*Math.max(ticketsLeft,1);
+  for(const t of TIERS){ if(r<t.left){t.left--;return t;} r-=t.left; }
+  return null;
+}
+function refresh(){
+  $('bal').textContent=fmt(balance);
+  TIERS.forEach((t,i)=>{$('t'+i).textContent=t.left+' of '+t.total+' left';});
+  $('topLine').textContent = TIERS[0].left>0
+    ? ('£'+TIERS[0].v.toLocaleString()+' TOP PRIZE IN PLAY')
+    : 'TOP PRIZE WON — FRESH POOL SOON';
+  $('leftCt').textContent=ticketsLeft;
+  $('prog').style.width=(100*(CAP-ticketsLeft)/CAP)+'%';
+  $('goBtn').disabled=busy||balance<PRICE||ticketsLeft<=0;
+}
+
+/* ---------- numbered entry pools (LIVE via /api, demo fallback) ---------- */
+function hashStr(s){let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h;}
+async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');}
+let pool={}, prev=null, LIVE=false;
+let poolNo=40+hashStr('DC'+(new Date()).toISOString().slice(0,10))%25;
+
+/* LIVE: real shared pools from Supabase */
+function applyPoolState(s){
+  pool={id:s.pool, hash:s.seed_hash};
+  ticketsLeft=s.cap-s.sold;
+  TIERS.forEach(t=>{const m=(s.tiers||[]).find(x=>x.prize_p===t.v*100); t.left=m?m.left:0;});
+  $('poolNo').textContent='#'+(s.pool.split('-P')[1]||s.pool);
+  $('commitHash').textContent=s.seed_hash;
+  refresh();
+}
+async function syncPool(){
+  try{
+    const r=await fetch('/api/pool?game=DC',{cache:'no-store'});
+    if(!r.ok)throw 0;
+    const s=await r.json();
+    if(!s||s.error||!s.pool)throw 0;
+    applyPoolState(s);                     // apply first; only then declare LIVE
+    if(!LIVE){
+      LIVE=true;
+      const pr=document.querySelector('.poolref');
+      if(pr)pr.append(' \u00B7 LIVE');    // append a text node — keeps #poolNo alive
+    }
+  }catch(e){
+    console.error('pool sync failed',e);
+    if(!LIVE&&!pool.id)openDemoPool(false);
+  }
+}
+
+/* DEMO: simulated pool until the backend answers */
+async function openDemoPool(fresh){
+  const id='DC-P'+String(poolNo).padStart(4,'0');
+  TIERS.forEach(t=>t.left=t.total);
+  ticketsLeft=CAP;
+  const sold=fresh?0:(430+hashStr(id)%60);
+  for(let i=0;i<sold;i++){ticketsLeft--;drawHiddenTicket();}
+  nextTicket=sold+1;
+  pool={id,seed:id+'|'+crypto.getRandomValues(new Uint32Array(3)).join('-')};
+  $('poolNo').textContent='#'+String(poolNo).padStart(4,'0');
+  $('commitHash').textContent='computing\u2026';
+  pool.hash=await sha256(pool.seed);
+  $('commitHash').textContent=pool.hash;
+  refresh();
+}
+function rollDemoPool(){
+  prev={id:pool.id,seed:pool.seed};
+  $('prevId').textContent=prev.id;
+  $('prevSeed').textContent=prev.seed;
+  $('ticketLine').innerHTML='SOLD OUT \u2014 every prize claimed! Fresh prizes loaded \u00B7 last pool\u0027s seed revealed in the fairness panel';
+  poolNo++;
+  openDemoPool(true);
+}
+
+let curTicket=0;
+function finish(tier,sub){
+  const amtEl=$('popAmt'),lblEl=$('popLbl');
+  if(tier){
+    balance+=tier.v;
+    amtEl.textContent='£'+tier.v.toLocaleString();
+    amtEl.className='amt'+(tier.v>=20?' big':'');
+    lblEl.textContent=sub||(tier.v>=20?'BIG WIN!':'WINNER');
+  }else{
+    amtEl.textContent='NO WIN';
+    amtEl.className='amt zero';
+    lblEl.textContent=sub||'play again';
+  }
+  $('pop').classList.add('show');
+  setTimeout(()=>$('pop').classList.remove('show'),1700);
+  const log=$('log');
+  if(log.firstChild&&log.firstChild.dataset&&log.firstChild.dataset.empty)log.innerHTML='';
+  const row=document.createElement('div');
+  row.innerHTML=pool.id+' · entry <b>'+String(curTicket).padStart(3,'0')+'</b> · '+(tier?'<span class="lw">£'+tier.v+'</span>':'no win');
+  log.prepend(row);
+  $('ticketLine').innerHTML='Entry <b>#'+String(curTicket).padStart(3,'0')+'</b> in '+pool.id+' · '+(tier?'won <b>£'+tier.v.toLocaleString()+'</b>':'no win');
+  busy=false; refresh();
+  if(LIVE){setTimeout(syncPool,600);}
+  else if(ticketsLeft<=0)setTimeout(rollDemoPool,1400);
+}
+$('goBtn').addEventListener('click',async ()=>{
+  if(busy||balance<PRICE||ticketsLeft<=0)return;
+  busy=true; nonce++;
+  $('pop').classList.remove('show');
+  let tier=null;
+  if(LIVE){
+    // REAL: the server hands out the next numbered entry from the committed map
+    try{
+      const r=await fetch('/api/buy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({game:'DC'})});
+      if(!r.ok)throw 0;
+      const d=await r.json(); if(d.error)throw 0;
+      balance-=PRICE;
+      curTicket=d.entry_no;
+      ticketsLeft=d.cap-d.sold;
+      tier=TIERS.find(t=>t.v===d.prize_p/100)||null;
+      if(d.sold_out){
+        prev={id:d.pool,seed:d.seed};
+        $('prevId').textContent=prev.id;
+        $('prevSeed').textContent=prev.seed;
+      }
+    }catch(e){ busy=false; refresh(); return; }
+  }else{
+    balance-=PRICE; ticketsLeft--;
+    curTicket=nextTicket++;
+    tier=drawHiddenTicket();   // demo: outcome fixed HERE, before any theatre
+  }
+  $('ticketLine').innerHTML='Entry <b>#'+String(curTicket).padStart(3,'0')+'</b> in '+pool.id+' \u00B7 revealing\u2026';
+  refresh();
+  GAME.run(tier,(sub)=>finish(tier,sub));
+});
+$('fairToggle').addEventListener('click',()=>{
+  const b=$('fairBody');b.classList.toggle('open');
+  $('fairToggle').textContent=(b.classList.contains('open')?'\u25BE':'\u25B8')+' Provably fair — verify this draw';
+});
+$('freeBtn').addEventListener('click',()=>$('freeModal').classList.add('open'));
+$('freeClose').addEventListener('click',()=>$('freeModal').classList.remove('open'));
+$('freeModal').addEventListener('click',e=>{if(e.target.id==='freeModal')$('freeModal').classList.remove('open');});
+
+/* ================= GAME THEATRE ================= */
+
+const FACES=['\u2680','\u2681','\u2682','\u2683','\u2684','\u2685'];
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
+function combo(tier){
+  if(!tier){ // avoid triple, run, pair, all-odd
+    while(true){
+      const d=[1+Math.floor(Math.random()*6),1+Math.floor(Math.random()*6),1+Math.floor(Math.random()*6)];
+      const s=[...d].sort((a,b)=>a-b);
+      const trip=d[0]===d[1]&&d[1]===d[2];
+      const run=s[1]===s[0]+1&&s[2]===s[1]+1;
+      const pair=d[0]===d[1]||d[1]===d[2]||d[0]===d[2];
+      const odd=d.every(x=>x%2===1);
+      if(!trip&&!run&&!pair&&!odd)return d;
+    }
+  }
+  const i=TIERS.indexOf(tier);
+  if(i===0)return [6,6,6];
+  if(i===1){const r=pick([1,2,3,4,5]);return [r,r,r];}
+  if(i===2){const r=pick([[1,2,3],[2,3,4],[3,4,5],[4,5,6]]);return r.sort(()=>Math.random()-.5);}
+  if(i===3){const a=1+Math.floor(Math.random()*6);let b=a;while(b===a)b=1+Math.floor(Math.random()*6);
+    return [[a,a,b],[a,b,a],[b,a,a]][Math.floor(Math.random()*3)];}
+  // all odd, no pair/triple/run: {1,3,5} shuffled? 1-3-5 not consecutive: valid, distinct
+  return [1,3,5].sort(()=>Math.random()-.5);
+}
+const GAME={
+  init(){},
+  run(tier,done){
+    const dies=[$('d0'),$('d1'),$('d2')];
+    const target=combo(tier);
+    if(REDUCE){dies.forEach((d,i)=>{d.textContent=FACES[target[i]-1];d.classList.toggle('hot',!!tier);});done(tier?null:'no combo');return;}
+    dies.forEach(d=>{d.classList.add('spin');d.classList.remove('hot');});
+    const iv=setInterval(()=>{dies.forEach(d=>d.textContent=FACES[Math.floor(Math.random()*6)]);},80);
+    target.forEach((v,i)=>{
+      setTimeout(()=>{
+        dies[i].classList.remove('spin');
+        dies[i].textContent=FACES[v-1];
+        if(tier)dies[i].classList.add('hot');
+        if(i===2){clearInterval(iv);setTimeout(()=>done(tier?null:'no combo'),550);}
+      },900+i*450);
+    });
+  }
+};
+
+/* ================================================= */
+if(GAME.init)GAME.init();
+syncPool();
+setInterval(()=>{if(!busy)syncPool();},6000);
+</script>
+</body>
+</html>
