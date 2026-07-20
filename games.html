@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Games — InstantWins.co.uk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#17233B;--soft:#6B7A99;--line:#E3EAF5;--wash:#F2F8FE;--buy:#1D4ED8;--buy-ink:#1D4ED8;--match:#0E9F6E}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Archivo',sans-serif;background:#fff;color:var(--ink)}
+.topbar{display:flex;gap:4px;padding:12px 16px;border-bottom:1px solid var(--line);font-weight:700;font-size:13px;max-width:960px;margin:0 auto}
+.topbar a{color:#31415E;text-decoration:none;padding:6px 10px;border-radius:8px}
+.topbar a.on{background:#EAF2FD;color:var(--buy)}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+.pagehead{padding:26px 0 8px}
+.pagehead h1{font-size:1.6rem;font-weight:800;letter-spacing:-.02em}
+.pagehead p{color:var(--soft);font-size:.85rem;margin-top:6px;line-height:1.55;max-width:640px}
+.nextbar{display:flex;align-items:center;gap:10px;background:var(--wash);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:14px 0 4px;font-size:.8rem;font-weight:600}
+.nextbar .num{font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--buy);font-size:1rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;padding:16px 0 8px}
+.gcard{display:block;border:1px solid var(--line);border-radius:14px;padding:16px 14px;text-decoration:none;color:var(--ink);transition:box-shadow .15s,transform .15s;position:relative}
+.gcard:hover{box-shadow:0 6px 20px rgba(23,35,59,.10);transform:translateY(-2px)}
+.dot{width:12px;height:12px;border-radius:50%;margin-bottom:10px}
+.gname{font-weight:800;font-size:.95rem;letter-spacing:.02em}
+.gsub{color:var(--soft);font-size:.72rem;margin-top:3px;line-height:1.4}
+.gmeta{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.gmeta span{font-family:'IBM Plex Mono',monospace;font-size:.62rem;font-weight:600;color:var(--soft);background:var(--wash);border:1px solid var(--line);border-radius:6px;padding:3px 6px}
+.gcta{margin-top:12px;font-size:.72rem;font-weight:700;color:var(--buy)}
+.how{border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0;background:var(--wash)}
+.how h2{font-size:.9rem;font-weight:800;margin-bottom:8px}
+.how p{font-size:.78rem;color:var(--soft);line-height:1.6;margin-bottom:6px}
+.how b{color:var(--ink)}
+footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;color:var(--soft);font-size:.66rem;line-height:1.7;text-align:center;max-width:960px;margin-left:auto;margin-right:auto}
+</style>
+</head>
+<body>
+<nav class="topbar">
+  <a href="index.html">Home</a>
+  <a href="card.html">Card</a>
+  <a href="games.html" class="on">Games</a>
+  <a href="results.html">Results</a>
+  <a href="free-entry.html">Free entry</a>
+  <a href="fairness.html">Fairness</a>
+</nav>
+<div class="wrap">
+  <div class="pagehead">
+    <h1>Games</h1>
+    <p>Eleven instant-win games. Every game runs in numbered pools — a fixed set of numbered entries, a
+       fixed prize table, a fresh committed allocation, and a seed revealed the moment the pool sells
+       out. The game on screen is just how your entry's prize is revealed. Same structure, same fairness
+       proof, same free postal route as every draw on the site.</p>
+  </div>
+  <div class="nextbar">Card draws off every five minutes — next in <span class="num" id="clock">--:--</span> &middot; games run in numbered pools: sold out = settled, instantly</div>
+  <div class="grid">
+  <a class="gcard" href="plinko-instantwins.html">
+    <div class="dot" style="background:#F5C542"></div>
+    <div class="gname">PLINKO DROP</div>
+    <div class="gsub">Drop the ball, land the bin</div>
+    <div class="gmeta"><span>£2 a go</span><span>Top £100 / draw</span><span>1-in-5.8</span></div>
+    <div class="gcta">Play the next draw &rarr;</div>
+  </a>
+  <a class="gcard" href="rocketcash-instantwins.html">
+    <div class="dot" style="background:#FF7A2F"></div>
+    <div class="gname">ROCKET CASH</div>
+    <div class="gsub">How high will it lock?</div>
+    <div class="gmeta"><span>£2 a go</span><span>Top £100 / draw</span><span>1-in-5.8</span></div>
+    <div class="gcta">Play the next draw &rarr;</div>
+  </a>
+  <a class="gcard" href="diamonddig-instantwins.html">
+    <div class="dot" style="background:#2FD6C3"></div>
+    <div class="gname">DIAMOND DIG</div>
+    <div class="gsub">Pick 3 tiles, find the gem</div>
+    <div class="gmeta"><span>£2 a go</span><span>Top £100 / draw</span><span>1-in-5.8</span></div>
+    <div class="gcta">Play the next draw &rarr;</div>
+  </a>
+  <a class="gcard" href="theclaw-instantwins.html">
+    <div class="dot" style="background:#FF5FA2"></div>
+    <div class="gname">THE CLAW</div>
+    <div class="gsub">Grab a capsule, crack it open</div>
+    <div class="gmeta"><span>£2 a go</span><span>Top £100 / draw</span><span>1-in-5.8</span></div>
+    <div class="gcta">Play the next draw &rarr;</div>
+  </a>
+  <a class="gcard" href="safecracker-instantwins.html">
+    <div class="dot" style="background:#C79A1B"></div>
+    <div class="gname">SAFE CRACKER</div>
+    <div class="gsub">The premium vault — £250 top</div>
+    <div class="gmeta"><span>£5 a go</span><span>Top £250 / draw</span><span>1-in-9.5</span></div>
+    <div class="gcta">Play the next draw &rarr;</div>
+  </a>
+  <a class="gcard" href="packrip-instantwins.html">
+    <div class="dot" style="background:#4F9BFF"></div>
+    <div class="gname">PACK RIP</div>
+    <div class="gsub">Tear the pack, flip the hero</div>
+    <div class="gmeta"><span>£2 a go</span><span>Top £100 / draw</span><span>1-in-5.8</span></div>
+    <div class="gcta">Play the next draw &rarr;</div>
+  </a>
+  <a class="gcard" href="photofinish-instantwins.html">
+    <div class="dot" style="background:#61D95B"></div>
+    <div class="gname">PHOTO FINISH</div>
+    <div class="gsub">Your runner, six lanes, one line</div>
+    <div class="gmeta"><span>£2 a go</span><span>Top £100 / draw</span><span>1-in-5.8</span></div>
+    <div class="gcta">Play the next draw &rarr;</div>
+  </a>
+  <a class="gcard" href="balloonburst-instantwins.html">
+    <div class="dot" style="background:#FF4D5E"></div>
+    <div class="gname">BALLOON BURST</div>
+    <div class="gsub">Bigger balloon, bigger prize</div>
+    <div class="gmeta"><span>£2 a go</span><span>Top £100 / draw</span><span>1-in-5.8</span></div>
+    <div class="gcta">Play the next draw &rarr;</div>
+  </a>
+  <a class="gcard" href="pennypusher-instantwins.html">
+    <div class="dot" style="background:#E0A93F"></div>
+    <div class="gname">PENNY PUSHER</div>
+    <div class="gsub">Nudge the token off the edge</div>
+    <div class="gmeta"><span>£2 a go</span><span>Top £100 / draw</span><span>1-in-5.8</span></div>
+    <div class="gcta">Play the next draw &rarr;</div>
+  </a>
+  <a class="gcard" href="luckyladder-instantwins.html">
+    <div class="dot" style="background:#B07CFF"></div>
+    <div class="gname">LUCKY LADDER</div>
+    <div class="gsub">Flip up the rungs and bank</div>
+    <div class="gmeta"><span>£2 a go</span><span>Top £100 / draw</span><span>1-in-5.8</span></div>
+    <div class="gcta">Play the next draw &rarr;</div>
+  </a>
+  <a class="gcard" href="cashgrab-instantwins.html">
+    <div class="dot" style="background:#85C96B"></div>
+    <div class="gname">CASH GRAB</div>
+    <div class="gsub">10 seconds in the booth</div>
+    <div class="gmeta"><span>£2 a go</span><span>Top £100 / draw</span><span>1-in-5.8</span></div>
+    <div class="gcta">Play the next draw &rarr;</div>
+  </a>
+  </div>
+  <div class="how">
+    <h2>How the games work</h2>
+    <p><b>The outcome is never in the game.</b> Before each pool opens, a shuffled
+       entry&rarr;prize allocation is fixed and its SHA-256 hash is published on the game page. Buying an
+       entry reveals the prize already attached to your entry number — the plinko ball, the claw, the
+       rocket are presentation only and change nothing.</p>
+    <p><b>The seed is revealed at sell-out.</b> The moment a pool's final entry sells, its seed is published
+       so anyone can re-hash it and confirm it matches the commitment shown while the pool was live. Any
+       pool still open 28 days after opening settles then, with unsold-entry prizes drawn among its
+       entrants.</p>
+    <p><b>Free entry, always.</b> Every pool of every game can be entered free by post with identical
+       odds — free entries are processed ahead of paid sales. See the <a href="free-entry.html" style="color:var(--buy-ink)">Free entry page</a>.</p>
+  </div>
+</div>
+<footer>
+  All games form part of the single continuous arrangement of free-entry prize draws on InstantWins.co.uk,
+  structured under the free-entry provisions of Schedule 2 of the Gambling Act 2005. No purchase necessary:
+  see Free entry. Prize tables and entry caps are published per pool and never change mid-pool.
+  Structure subject to solicitor sign-off before launch. 18+. UK residents only. Promoter: IGX Ltd.
+</footer>
+<script>
+const pad=n=>String(n).padStart(2,'0');
+setInterval(()=>{
+  const d=new Date(); const e=new Date(d); e.setSeconds(0,0);
+  e.setMinutes(e.getMinutes()-(e.getMinutes()%5)+5);
+  const s=Math.floor((e-d)/1000);
+  document.getElementById('clock').textContent=pad(Math.floor(s/60))+':'+pad(s%60);
+},250);
+</script>
+</body>
+</html>
