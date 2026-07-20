@@ -89,7 +89,7 @@ alter table postal_entries enable row level security;
 -- open a fresh pool: seal the seed, build the shuffled map
 -- ---------------------------------------------------------------
 create or replace function open_pool(p_game text) returns uuid
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare
   g       games%rowtype;
   v_no    int;
@@ -135,7 +135,7 @@ end $$;
 -- read the counter (safe: reveals nothing about which entries win)
 -- ---------------------------------------------------------------
 create or replace function pool_state(p_game text) returns jsonb
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare p pools%rowtype; v_tiers jsonb;
 begin
   select * into p from pools
@@ -169,7 +169,7 @@ end $$;
 -- buy the next entry: reveal its prize; settle + reopen on sell-out
 -- ---------------------------------------------------------------
 create or replace function buy_entry(p_game text) returns jsonb
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare p pools%rowtype; v_entry int; v_prize int; v_extra jsonb := '{}'::jsonb;
 begin
   select * into p from pools
@@ -261,7 +261,7 @@ alter table card_entries enable row level security;
 
 -- settle everything past its off time (winner derived from seed+sold)
 create or replace function card_settle_due() returns void
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare d card_draws%rowtype; v_win int;
 begin
   for d in select * from card_draws
@@ -281,7 +281,7 @@ end $$;
 
 -- make sure the next five-minute and hourly draws exist
 create or replace function card_ensure_open() returns void
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare v_five timestamptz; v_hour timestamptz; v_seed text;
 begin
   v_five := to_timestamp(ceil(extract(epoch from now())/300)*300);
@@ -302,7 +302,7 @@ end $$;
 
 -- the read: settle due, ensure open, return the board
 create or replace function card_state() returns jsonb
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare v_open jsonb; v_results jsonb;
 begin
   perform card_settle_due();
@@ -330,7 +330,7 @@ end $$;
 
 -- the buy: settle due, take the next entry number in the open draw
 create or replace function card_enter(p_kind text, p_punter text) returns jsonb
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare d card_draws%rowtype; v_no int;
 begin
   if p_kind not in ('five','grand') then raise exception 'bad kind'; end if;
