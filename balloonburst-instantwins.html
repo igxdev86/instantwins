@@ -239,35 +239,55 @@ function refresh(){
   $('goBtn').disabled=busy||balance<PRICE||ticketsLeft<=0;
 }
 
-/* ---------- numbered entry pools ---------- */
+/* ---------- numbered entry pools (LIVE via /api, demo fallback) ---------- */
 function hashStr(s){let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h;}
 async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');}
-let pool={}, prev=null;
+let pool={}, prev=null, LIVE=false;
 let poolNo=40+hashStr('BB'+(new Date()).toISOString().slice(0,10))%25;
 
-async function openPool(fresh){
+/* LIVE: real shared pools from Supabase */
+function applyPoolState(s){
+  pool={id:s.pool, hash:s.seed_hash};
+  ticketsLeft=s.cap-s.sold;
+  TIERS.forEach(t=>{const m=(s.tiers||[]).find(x=>x.prize_p===t.v*100); t.left=m?m.left:0;});
+  $('poolNo').textContent='#'+(s.pool.split('-P')[1]||s.pool);
+  $('commitHash').textContent=s.seed_hash;
+  refresh();
+}
+async function syncPool(){
+  try{
+    const r=await fetch('/api/pool?game=BB',{cache:'no-store'});
+    if(!r.ok)throw 0;
+    const s=await r.json(); if(s.error)throw 0;
+    if(!LIVE){LIVE=true;const pr=document.querySelector('.poolref');if(pr)pr.textContent+=' \u00B7 LIVE';}
+    applyPoolState(s);
+  }catch(e){
+    if(!LIVE&&!pool.id)openDemoPool(false);
+  }
+}
+
+/* DEMO: simulated pool until the backend answers */
+async function openDemoPool(fresh){
   const id='BB-P'+String(poolNo).padStart(4,'0');
   TIERS.forEach(t=>t.left=t.total);
   ticketsLeft=CAP;
-  // believable sales already in this pool (deterministic per pool id).
-  // In production this is the live sold count from Supabase.
   const sold=fresh?0:(430+hashStr(id)%60);
   for(let i=0;i<sold;i++){ticketsLeft--;drawHiddenTicket();}
   nextTicket=sold+1;
   pool={id,seed:id+'|'+crypto.getRandomValues(new Uint32Array(3)).join('-')};
   $('poolNo').textContent='#'+String(poolNo).padStart(4,'0');
-  $('commitHash').textContent='computing…';
+  $('commitHash').textContent='computing\u2026';
   pool.hash=await sha256(pool.seed);
   $('commitHash').textContent=pool.hash;
   refresh();
 }
-function rollPool(){
+function rollDemoPool(){
   prev={id:pool.id,seed:pool.seed};
   $('prevId').textContent=prev.id;
   $('prevSeed').textContent=prev.seed;
-  $('ticketLine').innerHTML='SOLD OUT — every prize claimed! Fresh prizes loaded · last pool\'s seed revealed in the fairness panel';
+  $('ticketLine').innerHTML='SOLD OUT \u2014 every prize claimed! Fresh prizes loaded \u00B7 last pool\u0027s seed revealed in the fairness panel';
   poolNo++;
-  openPool(true);
+  openDemoPool(true);
 }
 
 let curTicket=0;
@@ -292,15 +312,36 @@ function finish(tier,sub){
   log.prepend(row);
   $('ticketLine').innerHTML='Entry <b>#'+String(curTicket).padStart(3,'0')+'</b> in '+pool.id+' · '+(tier?'won <b>£'+tier.v.toLocaleString()+'</b>':'no win');
   busy=false; refresh();
-  if(ticketsLeft<=0)setTimeout(rollPool,1400);
+  if(LIVE){setTimeout(syncPool,600);}
+  else if(ticketsLeft<=0)setTimeout(rollDemoPool,1400);
 }
-$('goBtn').addEventListener('click',()=>{
+$('goBtn').addEventListener('click',async ()=>{
   if(busy||balance<PRICE||ticketsLeft<=0)return;
-  busy=true; balance-=PRICE; ticketsLeft--; nonce++;
-  curTicket=nextTicket++;
-  const tier=drawHiddenTicket();   // outcome fixed HERE, before any theatre
+  busy=true; nonce++;
   $('pop').classList.remove('show');
-  $('ticketLine').innerHTML='Entry <b>#'+String(curTicket).padStart(3,'0')+'</b> in '+pool.id+' · revealing…';
+  let tier=null;
+  if(LIVE){
+    // REAL: the server hands out the next numbered entry from the committed map
+    try{
+      const r=await fetch('/api/buy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({game:'BB'})});
+      if(!r.ok)throw 0;
+      const d=await r.json(); if(d.error)throw 0;
+      balance-=PRICE;
+      curTicket=d.entry_no;
+      ticketsLeft=d.cap-d.sold;
+      tier=TIERS.find(t=>t.v===d.prize_p/100)||null;
+      if(d.sold_out){
+        prev={id:d.pool,seed:d.seed};
+        $('prevId').textContent=prev.id;
+        $('prevSeed').textContent=prev.seed;
+      }
+    }catch(e){ busy=false; refresh(); return; }
+  }else{
+    balance-=PRICE; ticketsLeft--;
+    curTicket=nextTicket++;
+    tier=drawHiddenTicket();   // demo: outcome fixed HERE, before any theatre
+  }
+  $('ticketLine').innerHTML='Entry <b>#'+String(curTicket).padStart(3,'0')+'</b> in '+pool.id+' \u00B7 revealing\u2026';
   refresh();
   GAME.run(tier,(sub)=>finish(tier,sub));
 });
@@ -357,7 +398,8 @@ const GAME={
 
 /* ================================================= */
 if(GAME.init)GAME.init();
-openPool(false);
+syncPool();
+setInterval(()=>{if(!busy)syncPool();},6000);
 </script>
 </body>
 </html>
