@@ -94,7 +94,8 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
 <div class="wrap">
   <div class="head">
     <h1>The Card</h1>
-    <div class="balance">Credit <b id="bal">£20.00</b></div>
+    <div style="text-align:right"><div class="balance">Credit <b id="bal">£20.00</b></div>
+    <div id="modeBadge" style="font-size:.58rem;font-weight:800;letter-spacing:.12em;color:var(--soft);margin-top:3px">CONNECTING…</div></div>
   </div>
 
   <div class="nextdraw" id="fiveCard">
@@ -168,147 +169,218 @@ const fmt=n=>'£'+n.toLocaleString('en-GB',{minimumFractionDigits:2});
 function hashStr(s){let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h;}
 async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');}
 function nextBoundary(mins){const d=new Date();d.setSeconds(0,0);d.setMinutes(d.getMinutes()-(d.getMinutes()%mins)+mins);return d;}
-function idFor(prefix,t){return prefix+'-'+pad(t.getHours())+pad(t.getMinutes());}
+function hm(t){t=new Date(t);return pad(t.getHours())+':'+pad(t.getMinutes());}
 const FIRSTNAMES=['Dave','Sarah','Mo','Kelly','Tom','Priya','Gareth','Lisa','Jamal','Ffion','Steve','Aisha','Rhys','Donna','Marek','Jo'];
 const TOWNS=['Cardiff','Leeds','Barry','Swindon','Glasgow','Luton','Wrexham','Hull','Derby','Newport','Bolton','Penarth'];
 
-/* ================= state ================= */
-let balance=20.00;
-let five={}, grand={};
+/* ============ local identity + credit (persists on the real site) ==== */
+function store(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+let punter=load('iw_punter',null);
+if(!punter){punter='p-'+crypto.getRandomValues(new Uint32Array(2)).join('-');store('iw_punter',punter);}
+let balance=load('iw_credit',20.00);
+let mine=load('iw_card_mine',{});
+let seenSettled=load('iw_card_seen',[]);
+function saveAll(){store('iw_credit',balance);store('iw_card_mine',mine);store('iw_card_seen',seenSettled.slice(-40));}
 
-function newDraw(kind){
-  // kind: 'five' | 'grand'
-  const isG = kind==='grand';
-  const end = isG ? nextBoundary(60) : nextBoundary(5);
-  const id  = idFor(isG?'GRAND':'FIVE', end);
-  const d = {
-    kind, end, id,
-    price: isG?2:1,
-    prize: isG?1000:100,
-    sold: (isG?420:38) + hashStr(id)%(isG?260:70),  // believable demo entries
-    mine: [],
-    seed: id+'|'+crypto.getRandomValues(new Uint32Array(3)).join('-'),
-  };
-  sha256(d.seed).then(h=>{d.hash=h; if(kind==='five')$('fiveHash').textContent=h;});
-  return d;
+/* ================= shared render bits ================= */
+function banner(el,kindLabel,winner,iWon,prize,who){
+  const b=$(el);
+  b.innerHTML='<div class="sub">'+kindLabel+' — OFF!</div>'
+    +'<div class="big">'+(winner? 'WINNING ENTRY #'+winner : 'NO ENTRIES — NO DRAW')+'</div>'
+    +(winner?(iWon?'<div class="win">THAT’S YOU — £'+prize.toLocaleString()+' WON!</div>'
+                  :'<div class="sub">'+who+' takes £'+prize.toLocaleString()+'</div>'):'')
+    +'<div class="sub" style="opacity:.7">seed revealed · next draw opening…</div>';
+  b.classList.add('show');
+  setTimeout(()=>b.classList.remove('show'),3800);
 }
-
-/* ================= render ================= */
-function renderTop(){
-  $('bal').textContent=fmt(balance);
-  $('fiveId').textContent=five.id;
-  $('grandId').textContent=grand.id;
-  $('fiveSold').textContent=five.sold.toLocaleString();
-  $('grandSold').textContent=grand.sold.toLocaleString();
-  $('fiveMine').textContent=five.mine.length?('You\u2019re in \u00D7'+five.mine.length+' (entry '+five.mine.join(', ')+')'):'';
-  $('grandMine').textContent=grand.mine.length?('You\u2019re in \u00D7'+grand.mine.length):'';
-  $('fiveEnter').disabled=balance<five.price;
-  $('grandEnter').disabled=balance<grand.price;
-}
-function renderUpcoming(){
-  const rows=[];
-  let t=new Date(five.end);
+function renderUpcomingFrom(t0){
+  const rows=[];let t=new Date(t0);
   for(let i=0;i<6;i++){
     const isHour=t.getMinutes()===0;
     rows.push('<div class="brow'+(i===0?' next':'')+(isHour?' grand':'')+'">'
-      +'<span class="t">'+pad(t.getHours())+':'+pad(t.getMinutes())+'</span>'
+      +'<span class="t">'+hm(t)+'</span>'
       +'<span class="nm">'+(isHour?'Hourly Grand':'Five-Minute Draw')+'</span>'
-      +'<span class="pz">'+(isHour?'\u00A31,000':'\u00A3100')+'</span>'
+      +'<span class="pz">'+(isHour?'£1,000':'£100')+'</span>'
       +'<span class="st">'+(i===0?'ENTRIES OPEN':'UPCOMING')+'</span></div>');
     t=new Date(t.getTime()+5*60000);
   }
   $('upcoming').innerHTML=rows.join('');
 }
 let results=[];
-function seedResults(){
-  // a believable recent history
-  let t=new Date(five.end.getTime()-5*60000);
-  for(let i=0;i<5;i++){
-    const isHour=t.getMinutes()===0;
-    results.push(fakeResult(t,isHour));
-    t=new Date(t.getTime()-5*60000);
-  }
-  renderResults();
-}
-function fakeResult(t,isHour){
-  const id=idFor(isHour?'GRAND':'FIVE',t);
-  const sold=(isHour?420:38)+hashStr(id)%(isHour?260:70);
-  return {time:pad(t.getHours())+':'+pad(t.getMinutes()), grand:isHour,
-    prize:isHour?1000:100, entry:1+hashStr(id+'w')%sold,
-    who:FIRSTNAMES[hashStr(id+'n')%FIRSTNAMES.length]+' from '+TOWNS[hashStr(id+'t')%TOWNS.length], me:false};
-}
 function renderResults(){
-  $('results').innerHTML=results.slice(0,7).map(r=>
+  $('results').innerHTML=results.slice(0,8).map(r=>
     '<div class="brow'+(r.grand?' grand':'')+(r.me?' me':'')+'">'
     +'<span class="t">'+r.time+'</span>'
     +'<span class="nm">'+(r.grand?'Hourly Grand':'Five-Minute Draw')
-    +' <span class="who">entry <b>#'+r.entry+'</b> \u00B7 '+r.who+'</span></span>'
-    +'<span class="pz">\u00A3'+r.prize.toLocaleString()+'</span></div>').join('');
+    +' <span class="who">'+(r.entry?('entry <b>#'+r.entry+'</b> · '+r.who):'no entries')+'</span></span>'
+    +'<span class="pz">£'+r.prize.toLocaleString()+'</span></div>').join('');
 }
 
-/* ================= entering ================= */
-function enter(d){
-  if(balance<d.price)return;
-  balance-=d.price;
-  d.sold++;
-  d.mine.push(d.sold);   // your entry number
-  renderTop();
+/* ==================================================================
+   LIVE MODE — real shared draws via /api/card
+   ================================================================== */
+let LIVE=false, S=null, skewMs=0;
+function applyState(){
+  const f=S.open&&S.open.five, g=S.open&&S.open.grand;
+  if(f){
+    $('fiveId').textContent='FIVE-'+hm(f.off_at).replace(':','');
+    $('fiveSold').textContent=f.sold.toLocaleString();
+    $('fiveHash').textContent=f.seed_hash;
+    const m=mine[f.id]||[];
+    $('fiveMine').textContent=m.length?('You’re in ×'+m.length+' (entry '+m.join(', ')+')'):'';
+    $('fiveEnter').disabled=balance<1;
+    renderUpcomingFrom(f.off_at);
+  }
+  if(g){
+    $('grandId').textContent='GRAND-'+hm(g.off_at).replace(':','');
+    $('grandSold').textContent=g.sold.toLocaleString();
+    const m=mine[g.id]||[];
+    $('grandMine').textContent=m.length?('You’re in ×'+m.length):'';
+    $('grandEnter').disabled=balance<2;
+  }
+  for(const r of (S.results||[])){
+    if(seenSettled.includes(r.draw_id))continue;
+    seenSettled.push(r.draw_id);
+    const m=mine[r.draw_id]||[];
+    const iWon=!!(r.winner_entry&&m.includes(r.winner_entry));
+    if(iWon){balance+=r.prize_p/100;}
+    const age=(new Date(S.server_now)-new Date(r.off_at))/1000;
+    if(age<120) banner(r.kind==='grand'?'grandOff':'fiveOff',
+      r.kind==='grand'?'HOURLY GRAND':'FIVE-MINUTE DRAW',
+      r.winner_entry,iWon,r.prize_p/100,'Entry #'+r.winner_entry);
+  }
+  results=(S.results||[]).map(r=>{
+    const won=(mine[r.draw_id]||[]).includes(r.winner_entry);
+    return {time:hm(r.off_at),grand:r.kind==='grand',prize:r.prize_p/100,
+      entry:r.winner_entry,
+      who:won?'YOU':(r.winner_entry?('of '+r.sold+' entries'):''),
+      me:won};
+  });
+  renderResults();
+  $('bal').textContent=fmt(balance);
+  saveAll();
 }
-$('fiveEnter').addEventListener('click',()=>enter(five));
-$('grandEnter').addEventListener('click',()=>enter(grand));
+async function syncLive(){
+  try{
+    const r=await fetch('/api/card',{cache:'no-store'});
+    if(!r.ok)throw 0;
+    S=await r.json();
+    if(S.error)throw 0;
+    skewMs=new Date(S.server_now)-new Date();
+    if(!LIVE){LIVE=true;$('modeBadge').textContent='LIVE';$('modeBadge').style.color='var(--match)';}
+    applyState();
+  }catch(e){
+    if(!LIVE&&!DEMO_RUNNING)startDemo();
+  }
+}
+async function enterLive(kind){
+  const price=kind==='grand'?2:1;
+  if(balance<price)return;
+  try{
+    const r=await fetch('/api/card',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({kind,punter})});
+    if(!r.ok)throw 0;
+    const d=await r.json();
+    if(d.error||!d.draw_id)throw 0;
+    balance-=price;
+    mine[d.draw_id]=(mine[d.draw_id]||[]).concat([d.entry_no]);
+    saveAll();
+    await syncLive();
+  }catch(e){}
+}
+function liveClockTick(){
+  if(!LIVE||!S||!S.open)return;
+  const now=new Date(Date.now()+skewMs);
+  const f=S.open.five,g=S.open.grand;
+  if(f){const s=Math.max(Math.floor((new Date(f.off_at)-now)/1000),0);
+    $('fiveClock').textContent=pad(Math.floor(s/60))+':'+pad(s%60);
+    if(s===0)syncLive();}
+  if(g){const s=Math.max(Math.floor((new Date(g.off_at)-now)/1000),0);
+    $('grandClock').textContent=pad(Math.floor(s/60))+':'+pad(s%60);}
+}
 
-/* ================= the off ================= */
-function drawOff(d, bannerEl){
+/* ==================================================================
+   DEMO MODE — simulated board (until the backend is connected)
+   ================================================================== */
+let DEMO_RUNNING=false, five={}, grand={};
+function newDraw(kind){
+  const isG=kind==='grand';
+  const end=isG?nextBoundary(60):nextBoundary(5);
+  const id=(isG?'GRAND-':'FIVE-')+hm(end).replace(':','');
+  const d={kind,end,id,price:isG?2:1,prize:isG?1000:100,
+    sold:(isG?420:38)+hashStr(id)%(isG?260:70),mine:[],
+    seed:id+'|'+crypto.getRandomValues(new Uint32Array(3)).join('-')};
+  sha256(d.seed).then(h=>{d.hash=h;if(kind==='five')$('fiveHash').textContent=h;});
+  return d;
+}
+function renderDemoTop(){
+  $('bal').textContent=fmt(balance);
+  $('fiveId').textContent=five.id;$('grandId').textContent=grand.id;
+  $('fiveSold').textContent=five.sold.toLocaleString();
+  $('grandSold').textContent=grand.sold.toLocaleString();
+  $('fiveMine').textContent=five.mine.length?('You’re in ×'+five.mine.length+' (entry '+five.mine.join(', ')+')'):'';
+  $('grandMine').textContent=grand.mine.length?('You’re in ×'+grand.mine.length):'';
+  $('fiveEnter').disabled=balance<1;$('grandEnter').disabled=balance<2;
+}
+function fakeResult(t,isHour){
+  const id=(isHour?'GRAND-':'FIVE-')+hm(t).replace(':','');
+  const sold=(isHour?420:38)+hashStr(id)%(isHour?260:70);
+  return {time:hm(t),grand:isHour,prize:isHour?1000:100,
+    entry:1+hashStr(id+'w')%sold,
+    who:FIRSTNAMES[hashStr(id+'n')%FIRSTNAMES.length]+' from '+TOWNS[hashStr(id+'t')%TOWNS.length],me:false};
+}
+function demoOff(d,el){
   const winner=1+Math.floor(Math.random()*d.sold);
   const iWon=d.mine.includes(winner);
   const who=iWon?'YOU':(FIRSTNAMES[Math.floor(Math.random()*FIRSTNAMES.length)]+' from '+TOWNS[Math.floor(Math.random()*TOWNS.length)]);
   if(iWon)balance+=d.prize;
-  const b=$(bannerEl);
-  b.innerHTML='<div class="sub">'+(d.kind==='grand'?'HOURLY GRAND':'FIVE-MINUTE DRAW')+' \u2014 OFF!</div>'
-    +'<div class="big">WINNING ENTRY #'+winner+'</div>'
-    +(iWon?'<div class="win">THAT\u2019S YOU \u2014 \u00A3'+d.prize.toLocaleString()+' WON!</div>'
-          :'<div class="sub">'+who+' takes \u00A3'+d.prize.toLocaleString()+'</div>')
-    +'<div class="sub" style="opacity:.7">seed revealed \u00B7 next draw opening\u2026</div>';
-  b.classList.add('show');
-  results.unshift({time:pad(d.end.getHours())+':'+pad(d.end.getMinutes()), grand:d.kind==='grand',
-    prize:d.prize, entry:winner, who:iWon?'YOU':who, me:iWon});
+  banner(el,d.kind==='grand'?'HOURLY GRAND':'FIVE-MINUTE DRAW',winner,iWon,d.prize,who);
+  results.unshift({time:hm(d.end),grand:d.kind==='grand',prize:d.prize,entry:winner,who:iWon?'YOU':who,me:iWon});
   renderResults();
-  setTimeout(()=>{b.classList.remove('show');},3800);
 }
-
-/* ================= clock ================= */
-function tick(){
-  const now=new Date();
-  const f=(five.end-now)/1000, g=(grand.end-now)/1000;
-  if(f<=0){
-    drawOff(five,'fiveOff');
-    five=newDraw('five');
-    renderUpcoming();
-  }
-  if(g<=0){
-    drawOff(grand,'grandOff');
-    grand=newDraw('grand');
-  }
+function demoTick(){
+  if(LIVE)return;
+  if((five.end-new Date())<=0){demoOff(five,'fiveOff');five=newDraw('five');renderUpcomingFrom(five.end);}
+  if((grand.end-new Date())<=0){demoOff(grand,'grandOff');grand=newDraw('grand');}
   const fs=Math.max(Math.floor((five.end-new Date())/1000),0);
   const gs=Math.max(Math.floor((grand.end-new Date())/1000),0);
   $('fiveClock').textContent=pad(Math.floor(fs/60))+':'+pad(fs%60);
   $('grandClock').textContent=pad(Math.floor(gs/60))+':'+pad(gs%60);
-  // demo: entries trickle in as the off approaches
-  if(Math.random()<(fs<60?.45:.12)){five.sold++;$('fiveSold').textContent=five.sold.toLocaleString();}
-  if(Math.random()<.08){grand.sold++;$('grandSold').textContent=grand.sold.toLocaleString();}
+  if(Math.random()<(fs<60?.45:.12)){five.sold++;}
+  if(Math.random()<.08){grand.sold++;}
+  renderDemoTop();
+}
+function startDemo(){
+  if(DEMO_RUNNING)return;DEMO_RUNNING=true;
+  $('modeBadge').textContent='DEMO MODE — backend not connected';
+  $('modeBadge').style.color='var(--gold)';
+  five=newDraw('five');grand=newDraw('grand');
+  renderDemoTop();renderUpcomingFrom(five.end);
+  let t=new Date(five.end.getTime()-5*60000);
+  for(let i=0;i<5;i++){results.push(fakeResult(t,t.getMinutes()===0));t=new Date(t.getTime()-5*60000);}
+  renderResults();
+  setInterval(demoTick,1000);
 }
 
 /* ================= wiring ================= */
+$('fiveEnter').addEventListener('click',()=>{
+  if(LIVE){enterLive('five');}
+  else if(balance>=1){balance-=1;five.sold++;five.mine.push(five.sold);renderDemoTop();}
+});
+$('grandEnter').addEventListener('click',()=>{
+  if(LIVE){enterLive('grand');}
+  else if(balance>=2){balance-=2;grand.sold++;grand.mine.push(grand.sold);renderDemoTop();}
+});
 $('freeBtn').addEventListener('click',()=>$('freeModal').classList.add('open'));
 $('freeClose').addEventListener('click',()=>$('freeModal').classList.remove('open'));
 $('freeModal').addEventListener('click',e=>{if(e.target.id==='freeModal')$('freeModal').classList.remove('open');});
 
-five=newDraw('five');
-grand=newDraw('grand');
-renderTop();
-renderUpcoming();
-seedResults();
-setInterval(()=>{tick();renderTop();},1000);
+syncLive();
+setInterval(syncLive,4000);
+setInterval(liveClockTick,500);
+
 </script>
 </body>
 </html>
