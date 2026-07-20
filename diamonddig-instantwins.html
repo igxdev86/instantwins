@@ -246,10 +246,16 @@ async function syncPool(){
   try{
     const r=await fetch('/api/pool?game=DD',{cache:'no-store'});
     if(!r.ok)throw 0;
-    const s=await r.json(); if(s.error)throw 0;
-    if(!LIVE){LIVE=true;const pr=document.querySelector('.poolref');if(pr)pr.textContent+=' \u00B7 LIVE';}
-    applyPoolState(s);
+    const s=await r.json();
+    if(!s||s.error||!s.pool)throw 0;
+    applyPoolState(s);                     // apply first; only then declare LIVE
+    if(!LIVE){
+      LIVE=true;
+      const pr=document.querySelector('.poolref');
+      if(pr)pr.append(' \u00B7 LIVE');    // append a text node — keeps #poolNo alive
+    }
   }catch(e){
+    console.error('pool sync failed',e);
     if(!LIVE&&!pool.id)openDemoPool(false);
   }
 }
