@@ -51,6 +51,7 @@ header{padding:14px 16px 6px;display:flex;align-items:center;justify-content:spa
 .drawbar b{color:var(--text)}
 .drawbar .off{color:var(--acc);font-weight:600}
 .drawbar .off b{color:var(--acc);font-size:13px}
+.poolref{margin:5px 16px 0;text-align:center;font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.5px}
 .progwrap{margin:6px 16px 0;height:6px;background:var(--panel);border:1px solid var(--panel-edge);border-radius:4px;overflow:hidden}
 .prog{height:100%;width:0;background:linear-gradient(90deg,var(--acc-deep),var(--acc));transition:width .3s}
 .comp{margin:8px 16px 0;display:flex;justify-content:space-between;gap:8px}
@@ -140,18 +141,19 @@ footer b{color:var(--text)}
   <div class="balance">Credit <b id="bal">—</b></div>
 </header>
 
-<div class="guarantee">Every prize in every pool will be won — guaranteed &amp; verifiable</div>
+<div class="guarantee">Every prize below will be won — guaranteed &amp; verifiable</div>
 
 <div class="drawbar">
-  <span>POOL <b id="poolNo">—</b></span>
-  <span class="off"><b id="soldCt">—</b></span>
+  <span id="topLine">—</span>
+  <span class="off"><b id="leftCt">—</b> LEFT</span>
 </div>
 <div class="progwrap"><div class="prog" id="prog"></div></div>
+<div class="poolref">pool <span id="poolNo">—</span> · every pool verifiable in the fairness panel below</div>
 
 <div class="comp">
   <div class="stat gold"><b>£500</b><i>Pot / pool</i></div>
   <div class="stat"><b>£2</b><i>Per climb</i></div>
-  <div class="stat"><b id="left">—</b><i>Left this pool</i></div>
+  <div class="stat"><b>86</b><i>Winners /500</i></div>
   <div class="stat"><b>1-in-5.8</b><i>Win odds</i></div>
 </div>
 
@@ -164,16 +166,16 @@ footer b{color:var(--text)}
   <button class="btn btn-go" id="goBtn">CLIMB · £2</button>
   <button class="btn btn-free" id="freeBtn">Enter free<br>by post</button>
 </div>
-<div class="ticket-line" id="ticketLine">A fresh allocation is committed for every pool · playing reveals your entry's prize</div>
+<div class="ticket-line" id="ticketLine">Every entry has its prize locked in before you buy — play to reveal yours</div>
 
 <div class="panel">
-  <h2>PRIZE TABLE — EVERY POOL</h2>
+  <h2>PRIZE TABLE</h2>
   <div class="prow"><span class="pv" style="color:var(--gold)">£100</span><span class="pc" id="t0">1 of 1 left</span></div>
   <div class="prow"><span class="pv">£20</span><span class="pc" id="t1">5 of 5 left</span></div>
   <div class="prow"><span class="pv">£10</span><span class="pc" id="t2">10 of 10 left</span></div>
   <div class="prow"><span class="pv">£5</span><span class="pc" id="t3">20 of 20 left</span></div>
   <div class="prow"><span class="pv">£2</span><span class="pc" id="t4">50 of 50 left</span></div>
-  <div class="odds-line">Each pool is a fixed set of <b>500 numbered entries at £2</b> with the full £500 prize table above — <b>86 winning entries in every pool</b>, 1-in-5.8, identical pool after pool. A fresh allocation is committed before each pool opens and its seed is revealed the moment the final entry sells. Any pool still open 28 days after opening settles then, with unsold-entry prizes drawn among its entrants.</div>
+  <div class="odds-line"><b>86 winners in every 500 entries — the odds never change.</b> £2 a go, prizes £2 to £100, and every time 500 entries sell out the full prize table above resets. Every prize is locked in before anyone buys, and you can check it — the how lives in the fairness panel below.</div>
 </div>
 
 <div class="panel">
@@ -184,7 +186,7 @@ footer b{color:var(--text)}
     <div class="hash" id="commitHash">computing…</div>
     <p><b>Previous pool <span id="prevId">—</span> — seed revealed at sell-out:</b></p>
     <div class="hash prev" id="prevSeed">awaiting first sell-out this session…</div>
-    <p>Hash the revealed seed yourself and confirm it matches the commitment published while that pool was live. Reveal log:</p>
+    <p>Hash the revealed seed yourself and confirm it matches the commitment published while that pool was live. Any pool still open 28 days after opening settles then, with unsold-entry prizes drawn among its entrants. Reveal log:</p>
     <div class="log" id="log"><div data-empty="1">No plays yet this session.</div></div>
   </div>
 </div>
@@ -223,9 +225,11 @@ function drawHiddenTicket(){
 }
 function refresh(){
   $('bal').textContent=fmt(balance);
-  $('left').textContent=ticketsLeft.toLocaleString();
   TIERS.forEach((t,i)=>{$('t'+i).textContent=t.left+' of '+t.total+' left';});
-  $('soldCt').textContent=(CAP-ticketsLeft)+' / '+CAP+' SOLD';
+  $('topLine').textContent = TIERS[0].left>0
+    ? ('£'+TIERS[0].v.toLocaleString()+' TOP PRIZE IN PLAY')
+    : 'TOP PRIZE WON — FRESH POOL SOON';
+  $('leftCt').textContent=ticketsLeft;
   $('prog').style.width=(100*(CAP-ticketsLeft)/CAP)+'%';
   $('goBtn').disabled=busy||balance<PRICE||ticketsLeft<=0;
 }
@@ -256,7 +260,7 @@ function rollPool(){
   prev={id:pool.id,seed:pool.seed};
   $('prevId').textContent=prev.id;
   $('prevSeed').textContent=prev.seed;
-  $('ticketLine').innerHTML='Pool <b>'+prev.id+'</b> SOLD OUT — seed revealed in the fairness panel · fresh pool open';
+  $('ticketLine').innerHTML='SOLD OUT — every prize claimed! Fresh prizes loaded · last pool\'s seed revealed in the fairness panel';
   poolNo++;
   openPool(true);
 }
