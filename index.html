@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>InstantWins.co.uk — Win in the next five minutes</title>
+<meta name="description" content="Eleven instant-win games, a fresh draw every five minutes, every prize guaranteed and verifiable. Free entry route on every draw.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#17233B;--soft:#6B7A99;--line:#E3EAF5;--wash:#F2F8FE;--buy:#1D4ED8;--match:#0E9F6E;--gold:#B8860B}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Archivo',sans-serif;background:#fff;color:var(--ink)}
+.topbar{display:flex;gap:4px;padding:12px 16px;border-bottom:1px solid var(--line);font-weight:700;font-size:13px;max-width:960px;margin:0 auto}
+.topbar a{color:#31415E;text-decoration:none;padding:6px 10px;border-radius:8px}
+.topbar a.on{background:#EAF2FD;color:var(--buy)}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+
+/* hero */
+.hero{padding:30px 0 10px;text-align:left}
+.hero h1{font-size:2rem;font-weight:900;letter-spacing:-.03em;line-height:1.08}
+.hero h1 .num{font-family:'IBM Plex Mono',monospace;color:var(--buy)}
+.hero p{color:var(--soft);font-size:.88rem;margin-top:10px;line-height:1.6;max-width:620px}
+.gbadge{display:inline-block;margin-top:14px;font-size:.66rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);border:1.5px dashed var(--gold);border-radius:8px;padding:7px 12px}
+.heroctas{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.cta{display:inline-block;text-decoration:none;font-weight:800;font-size:.85rem;padding:12px 18px;border-radius:10px}
+.cta.primary{background:var(--buy);color:#fff}
+.cta.free{color:var(--buy);border:2px dashed var(--buy)}
+
+/* countdown strip */
+.nextbar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--wash);border:1px solid var(--line);border-radius:12px;padding:13px 15px;margin:20px 0 4px;font-size:.8rem;font-weight:700;flex-wrap:wrap}
+.nextbar .num{font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--buy);font-size:1.15rem}
+.nextbar .sub{color:var(--soft);font-weight:600;font-size:.72rem}
+
+/* games grid */
+.sechead{display:flex;align-items:baseline;justify-content:space-between;padding:22px 0 4px}
+.sechead h2{font-size:1.15rem;font-weight:900;letter-spacing:-.02em}
+.sechead span{font-size:.7rem;color:var(--soft);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:10px;padding:10px 0 6px}
+.gcard{display:block;border:1px solid var(--line);border-top:4px solid var(--gacc);border-radius:13px;padding:14px 12px 12px;text-decoration:none;color:var(--ink);transition:box-shadow .15s,transform .15s;background:#fff}
+.gcard:hover{box-shadow:0 8px 22px rgba(23,35,59,.12);transform:translateY(-2px)}
+.gname{font-weight:900;font-size:.85rem;letter-spacing:.01em}
+.gsub{color:var(--soft);font-size:.66rem;margin-top:3px;line-height:1.4;min-height:26px}
+.gmeta{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+.gmeta span{font-family:'IBM Plex Mono',monospace;font-size:.58rem;font-weight:600;color:var(--soft);background:var(--wash);border:1px solid var(--line);border-radius:5px;padding:2px 5px}
+.gmeta .top{color:var(--match);border-color:#CBEBDD;background:#EDFAF4}
+.gcta{margin-top:10px;font-size:.68rem;font-weight:800;color:var(--buy)}
+.gcard.prem{background:linear-gradient(160deg,#FFFDF4,#fff 55%)}
+.gcard.prem .gmeta .top{color:var(--gold);border-color:#EAD9A8;background:#FBF6E4}
+
+/* trust strip */
+.trust{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:18px 0}
+.tcell{border:1px solid var(--line);border-radius:13px;padding:15px;background:var(--wash)}
+.tcell h3{font-size:.8rem;font-weight:900;margin-bottom:5px}
+.tcell p{font-size:.72rem;color:var(--soft);line-height:1.6}
+.tcell b{color:var(--ink)}
+.tcell a{color:var(--buy);font-weight:700}
+
+footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;color:var(--soft);font-size:.66rem;line-height:1.7;text-align:center;max-width:960px;margin-left:auto;margin-right:auto}
+</style>
+</head>
+<body>
+<nav class="topbar">
+  <a href="index.html" class="on">Home</a>
+  <a href="card.html">Card</a>
+  <a href="games.html">Games</a>
+  <a href="results.html">Results</a>
+  <a href="free-entry.html">Free entry</a>
+  <a href="fairness.html">Fairness</a>
+</nav>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>Win in the next <span class="num" id="heroClock">5:00</span></h1>
+    <p>Eleven instant-win games. The Card fires a draw every five minutes; the games run in numbered 500-entry
+       pools — fixed prize table, results locked and published as a tamper-proof fingerprint before
+       every pool opens, seed revealed the moment it sells out.
+       Play reveals the prize already attached to your numbered entry. Nothing else does.</p>
+    <div class="gbadge">Every prize in every pool will be won — guaranteed &amp; verifiable</div>
+    <div class="heroctas">
+      <a class="cta primary" href="games.html">Play the games</a>
+      <a class="cta free" href="free-entry.html">Enter free by post</a>
+    </div>
+  </div>
+
+  <div class="nextbar">
+    <span>Card draws off in <span class="num" id="clock">--:--</span></span>
+    <span class="sub">Games run in numbered pools &middot; £500 pot per pool &middot; 86 winners in every 500 entries &middot; sold out = settled</span>
+  </div>
+
+  <a class="nextbar" href="card.html" style="text-decoration:none;color:var(--ink)">
+    <span>THE CLASSIC CARD &middot; a draw off every five minutes &middot; <b style="color:var(--buy)">&pound;1,000 Hourly Grand</b> on the hour</span>
+    <span class="sub" style="color:var(--buy);font-weight:800">Open the card &rarr;</span>
+  </a>
+
+  <div class="sechead"><h2>The games</h2><span>£2 a go &middot; instant reveal &middot; same odds every pool</span></div>
+  <div class="grid">
+    <a class="gcard" href="plinko-instantwins.html" style="--gacc:#F5C542">
+      <div class="gname">PLINKO DROP</div><div class="gsub">Drop the ball, land the bin</div>
+      <div class="gmeta"><span>£2</span><span class="top">Top £100</span><span>1-in-5.8</span></div>
+      <div class="gcta">Play &rarr;</div>
+    </a>
+    <a class="gcard" href="rocketcash-instantwins.html" style="--gacc:#FF7A2F">
+      <div class="gname">ROCKET CASH</div><div class="gsub">How high will it lock?</div>
+      <div class="gmeta"><span>£2</span><span class="top">Top £100</span><span>1-in-5.8</span></div>
+      <div class="gcta">Play &rarr;</div>
+    </a>
+    <a class="gcard" href="diamonddig-instantwins.html" style="--gacc:#2FD6C3">
+      <div class="gname">DIAMOND DIG</div><div class="gsub">Pick 3 tiles, find the gem</div>
+      <div class="gmeta"><span>£2</span><span class="top">Top £100</span><span>1-in-5.8</span></div>
+      <div class="gcta">Play &rarr;</div>
+    </a>
+    <a class="gcard" href="theclaw-instantwins.html" style="--gacc:#FF5FA2">
+      <div class="gname">THE CLAW</div><div class="gsub">Grab a capsule, crack it open</div>
+      <div class="gmeta"><span>£2</span><span class="top">Top £100</span><span>1-in-5.8</span></div>
+      <div class="gcta">Play &rarr;</div>
+    </a>
+    <a class="gcard prem" href="safecracker-instantwins.html" style="--gacc:#C79A1B">
+      <div class="gname">SAFE CRACKER</div><div class="gsub">The premium vault — £250 top</div>
+      <div class="gmeta"><span>£5</span><span class="top">Top £250</span><span>1-in-9.5</span></div>
+      <div class="gcta">Play &rarr;</div>
+    </a>
+    <a class="gcard" href="packrip-instantwins.html" style="--gacc:#4F9BFF">
+      <div class="gname">PACK RIP</div><div class="gsub">Tear the pack, flip the hero</div>
+      <div class="gmeta"><span>£2</span><span class="top">Top £100</span><span>1-in-5.8</span></div>
+      <div class="gcta">Play &rarr;</div>
+    </a>
+    <a class="gcard" href="photofinish-instantwins.html" style="--gacc:#61D95B">
+      <div class="gname">PHOTO FINISH</div><div class="gsub">Your runner, six lanes, one line</div>
+      <div class="gmeta"><span>£2</span><span class="top">Top £100</span><span>1-in-5.8</span></div>
+      <div class="gcta">Play &rarr;</div>
+    </a>
+    <a class="gcard" href="balloonburst-instantwins.html" style="--gacc:#FF4D5E">
+      <div class="gname">BALLOON BURST</div><div class="gsub">Bigger balloon, bigger prize</div>
+      <div class="gmeta"><span>£2</span><span class="top">Top £100</span><span>1-in-5.8</span></div>
+      <div class="gcta">Play &rarr;</div>
+    </a>
+    <a class="gcard" href="pennypusher-instantwins.html" style="--gacc:#E0A93F">
+      <div class="gname">PENNY PUSHER</div><div class="gsub">Nudge the token off the edge</div>
+      <div class="gmeta"><span>£2</span><span class="top">Top £100</span><span>1-in-5.8</span></div>
+      <div class="gcta">Play &rarr;</div>
+    </a>
+    <a class="gcard" href="luckyladder-instantwins.html" style="--gacc:#B07CFF">
+      <div class="gname">LUCKY LADDER</div><div class="gsub">Flip up the rungs and bank</div>
+      <div class="gmeta"><span>£2</span><span class="top">Top £100</span><span>1-in-5.8</span></div>
+      <div class="gcta">Play &rarr;</div>
+    </a>
+    <a class="gcard" href="cashgrab-instantwins.html" style="--gacc:#85C96B">
+      <div class="gname">CASH GRAB</div><div class="gsub">10 seconds in the booth</div>
+      <div class="gmeta"><span>£2</span><span class="top">Top £100</span><span>1-in-5.8</span></div>
+      <div class="gcta">Play &rarr;</div>
+    </a>
+  </div>
+
+  <div class="trust">
+    <div class="tcell">
+      <h3>The outcome is never in the game</h3>
+      <p>Before each pool opens, a shuffled entry&rarr;prize allocation is fixed and its <b>SHA-256 hash
+         published</b> on the game page. The ball, the claw, the rocket are presentation only — they reveal
+         the prize already attached to your entry number and change nothing.</p>
+    </div>
+    <div class="tcell">
+      <h3>Verify every single pool</h3>
+      <p>The moment a pool sells out, its <b>seed is revealed</b>. Re-hash it yourself and confirm it
+         matches the commitment shown while the pool was live. Any pool still open after 28 days settles
+         then, prizes drawn among its entrants. Full detail on the <a href="fairness.html">Fairness page</a>.</p>
+    </div>
+    <div class="tcell">
+      <h3>Free entry, always</h3>
+      <p>Every pool of every game can be entered <b>free by post with identical odds</b> — free entries
+         are processed ahead of paid sales, from the same numbered sequence. See
+         <a href="free-entry.html">Free entry</a>. No purchase necessary.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  All games form part of the single continuous arrangement of free-entry prize draws on InstantWins.co.uk,
+  structured under the free-entry provisions of Schedule 2 of the Gambling Act 2005. No purchase necessary:
+  see Free entry. Prize tables and entry caps are published per pool and never change mid-pool.
+  Structure subject to solicitor sign-off before launch. 18+. UK residents only. Promoter: IGX Ltd.
+</footer>
+
+<script>
+const pad=n=>String(n).padStart(2,'0');
+function tick(){
+  const d=new Date(); const e=new Date(d); e.setSeconds(0,0);
+  e.setMinutes(e.getMinutes()-(e.getMinutes()%5)+5);
+  const s=Math.floor((e-d)/1000);
+  const t=pad(Math.floor(s/60))+':'+pad(s%60);
+  document.getElementById('clock').textContent=t;
+  document.getElementById('heroClock').textContent=t;
+}
+setInterval(tick,250); tick();
+</script>
+</body>
+</html>
