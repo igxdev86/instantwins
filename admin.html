@@ -1,0 +1,122 @@
+<!doctype html><html lang="en-GB"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin console — InstantWins.co.uk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#17233B;--soft:#6B7A99;--line:#E3EAF5;--wash:#F2F8FE;--buy:#1D4ED8;--match:#0E9F6E;--gold:#B8860B;--bad:#C0273A}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Archivo',sans-serif;background:#fff;color:var(--ink)}
+.topbar{display:flex;gap:2px;padding:12px 12px;border-bottom:1px solid var(--line);font-weight:700;font-size:12.5px;max-width:960px;margin:0 auto;flex-wrap:wrap}
+.topbar a{color:#31415E;text-decoration:none;padding:6px 9px;border-radius:8px}
+.topbar a.on{background:#EAF2FD;color:var(--buy)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 40px}
+h1{font-size:1.4rem;font-weight:900;letter-spacing:-.02em;padding:22px 0 4px}
+p.lead{color:var(--soft);font-size:.82rem;line-height:1.6;margin-bottom:14px}
+.panel{border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:14px;background:#fff}
+.panel h2{font-size:.92rem;font-weight:900;margin-bottom:10px}
+label{display:block;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--soft);margin:12px 0 5px}
+input,textarea{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:12px;font-family:'Archivo';font-size:.9rem;background:var(--wash)}
+textarea{min-height:90px;resize:vertical}
+.btn{display:inline-block;border:none;background:var(--buy);color:#fff;font-family:'Archivo';font-weight:800;font-size:.88rem;padding:13px 20px;border-radius:10px;cursor:pointer;margin-top:14px}
+.btn.ghost{background:none;color:var(--buy);border:2px dashed var(--buy)}
+.btn:disabled{opacity:.5}
+.err{color:var(--bad);font-size:.78rem;font-weight:700;margin-top:10px;min-height:16px}
+.ok{color:var(--match)}
+.mono{font-family:'IBM Plex Mono',monospace}
+.row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.8rem;align-items:baseline}
+.row:last-child{border-bottom:none}
+.row .m{color:var(--soft);font-size:.7rem}
+.pill{font-family:'IBM Plex Mono',monospace;font-size:.68rem;font-weight:700;background:var(--wash);border:1px solid var(--line);border-radius:6px;padding:2px 7px}
+.win{color:var(--match);font-weight:800}
+footer{border-top:1px solid var(--line);margin-top:26px;padding:16px;color:var(--soft);font-size:.64rem;line-height:1.7;text-align:center}
+.msg{max-width:82%;padding:9px 12px;border-radius:12px;margin:6px 0;font-size:.82rem;line-height:1.45}
+.msg.user{background:#EAF2FD;margin-left:auto;border-bottom-right-radius:3px}
+.msg.admin{background:var(--wash);border:1px solid var(--line);border-bottom-left-radius:3px}
+.msg .t{font-size:.58rem;color:var(--soft);margin-top:3px}
+.tabs{display:flex;gap:8px;margin-top:16px}
+.tabs button{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px;font-family:'Archivo';font-weight:800;font-size:.82rem;cursor:pointer;color:var(--soft)}
+.tabs button.on{border-color:var(--buy);color:var(--buy);background:#EAF2FD}
+</style></head><body>
+<nav class="topbar">
+  <a href="index.html">Home</a><a href="card.html">Card</a><a href="games.html">Games</a>
+  <a href="results.html">Results</a><a href="free-entry.html">Free entry</a>
+  <a href="fairness.html">Fairness</a><a href="account.html" class="on">Account</a>
+</nav><div class="wrap">
+  <h1>Admin console</h1>
+  <div class="err" id="gate"></div>
+  <div id="all" style="display:none">
+  <div class="panel"><h2>Tonight's numbers</h2><div id="stats"></div></div>
+  <div class="panel"><h2>Send an announcement to all users</h2>
+    <label>Title</label><input id="anTitle" placeholder="e.g. New games live tonight">
+    <label>Message</label><textarea id="anBody"></textarea>
+    <button class="btn" id="anGo">PUBLISH ANNOUNCEMENT</button>
+    <div class="err" id="anErr"></div>
+  </div>
+  <div class="panel"><h2>Support threads</h2><div id="threads"><span class="m" style="color:var(--soft);font-size:.75rem">Loading…</span></div></div>
+  <div class="panel" id="threadPanel" style="display:none"><h2 id="threadTitle">Thread</h2>
+    <div id="thread" style="display:flex;flex-direction:column"></div>
+    <label>Reply as InstantWins</label><textarea id="reBody"></textarea>
+    <button class="btn" id="reGo">SEND REPLY</button>
+    <div class="err" id="reErr"></div>
+  </div>
+  <div class="panel"><h2>Users</h2><div id="users"></div></div>
+  </div>
+</div><footer>InstantWins.co.uk is operated by IGX Ltd. All draws form a single continuous arrangement of
+free-entry prize competitions under Schedule 2 of the Gambling Act 2005. Test mode: all credit is
+play-money. 18+, UK residents only. Structure subject to solicitor sign-off before launch.</footer>
+<script>
+const $=id=>document.getElementById(id);
+function sess(){try{return JSON.parse(localStorage.getItem('iw_session'))}catch(e){return null}}
+function clearSess(){localStorage.removeItem('iw_session')}
+async function api(path,body){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();if(!r.ok||d.error)throw new Error(d.error||'failed');return d;}
+const fmtp=p=>'£'+(p/100).toLocaleString('en-GB',{minimumFractionDigits:2});
+function esc(x){const d=document.createElement('div');d.textContent=x;return d.innerHTML;}
+
+const s=sess(); if(!s){location.href='signup.html';}
+let curUser=null;
+async function guard(){
+  try{ const me=await api('/api/auth',{action:'me',token:s.token});
+    if(!me.is_admin){$('gate').textContent='This account is not an admin. Run the admin SQL flag for your email, then log out and back in.';return false;}
+    $('all').style.display='';return true;
+  }catch(e){$('gate').textContent=e.message;return false;}
+}
+async function loadStats(){
+  const d=await api('/api/admin',{action:'stats',token:s.token});
+  $('stats').innerHTML=
+    '<div class="row"><span>Users</span><span class="mono">'+d.users+'</span></div>'
+   +'<div class="row"><span>Game entries sold</span><span class="mono">'+d.entries_sold+'</span></div>'
+   +'<div class="row"><span>Card entries</span><span class="mono">'+d.card_entries+'</span></div>'
+   +'<div class="row"><span>Prizes credited</span><span class="mono win">'+fmtp(d.prizes_paid_p)+'</span></div>'
+   +(d.per_game||[]).map(g=>'<div class="row"><span class="m">'+esc(g.game)+'</span><span class="mono">'+g.sold+' sold</span></div>').join('')
+   +'<div class="row"><b>Recent wins</b><span></span></div>'
+   +((d.recent_wins||[]).map(w=>'<div class="row"><span class="m">'+esc(w.who)+' · '+esc(w.reason)+'</span><span class="mono win">+'+fmtp(w.amount_p)+'</span></div>').join('')||'<div class="row"><span class="m">None yet</span></div>');
+}
+async function loadThreads(){
+  const t=await api('/api/admin',{action:'threads',token:s.token});
+  $('threads').innerHTML=t.length?t.map(x=>
+    '<div class="row"><span><b>'+esc(x.name)+'</b> <span class="m">'+esc(x.email)+' · '+x.count+' msgs</span></span>'
+    +'<button class="pill" style="cursor:pointer;border:none" onclick="openThread(\''+x.user_id+'\',\''+esc(x.name)+'\')">Open</button></div>').join('')
+    :'<span style="color:var(--soft);font-size:.75rem">No support messages yet.</span>';
+}
+window.openThread=async(uid,name)=>{
+  curUser=uid;$('threadPanel').style.display='';$('threadTitle').textContent='Thread — '+name;
+  const m=await api('/api/admin',{action:'thread',token:s.token,user_id:uid});
+  $('thread').innerHTML=m.map(x=>'<div class="msg '+(x.sender==='admin'?'user':'admin')+'">'+esc(x.body)+'<div class="t">'+x.sender+' · '+new Date(x.at).toLocaleString()+'</div></div>').join('');
+  $('threadPanel').scrollIntoView({behavior:'smooth'});
+};
+$('reGo').onclick=async()=>{
+  const b=$('reBody').value.trim(); if(!b||!curUser)return;
+  try{await api('/api/admin',{action:'reply',token:s.token,user_id:curUser,body:b});$('reBody').value='';openThread(curUser,$('threadTitle').textContent.slice(9));loadThreads();}
+  catch(e){$('reErr').textContent=e.message;}
+};
+$('anGo').onclick=async()=>{
+  try{await api('/api/admin',{action:'announce',token:s.token,title:$('anTitle').value,body:$('anBody').value});
+    $('anTitle').value='';$('anBody').value='';$('anErr').textContent='Published.';$('anErr').className='err ok';}
+  catch(e){$('anErr').textContent=e.message;}
+};
+async function loadUsers(){
+  const u=await api('/api/admin',{action:'users',token:s.token});
+  $('users').innerHTML=u.map(x=>'<div class="row"><span><b>'+esc(x.name)+'</b> <span class="m">'+esc(x.email)+' · joined '+new Date(x.joined).toLocaleDateString()+'</span></span><span class="mono">'+fmtp(x.balance_p)+'</span></div>').join('');
+}
+(async()=>{ if(await guard()){loadStats();loadThreads();loadUsers();setInterval(loadThreads,20000);} })();
+</script></body></html>
