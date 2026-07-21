@@ -107,13 +107,27 @@ footer{margin:20px 16px 24px;font-size:9.5px;color:var(--muted);line-height:1.65
 footer b{color:var(--text)}
 @media (prefers-reduced-motion: reduce){.result-pop{transition:none}}
 
-.rrwrap{min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
-.slotname{font-family:'Bungee';font-size:18px;color:var(--acc);letter-spacing:1px}
+.rrwrap{min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:12px 0}
+.slotname{font-family:'Bungee';font-size:18px;color:var(--acc);letter-spacing:1px;text-align:center}
+.featTag{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;color:#0A0D1C;background:var(--acc);border-radius:5px;padding:3px 9px}
 .reels{display:flex;gap:12px;background:#0E1330;border:3px solid var(--acc);border-radius:16px;padding:16px}
-.reel{width:92px;height:110px;border-radius:10px;background:linear-gradient(180deg,#EAECF6,#C9D0E4);color:#141414;font-size:52px;line-height:110px;text-align:center}
+.reel{width:88px;height:106px;border-radius:10px;background:linear-gradient(180deg,#EAECF6,#C9D0E4);color:#141414;font-size:48px;line-height:106px;text-align:center;position:relative;transition:transform .3s}
 .reel.blur{filter:blur(3px)}
 .reel.hot{background:linear-gradient(180deg,#FFF3CE,#F5C542)}
-.rrlegend{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);text-align:center;padding:0 12px}
+.reel.wildhot{background:linear-gradient(180deg,var(--acc),var(--acc-deep));color:#fff}
+.reel.tall{transform:scaleY(1.12)}
+.grid3{display:grid;grid-template-columns:repeat(3,84px);gap:8px;background:#0E1330;border:3px solid var(--acc);border-radius:16px;padding:14px}
+.cell{height:76px;border-radius:9px;background:linear-gradient(180deg,#EAECF6,#C9D0E4);color:#141414;font-size:34px;line-height:76px;text-align:center;position:relative}
+.cell.blur{filter:blur(3px)}
+.cell.hot{background:linear-gradient(180deg,#FFF3CE,#F5C542)}
+.cell.lock{background:linear-gradient(180deg,var(--acc),var(--acc-deep));color:#fff;box-shadow:0 0 0 2px #FFF3CE inset}
+.cell.lock i{position:absolute;bottom:2px;left:0;right:0;font-style:normal;font-family:'IBM Plex Mono',monospace;font-size:10px;line-height:1;color:#FFF3CE}
+.cell.pop{transform:scale(.1);opacity:0;transition:all .3s}
+.cell.drop{transform:translateY(-14px);opacity:.6}
+.featZone{min-height:30px;display:flex;align-items:center;justify-content:center}
+.fx{font-family:'Bungee';font-size:16px;color:var(--gold);letter-spacing:1px}
+.fxoff{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)}
+.rrlegend{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--muted);text-align:center;padding:0 12px;line-height:1.7}
 .slotswitch{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--acc);font-weight:700;text-decoration:none}
 
 </style>
@@ -152,14 +166,7 @@ footer b{color:var(--text)}
 </div>
 
 <div class="stage-wrap" id="stage">
-  <div class="rrwrap">
-    <div class="slotname" id="slotName">—</div>
-    <div class="reels">
-      <div class="reel" id="r0">?</div><div class="reel" id="r1">?</div><div class="reel" id="r2">?</div>
-    </div>
-    <div class="rrlegend" id="slotLegend"></div>
-    <a class="slotswitch" id="slotSwitch" href="thespins.html">&larr; all 20 slots</a>
-  </div>
+  <div class="rrwrap" id="stagebox"></div>
   <div class="result-pop" id="pop"><div class="amt" id="popAmt"></div><div class="lbl" id="popLbl"></div></div>
 </div>
 
@@ -176,7 +183,7 @@ footer b{color:var(--text)}
   <div class="prow"><span class="pv">£10</span><span class="pc" id="t2">10 of 10 left</span></div>
   <div class="prow"><span class="pv">£5</span><span class="pc" id="t3">20 of 20 left</span></div>
   <div class="prow"><span class="pv">£2</span><span class="pc" id="t4">50 of 50 left</span></div>
-  <div class="odds-line"><b>86 winners in every 500 entries — the odds never change.</b> £2 a go, prizes £2 to £100, and every time 500 entries sell out the full prize table above resets. Every prize is locked in before anyone buys, and you can check it — the how lives in the fairness panel below. <b>All twenty slots share one pool</b> — every spin, on any theme, takes the next entry from the same sealed allocation. The theme is presentation only.</div>
+  <div class="odds-line"><b>86 winners in every 500 entries — the odds never change.</b> £2 a go, prizes £2 to £100, and every time 500 entries sell out the full prize table above resets. Every prize is locked in before anyone buys, and you can check it — the how lives in the fairness panel below. <b>All forty slots share one pool</b> — every spin, on any theme, takes the next entry from the same sealed allocation. Themes and features are presentation only.</div>
 </div>
 
 <div class="panel">
@@ -193,7 +200,7 @@ footer b{color:var(--text)}
 </div>
 
 <footer>
-  <b>THE SPINS</b> runs as a series of numbered entry pools within the single continuous arrangement of free-entry prize draws on InstantWins.co.uk, structured under the free-entry provisions of Schedule 2 of the Gambling Act 2005 — it is not gambling and no licence is required. Every pool may be entered free by post with identical odds; free entries are processed ahead of paid sales. A pool closes and its seed is revealed the moment its final entry sells; any pool still open 28 days after opening settles then, with unsold-entry prizes drawn among its entrants. All twenty slots draw from the same shared pool — the theme you pick is presentation only and does not affect the outcome. 18+, UK residents only. Full T&amp;Cs apply. Structure subject to solicitor sign-off before launch. Promoter: IGX Ltd.
+  <b>THE SPINS</b> runs as a series of numbered entry pools within the single continuous arrangement of free-entry prize draws on InstantWins.co.uk, structured under the free-entry provisions of Schedule 2 of the Gambling Act 2005 — it is not gambling and no licence is required. Every pool may be entered free by post with identical odds; free entries are processed ahead of paid sales. A pool closes and its seed is revealed the moment its final entry sells; any pool still open 28 days after opening settles then, with unsold-entry prizes drawn among its entrants. All forty slots draw from the same shared pool — the theme and any feature animations are presentation only and do not affect the outcome. 18+, UK residents only. Full T&amp;Cs apply. Structure subject to solicitor sign-off before launch. Promoter: IGX Ltd.
 </footer>
 
 <div class="modal" id="freeModal">
@@ -377,61 +384,248 @@ $('freeModal').addEventListener('click',e=>{if(e.target.id==='freeModal')$('free
 
 /* ================= GAME THEATRE ================= */
 
-const THEMES=[
- {n:'FRUIT FRENZY',a:'#FF4D5E',d:'#C22334',s:['7\u{FE0F}\u{20E3}','\u{1F352}','\u{1F347}','\u{1F34A}','\u{1F34B}','\u{2B50}']},
- {n:'EGYPT GOLD',a:'#F5C542',d:'#C79A1B',s:['\u{1F441}\u{FE0F}','\u{1F3FA}','\u{1F40D}','\u{1FAB2}','\u{1F334}','\u{1F53B}']},
- {n:'PIRATE PLUNDER',a:'#4F9BFF',d:'#1F5FC4',s:['\u{1F4B0}','\u{1F480}','\u{2693}','\u{1F5FA}\u{FE0F}','\u{1F99C}','\u{2694}\u{FE0F}']},
- {n:'SPACE RACE',a:'#8D6BFF',d:'#5A38C4',s:['\u{1FA90}','\u{1F680}','\u{1F47E}','\u{2604}\u{FE0F}','\u{1F31F}','\u{1F6F0}\u{FE0F}']},
- {n:'WILD WEST',a:'#E0A93F',d:'#A87718',s:['\u{1F920}','\u{1F40E}','\u{1F335}','\u{1FA99}','\u{1F33E}','\u{2B50}']},
- {n:'DEEP SEA',a:'#2FD6C3',d:'#148F81',s:['\u{1F419}','\u{1F988}','\u{1F420}','\u{1F980}','\u{1F41A}','\u{1FAE7}']},
- {n:'JUNGLE WILDS',a:'#61D95B',d:'#2F9E2B',s:['\u{1F981}','\u{1F412}','\u{1F99C}','\u{1F40D}','\u{1F34C}','\u{1F33F}']},
- {n:'FROZEN FORTUNE',a:'#6FD3FF',d:'#2A8CC0',s:['\u{2744}\u{FE0F}','\u{26C4}','\u{1F9CA}','\u{1F427}','\u{1F3D4}\u{FE0F}','\u{2728}']},
- {n:"DRAGON'S HOARD",a:'#E8384F',d:'#A81C30',s:['\u{1F409}','\u{1F525}','\u{1F6E1}\u{FE0F}','\u{1F3F0}','\u{1F5E1}\u{FE0F}','\u{2728}']},
- {n:'CANDY RUSH',a:'#F972B6',d:'#C23A85',s:['\u{1F36D}','\u{1F36C}','\u{1F9C1}','\u{1F369}','\u{1F36A}','\u{1F36B}']},
- {n:'LUCKY LEPRECHAUN',a:'#3DDC84',d:'#1E9E58',s:['\u{1F340}','\u{1F308}','\u{1FA99}','\u{1F3A9}','\u{1F37A}','\u{2B50}']},
- {n:'NEON NIGHTS',a:'#FF5FA2',d:'#C42670',s:['\u{1F303}','\u{1F3B7}','\u{1F378}','\u{1F483}','\u{1F57A}','\u{2728}']},
- {n:'FARM FORTUNES',a:'#FFAA2B',d:'#C77A08',s:['\u{1F69C}','\u{1F404}','\u{1F413}','\u{1F33D}','\u{1F95A}','\u{1F33B}']},
- {n:'VIKING VOYAGE',a:'#C9D6EA',d:'#7C8DB0',s:['\u{26F5}','\u{1FA93}','\u{1F6E1}\u{FE0F}','\u{2692}\u{FE0F}','\u{1F43A}','\u{2744}\u{FE0F}']},
- {n:'SAMURAI SPINS',a:'#FF7A2F',d:'#D14E0A',s:['\u{1F3EF}','\u{2694}\u{FE0F}','\u{1F338}','\u{1F38B}','\u{1F977}','\u{1F319}']},
- {n:'AZTEC RICHES',a:'#C79A1B',d:'#8F6A00',s:['\u{2600}\u{FE0F}','\u{1F5FF}','\u{1F985}','\u{1F406}','\u{1FAB6}','\u{1F525}']},
- {n:'HAUNTED HALLS',a:'#B07CFF',d:'#7A3FE0',s:['\u{1F47B}','\u{1F987}','\u{1F577}\u{FE0F}','\u{1F480}','\u{1F56F}\u{FE0F}','\u{1F315}']},
- {n:'ROYAL RICHES',a:'#FFD34D',d:'#C79A1B',s:['\u{1F451}','\u{1F48D}','\u{1F3C6}','\u{1F99A}','\u{1F37E}','\u{265B}']},
- {n:'FOOTBALL FEVER',a:'#35D07A',d:'#1E8F52',s:['\u{1F3C6}','\u{26BD}','\u{1F945}','\u{1F45F}','\u{1F9E4}','\u{1F4E3}']},
- {n:'LUCKY LANTERNS',a:'#E23B4E',d:'#A81C30',s:['\u{1F9E7}','\u{1F3EE}','\u{1F41F}','\u{1FA99}','\u{1F960}','\u{1F386}']}
-];
+const THEMES=[{"n": "FRUIT FRENZY", "a": "#FF4D5E", "d": "#C22334", "f": "plain", "s": ["7\ufe0f\u20e3", "\ud83c\udf52", "\ud83c\udf47", "\ud83c\udf4a", "\ud83c\udf4b", "\u2b50"]}, {"n": "EGYPT GOLD", "a": "#F5C542", "d": "#C79A1B", "f": "plain", "s": ["\ud83d\udc41\ufe0f", "\ud83c\udffa", "\ud83d\udc0d", "\ud83e\udeb2", "\ud83c\udf34", "\ud83d\udd3b"]}, {"n": "PIRATE PLUNDER", "a": "#4F9BFF", "d": "#1F5FC4", "f": "plain", "s": ["\ud83d\udcb0", "\ud83d\udc80", "\u2693", "\ud83d\uddfa\ufe0f", "\ud83e\udd9c", "\u2694\ufe0f"]}, {"n": "SPACE RACE", "a": "#8D6BFF", "d": "#5A38C4", "f": "plain", "s": ["\ud83e\ude90", "\ud83d\ude80", "\ud83d\udc7e", "\u2604\ufe0f", "\ud83c\udf1f", "\ud83d\udef0\ufe0f"]}, {"n": "WILD WEST", "a": "#E0A93F", "d": "#A87718", "f": "plain", "s": ["\ud83e\udd20", "\ud83d\udc0e", "\ud83c\udf35", "\ud83e\ude99", "\ud83c\udf3e", "\u2b50"]}, {"n": "DEEP SEA", "a": "#2FD6C3", "d": "#148F81", "f": "plain", "s": ["\ud83d\udc19", "\ud83e\udd88", "\ud83d\udc20", "\ud83e\udd80", "\ud83d\udc1a", "\ud83e\udee7"]}, {"n": "JUNGLE WILDS", "a": "#61D95B", "d": "#2F9E2B", "f": "plain", "s": ["\ud83e\udd81", "\ud83d\udc12", "\ud83e\udd9c", "\ud83d\udc0d", "\ud83c\udf4c", "\ud83c\udf3f"]}, {"n": "FROZEN FORTUNE", "a": "#6FD3FF", "d": "#2A8CC0", "f": "plain", "s": ["\u2744\ufe0f", "\u26c4", "\ud83e\uddca", "\ud83d\udc27", "\ud83c\udfd4\ufe0f", "\u2728"]}, {"n": "DRAGON'S HOARD", "a": "#E8384F", "d": "#A81C30", "f": "plain", "s": ["\ud83d\udc09", "\ud83d\udd25", "\ud83d\udee1\ufe0f", "\ud83c\udff0", "\ud83d\udde1\ufe0f", "\u2728"]}, {"n": "CANDY RUSH", "a": "#F972B6", "d": "#C23A85", "f": "plain", "s": ["\ud83c\udf6d", "\ud83c\udf6c", "\ud83e\uddc1", "\ud83c\udf69", "\ud83c\udf6a", "\ud83c\udf6b"]}, {"n": "LUCKY LEPRECHAUN", "a": "#3DDC84", "d": "#1E9E58", "f": "plain", "s": ["\ud83c\udf40", "\ud83c\udf08", "\ud83e\ude99", "\ud83c\udfa9", "\ud83c\udf7a", "\u2b50"]}, {"n": "NEON NIGHTS", "a": "#FF5FA2", "d": "#C42670", "f": "plain", "s": ["\ud83c\udf03", "\ud83c\udfb7", "\ud83c\udf78", "\ud83d\udc83", "\ud83d\udd7a", "\u2728"]}, {"n": "FARM FORTUNES", "a": "#FFAA2B", "d": "#C77A08", "f": "plain", "s": ["\ud83d\ude9c", "\ud83d\udc04", "\ud83d\udc13", "\ud83c\udf3d", "\ud83e\udd5a", "\ud83c\udf3b"]}, {"n": "VIKING VOYAGE", "a": "#C9D6EA", "d": "#7C8DB0", "f": "plain", "s": ["\u26f5", "\ud83e\ude93", "\ud83d\udee1\ufe0f", "\u2692\ufe0f", "\ud83d\udc3a", "\u2744\ufe0f"]}, {"n": "SAMURAI SPINS", "a": "#FF7A2F", "d": "#D14E0A", "f": "plain", "s": ["\ud83c\udfef", "\u2694\ufe0f", "\ud83c\udf38", "\ud83c\udf8b", "\ud83e\udd77", "\ud83c\udf19"]}, {"n": "AZTEC RICHES", "a": "#C79A1B", "d": "#8F6A00", "f": "plain", "s": ["\u2600\ufe0f", "\ud83d\uddff", "\ud83e\udd85", "\ud83d\udc06", "\ud83e\udeb6", "\ud83d\udd25"]}, {"n": "HAUNTED HALLS", "a": "#B07CFF", "d": "#7A3FE0", "f": "plain", "s": ["\ud83d\udc7b", "\ud83e\udd87", "\ud83d\udd77\ufe0f", "\ud83d\udc80", "\ud83d\udd6f\ufe0f", "\ud83c\udf15"]}, {"n": "ROYAL RICHES", "a": "#FFD34D", "d": "#C79A1B", "f": "plain", "s": ["\ud83d\udc51", "\ud83d\udc8d", "\ud83c\udfc6", "\ud83e\udd9a", "\ud83c\udf7e", "\u265b"]}, {"n": "FOOTBALL FEVER", "a": "#35D07A", "d": "#1E8F52", "f": "plain", "s": ["\ud83c\udfc6", "\u26bd", "\ud83e\udd45", "\ud83d\udc5f", "\ud83e\udde4", "\ud83d\udce3"]}, {"n": "LUCKY LANTERNS", "a": "#E23B4E", "d": "#A81C30", "f": "plain", "s": ["\ud83e\udde7", "\ud83c\udfee", "\ud83d\udc1f", "\ud83e\ude99", "\ud83e\udd60", "\ud83c\udf86"]}, {"n": "MEGA FORTUNE WHEEL", "a": "#F5C542", "d": "#C79A1B", "f": "wheel", "s": ["\ud83d\udcb0", "\ud83d\udc8e", "\ud83c\udf7e", "\ud83d\udc8d", "\ud83d\udd70\ufe0f", "\u2b50"]}, {"n": "WOLF MOON", "a": "#6FD3FF", "d": "#2A6FA8", "f": "expand", "s": ["\ud83d\udc3a", "\ud83c\udf15", "\ud83e\udd8c", "\ud83c\udf32", "\u26f0\ufe0f", "\u2b50"]}, {"n": "BOOK OF SECRETS", "a": "#E0A93F", "d": "#A87718", "f": "free", "s": ["\ud83d\udcd6", "\ud83d\udc51", "\ud83d\udc41\ufe0f", "\ud83e\udeb2", "\ud83c\udffa", "\u2b50"]}, {"n": "GEM STORM", "a": "#B07CFF", "d": "#7A3FE0", "f": "wild", "s": ["\ud83d\udc8e", "\u2b50", "\ud83d\udd36", "\ud83d\udd37", "\ud83d\udfe2", "\u26aa"]}, {"n": "BIG CATCH", "a": "#4F9BFF", "d": "#1F5FC4", "f": "hold", "s": ["\ud83d\udc1f", "\ud83c\udfa3", "\u26f5", "\ud83e\udeb1", "\ud83d\udcb0", "\u2693"]}, {"n": "SUGAR SMASH", "a": "#F972B6", "d": "#C23A85", "f": "cascade", "s": ["\ud83c\udf6d", "\ud83c\udf6c", "\ud83c\udf69", "\ud83e\uddc1", "\ud83c\udf6b", "\ud83c\udf68"]}, {"n": "THUNDER STRIKE", "a": "#FFD34D", "d": "#C79A1B", "f": "mult", "s": ["\u26a1", "\ud83c\udfdb\ufe0f", "\ud83e\udd85", "\ud83d\udd31", "\u2601\ufe0f", "\u2b50"]}, {"n": "TEMPLE TUMBLE", "a": "#61D95B", "d": "#2F9E2B", "f": "cascade", "s": ["\ud83d\uddff", "\ud83c\udf0b", "\ud83d\udc0d", "\ud83e\udea8", "\ud83c\udf3f", "\u2b50"]}, {"n": "END OF THE RAINBOW", "a": "#3DDC84", "d": "#1E9E58", "f": "wheel", "s": ["\ud83c\udf08", "\ud83c\udf40", "\ud83e\ude99", "\ud83c\udfa9", "\ud83c\udf7a", "\u2b50"]}, {"n": "VAMPIRE RICHES", "a": "#E8384F", "d": "#A81C30", "f": "free", "s": ["\ud83e\udddb", "\ud83e\udd87", "\ud83d\udd6f\ufe0f", "\ud83e\ude78", "\u26b0\ufe0f", "\ud83c\udf15"]}, {"n": "GOLDEN PHARAOH", "a": "#F5C542", "d": "#C79A1B", "f": "expand", "s": ["\ud83d\udc51", "\ud83d\udc2b", "\ud83c\udfdc\ufe0f", "\u2600\ufe0f", "\ud83e\udeb2", "\ud83d\udd3a"]}, {"n": "DIAMOND STRIKE", "a": "#2FD6C3", "d": "#148F81", "f": "mult", "s": ["\ud83d\udc8e", "7\ufe0f\u20e3", "\ud83d\udd14", "\ud83c\udf52", "\ud83c\udf4b", "\u2b50"]}, {"n": "JOKER'S JACKPOT", "a": "#FF4D5E", "d": "#C22334", "f": "respin", "s": ["\ud83c\udccf", "\ud83d\udd25", "\ud83d\udd14", "\ud83c\udf52", "\ud83c\udf4b", "\u2b50"]}, {"n": "OCEAN'S BOUNTY", "a": "#6FD3FF", "d": "#2A8CC0", "f": "hold", "s": ["\ud83e\uddaa", "\ud83d\udc2c", "\ud83d\udc20", "\ud83c\udf0a", "\ud83d\udcb0", "\u2693"]}, {"n": "MAYA FALLS", "a": "#35D07A", "d": "#1E8F52", "f": "cascade", "s": ["\ud83d\udca7", "\ud83d\uddff", "\ud83e\udd85", "\ud83d\udc06", "\ud83c\udf3d", "\u2b50"]}, {"n": "LUCKY BUDDHA", "a": "#FFAA2B", "d": "#C77A08", "f": "wild", "s": ["\ud83e\uddd8", "\ud83e\udeb7", "\ud83d\udd6f\ufe0f", "\ud83e\udde7", "\ud83e\ude99", "\u2b50"]}, {"n": "RAGNAROK REELS", "a": "#C9D6EA", "d": "#7C8DB0", "f": "mult", "s": ["\ud83d\udd28", "\u26a1", "\ud83d\udee1\ufe0f", "\ud83d\udc3a", "\u2744\ufe0f", "\u2b50"]}, {"n": "COSMIC CASH", "a": "#8D6BFF", "d": "#5A38C4", "f": "respin", "s": ["\ud83d\udcb8", "\ud83e\ude90", "\ud83d\ude80", "\ud83d\udef8", "\u2604\ufe0f", "\ud83c\udf1f"]}, {"n": "CROWN JEWELS", "a": "#FFD34D", "d": "#C79A1B", "f": "hold", "s": ["\ud83d\udc51", "\ud83d\udc8d", "\ud83c\udfc6", "\ud83d\udc8e", "\ud83d\udcb0", "\u265b"]}, {"n": "PHANTOM MANOR", "a": "#B07CFF", "d": "#7A3FE0", "f": "free", "s": ["\ud83d\udc7b", "\ud83c\udff0", "\ud83d\udd6f\ufe0f", "\ud83d\udd78\ufe0f", "\ud83d\udddd\ufe0f", "\ud83c\udf15"]}];
+const FEATNAME={plain:'',wild:'WILDS',respin:'RESPIN',mult:'MULTIPLIER',cascade:'CASCADE',free:'FREE SPINS',hold:'HOLD & SPIN',expand:'EXPANDING WILD',wheel:'BONUS WHEEL'};
 const qi=parseInt(new URLSearchParams(location.search).get('slot')||'0',10);
 const SLOT=THEMES[((qi%THEMES.length)+THEMES.length)%THEMES.length];
 document.documentElement.style.setProperty('--acc',SLOT.a);
 document.documentElement.style.setProperty('--acc-deep',SLOT.d);
 document.title=SLOT.n+' \u00B7 THE SPINS \u2014 InstantWins.co.uk';
-$('slotName').textContent=SLOT.n;
-$('slotLegend').innerHTML=TIERS.map((t,i)=>SLOT.s[i]+'\u00D73 \u00A3'+t.v).join(' \u00B7 ');
-$('slotSwitch').href='thespins.html';
+const WILD='\uD83C\uDCCF', SCAT='\uD83C\uDF1F', COIN='\uD83E\uDE99';
+function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+function two(){const a=rnd(SLOT.s);let b=a;while(b===a)b=rnd(SLOT.s);return [a,b];}
+
+/* ---------- stage construction ---------- */
+const GRID=(SLOT.f==='cascade'||SLOT.f==='hold');
+function buildStage(){
+  let h='<div class="slotname">'+SLOT.n+'</div>';
+  if(FEATNAME[SLOT.f])h+='<div class="featTag">'+FEATNAME[SLOT.f]+'</div>';
+  if(GRID){
+    h+='<div class="grid3">';
+    for(let i=0;i<9;i++)h+='<div class="cell" id="g'+i+'">?</div>';
+    h+='</div>';
+  }else{
+    h+='<div class="reels">';
+    for(let i=0;i<3;i++)h+='<div class="reel" id="r'+i+'">?</div>';
+    h+='</div>';
+  }
+  h+='<div class="featZone" id="featZone"></div>';
+  h+='<div class="rrlegend" id="slotLegend"></div>';
+  h+='<a class="slotswitch" href="thespins.html">&larr; all 40 slots</a>';
+  $('stagebox').innerHTML=h;
+  const leg=TIERS.map((t,i)=>SLOT.s[i]+'\u00D73 \u00A3'+t.v).join(' \u00B7 ');
+  const extra={wild:' \u00B7 '+WILD+' substitutes',respin:' \u00B7 near-miss triggers a respin',
+    mult:' \u00B7 line \u00D7 multiplier',cascade:' \u00B7 wins drop in',free:' \u00B7 3\u00D7'+SCAT+' = free spins',
+    hold:' \u00B7 3+ coins pay their total',expand:' \u00B7 wild fills reel 2',wheel:' \u00B7 3\u00D7'+SCAT+' spins the wheel'}[SLOT.f]||'';
+  $('slotLegend').textContent=leg+extra;
+}
+
+/* ---------- shared spin helpers ---------- */
+function reels(){return [$('r0'),$('r1'),$('r2')];}
+function startBlur(els){els.forEach(r=>{r.classList.add('blur');r.classList.remove('hot','wildhot');});
+  return setInterval(()=>{els.forEach(r=>{if(r.classList.contains('blur'))r.textContent=rnd(SLOT.s);});},70);}
+function stopSeq(els,iv,targets,base,gap,each,after){
+  targets.forEach((s,i)=>{setTimeout(()=>{
+    els[i].classList.remove('blur');els[i].textContent=s;
+    if(each)each(i,els[i]);
+    if(i===targets.length-1){clearInterval(iv);if(after)setTimeout(after,420);}
+  },base+i*gap);});}
+function featMsg(html){$('featZone').innerHTML=html;}
+function clearFeat(){$('featZone').innerHTML='';}
+
+/* ---------- the eight theatres ---------- */
+const RUN={};
+
+RUN.plain=(tier,done)=>{
+  const t=tier?[SLOT.s[TIERS.indexOf(tier)],SLOT.s[TIERS.indexOf(tier)],SLOT.s[TIERS.indexOf(tier)]]
+              :(Math.random()<.55?(x=>[x[0],x[0],x[1]])(two()):(()=>{const [a,b]=two();let c=a;while(c===a||c===b)c=rnd(SLOT.s);return[a,b,c];})());
+  const iv=startBlur(reels());
+  stopSeq(reels(),iv,t,900,520,(i,el)=>{if(tier)el.classList.add('hot');},
+    ()=>done(tier?null:'so close\u2026'));
+};
+
+RUN.wild=(tier,done)=>{
+  const els=reels(), iv=startBlur(els);
+  let t;
+  if(tier){const s=SLOT.s[TIERS.indexOf(tier)];t=[s,WILD,s];}
+  else{const [a,b]=two();t=[a,WILD,b];}
+  stopSeq(els,iv,t,900,520,null,()=>{
+    els[1].classList.add('wildhot');
+    featMsg('<span class="fx">'+WILD+' WILD!</span>');
+    setTimeout(()=>{
+      if(tier){els[1].textContent=t[0];els.forEach(e=>e.classList.add('hot'));}
+      done(tier?null:'wild couldn\u2019t save it\u2026');
+    },900);
+  });
+};
+
+RUN.respin=(tier,done)=>{
+  const els=reels(), iv=startBlur(els);
+  const s=tier?SLOT.s[TIERS.indexOf(tier)]:two()[0];
+  stopSeq(els,iv,[s,s,rnd(SLOT.s.filter(x=>x!==s))],900,520,null,()=>{
+    featMsg('<span class="fx">RESPIN!</span>');
+    els[2].classList.add('blur');
+    const iv2=setInterval(()=>{els[2].textContent=rnd(SLOT.s);},70);
+    setTimeout(()=>{
+      clearInterval(iv2);els[2].classList.remove('blur');
+      if(tier){els[2].textContent=s;els.forEach(e=>e.classList.add('hot'));}
+      else{let c=rnd(SLOT.s.filter(x=>x!==s));els[2].textContent=c;}
+      setTimeout(()=>done(tier?null:'respin just missed\u2026'),450);
+    },1100);
+  });
+};
+
+RUN.mult=(tier,done)=>{
+  const els=reels(), iv=startBlur(els);
+  const PAIRS={100:['\u00A310','\u00D710'],20:['\u00A310','\u00D72'],10:['\u00A32','\u00D75'],5:['\u00A31','\u00D75'],2:['\u00A31','\u00D72']};
+  let t;
+  if(tier){const s=SLOT.s[TIERS.indexOf(tier)];t=[s,s,s];}
+  else{const [a,b]=two();let c=a;while(c===a||c===b)c=rnd(SLOT.s);t=[a,b,c];}
+  stopSeq(els,iv,t,900,520,(i,el)=>{if(tier)el.classList.add('hot');},()=>{
+    if(!tier){featMsg('<span class="fxoff">MULTIPLIER \u2014 no line</span>');done('no line, no multiplier');return;}
+    const [base,m]=PAIRS[tier.v];
+    featMsg('<span class="fx" id="multChip">\u00D7?</span>');
+    const chip=$('multChip');const opts=['\u00D72','\u00D75','\u00D710','\u00D725','\u00D750'];
+    const iv2=setInterval(()=>{chip.textContent=rnd(opts);},80);
+    setTimeout(()=>{clearInterval(iv2);chip.textContent=m;
+      setTimeout(()=>{featMsg('<span class="fx">'+base+' line '+m+' = \u00A3'+tier.v+'</span>');done(null);},500);
+    },1300);
+  });
+};
+
+RUN.free=(tier,done)=>{
+  const els=reels(), iv=startBlur(els);
+  const big=tier&&TIERS.indexOf(tier)<2;
+  if(!big){ // small win or loser: scatter tease then normal line
+    let t;
+    if(tier){const s=SLOT.s[TIERS.indexOf(tier)];t=[s,s,s];}
+    else t=[SCAT,SCAT,rnd(SLOT.s)];
+    stopSeq(els,iv,t,900,520,(i,el)=>{if(tier)el.classList.add('hot');},
+      ()=>done(tier?null:'two scatters \u2014 so close to free spins\u2026'));
+    return;
+  }
+  stopSeq(els,iv,[SCAT,SCAT,SCAT],900,520,(i,el)=>el.classList.add('wildhot'),()=>{
+    featMsg('<span class="fx">3 FREE SPINS!</span>');
+    let spin=0;
+    const doFree=()=>{
+      spin++;
+      featMsg('<span class="fx">FREE SPIN '+spin+' / 3</span>');
+      const iv2=startBlur(els);
+      const s=SLOT.s[TIERS.indexOf(tier)];
+      const t=spin<3?(x=>[x[0],x[1],rnd(SLOT.s)])(two()):[s,s,s];
+      stopSeq(els,iv2,t,600,340,(i,el)=>{if(spin===3)el.classList.add('hot');},
+        ()=>{ if(spin<3)doFree(); else done(null); });
+    };
+    setTimeout(doFree,800);
+  });
+};
+
+RUN.hold=(tier,done)=>{
+  const cells=[...Array(9)].map((_,i)=>$('g'+i));
+  cells.forEach(c=>{c.className='cell';c.textContent='?';});
+  const COINSETS={100:[50,25,10,10,5],20:[10,5,5],10:[5,2,2,1],5:[2,2,1],2:[1,1]};
+  const vals=tier?COINSETS[tier.v]:[rnd([1,2,5]),rnd([1,2,5])];
+  const spots=[...Array(9).keys()].sort(()=>Math.random()-.5).slice(0,vals.length);
+  featMsg('<span class="fx">HOLD &amp; SPIN \u2014 3+ coins pay</span>');
+  let wave=0;
+  const waves=[[],[],[]];
+  spots.forEach((s,i)=>waves[Math.min(i,2)% 3].push(i)); // spread landings
+  spots.forEach((s,i)=>waves[i%3].push=null);
+  const landByWave=[spots.filter((_,i)=>i%3===0),spots.filter((_,i)=>i%3===1),spots.filter((_,i)=>i%3===2)];
+  const valFor={}; spots.forEach((s,i)=>valFor[s]=vals[i]);
+  const doWave=()=>{
+    wave++;
+    cells.forEach(c=>{if(!c.classList.contains('lock'))c.classList.add('blur');});
+    const iv=setInterval(()=>{cells.forEach(c=>{if(c.classList.contains('blur'))c.textContent=rnd(SLOT.s);});},70);
+    setTimeout(()=>{
+      clearInterval(iv);
+      cells.forEach(c=>{c.classList.remove('blur');if(!c.classList.contains('lock'))c.textContent=rnd(SLOT.s);});
+      landByWave[wave-1].forEach(idx=>{const c=cells[idx];c.classList.add('lock');c.textContent=COIN;
+        c.innerHTML=COIN+'<i>\u00A3'+valFor[idx]+'</i>';});
+      if(wave<3)setTimeout(doWave,500);
+      else{
+        const n=spots.length;
+        if(tier){featMsg('<span class="fx">'+n+' coins land \u2014 total \u00A3'+tier.v+'!</span>');done(null);}
+        else{featMsg('<span class="fxoff">only '+n+' coins \u2014 needs 3+</span>');done('needed 3 coins, landed '+n+'\u2026');}
+      }
+    },800);
+  };
+  doWave();
+};
+
+RUN.cascade=(tier,done)=>{
+  const cells=[...Array(9)].map((_,i)=>$('g'+i));
+  cells.forEach(c=>{c.className='cell';c.textContent=rnd(SLOT.s);});
+  featMsg('<span class="fx">CASCADE</span>');
+  let wave=0;
+  const doWave=()=>{
+    wave++;
+    const pop=[...Array(9).keys()].sort(()=>Math.random()-.5).slice(0,4);
+    pop.forEach(i=>cells[i].classList.add('pop'));
+    setTimeout(()=>{
+      pop.forEach(i=>{cells[i].classList.remove('pop');cells[i].classList.add('drop');cells[i].textContent=rnd(SLOT.s);});
+      setTimeout(()=>pop.forEach(i=>cells[i].classList.remove('drop')),260);
+      if(wave<2)setTimeout(doWave,450);
+      else setTimeout(()=>{
+        // final board: middle row is the line
+        const mid=[3,4,5];
+        if(tier){const s=SLOT.s[TIERS.indexOf(tier)];mid.forEach(i=>{cells[i].textContent=s;cells[i].classList.add('hot');});done(null);}
+        else{const [a,b]=two();let c2=a;while(c2===a||c2===b)c2=rnd(SLOT.s);
+          [a,b,c2].forEach((s,j)=>cells[mid[j]].textContent=s);done('nothing lined up\u2026');}
+      },420);
+    },320);
+  };
+  doWave();
+};
+
+RUN.expand=(tier,done)=>{
+  const els=reels(), iv=startBlur(els);
+  let sides;
+  if(tier){const s=SLOT.s[TIERS.indexOf(tier)];sides=[s,s];}
+  else sides=two();
+  stopSeq(els,iv,[sides[0],rnd(SLOT.s),sides[1]],900,520,null,()=>{
+    els[1].classList.add('wildhot');
+    els[1].textContent=WILD;
+    featMsg('<span class="fx">WILD EXPANDS!</span>');
+    els[1].classList.add('tall');
+    setTimeout(()=>{
+      if(tier){els.forEach(e=>e.classList.add('hot'));done(null);}
+      else done('wild reel, mismatched sides\u2026');
+    },900);
+  });
+};
+
+RUN.wheel=(tier,done)=>{
+  const els=reels(), iv=startBlur(els);
+  if(!tier){
+    stopSeq(els,iv,[SCAT,SCAT,rnd(SLOT.s)],900,520,null,
+      ()=>done('two bonus symbols \u2014 wheel stays shut\u2026'));
+    return;
+  }
+  stopSeq(els,iv,[SCAT,SCAT,SCAT],900,520,(i,el)=>el.classList.add('wildhot'),()=>{
+    featMsg('<span class="fx" id="wheelChip">BONUS WHEEL\u2026</span>');
+    const chip=$('wheelChip');
+    const labels=['\u00A32','\u00A35','\u00A310','\u00A320','\u00A3100'];
+    const iv2=setInterval(()=>{chip.textContent='\u25C0 '+rnd(labels)+' \u25B6';},90);
+    setTimeout(()=>{clearInterval(iv2);chip.textContent='\u25C0 \u00A3'+tier.v+' \u25B6';
+      setTimeout(()=>done(null),600);},1600);
+  });
+};
 
 const GAME={
-  init(){},
-  line(tier){
-    if(tier){const s=SLOT.s[TIERS.indexOf(tier)];return [s,s,s];}
-    const a=SLOT.s[Math.floor(Math.random()*SLOT.s.length)];
-    let b=a;while(b===a)b=SLOT.s[Math.floor(Math.random()*SLOT.s.length)];
-    if(Math.random()<.55)return [a,a,b];
-    let c=a;while(c===a||c===b)c=SLOT.s[Math.floor(Math.random()*SLOT.s.length)];
-    return [a,b,c];
-  },
+  init(){buildStage();},
   run(tier,done){
-    const reels=[$('r0'),$('r1'),$('r2')];
-    const target=this.line(tier);
-    if(REDUCE){reels.forEach((r,i)=>{r.textContent=target[i];r.classList.toggle('hot',!!tier);});done(tier?null:'so close\u2026');return;}
-    reels.forEach(r=>{r.classList.add('blur');r.classList.remove('hot');});
-    const iv=setInterval(()=>{reels.forEach(r=>{if(r.classList.contains('blur'))r.textContent=SLOT.s[Math.floor(Math.random()*SLOT.s.length)];});},70);
-    target.forEach((s,i)=>{
-      setTimeout(()=>{
-        reels[i].classList.remove('blur');
-        reels[i].textContent=s;
-        if(tier)reels[i].classList.add('hot');
-        if(i===2){clearInterval(iv);setTimeout(()=>done(tier?null:'so close\u2026'),600);}
-      },1000+i*550);
-    });
+    clearFeat();
+    if(REDUCE){ // reduced motion: settle instantly on a plain line
+      if(GRID){const cells=[...Array(9)].map((_,i)=>$('g'+i));cells.forEach(c=>{c.className='cell';c.textContent=rnd(SLOT.s);});
+        const mid=[3,4,5];const s=tier?SLOT.s[TIERS.indexOf(tier)]:null;
+        if(s)mid.forEach(i=>{cells[i].textContent=s;cells[i].classList.add('hot');});}
+      else{const s=tier?SLOT.s[TIERS.indexOf(tier)]:null;
+        const t=s?[s,s,s]:(x=>[x[0],x[1],x[0]])(two());
+        reels().forEach((r,i)=>{r.className='reel'+(s?' hot':'');r.textContent=t[i];});}
+      done(tier?null:'no line');return;
+    }
+    RUN[SLOT.f](tier,done);
   }
 };
 
