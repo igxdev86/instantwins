@@ -125,6 +125,7 @@ footer b{color:var(--text)}
   <a href="results.html">Results</a>
   <a href="free-entry.html">Free entry</a>
   <a href="fairness.html">Fairness</a>
+  <a href="account.html">Account</a>
 </nav>
 
 <header>
@@ -207,6 +208,8 @@ const CAP=500;
 const TIERS=[{v:100,total:1,left:1},{v:20,total:5,left:5},{v:10,total:10,left:10},{v:5,total:20,left:20},{v:2,total:50,left:50}];
 let ticketsLeft=CAP, nextTicket=1, nonce=0, balance=20.00, busy=false;
 const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let TOKEN=null;try{const _s=JSON.parse(localStorage.getItem('iw_session'));TOKEN=_s&&_s.token;}catch(e){}
+let srvPend=null, meFetched=false;
 const $=id=>document.getElementById(id);
 const fmt=n=>'£'+n.toLocaleString('en-GB',{minimumFractionDigits:2});
 const pad=n=>String(n).padStart(2,'0');
@@ -226,7 +229,8 @@ function refresh(){
     : 'TOP PRIZE WON — FRESH POOL SOON';
   $('leftCt').textContent=ticketsLeft;
   $('prog').style.width=(100*(CAP-ticketsLeft)/CAP)+'%';
-  $('goBtn').disabled=busy||balance<PRICE||ticketsLeft<=0;
+  if(LIVE&&!TOKEN){$('goBtn').textContent='SIGN IN TO PLAY';$('goBtn').disabled=busy;}
+  else{$('goBtn').disabled=busy||balance<PRICE||ticketsLeft<=0;}
 }
 
 /* ---------- numbered entry pools (LIVE via /api, demo fallback) ---------- */
@@ -255,6 +259,12 @@ async function syncPool(){
       LIVE=true;
       const pr=document.querySelector('.poolref');
       if(pr)pr.append(' \u00B7 LIVE');    // append a text node — keeps #poolNo alive
+      if(TOKEN&&!meFetched){meFetched=true;
+        fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({action:'me',token:TOKEN})})
+        .then(r=>r.json()).then(m=>{if(m&&m.balance_p!=null){balance=m.balance_p/100;refresh();}
+          else if(m&&m.error){TOKEN=null;refresh();}}).catch(()=>{});}
+      refresh();
     }
   }catch(e){
     console.error('pool sync failed',e);
@@ -289,8 +299,10 @@ function rollDemoPool(){
 let curTicket=0;
 function finish(tier,sub){
   const amtEl=$('popAmt'),lblEl=$('popLbl');
+  const srv=srvPend!=null;
+  if(srv){balance=srvPend;srvPend=null;}
   if(tier){
-    balance+=tier.v;
+    if(!srv)balance+=tier.v;
     amtEl.textContent='£'+tier.v.toLocaleString();
     amtEl.className='amt'+(tier.v>=20?' big':'');
     lblEl.textContent=sub||(tier.v>=20?'BIG WIN!':'WINNER');
@@ -317,21 +329,30 @@ $('goBtn').addEventListener('click',async ()=>{
   $('pop').classList.remove('show');
   let tier=null;
   if(LIVE){
-    // REAL: the server hands out the next numbered entry from the committed map
+    if(!TOKEN){busy=false;location.href='signup.html';return;}
+    // REAL: server debits the wallet and hands out the next committed entry
     try{
-      const r=await fetch('/api/buy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({game:'CG'})});
-      if(!r.ok)throw 0;
-      const d=await r.json(); if(d.error)throw 0;
-      balance-=PRICE;
+      const r=await fetch('/api/play',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:TOKEN,game:'CG'})});
+      const d=await r.json();
+      if(!r.ok||d.error)throw new Error((d&&d.error)||'entry failed');
       curTicket=d.entry_no;
       ticketsLeft=d.cap-d.sold;
       tier=TIERS.find(t=>t.v===d.prize_p/100)||null;
+      srvPend=d.balance_p/100;
+      balance=srvPend-(tier?tier.v:0);
       if(d.sold_out){
         prev={id:d.pool,seed:d.seed};
         $('prevId').textContent=prev.id;
         $('prevSeed').textContent=prev.seed;
       }
-    }catch(e){ busy=false; refresh(); return; }
+    }catch(e){
+      busy=false;
+      $('ticketLine').innerHTML=/credit/.test(e.message)
+        ?'Not enough play credit — top-ups arrive with Stripe'
+        :(/signed in/.test(e.message)?'Session expired — <a href="signup.html" style="color:var(--acc)">sign in again</a>':'Entry failed — try again');
+      if(/signed in/.test(e.message))TOKEN=null;
+      refresh(); return;
+    }
   }else{
     balance-=PRICE; ticketsLeft--;
     curTicket=nextTicket++;
