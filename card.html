@@ -89,6 +89,7 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
   <a href="results.html">Results</a>
   <a href="free-entry.html">Free entry</a>
   <a href="fairness.html">Fairness</a>
+  <a href="account.html">Account</a>
 </nav>
 
 <div class="wrap">
@@ -176,6 +177,16 @@ const TOWNS=['Cardiff','Leeds','Barry','Swindon','Glasgow','Luton','Wrexham','Hu
 /* ============ local identity + credit (persists on the real site) ==== */
 function store(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+let TOKEN=null;try{const _s=JSON.parse(localStorage.getItem('iw_session'));TOKEN=_s&&_s.token;}catch(e){}
+async function fetchMe(){
+  if(!TOKEN)return;
+  try{const r=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'me',token:TOKEN})});
+    const m=await r.json();
+    if(m&&m.balance_p!=null){balance=m.balance_p/100;$('bal').textContent=fmt(balance);}
+    else if(m&&m.error){TOKEN=null;}
+  }catch(e){}
+}
 let punter=load('iw_punter',null);
 if(!punter){punter='p-'+crypto.getRandomValues(new Uint32Array(2)).join('-');store('iw_punter',punter);}
 let balance=load('iw_credit',20.00);
@@ -229,7 +240,8 @@ function applyState(){
     $('fiveHash').textContent=f.seed_hash;
     const m=mine[f.id]||[];
     $('fiveMine').textContent=m.length?('You’re in ×'+m.length+' (entry '+m.join(', ')+')'):'';
-    $('fiveEnter').disabled=balance<1;
+    $('fiveEnter').textContent=TOKEN?'ENTER \u00B7 \u00A31':'SIGN IN TO ENTER';
+    $('fiveEnter').disabled=TOKEN?balance<1:false;
     renderUpcomingFrom(f.off_at);
   }
   if(g){
@@ -237,14 +249,15 @@ function applyState(){
     $('grandSold').textContent=g.sold.toLocaleString();
     const m=mine[g.id]||[];
     $('grandMine').textContent=m.length?('You’re in ×'+m.length):'';
-    $('grandEnter').disabled=balance<2;
+    $('grandEnter').textContent=TOKEN?'ENTER \u00B7 \u00A32':'SIGN IN TO ENTER';
+    $('grandEnter').disabled=TOKEN?balance<2:false;
   }
   for(const r of (S.results||[])){
     if(seenSettled.includes(r.draw_id))continue;
     seenSettled.push(r.draw_id);
     const m=mine[r.draw_id]||[];
     const iWon=!!(r.winner_entry&&m.includes(r.winner_entry));
-    if(iWon){balance+=r.prize_p/100;}
+    if(iWon){if(TOKEN){setTimeout(fetchMe,300);}else{balance+=r.prize_p/100;}}
     const age=(new Date(S.server_now)-new Date(r.off_at))/1000;
     if(age<120) banner(r.kind==='grand'?'grandOff':'fiveOff',
       r.kind==='grand'?'HOURLY GRAND':'FIVE-MINUTE DRAW',
@@ -268,27 +281,27 @@ async function syncLive(){
     S=await r.json();
     if(S.error)throw 0;
     skewMs=new Date(S.server_now)-new Date();
-    if(!LIVE){LIVE=true;$('modeBadge').textContent='LIVE';$('modeBadge').style.color='var(--match)';}
+    if(!LIVE){LIVE=true;$('modeBadge').textContent='LIVE';$('modeBadge').style.color='var(--match)';fetchMe();}
     applyState();
   }catch(e){
     if(!LIVE&&!DEMO_RUNNING)startDemo();
   }
 }
 async function enterLive(kind){
-  const price=kind==='grand'?2:1;
-  if(balance<price)return;
+  if(!TOKEN){location.href='signup.html';return;}
   try{
-    const r=await fetch('/api/card',{method:'POST',
+    const r=await fetch('/api/play',{method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({kind,punter})});
-    if(!r.ok)throw 0;
+      body:JSON.stringify({kind,token:TOKEN})});
     const d=await r.json();
-    if(d.error||!d.draw_id)throw 0;
-    balance-=price;
+    if(!r.ok||d.error||!d.draw_id)throw new Error((d&&d.error)||'entry failed');
+    balance=d.balance_p/100;
     mine[d.draw_id]=(mine[d.draw_id]||[]).concat([d.entry_no]);
     saveAll();
     await syncLive();
-  }catch(e){}
+  }catch(e){
+    if(/signed in/.test(e.message)){TOKEN=null;location.href='signup.html';}
+  }
 }
 function liveClockTick(){
   if(!LIVE||!S||!S.open)return;
