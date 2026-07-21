@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SAFE CRACKER — InstantWins.co.uk</title>
+<title>THE SPINS — InstantWins.co.uk</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Bungee&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 /*
-  SAFE CRACKER — pool-based instant game, InstantWins.co.uk
+  THE SPINS — pool-based instant game, InstantWins.co.uk
   -----------------------------------------------------
   Part of the site's single continuous arrangement of free-entry prize
   draws (Schedule 2, Gambling Act 2005). Framework invariants:
@@ -27,8 +27,8 @@
   --ink:#0A0D1C;
   --panel:#141936;
   --panel-edge:#232B5C;
-  --acc:#F5C542;
-  --acc-deep:#C79A1B;
+  --acc:#FF3D7F;
+  --acc-deep:#C21A5B;
   --gold:#F5C542;
   --win:#3DDC84;
   --text:#EAECF6;
@@ -106,19 +106,14 @@ footer{margin:20px 16px 24px;font-size:9.5px;color:var(--muted);line-height:1.65
 footer b{color:var(--text)}
 @media (prefers-reduced-motion: reduce){.result-pop{transition:none}}
 
-.safe{position:relative;height:340px;perspective:900px;margin:0 auto;max-width:300px}
-.door{position:absolute;inset:24px 10px;background:linear-gradient(160deg,#3A4266,#20263F);border:3px solid #4A5478;border-radius:14px;transform-origin:left center;transition:transform 1s cubic-bezier(.6,0,.3,1);z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;backface-visibility:hidden}
-.door.open{transform:rotateY(-108deg)}
-.dial-wrap{width:120px;height:120px;border-radius:50%;background:#141936;border:4px solid #4A5478;display:flex;align-items:center;justify-content:center}
-.dial{width:96px;height:96px;border-radius:50%;background:repeating-conic-gradient(#2A3252 0deg 8deg,#20263F 8deg 12deg);border:3px solid var(--gold);position:relative;transition:transform 1.05s cubic-bezier(.25,.1,.25,1)}
-.notch{position:absolute;top:2px;left:50%;width:4px;height:14px;background:var(--gold);transform:translateX(-50%);border-radius:2px}
-.combo{font-family:'IBM Plex Mono',monospace;font-size:16px;letter-spacing:3px;color:var(--gold);font-weight:600}
-.handle{width:60px;height:12px;background:#4A5478;border-radius:6px}
-.inside{position:absolute;inset:24px 10px;background:#0B0F22;border:3px solid #232B5C;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;z-index:1}
-.stack{font-size:44px;line-height:1}
-.inside .val{font-family:'Bungee';font-size:26px;color:var(--gold)}
-.inside .empty{font-size:38px;opacity:.6}
-.inside .note{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:700}
+.rrwrap{min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.slotname{font-family:'Bungee';font-size:18px;color:var(--acc);letter-spacing:1px}
+.reels{display:flex;gap:12px;background:#0E1330;border:3px solid var(--acc);border-radius:16px;padding:16px}
+.reel{width:92px;height:110px;border-radius:10px;background:linear-gradient(180deg,#EAECF6,#C9D0E4);color:#141414;font-size:52px;line-height:110px;text-align:center}
+.reel.blur{filter:blur(3px)}
+.reel.hot{background:linear-gradient(180deg,#FFF3CE,#F5C542)}
+.rrlegend{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);text-align:center;padding:0 12px}
+.slotswitch{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--acc);font-weight:700;text-decoration:none}
 
 </style>
 </head>
@@ -135,7 +130,7 @@ footer b{color:var(--text)}
 </nav>
 
 <header>
-  <div class="logo">SAFE CRACKER<span>INSTANT GAMES · INSTANTWINS.CO.UK</span></div>
+  <div class="logo">THE SPINS<span>INSTANT GAMES · INSTANTWINS.CO.UK</span></div>
   <div class="balance">Credit <b id="bal">—</b></div>
 </header>
 
@@ -150,37 +145,37 @@ footer b{color:var(--text)}
 
 <div class="comp">
   <div class="stat gold"><b>£500</b><i>Pot / pool</i></div>
-  <div class="stat"><b>£5</b><i>Per crack</i></div>
-  <div class="stat"><b>21</b><i>Winners /200</i></div>
-  <div class="stat"><b>1-in-9.5</b><i>Win odds</i></div>
+  <div class="stat"><b>£2</b><i>Per spin</i></div>
+  <div class="stat"><b>86</b><i>Winners /500</i></div>
+  <div class="stat"><b>1-in-5.8</b><i>Win odds</i></div>
 </div>
 
 <div class="stage-wrap" id="stage">
-  <div class="safe">
-    <div class="door" id="door">
-      <div class="dial-wrap"><div class="dial" id="dial"><div class="notch"></div></div></div>
-      <div class="combo" id="combo">-- &middot; -- &middot; --</div>
-      <div class="handle"></div>
+  <div class="rrwrap">
+    <div class="slotname" id="slotName">—</div>
+    <div class="reels">
+      <div class="reel" id="r0">?</div><div class="reel" id="r1">?</div><div class="reel" id="r2">?</div>
     </div>
-    <div class="inside" id="inside"></div>
+    <div class="rrlegend" id="slotLegend"></div>
+    <a class="slotswitch" id="slotSwitch" href="thespins.html">&larr; all 20 slots</a>
   </div>
   <div class="result-pop" id="pop"><div class="amt" id="popAmt"></div><div class="lbl" id="popLbl"></div></div>
 </div>
 
 <div class="controls">
-  <button class="btn btn-go" id="goBtn">CRACK · £5</button>
+  <button class="btn btn-go" id="goBtn">SPIN · £2</button>
   <button class="btn btn-free" id="freeBtn">Enter free<br>by post</button>
 </div>
 <div class="ticket-line" id="ticketLine">Every entry has its prize locked in before you buy — play to reveal yours</div>
 
 <div class="panel">
   <h2>PRIZE TABLE</h2>
-  <div class="prow"><span class="pv" style="color:var(--gold)">£250</span><span class="pc" id="t0">1 of 1 left</span></div>
-  <div class="prow"><span class="pv">£50</span><span class="pc" id="t1">1 of 1 left</span></div>
-  <div class="prow"><span class="pv">£25</span><span class="pc" id="t2">4 of 4 left</span></div>
-  <div class="prow"><span class="pv">£10</span><span class="pc" id="t3">5 of 5 left</span></div>
-  <div class="prow"><span class="pv">£5</span><span class="pc" id="t4">10 of 10 left</span></div>
-  <div class="odds-line"><b>21 winners in every 200 entries — the odds never change.</b> £5 a go, prizes £5 to £250, and every time 200 entries sell out the full prize table above resets. Every prize is locked in before anyone buys, and you can check it — the how lives in the fairness panel below.</div>
+  <div class="prow"><span class="pv" style="color:var(--gold)">£100</span><span class="pc" id="t0">1 of 1 left</span></div>
+  <div class="prow"><span class="pv">£20</span><span class="pc" id="t1">5 of 5 left</span></div>
+  <div class="prow"><span class="pv">£10</span><span class="pc" id="t2">10 of 10 left</span></div>
+  <div class="prow"><span class="pv">£5</span><span class="pc" id="t3">20 of 20 left</span></div>
+  <div class="prow"><span class="pv">£2</span><span class="pc" id="t4">50 of 50 left</span></div>
+  <div class="odds-line"><b>86 winners in every 500 entries — the odds never change.</b> £2 a go, prizes £2 to £100, and every time 500 entries sell out the full prize table above resets. Every prize is locked in before anyone buys, and you can check it — the how lives in the fairness panel below. <b>All twenty slots share one pool</b> — every spin, on any theme, takes the next entry from the same sealed allocation. The theme is presentation only.</div>
 </div>
 
 <div class="panel">
@@ -197,7 +192,7 @@ footer b{color:var(--text)}
 </div>
 
 <footer>
-  <b>SAFE CRACKER</b> runs as a series of numbered entry pools within the single continuous arrangement of free-entry prize draws on InstantWins.co.uk, structured under the free-entry provisions of Schedule 2 of the Gambling Act 2005 — it is not gambling and no licence is required. Every pool may be entered free by post with identical odds; free entries are processed ahead of paid sales. A pool closes and its seed is revealed the moment its final entry sells; any pool still open 28 days after opening settles then, with unsold-entry prizes drawn among its entrants. The combination is presentation only. 18+, UK residents only. Full T&amp;Cs apply. Structure subject to solicitor sign-off before launch. Promoter: IGX Ltd.
+  <b>THE SPINS</b> runs as a series of numbered entry pools within the single continuous arrangement of free-entry prize draws on InstantWins.co.uk, structured under the free-entry provisions of Schedule 2 of the Gambling Act 2005 — it is not gambling and no licence is required. Every pool may be entered free by post with identical odds; free entries are processed ahead of paid sales. A pool closes and its seed is revealed the moment its final entry sells; any pool still open 28 days after opening settles then, with unsold-entry prizes drawn among its entrants. All twenty slots draw from the same shared pool — the theme you pick is presentation only and does not affect the outcome. 18+, UK residents only. Full T&amp;Cs apply. Structure subject to solicitor sign-off before launch. Promoter: IGX Ltd.
 </footer>
 
 <div class="modal" id="freeModal">
@@ -205,17 +200,17 @@ footer b{color:var(--text)}
     <h3>ENTER FREE BY POST</h3>
     <p>Every draw on InstantWins.co.uk can be entered completely free, with identical odds to a paid entry. Send an unenclosed postcard with your full name, address, date of birth and email to:</p>
     <div class="addr">InstantWins Free Entry<br>IGX Ltd, PO Box (TBC)<br>United Kingdom</div>
-    <p class="small">Name the game (e.g. &ldquo;SAFE CRACKER&rdquo;) and optionally a pool number, or name nothing — your entry joins that game&rsquo;s open pool (or the next open pool on the site) at processing. One entry per postcard. Free entries are injected ahead of paid sales, from the same numbered sequence, with exactly equal chances of every prize. No purchase necessary.</p>
+    <p class="small">Name the game (e.g. &ldquo;THE SPINS&rdquo;) and optionally a pool number, or name nothing — your entry joins that game&rsquo;s open pool (or the next open pool on the site) at processing. One entry per postcard. Free entries are injected ahead of paid sales, from the same numbered sequence, with exactly equal chances of every prize. No purchase necessary.</p>
     <button class="modal-close" id="freeClose">GOT IT</button>
   </div>
 </div>
 
 <script>
 /* ================= SHARED CHASSIS ================= */
-const PRICE=5;
-const CAP=200;
-const TIERS=[{v:250,total:1,left:1},{v:50,total:1,left:1},{v:25,total:4,left:4},{v:10,total:5,left:5},{v:5,total:10,left:10}];
-let ticketsLeft=CAP, nextTicket=1, nonce=0, balance=50.00, busy=false;
+const PRICE=2;
+const CAP=500;
+const TIERS=[{v:100,total:1,left:1},{v:20,total:5,left:5},{v:10,total:10,left:10},{v:5,total:20,left:20},{v:2,total:50,left:50}];
+let ticketsLeft=CAP, nextTicket=1, nonce=0, balance=20.00, busy=false;
 const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let TOKEN=null;try{const _s=JSON.parse(localStorage.getItem('iw_session'));TOKEN=_s&&_s.token;}catch(e){}
 let srvPend=null, meFetched=false;
@@ -246,7 +241,7 @@ function refresh(){
 function hashStr(s){let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h;}
 async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');}
 let pool={}, prev=null, LIVE=false;
-let poolNo=40+hashStr('SC'+(new Date()).toISOString().slice(0,10))%25;
+let poolNo=40+hashStr('SP'+(new Date()).toISOString().slice(0,10))%25;
 
 /* LIVE: real shared pools from Supabase */
 function applyPoolState(s){
@@ -259,7 +254,7 @@ function applyPoolState(s){
 }
 async function syncPool(){
   try{
-    const r=await fetch('/api/pool?game=SC',{cache:'no-store'});
+    const r=await fetch('/api/pool?game=SP',{cache:'no-store'});
     if(!r.ok)throw 0;
     const s=await r.json();
     if(!s||s.error||!s.pool)throw 0;
@@ -283,10 +278,10 @@ async function syncPool(){
 
 /* DEMO: simulated pool until the backend answers */
 async function openDemoPool(fresh){
-  const id='SC-P'+String(poolNo).padStart(4,'0');
+  const id='SP-P'+String(poolNo).padStart(4,'0');
   TIERS.forEach(t=>t.left=t.total);
   ticketsLeft=CAP;
-  const sold=fresh?0:(160+hashStr(id)%35);
+  const sold=fresh?0:(430+hashStr(id)%60);
   for(let i=0;i<sold;i++){ticketsLeft--;drawHiddenTicket();}
   nextTicket=sold+1;
   pool={id,seed:id+'|'+crypto.getRandomValues(new Uint32Array(3)).join('-')};
@@ -313,8 +308,8 @@ function finish(tier,sub){
   if(tier){
     if(!srv)balance+=tier.v;
     amtEl.textContent='£'+tier.v.toLocaleString();
-    amtEl.className='amt'+(tier.v>=50?' big':'');
-    lblEl.textContent=sub||(tier.v>=50?'BIG WIN!':'WINNER');
+    amtEl.className='amt'+(tier.v>=20?' big':'');
+    lblEl.textContent=sub||(tier.v>=20?'BIG WIN!':'WINNER');
   }else{
     amtEl.textContent='NO WIN';
     amtEl.className='amt zero';
@@ -341,7 +336,7 @@ $('goBtn').addEventListener('click',async ()=>{
     if(!TOKEN){busy=false;location.href='signup.html';return;}
     // REAL: server debits the wallet and hands out the next committed entry
     try{
-      const r=await fetch('/api/play',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:TOKEN,game:'SC'})});
+      const r=await fetch('/api/play',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:TOKEN,game:'SP'})});
       const d=await r.json();
       if(!r.ok||d.error)throw new Error((d&&d.error)||'entry failed');
       curTicket=d.entry_no;
@@ -381,39 +376,61 @@ $('freeModal').addEventListener('click',e=>{if(e.target.id==='freeModal')$('free
 
 /* ================= GAME THEATRE ================= */
 
+const THEMES=[
+ {n:'FRUIT FRENZY',a:'#FF4D5E',d:'#C22334',s:['7\u{FE0F}\u{20E3}','\u{1F352}','\u{1F347}','\u{1F34A}','\u{1F34B}','\u{2B50}']},
+ {n:'EGYPT GOLD',a:'#F5C542',d:'#C79A1B',s:['\u{1F441}\u{FE0F}','\u{1F3FA}','\u{1F40D}','\u{1FAB2}','\u{1F334}','\u{1F53B}']},
+ {n:'PIRATE PLUNDER',a:'#4F9BFF',d:'#1F5FC4',s:['\u{1F4B0}','\u{1F480}','\u{2693}','\u{1F5FA}\u{FE0F}','\u{1F99C}','\u{2694}\u{FE0F}']},
+ {n:'SPACE RACE',a:'#8D6BFF',d:'#5A38C4',s:['\u{1FA90}','\u{1F680}','\u{1F47E}','\u{2604}\u{FE0F}','\u{1F31F}','\u{1F6F0}\u{FE0F}']},
+ {n:'WILD WEST',a:'#E0A93F',d:'#A87718',s:['\u{1F920}','\u{1F40E}','\u{1F335}','\u{1FA99}','\u{1F33E}','\u{2B50}']},
+ {n:'DEEP SEA',a:'#2FD6C3',d:'#148F81',s:['\u{1F419}','\u{1F988}','\u{1F420}','\u{1F980}','\u{1F41A}','\u{1FAE7}']},
+ {n:'JUNGLE WILDS',a:'#61D95B',d:'#2F9E2B',s:['\u{1F981}','\u{1F412}','\u{1F99C}','\u{1F40D}','\u{1F34C}','\u{1F33F}']},
+ {n:'FROZEN FORTUNE',a:'#6FD3FF',d:'#2A8CC0',s:['\u{2744}\u{FE0F}','\u{26C4}','\u{1F9CA}','\u{1F427}','\u{1F3D4}\u{FE0F}','\u{2728}']},
+ {n:"DRAGON'S HOARD",a:'#E8384F',d:'#A81C30',s:['\u{1F409}','\u{1F525}','\u{1F6E1}\u{FE0F}','\u{1F3F0}','\u{1F5E1}\u{FE0F}','\u{2728}']},
+ {n:'CANDY RUSH',a:'#F972B6',d:'#C23A85',s:['\u{1F36D}','\u{1F36C}','\u{1F9C1}','\u{1F369}','\u{1F36A}','\u{1F36B}']},
+ {n:'LUCKY LEPRECHAUN',a:'#3DDC84',d:'#1E9E58',s:['\u{1F340}','\u{1F308}','\u{1FA99}','\u{1F3A9}','\u{1F37A}','\u{2B50}']},
+ {n:'NEON NIGHTS',a:'#FF5FA2',d:'#C42670',s:['\u{1F303}','\u{1F3B7}','\u{1F378}','\u{1F483}','\u{1F57A}','\u{2728}']},
+ {n:'FARM FORTUNES',a:'#FFAA2B',d:'#C77A08',s:['\u{1F69C}','\u{1F404}','\u{1F413}','\u{1F33D}','\u{1F95A}','\u{1F33B}']},
+ {n:'VIKING VOYAGE',a:'#C9D6EA',d:'#7C8DB0',s:['\u{26F5}','\u{1FA93}','\u{1F6E1}\u{FE0F}','\u{2692}\u{FE0F}','\u{1F43A}','\u{2744}\u{FE0F}']},
+ {n:'SAMURAI SPINS',a:'#FF7A2F',d:'#D14E0A',s:['\u{1F3EF}','\u{2694}\u{FE0F}','\u{1F338}','\u{1F38B}','\u{1F977}','\u{1F319}']},
+ {n:'AZTEC RICHES',a:'#C79A1B',d:'#8F6A00',s:['\u{2600}\u{FE0F}','\u{1F5FF}','\u{1F985}','\u{1F406}','\u{1FAB6}','\u{1F525}']},
+ {n:'HAUNTED HALLS',a:'#B07CFF',d:'#7A3FE0',s:['\u{1F47B}','\u{1F987}','\u{1F577}\u{FE0F}','\u{1F480}','\u{1F56F}\u{FE0F}','\u{1F315}']},
+ {n:'ROYAL RICHES',a:'#FFD34D',d:'#C79A1B',s:['\u{1F451}','\u{1F48D}','\u{1F3C6}','\u{1F99A}','\u{1F37E}','\u{265B}']},
+ {n:'FOOTBALL FEVER',a:'#35D07A',d:'#1E8F52',s:['\u{1F3C6}','\u{26BD}','\u{1F945}','\u{1F45F}','\u{1F9E4}','\u{1F4E3}']},
+ {n:'LUCKY LANTERNS',a:'#E23B4E',d:'#A81C30',s:['\u{1F9E7}','\u{1F3EE}','\u{1F41F}','\u{1FA99}','\u{1F960}','\u{1F386}']}
+];
+const qi=parseInt(new URLSearchParams(location.search).get('slot')||'0',10);
+const SLOT=THEMES[((qi%THEMES.length)+THEMES.length)%THEMES.length];
+document.documentElement.style.setProperty('--acc',SLOT.a);
+document.documentElement.style.setProperty('--acc-deep',SLOT.d);
+document.title=SLOT.n+' \u00B7 THE SPINS \u2014 InstantWins.co.uk';
+$('slotName').textContent=SLOT.n;
+$('slotLegend').innerHTML=TIERS.map((t,i)=>SLOT.s[i]+'\u00D73 \u00A3'+t.v).join(' \u00B7 ');
+$('slotSwitch').href='thespins.html';
+
 const GAME={
-  angle:0,
   init(){},
+  line(tier){
+    if(tier){const s=SLOT.s[TIERS.indexOf(tier)];return [s,s,s];}
+    const a=SLOT.s[Math.floor(Math.random()*SLOT.s.length)];
+    let b=a;while(b===a)b=SLOT.s[Math.floor(Math.random()*SLOT.s.length)];
+    if(Math.random()<.55)return [a,a,b];
+    let c=a;while(c===a||c===b)c=SLOT.s[Math.floor(Math.random()*SLOT.s.length)];
+    return [a,b,c];
+  },
   run(tier,done){
-    const door=$('door'),dial=$('dial'),combo=$('combo'),inside=$('inside');
-    door.classList.remove('open'); inside.innerHTML='';
-    const nums=[Math.floor(Math.random()*100),Math.floor(Math.random()*100),Math.floor(Math.random()*100)];
-    const show=(i)=>{
-      const parts=['--','--','--'];
-      for(let j=0;j<=i;j++)parts[j]=String(nums[j]).padStart(2,'0');
-      combo.textContent=parts.join(' \u00B7 ');
-    };
-    combo.textContent='-- \u00B7 -- \u00B7 --';
-    const reveal=()=>{
-      if(tier){
-        inside.innerHTML='<div class="stack">\uD83D\uDCB7\uD83D\uDCB7\uD83D\uDCB7</div><div class="val">\u00A3'+tier.v.toLocaleString()+'</div><div class="note">In the vault</div>';
-      }else{
-        inside.innerHTML='<div class="empty">\uD83D\uDD78\uFE0F</div><div class="note">Vault empty</div>';
-      }
-      door.classList.add('open');
-      setTimeout(()=>done(tier?null:'vault empty'),1100);
-    };
-    if(REDUCE){show(2);reveal();return;}
-    const spins=[720+nums[0]*3.6,-(360+nums[1]*3.6),360+nums[2]*3.6];
-    let i=0;
-    const spin=()=>{
-      this.angle+=spins[i];
-      dial.style.transform='rotate('+this.angle+'deg)';
-      setTimeout(()=>{ show(i); i++;
-        if(i<3)spin(); else setTimeout(reveal,500);
-      },1100);
-    };
-    spin();
+    const reels=[$('r0'),$('r1'),$('r2')];
+    const target=this.line(tier);
+    if(REDUCE){reels.forEach((r,i)=>{r.textContent=target[i];r.classList.toggle('hot',!!tier);});done(tier?null:'so close\u2026');return;}
+    reels.forEach(r=>{r.classList.add('blur');r.classList.remove('hot');});
+    const iv=setInterval(()=>{reels.forEach(r=>{if(r.classList.contains('blur'))r.textContent=SLOT.s[Math.floor(Math.random()*SLOT.s.length)];});},70);
+    target.forEach((s,i)=>{
+      setTimeout(()=>{
+        reels[i].classList.remove('blur');
+        reels[i].textContent=s;
+        if(tier)reels[i].classList.add('hot');
+        if(i===2){clearInterval(iv);setTimeout(()=>done(tier?null:'so close\u2026'),600);}
+      },1000+i*550);
+    });
   }
 };
 

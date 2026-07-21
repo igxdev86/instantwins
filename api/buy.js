@@ -2,7 +2,7 @@
 // Takes the next numbered entry in the game's open pool and returns
 // its pre-set prize. Settles the pool + reveals the seed on sell-out.
 // DO NOT share the site publicly until Stripe + accounts are wired in.
-const TAGS = ['PL','RC','DD','CL','SC','PR','PF','BB','PP','HL','CG','RW','SG','PT','DC','RR','MB','DT','GG'];
+const TAGS = ['PL','RC','DD','CL','SC','PR','PF','BB','PP','HL','CG','RW','SG','PT','DC','RR','MB','DT','GG','SP'];
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {

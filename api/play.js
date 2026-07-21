@@ -1,6 +1,6 @@
 // api/play.js — authenticated play. {token, game} buys a pool entry;
 // {token, kind} enters a Card draw. Wallet is debited/credited server-side.
-const TAGS = ['PL','RC','DD','CL','SC','PR','PF','BB','PP','HL','CG','RW','SG','PT','DC','RR','MB','DT','GG'];
+const TAGS = ['PL','RC','DD','CL','SC','PR','PF','BB','PP','HL','CG','RW','SG','PT','DC','RR','MB','DT','GG','SP'];
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
   const KEY = process.env.SUPABASE_SERVICE_ROLE_KEY, URL = process.env.SUPABASE_URL;
