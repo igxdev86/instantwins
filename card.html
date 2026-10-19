@@ -134,6 +134,12 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
 .herodots button{width:9px;height:9px;border-radius:50%;border:none;background:rgba(255,255,255,.35);cursor:pointer;padding:0}
 .herodots button.on{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.7)}
 
+.nextdraw.freed{border-top-color:var(--match);background:linear-gradient(180deg,#0E2A22,#0A1528)}
+.nextdraw.freed .nd-clock{color:var(--match);text-shadow:0 0 18px rgba(25,230,160,.45)}
+.nextdraw.freed .nd-label{color:var(--match)}
+.brow.freed{background:linear-gradient(180deg,#0E2A22,#0A1528)}
+.brow.freed .pz{color:var(--match)}
+.freetag{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#05210f;background:var(--match);border-radius:4px;padding:1px 6px;margin-left:6px;vertical-align:middle}
 </style>
 </head>
 <body class="ebh">
@@ -141,7 +147,7 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
 <div class="ebscrim" id="ebscrim" onclick="ebClose()"></div><aside class="ebside" id="ebside"><div class="ebbrand"><svg class="iwlogo" viewBox="0 0 250 40" height="30" role="img" aria-label="InstantWins" xmlns="http://www.w3.org/2000/svg" style="display:block"><g><defs><linearGradient id="bglg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#36E0FF"/><stop offset=".5" stop-color="#0FA8FF"/><stop offset="1" stop-color="#0551B5"/></linearGradient><linearGradient id="gllg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset=".5" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs><rect x="1" y="1" width="38" height="38" rx="10" fill="url(#bglg)" stroke="#9BEBFF" stroke-opacity=".5"/><rect x="1" y="1" width="38" height="20" rx="10" fill="url(#gllg)"/><path d="M23 5 L11 22 H19 L16.5 35 L30 17 H21.5 Z" fill="#fff" stroke="#063a7a" stroke-width=".5" stroke-linejoin="round"/></g><text x="48" y="30" font-family="Barlow Condensed,Archivo,sans-serif" font-weight="800" font-size="30" letter-spacing="-0.5" fill="#F2F7FF">INSTANT<tspan fill="#36E0FF">WINS</tspan></text></svg></div><nav class="ebnav"><a class="" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span>Home</span></a><a class="on" href="card.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg><span>The Card</span></a><a class="" href="games.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Instant Games</span></a><a class="" href="thespins.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg><span>The Spins</span></a><a class="" href="results.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4"/><path d="M6 4h12v4a6 6 0 01-12 0z"/></svg><span>Results</span></a><a class="" href="free-entry.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span>Free Entry</span></a><a class="" href="fairness.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4-3 7-7 10-4-3-7-6-7-10V6z"/></svg><span>Fairness</span></a><a class="" href="account.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg><span>Account</span></a></nav><a class="ebpromo" href="card.html"><span class="ebpromo-k">On the hour</span><span class="ebpromo-v">£1,000</span><span class="ebpromo-s">Hourly Grand &rarr;</span></a><div class="ebfoot">18+ · Schedule 2 · Test mode</div></aside>
 
 
-<div class="wrap"><div class="herowrap"><div class="herotrack"><div class="heroslide hs-card" style="min-height:150px;padding:20px 22px"><div class="hs-tag">The Card</div><div class="hs-h" style="font-size:1.7rem">£1,000 HOURLY GRAND</div><div class="hs-p">A draw every five minutes — the big one lands on the hour.</div></div></div></div>
+<div class="wrap"><div class="herowrap"><div class="herotrack"><div class="heroslide hs-card" style="min-height:150px;padding:20px 22px"><div class="hs-tag">The Card</div><div class="hs-h" style="font-size:1.7rem">£1,000 HOURLY GRAND</div><div class="hs-p">A draw every five minutes, plus a 100% free £5 draw every ten. The big one lands on the hour.</div></div></div></div>
   <div class="head">
     <h1>The Card</h1>
     <div style="text-align:right"><div class="balance">Credit <b id="bal">£20.00</b></div>
@@ -163,6 +169,20 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
     <div class="offbanner" id="fiveOff"></div>
   </div>
 
+  <div class="nextdraw freed" id="freeCard" style="margin-top:10px">
+    <div class="nd-label">FREE DRAW · EVERY 10 MIN<span class="freetag">100% free</span> · <span id="freeId">—</span></div>
+    <div class="nd-row">
+      <div class="nd-clock" id="freeClock">--:--</div>
+      <div class="nd-prize">One winner takes <b>£5</b> <span style="font-size:.78rem;color:var(--soft);font-weight:600">site credit or cash</span></div>
+    </div>
+    <div class="nd-meta"><b id="freeSold">—</b> free entries in · £0 to enter · one entry per draw</div>
+    <div class="nd-actions">
+      <button class="enterbtn" id="freeEnter" style="background:linear-gradient(180deg,#43F0B4,#19E6A0,#0E9F6E);color:#05210f">ENTER FREE</button>
+      <span class="myentries" id="freeMine"></span>
+    </div>
+    <div class="offbanner" id="freeOff"></div>
+  </div>
+
   <div class="nextdraw grand" id="grandCard" style="margin-top:10px">
     <div class="nd-label">HOURLY GRAND · ON THE HOUR · <span id="grandId">—</span></div>
     <div class="nd-row">
@@ -177,7 +197,7 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
     <div class="offbanner" id="grandOff"></div>
   </div>
 
-  <div class="sechead"><h2>Coming up</h2><span>a draw off every five minutes, all day</span></div>
+  <div class="sechead"><h2>Coming up</h2><span>paid &amp; <b style="color:var(--match)">free</b> draws, blended all day</span></div>
   <div class="board" id="upcoming"></div>
 
   <div class="sechead"><h2>Just gone</h2><span>latest winners on the card</span></div>
@@ -220,6 +240,7 @@ function hashStr(s){let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return
 async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');}
 function nextBoundary(mins){const d=new Date();d.setSeconds(0,0);d.setMinutes(d.getMinutes()-(d.getMinutes()%mins)+mins);return d;}
 function hm(t){t=new Date(t);return pad(t.getHours())+':'+pad(t.getMinutes());}
+function drawLabel(k){return k==='grand'?'Hourly Grand':k==='free'?'Free Draw':'Five-Minute Draw';}
 const FIRSTNAMES=['Dave','Sarah','Mo','Kelly','Tom','Priya','Gareth','Lisa','Jamal','Ffion','Steve','Aisha','Rhys','Donna','Marek','Jo'];
 const TOWNS=['Cardiff','Leeds','Barry','Swindon','Glasgow','Luton','Wrexham','Hull','Derby','Newport','Bolton','Penarth'];
 
@@ -254,25 +275,29 @@ function banner(el,kindLabel,winner,iWon,prize,who){
   b.classList.add('show');
   setTimeout(()=>b.classList.remove('show'),3800);
 }
-function renderUpcomingFrom(t0){
-  const rows=[];let t=new Date(t0);
-  for(let i=0;i<6;i++){
-    const isHour=t.getMinutes()===0;
-    rows.push('<div class="brow'+(i===0?' next':'')+(isHour?' grand':'')+'">'
-      +'<span class="t">'+hm(t)+'</span>'
-      +'<span class="nm">'+(isHour?'Hourly Grand':'Five-Minute Draw')+'</span>'
-      +'<span class="pz">'+(isHour?'£1,000':'£100')+'</span>'
-      +'<span class="st">'+(i===0?'ENTRIES OPEN':'UPCOMING')+'</span></div>');
-    t=new Date(t.getTime()+5*60000);
+function renderUpcomingFrom(){
+  const base=new Date();base.setSeconds(0,0);const now=Date.now();const rows=[];let first=true;
+  for(let m=0;m<=70 && rows.length<7;m++){
+    const t=new Date(base.getTime()+m*60000);if(t.getTime()<=now)continue;
+    const mn=t.getMinutes();let k=null;
+    if(mn%60===0)k='grand';else if(mn%10===0)k='free';else if(mn%5===0)k='five';
+    if(!k)continue;
+    const pz=k==='grand'?'£1,000':k==='free'?'£5 FREE':'£100';
+    rows.push('<div class="brow'+(first?' next':'')+(k==='grand'?' grand':'')+(k==='free'?' freed':'')+'">'
+      +'<span class="t">'+pad(t.getHours())+':'+pad(t.getMinutes())+'</span>'
+      +'<span class="nm">'+drawLabel(k)+'</span>'
+      +'<span class="pz">'+pz+'</span>'
+      +'<span class="st">'+(first?'OPEN':'SOON')+'</span></div>');
+    first=false;
   }
   $('upcoming').innerHTML=rows.join('');
 }
 let results=[];
 function renderResults(){
   $('results').innerHTML=results.slice(0,8).map(r=>
-    '<div class="brow'+(r.grand?' grand':'')+(r.me?' me':'')+'">'
+    '<div class="brow'+(r.kind==='grand'?' grand':'')+(r.kind==='free'?' freed':'')+(r.me?' me':'')+'">'
     +'<span class="t">'+r.time+'</span>'
-    +'<span class="nm">'+(r.grand?'Hourly Grand':'Five-Minute Draw')
+    +'<span class="nm">'+drawLabel(r.kind)
     +' <span class="who">'+(r.entry?('entry <b>#'+r.entry+'</b> · '+r.who):'no entries')+'</span></span>'
     +'<span class="pz">£'+r.prize.toLocaleString()+'</span></div>').join('');
 }
@@ -282,25 +307,33 @@ function renderResults(){
    ================================================================== */
 let LIVE=false, S=null, skewMs=0;
 function applyState(){
-  const f=S.open&&S.open.five, g=S.open&&S.open.grand;
+  const f=S.open&&S.open.five, g=S.open&&S.open.grand, fr=S.open&&S.open.free;
   if(f){
     $('fiveId').textContent='FIVE-'+hm(f.off_at).replace(':','');
     $('fiveSold').textContent=f.sold.toLocaleString();
     $('fiveHash').textContent=f.seed_hash;
     const m=mine[f.id]||[];
     $('fiveMine').textContent=m.length?('You’re in ×'+m.length+' (entry '+m.join(', ')+')'):'';
-    $('fiveEnter').textContent=TOKEN?'ENTER \u00B7 \u00A31':'SIGN IN TO ENTER';
+    $('fiveEnter').textContent=TOKEN?'ENTER · £1':'SIGN IN TO ENTER';
     $('fiveEnter').disabled=TOKEN?balance<1:false;
-    renderUpcomingFrom(f.off_at);
   }
   if(g){
     $('grandId').textContent='GRAND-'+hm(g.off_at).replace(':','');
     $('grandSold').textContent=g.sold.toLocaleString();
     const m=mine[g.id]||[];
     $('grandMine').textContent=m.length?('You’re in ×'+m.length):'';
-    $('grandEnter').textContent=TOKEN?'ENTER \u00B7 \u00A32':'SIGN IN TO ENTER';
+    $('grandEnter').textContent=TOKEN?'ENTER · £2':'SIGN IN TO ENTER';
     $('grandEnter').disabled=TOKEN?balance<2:false;
   }
+  if(fr){
+    $('freeId').textContent='FREE-'+hm(fr.off_at).replace(':','');
+    $('freeSold').textContent=fr.sold.toLocaleString();
+    const entered=(mine[fr.id]||[]).length>0;
+    $('freeMine').textContent=entered?'You’re in — good luck!':'';
+    $('freeEnter').textContent=!TOKEN?'SIGN IN TO ENTER':(entered?'ENTERED ✓':'ENTER FREE');
+    $('freeEnter').disabled=!TOKEN?false:entered;
+  }
+  renderUpcomingFrom();
   for(const r of (S.results||[])){
     if(seenSettled.includes(r.draw_id))continue;
     seenSettled.push(r.draw_id);
@@ -308,13 +341,13 @@ function applyState(){
     const iWon=!!(r.winner_entry&&m.includes(r.winner_entry));
     if(iWon){if(TOKEN){setTimeout(fetchMe,300);}else{balance+=r.prize_p/100;}}
     const age=(new Date(S.server_now)-new Date(r.off_at))/1000;
-    if(age<120) banner(r.kind==='grand'?'grandOff':'fiveOff',
-      r.kind==='grand'?'HOURLY GRAND':'FIVE-MINUTE DRAW',
+    const el=r.kind==='grand'?'grandOff':r.kind==='free'?'freeOff':'fiveOff';
+    if(age<120) banner(el, drawLabel(r.kind).toUpperCase(),
       r.winner_entry,iWon,r.prize_p/100,'Entry #'+r.winner_entry);
   }
   results=(S.results||[]).map(r=>{
     const won=(mine[r.draw_id]||[]).includes(r.winner_entry);
-    return {time:hm(r.off_at),grand:r.kind==='grand',prize:r.prize_p/100,
+    return {time:hm(r.off_at),kind:r.kind,prize:r.prize_p/100,
       entry:r.winner_entry,
       who:won?'YOU':(r.winner_entry?('of '+r.sold+' entries'):''),
       me:won};
@@ -344,7 +377,7 @@ async function enterLive(kind){
       body:JSON.stringify({kind,token:TOKEN})});
     const d=await r.json();
     if(!r.ok||d.error||!d.draw_id)throw new Error((d&&d.error)||'entry failed');
-    balance=d.balance_p/100;
+    if(d.balance_p!=null)balance=d.balance_p/100;
     mine[d.draw_id]=(mine[d.draw_id]||[]).concat([d.entry_no]);
     saveAll();
     await syncLive();
@@ -355,42 +388,52 @@ async function enterLive(kind){
 function liveClockTick(){
   if(!LIVE||!S||!S.open)return;
   const now=new Date(Date.now()+skewMs);
-  const f=S.open.five,g=S.open.grand;
+  const f=S.open.five,g=S.open.grand,fr=S.open.free;
   if(f){const s=Math.max(Math.floor((new Date(f.off_at)-now)/1000),0);
     $('fiveClock').textContent=pad(Math.floor(s/60))+':'+pad(s%60);
     if(s===0)syncLive();}
   if(g){const s=Math.max(Math.floor((new Date(g.off_at)-now)/1000),0);
     $('grandClock').textContent=pad(Math.floor(s/60))+':'+pad(s%60);}
+  if(fr){const s=Math.max(Math.floor((new Date(fr.off_at)-now)/1000),0);
+    $('freeClock').textContent=pad(Math.floor(s/60))+':'+pad(s%60);
+    if(s===0)syncLive();}
 }
 
 /* ==================================================================
    DEMO MODE — simulated board (until the backend is connected)
    ================================================================== */
-let DEMO_RUNNING=false, five={}, grand={};
+let DEMO_RUNNING=false, five={}, grand={}, free={};
 function newDraw(kind){
-  const isG=kind==='grand';
-  const end=isG?nextBoundary(60):nextBoundary(5);
-  const id=(isG?'GRAND-':'FIVE-')+hm(end).replace(':','');
-  const d={kind,end,id,price:isG?2:1,prize:isG?1000:100,
-    sold:(isG?420:38)+hashStr(id)%(isG?260:70),mine:[],
+  const end=kind==='grand'?nextBoundary(60):kind==='free'?nextBoundary(10):nextBoundary(5);
+  const pre=kind==='grand'?'GRAND-':kind==='free'?'FREE-':'FIVE-';
+  const id=pre+hm(end).replace(':','');
+  const price=kind==='grand'?2:kind==='free'?0:1;
+  const prize=kind==='grand'?1000:kind==='free'?5:100;
+  const baseSold=kind==='grand'?420:kind==='free'?65:38;
+  const span=kind==='grand'?260:kind==='free'?140:70;
+  const d={kind,end,id,price,prize,sold:baseSold+hashStr(id)%span,mine:[],
     seed:id+'|'+crypto.getRandomValues(new Uint32Array(3)).join('-')};
   sha256(d.seed).then(h=>{d.hash=h;if(kind==='five')$('fiveHash').textContent=h;});
   return d;
 }
 function renderDemoTop(){
   $('bal').textContent=fmt(balance);
-  $('fiveId').textContent=five.id;$('grandId').textContent=grand.id;
+  $('fiveId').textContent=five.id;$('grandId').textContent=grand.id;$('freeId').textContent=free.id;
   $('fiveSold').textContent=five.sold.toLocaleString();
   $('grandSold').textContent=grand.sold.toLocaleString();
+  $('freeSold').textContent=free.sold.toLocaleString();
   $('fiveMine').textContent=five.mine.length?('You’re in ×'+five.mine.length+' (entry '+five.mine.join(', ')+')'):'';
   $('grandMine').textContent=grand.mine.length?('You’re in ×'+grand.mine.length):'';
+  $('freeMine').textContent=free.mine.length?('You’re in — good luck!'):'';
   $('fiveEnter').disabled=balance<1;$('grandEnter').disabled=balance<2;
+  $('freeEnter').disabled=free.mine.length>0;
+  $('freeEnter').textContent=free.mine.length?'ENTERED ✓':'ENTER FREE';
 }
-function fakeResult(t,isHour){
-  const id=(isHour?'GRAND-':'FIVE-')+hm(t).replace(':','');
-  const sold=(isHour?420:38)+hashStr(id)%(isHour?260:70);
-  return {time:hm(t),grand:isHour,prize:isHour?1000:100,
-    entry:1+hashStr(id+'w')%sold,
+function fakeResult(t,kind){
+  const id=(kind==='grand'?'GRAND-':kind==='free'?'FREE-':'FIVE-')+hm(t).replace(':','');
+  const sold=(kind==='grand'?420:kind==='free'?65:38)+hashStr(id)%(kind==='grand'?260:kind==='free'?140:70);
+  const prize=kind==='grand'?1000:kind==='free'?5:100;
+  return {time:hm(t),kind,prize,entry:1+hashStr(id+'w')%sold,
     who:FIRSTNAMES[hashStr(id+'n')%FIRSTNAMES.length]+' from '+TOWNS[hashStr(id+'t')%TOWNS.length],me:false};
 }
 function demoOff(d,el){
@@ -398,30 +441,39 @@ function demoOff(d,el){
   const iWon=d.mine.includes(winner);
   const who=iWon?'YOU':(FIRSTNAMES[Math.floor(Math.random()*FIRSTNAMES.length)]+' from '+TOWNS[Math.floor(Math.random()*TOWNS.length)]);
   if(iWon)balance+=d.prize;
-  banner(el,d.kind==='grand'?'HOURLY GRAND':'FIVE-MINUTE DRAW',winner,iWon,d.prize,who);
-  results.unshift({time:hm(d.end),grand:d.kind==='grand',prize:d.prize,entry:winner,who:iWon?'YOU':who,me:iWon});
+  banner(el,drawLabel(d.kind).toUpperCase(),winner,iWon,d.prize,who);
+  results.unshift({time:hm(d.end),kind:d.kind,prize:d.prize,entry:winner,who:iWon?'YOU':who,me:iWon});
   renderResults();
 }
 function demoTick(){
   if(LIVE)return;
-  if((five.end-new Date())<=0){demoOff(five,'fiveOff');five=newDraw('five');renderUpcomingFrom(five.end);}
+  if((five.end-new Date())<=0){demoOff(five,'fiveOff');five=newDraw('five');}
   if((grand.end-new Date())<=0){demoOff(grand,'grandOff');grand=newDraw('grand');}
+  if((free.end-new Date())<=0){demoOff(free,'freeOff');free=newDraw('free');}
+  renderUpcomingFrom();
   const fs=Math.max(Math.floor((five.end-new Date())/1000),0);
   const gs=Math.max(Math.floor((grand.end-new Date())/1000),0);
+  const rs=Math.max(Math.floor((free.end-new Date())/1000),0);
   $('fiveClock').textContent=pad(Math.floor(fs/60))+':'+pad(fs%60);
   $('grandClock').textContent=pad(Math.floor(gs/60))+':'+pad(gs%60);
+  $('freeClock').textContent=pad(Math.floor(rs/60))+':'+pad(rs%60);
   if(Math.random()<(fs<60?.45:.12)){five.sold++;}
   if(Math.random()<.08){grand.sold++;}
+  if(Math.random()<(rs<60?.5:.22)){free.sold++;}
   renderDemoTop();
 }
 function startDemo(){
   if(DEMO_RUNNING)return;DEMO_RUNNING=true;
   $('modeBadge').textContent='DEMO MODE — backend not connected';
   $('modeBadge').style.color='var(--gold)';
-  five=newDraw('five');grand=newDraw('grand');
-  renderDemoTop();renderUpcomingFrom(five.end);
-  let t=new Date(five.end.getTime()-5*60000);
-  for(let i=0;i<5;i++){results.push(fakeResult(t,t.getMinutes()===0));t=new Date(t.getTime()-5*60000);}
+  five=newDraw('five');grand=newDraw('grand');free=newDraw('free');
+  renderDemoTop();renderUpcomingFrom();
+  let t=new Date(nextBoundary(5).getTime()-5*60000);
+  for(let i=0;i<6;i++){
+    const mn=t.getMinutes();
+    const k=mn%60===0?'grand':mn%10===0?'free':'five';
+    results.push(fakeResult(t,k));t=new Date(t.getTime()-5*60000);
+  }
   renderResults();
   setInterval(demoTick,1000);
 }
@@ -435,6 +487,10 @@ $('grandEnter').addEventListener('click',()=>{
   if(LIVE){enterLive('grand');}
   else if(balance>=2){balance-=2;grand.sold++;grand.mine.push(grand.sold);renderDemoTop();}
 });
+$('freeEnter').addEventListener('click',()=>{
+  if(LIVE){enterLive('free');}
+  else if(!free.mine.length){free.sold++;free.mine.push(free.sold);renderDemoTop();}
+});
 $('freeBtn').addEventListener('click',()=>$('freeModal').classList.add('open'));
 $('freeClose').addEventListener('click',()=>$('freeModal').classList.remove('open'));
 $('freeModal').addEventListener('click',e=>{if(e.target.id==='freeModal')$('freeModal').classList.remove('open');});
@@ -442,6 +498,7 @@ $('freeModal').addEventListener('click',e=>{if(e.target.id==='freeModal')$('free
 syncLive();
 setInterval(syncLive,4000);
 setInterval(liveClockTick,500);
+
 
 </script>
 <script>
