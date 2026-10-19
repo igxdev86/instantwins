@@ -158,9 +158,9 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
     <div class="nd-label">NEXT FIVE-MINUTE DRAW · <span id="fiveId">—</span></div>
     <div class="nd-row">
       <div class="nd-clock" id="fiveClock">--:--</div>
-      <div class="nd-prize">One winner takes <b>£100</b></div>
+      <div class="nd-prize">Winning number takes <b>£100</b></div>
     </div>
-    <div class="nd-meta"><b id="fiveSold">—</b> entries in · £1 each · winner drawn at the off</div>
+    <div class="nd-meta"><b id="fiveSold">—</b>/200 numbers in · £1 each · one number from <b>200</b> drawn · no win if it’s unsold</div>
     <div class="nd-actions">
       <button class="enterbtn" id="fiveEnter">ENTER · £1</button>
       <button class="freebtn" id="freeBtn">Enter free by post</button>
@@ -184,12 +184,12 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
   </div>
 
   <div class="nextdraw grand" id="grandCard" style="margin-top:10px">
-    <div class="nd-label">HOURLY GRAND · ON THE HOUR · <span id="grandId">—</span></div>
+    <div class="nd-label">HOURLY GRAND · ON THE HOUR · SNOWBALL · <span id="grandId">—</span></div>
     <div class="nd-row">
       <div class="nd-clock" id="grandClock">--:--</div>
-      <div class="nd-prize">One winner takes <b>£1,000</b></div>
+      <div class="nd-prize">Jackpot <b id="grandPrize">£1,000</b></div>
     </div>
-    <div class="nd-meta"><b id="grandSold">—</b> entries in · £2 each · winner drawn on the hour</div>
+    <div class="nd-meta"><b id="grandSold">—</b>/1,000 numbers in · £2 each · number from <b>1,000</b> drawn · <b style="color:var(--gold)">rolls over until won</b></div>
     <div class="nd-actions">
       <button class="enterbtn" id="grandEnter">ENTER · £2</button>
       <span class="myentries" id="grandMine"></span>
@@ -204,9 +204,9 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
   <div class="board results" id="results"></div>
 
   <div class="fairline">
-    <b>Locked before you enter.</b> Every draw's result seed is fixed and fingerprinted before entries open —
+    <b>Locked before you enter.</b> Every draw's winning number is fixed by a sealed seed before entries open —
     this draw's commitment: <span class="hash" id="fiveHash">computing…</span>
-    The seed is revealed at the off so anyone can check the winning number was set all along. Full detail on
+    The number is drawn from the full capacity (200 on the Five-Minute, 1,000 on the Grand); the seed is revealed at the off so anyone can check it was set all along. If the drawn number wasn’t sold there is no winner — the Grand jackpot rolls to the next draw. Full detail on
     the <a href="fairness.html" style="color:var(--buy)">Fairness page</a>.
   </div>
 </div>
@@ -215,7 +215,7 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
   The Card is part of the single continuous arrangement of free-entry prize draws on InstantWins.co.uk,
   structured under the free-entry provisions of Schedule 2 of the Gambling Act 2005 — it is not gambling and
   no licence is required. Every draw may be entered free by post with identical odds; free entries are
-  processed ahead of paid sales. Demo mode: all credit is play-money. Structure subject to solicitor
+  processed ahead of paid sales. Paid draws: the winning number is drawn from a fixed pool of numbers, so a draw can have no winner — the Hourly Grand then rolls over, the Five-Minute resets. The Free Draw always pays. Demo mode: all credit is play-money. Structure subject to solicitor
   sign-off before launch. 18+. UK residents only. Promoter: IGX Ltd.
 </footer>
 
@@ -265,12 +265,13 @@ let seenSettled=load('iw_card_seen',[]);
 function saveAll(){store('iw_credit',balance);store('iw_card_mine',mine);store('iw_card_seen',seenSettled.slice(-40));}
 
 /* ================= shared render bits ================= */
-function banner(el,kindLabel,winner,iWon,prize,who){
+function banner(el,kindLabel,winner,iWon,prize,who,noWinText){
   const b=$(el);
   b.innerHTML='<div class="sub">'+kindLabel+' — OFF!</div>'
-    +'<div class="big">'+(winner? 'WINNING ENTRY #'+winner : 'NO ENTRIES — NO DRAW')+'</div>'
+    +'<div class="big">'+(winner?('WINNING NUMBER #'+winner):'NO WINNER')+'</div>'
     +(winner?(iWon?'<div class="win">THAT’S YOU — £'+prize.toLocaleString()+' WON!</div>'
-                  :'<div class="sub">'+who+' takes £'+prize.toLocaleString()+'</div>'):'')
+                  :'<div class="sub">'+who+' takes £'+prize.toLocaleString()+'</div>')
+            :'<div class="sub">'+(noWinText||'the drawn number wasn’t sold')+'</div>')
     +'<div class="sub" style="opacity:.7">seed revealed · next draw opening…</div>';
   b.classList.add('show');
   setTimeout(()=>b.classList.remove('show'),3800);
@@ -282,7 +283,7 @@ function renderUpcomingFrom(){
     const mn=t.getMinutes();let k=null;
     if(mn%60===0)k='grand';else if(mn%10===0)k='free';else if(mn%5===0)k='five';
     if(!k)continue;
-    const pz=k==='grand'?'£1,000':k==='free'?'£5 FREE':'£100';
+    const pz=k==='grand'?'JACKPOT':k==='free'?'£5 FREE':'£100';
     rows.push('<div class="brow'+(first?' next':'')+(k==='grand'?' grand':'')+(k==='free'?' freed':'')+'">'
       +'<span class="t">'+pad(t.getHours())+':'+pad(t.getMinutes())+'</span>'
       +'<span class="nm">'+drawLabel(k)+'</span>'
@@ -298,14 +299,15 @@ function renderResults(){
     '<div class="brow'+(r.kind==='grand'?' grand':'')+(r.kind==='free'?' freed':'')+(r.me?' me':'')+'">'
     +'<span class="t">'+r.time+'</span>'
     +'<span class="nm">'+drawLabel(r.kind)
-    +' <span class="who">'+(r.entry?('entry <b>#'+r.entry+'</b> · '+r.who):'no entries')+'</span></span>'
-    +'<span class="pz">£'+r.prize.toLocaleString()+'</span></div>').join('');
+    +' <span class="who">'+(r.entry?('number <b>#'+r.entry+'</b> · '+r.who):(r.who||'no winner'))+'</span></span>'
+    +'<span class="pz">'+(r.entry?('£'+r.prize.toLocaleString()):'—')+'</span></div>').join('');
 }
 
 /* ==================================================================
    LIVE MODE — real shared draws via /api/card
    ================================================================== */
 let LIVE=false, S=null, skewMs=0;
+function fullBtn(btn,sold,cap){ if(cap&&sold>=cap){$(btn).textContent='DRAW FULL';$(btn).disabled=true;return true;} return false;}
 function applyState(){
   const f=S.open&&S.open.five, g=S.open&&S.open.grand, fr=S.open&&S.open.free;
   if(f){
@@ -313,17 +315,20 @@ function applyState(){
     $('fiveSold').textContent=f.sold.toLocaleString();
     $('fiveHash').textContent=f.seed_hash;
     const m=mine[f.id]||[];
-    $('fiveMine').textContent=m.length?('You’re in ×'+m.length+' (entry '+m.join(', ')+')'):'';
-    $('fiveEnter').textContent=TOKEN?'ENTER · £1':'SIGN IN TO ENTER';
-    $('fiveEnter').disabled=TOKEN?balance<1:false;
+    $('fiveMine').textContent=m.length?('You’re in ×'+m.length+' (number '+m.join(', ')+')'):'';
+    if(!fullBtn('fiveEnter',f.sold,f.cap)){
+      $('fiveEnter').textContent=TOKEN?'ENTER · £1':'SIGN IN TO ENTER';
+      $('fiveEnter').disabled=TOKEN?balance<1:false;}
   }
   if(g){
     $('grandId').textContent='GRAND-'+hm(g.off_at).replace(':','');
     $('grandSold').textContent=g.sold.toLocaleString();
+    if($('grandPrize'))$('grandPrize').textContent='£'+(g.prize_p/100).toLocaleString();
     const m=mine[g.id]||[];
     $('grandMine').textContent=m.length?('You’re in ×'+m.length):'';
-    $('grandEnter').textContent=TOKEN?'ENTER · £2':'SIGN IN TO ENTER';
-    $('grandEnter').disabled=TOKEN?balance<2:false;
+    if(!fullBtn('grandEnter',g.sold,g.cap)){
+      $('grandEnter').textContent=TOKEN?'ENTER · £2':'SIGN IN TO ENTER';
+      $('grandEnter').disabled=TOKEN?balance<2:false;}
   }
   if(fr){
     $('freeId').textContent='FREE-'+hm(fr.off_at).replace(':','');
@@ -342,14 +347,15 @@ function applyState(){
     if(iWon){if(TOKEN){setTimeout(fetchMe,300);}else{balance+=r.prize_p/100;}}
     const age=(new Date(S.server_now)-new Date(r.off_at))/1000;
     const el=r.kind==='grand'?'grandOff':r.kind==='free'?'freeOff':'fiveOff';
+    const noWin=r.kind==='grand'?'JACKPOT ROLLS OVER':'no win — prize retained';
     if(age<120) banner(el, drawLabel(r.kind).toUpperCase(),
-      r.winner_entry,iWon,r.prize_p/100,'Entry #'+r.winner_entry);
+      r.winner_entry,iWon,r.prize_p/100,'Number #'+r.winner_entry,noWin);
   }
   results=(S.results||[]).map(r=>{
     const won=(mine[r.draw_id]||[]).includes(r.winner_entry);
     return {time:hm(r.off_at),kind:r.kind,prize:r.prize_p/100,
       entry:r.winner_entry,
-      who:won?'YOU':(r.winner_entry?('of '+r.sold+' entries'):''),
+      who:won?'YOU':(r.winner_entry?('of '+r.cap+' numbers'):(r.kind==='grand'?'no winner — rolled over':'no winner')),
       me:won};
   });
   renderResults();
@@ -390,28 +396,28 @@ function liveClockTick(){
   const now=new Date(Date.now()+skewMs);
   const f=S.open.five,g=S.open.grand,fr=S.open.free;
   if(f){const s=Math.max(Math.floor((new Date(f.off_at)-now)/1000),0);
-    $('fiveClock').textContent=pad(Math.floor(s/60))+':'+pad(s%60);
-    if(s===0)syncLive();}
+    $('fiveClock').textContent=pad(Math.floor(s/60))+':'+pad(s%60); if(s===0)syncLive();}
   if(g){const s=Math.max(Math.floor((new Date(g.off_at)-now)/1000),0);
     $('grandClock').textContent=pad(Math.floor(s/60))+':'+pad(s%60);}
   if(fr){const s=Math.max(Math.floor((new Date(fr.off_at)-now)/1000),0);
-    $('freeClock').textContent=pad(Math.floor(s/60))+':'+pad(s%60);
-    if(s===0)syncLive();}
+    $('freeClock').textContent=pad(Math.floor(s/60))+':'+pad(s%60); if(s===0)syncLive();}
 }
 
 /* ==================================================================
    DEMO MODE — simulated board (until the backend is connected)
    ================================================================== */
-let DEMO_RUNNING=false, five={}, grand={}, free={};
+let DEMO_RUNNING=false, five={}, grand={}, free={}, demoRollGrand=0;
 function newDraw(kind){
   const end=kind==='grand'?nextBoundary(60):kind==='free'?nextBoundary(10):nextBoundary(5);
   const pre=kind==='grand'?'GRAND-':kind==='free'?'FREE-':'FIVE-';
   const id=pre+hm(end).replace(':','');
   const price=kind==='grand'?2:kind==='free'?0:1;
-  const prize=kind==='grand'?1000:kind==='free'?5:100;
-  const baseSold=kind==='grand'?420:kind==='free'?65:38;
-  const span=kind==='grand'?260:kind==='free'?140:70;
-  const d={kind,end,id,price,prize,sold:baseSold+hashStr(id)%span,mine:[],
+  const cap=kind==='grand'?1000:kind==='free'?null:200;
+  const base=kind==='grand'?1000:kind==='free'?5:100;
+  const prize=kind==='grand'?(1000+demoRollGrand):base;
+  const baseSold=kind==='grand'?380:kind==='free'?65:85;
+  const span=kind==='grand'?320:kind==='free'?140:95;
+  const d={kind,end,id,price,cap,base,prize,sold:baseSold+hashStr(id)%span,mine:[],
     seed:id+'|'+crypto.getRandomValues(new Uint32Array(3)).join('-')};
   sha256(d.seed).then(h=>{d.hash=h;if(kind==='five')$('fiveHash').textContent=h;});
   return d;
@@ -422,27 +428,46 @@ function renderDemoTop(){
   $('fiveSold').textContent=five.sold.toLocaleString();
   $('grandSold').textContent=grand.sold.toLocaleString();
   $('freeSold').textContent=free.sold.toLocaleString();
-  $('fiveMine').textContent=five.mine.length?('You’re in ×'+five.mine.length+' (entry '+five.mine.join(', ')+')'):'';
+  if($('grandPrize'))$('grandPrize').textContent='£'+grand.prize.toLocaleString();
+  $('fiveMine').textContent=five.mine.length?('You’re in ×'+five.mine.length+' (number '+five.mine.join(', ')+')'):'';
   $('grandMine').textContent=grand.mine.length?('You’re in ×'+grand.mine.length):'';
   $('freeMine').textContent=free.mine.length?('You’re in — good luck!'):'';
-  $('fiveEnter').disabled=balance<1;$('grandEnter').disabled=balance<2;
+  $('fiveEnter').disabled=balance<1||five.sold>=five.cap;
+  $('fiveEnter').textContent=five.sold>=five.cap?'DRAW FULL':'ENTER · £1';
+  $('grandEnter').disabled=balance<2||grand.sold>=grand.cap;
+  $('grandEnter').textContent=grand.sold>=grand.cap?'DRAW FULL':'ENTER · £2';
   $('freeEnter').disabled=free.mine.length>0;
   $('freeEnter').textContent=free.mine.length?'ENTERED ✓':'ENTER FREE';
 }
 function fakeResult(t,kind){
   const id=(kind==='grand'?'GRAND-':kind==='free'?'FREE-':'FIVE-')+hm(t).replace(':','');
-  const sold=(kind==='grand'?420:kind==='free'?65:38)+hashStr(id)%(kind==='grand'?260:kind==='free'?140:70);
-  const prize=kind==='grand'?1000:kind==='free'?5:100;
-  return {time:hm(t),kind,prize,entry:1+hashStr(id+'w')%sold,
-    who:FIRSTNAMES[hashStr(id+'n')%FIRSTNAMES.length]+' from '+TOWNS[hashStr(id+'t')%TOWNS.length],me:false};
+  const cap=kind==='grand'?1000:kind==='free'?null:200;
+  const base=kind==='grand'?1000:kind==='free'?5:100;
+  const sold=(kind==='grand'?380:kind==='free'?65:85)+hashStr(id)%(kind==='grand'?320:kind==='free'?140:95);
+  let entry=null,who='no winner';
+  const draw=cap?1+hashStr(id+'d')%cap:1+hashStr(id+'d')%sold;
+  if(!cap||draw<=sold){entry=draw;who=FIRSTNAMES[hashStr(id+'n')%FIRSTNAMES.length]+' from '+TOWNS[hashStr(id+'t')%TOWNS.length];}
+  else if(kind==='grand')who='no winner — rolled over';
+  return {time:hm(t),kind,prize:base,entry,who,me:false};
 }
 function demoOff(d,el){
-  const winner=1+Math.floor(Math.random()*d.sold);
-  const iWon=d.mine.includes(winner);
-  const who=iWon?'YOU':(FIRSTNAMES[Math.floor(Math.random()*FIRSTNAMES.length)]+' from '+TOWNS[Math.floor(Math.random()*TOWNS.length)]);
-  if(iWon)balance+=d.prize;
-  banner(el,drawLabel(d.kind).toUpperCase(),winner,iWon,d.prize,who);
-  results.unshift({time:hm(d.end),kind:d.kind,prize:d.prize,entry:winner,who:iWon?'YOU':who,me:iWon});
+  let winNo=null;
+  if(d.cap==null){ if(d.sold>0)winNo=1+Math.floor(Math.random()*d.sold); }
+  else{ const draw=1+Math.floor(Math.random()*d.cap); if(d.sold>0&&draw<=d.sold)winNo=draw; }
+  if(winNo==null){
+    const noWin=d.kind==='grand'?'JACKPOT ROLLS OVER':'no win — prize retained';
+    banner(el,drawLabel(d.kind).toUpperCase(),null,false,0,'',noWin);
+    results.unshift({time:hm(d.end),kind:d.kind,prize:d.prize,entry:null,
+      who:(d.kind==='grand'?'no winner — rolled over':'no winner'),me:false});
+    if(d.kind==='grand')demoRollGrand=d.prize;
+  }else{
+    const iWon=d.mine.includes(winNo);
+    const who=iWon?'YOU':(FIRSTNAMES[Math.floor(Math.random()*FIRSTNAMES.length)]+' from '+TOWNS[Math.floor(Math.random()*TOWNS.length)]);
+    if(iWon)balance+=d.prize;
+    banner(el,drawLabel(d.kind).toUpperCase(),winNo,iWon,d.prize,who);
+    results.unshift({time:hm(d.end),kind:d.kind,prize:d.prize,entry:winNo,who:iWon?'YOU':who,me:iWon});
+    if(d.kind==='grand')demoRollGrand=0;
+  }
   renderResults();
 }
 function demoTick(){
@@ -457,8 +482,8 @@ function demoTick(){
   $('fiveClock').textContent=pad(Math.floor(fs/60))+':'+pad(fs%60);
   $('grandClock').textContent=pad(Math.floor(gs/60))+':'+pad(gs%60);
   $('freeClock').textContent=pad(Math.floor(rs/60))+':'+pad(rs%60);
-  if(Math.random()<(fs<60?.45:.12)){five.sold++;}
-  if(Math.random()<.08){grand.sold++;}
+  if(Math.random()<(fs<60?.4:.1)&&five.sold<five.cap){five.sold++;}
+  if(Math.random()<.07&&grand.sold<grand.cap){grand.sold++;}
   if(Math.random()<(rs<60?.5:.22)){free.sold++;}
   renderDemoTop();
 }
@@ -481,11 +506,11 @@ function startDemo(){
 /* ================= wiring ================= */
 $('fiveEnter').addEventListener('click',()=>{
   if(LIVE){enterLive('five');}
-  else if(balance>=1){balance-=1;five.sold++;five.mine.push(five.sold);renderDemoTop();}
+  else if(balance>=1&&five.sold<five.cap){balance-=1;five.sold++;five.mine.push(five.sold);renderDemoTop();}
 });
 $('grandEnter').addEventListener('click',()=>{
   if(LIVE){enterLive('grand');}
-  else if(balance>=2){balance-=2;grand.sold++;grand.mine.push(grand.sold);renderDemoTop();}
+  else if(balance>=2&&grand.sold<grand.cap){balance-=2;grand.sold++;grand.mine.push(grand.sold);renderDemoTop();}
 });
 $('freeEnter').addEventListener('click',()=>{
   if(LIVE){enterLive('free');}
@@ -498,6 +523,7 @@ $('freeModal').addEventListener('click',e=>{if(e.target.id==='freeModal')$('free
 syncLive();
 setInterval(syncLive,4000);
 setInterval(liveClockTick,500);
+
 
 
 </script>
