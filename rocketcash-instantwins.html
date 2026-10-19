@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>ROCKET CASH — InstantWins.co.uk</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2034%2034%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22ib%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%233B82F6%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%231D4ED8%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%2234%22%20height%3D%2234%22%20rx%3D%229%22%20fill%3D%22url%28%23ib%29%22/%3E%3Cpath%20d%3D%22M19.5%203.5%20L8.5%2019.5%20H15.5%20L13%2030.5%20L25.5%2014%20H17.5%20Z%22%20fill%3D%22%23F5C542%22/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22bgfv%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2336E0FF%22/%3E%3Cstop%20offset%3D%22.5%22%20stop-color%3D%22%230FA8FF%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230551B5%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22glfv%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ffffff%22%20stop-opacity%3D%22.55%22/%3E%3Cstop%20offset%3D%22.5%22%20stop-color%3D%22%23ffffff%22%20stop-opacity%3D%220%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%2238%22%20height%3D%2238%22%20rx%3D%2210%22%20fill%3D%22url%28%23bgfv%29%22%20stroke%3D%22%239BEBFF%22%20stroke-opacity%3D%22.5%22/%3E%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%2238%22%20height%3D%2220%22%20rx%3D%2210%22%20fill%3D%22url%28%23glfv%29%22/%3E%3Cpath%20d%3D%22M23%205%20L11%2022%20H19%20L16.5%2035%20L30%2017%20H21.5%20Z%22%20fill%3D%22%23fff%22%20stroke%3D%22%23063a7a%22%20stroke-width%3D%22.5%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Bungee&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Barlow+Condensed:wght@600;700;800&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 /*
   ROCKET CASH — pool-based instant game, InstantWins.co.uk
@@ -25,70 +25,80 @@
   Legal note: structure subject to solicitor sign-off before launch.
 */
 :root{
-  --ink:#0A0D1C;
-  --panel:#141936;
-  --panel-edge:#232B5C;
-  --acc:#FF7A2F;
-  --acc-deep:#D14E0A;
-  --gold:#F5C542;
-  --win:#3DDC84;
-  --text:#EAECF6;
-  --muted:#8B92B0;
+  --ink:#050B1A;
+  --panel:#0E1B38;
+  --panel-edge:#1C3463;
+  --acc:#0FA8FF;
+  --acc-deep:#0668C9;
+  --cyan:#36E0FF;
+  --gold:#2FD0FF;
+  --win:#19E6A0;
+  --live:#FF2E4D;
+  --text:#F2F7FF;
+  --muted:#8FA6CC;
   --mono:'IBM Plex Mono',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{background:var(--ink);color:var(--text);font-family:'Space Grotesk',sans-serif;overscroll-behavior:none}
-body{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
-.sitenav{background:#fff;display:flex;flex-wrap:wrap;gap:2px;padding:10px 10px;font-family:'Archivo',sans-serif;font-weight:700;font-size:11.5px}
-.sitenav a{color:#31415E;text-decoration:none;padding:5px 9px;border-radius:7px}
-.sitenav a.on{background:#EAF2FD;color:#1D4ED8}
+html,body{color:var(--text);font-family:'Space Grotesk',sans-serif;overscroll-behavior:none;
+  background:radial-gradient(120% 60% at 50% -5%, rgba(15,168,255,.22) 0%, rgba(5,11,26,0) 55%),linear-gradient(180deg,#071027 0%,#050B1A 48%,#030713 100%);background-attachment:fixed}
+body{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(15,168,255,.08),0 0 80px rgba(15,168,255,.06)}
+body::before{content:"";position:fixed;top:0;bottom:0;left:calc(50% - 240px);width:3px;background:linear-gradient(180deg,var(--cyan),var(--acc),var(--acc-deep));box-shadow:0 0 14px rgba(15,168,255,.7);z-index:40;pointer-events:none}
+@media(max-width:480px){body::before{left:0}}
+.sitenav{background:linear-gradient(180deg,#0B1733,#071027);border-bottom:1px solid var(--panel-edge);display:flex;flex-wrap:wrap;gap:2px;padding:10px 10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13.5px;text-transform:uppercase;letter-spacing:.5px}
+.sitenav a{color:#9DB4DB;text-decoration:none;padding:5px 10px;border-radius:5px}
+.sitenav a.on{background:linear-gradient(180deg,var(--acc),var(--acc-deep));color:#fff;box-shadow:0 2px 10px rgba(15,168,255,.5)}
 header{padding:14px 16px 6px;display:flex;align-items:center;justify-content:space-between}
-.logo{font-family:'Bungee',cursive;font-size:17px;color:var(--acc);letter-spacing:.5px;line-height:1}
-.logo span{display:block;font-size:9px;font-family:'Space Grotesk';font-weight:700;letter-spacing:2.5px;color:var(--muted)}
-.balance{font-family:var(--mono);font-size:13px;background:var(--panel);border:1px solid var(--panel-edge);border-radius:20px;padding:7px 13px}
-.balance b{color:var(--gold)}
-.guarantee{margin:8px 16px 0;text-align:center;font-size:10px;font-weight:700;letter-spacing:1.6px;color:var(--acc);border:1px dashed var(--acc-deep);border-radius:8px;padding:7px 4px;text-transform:uppercase}
-.drawbar{margin:10px 16px 0;display:flex;justify-content:space-between;align-items:center;background:var(--panel);border:1px solid var(--panel-edge);border-radius:10px;padding:9px 12px;font-family:var(--mono);font-size:11px;color:var(--muted)}
-.drawbar b{color:var(--text)}
-.drawbar .off{color:var(--acc);font-weight:600}
-.drawbar .off b{color:var(--acc);font-size:13px}
+.logo{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;color:#fff;letter-spacing:.5px;line-height:1;text-transform:uppercase}
+.logo span{display:block;font-size:8.5px;font-family:'Space Grotesk';font-weight:700;letter-spacing:2.5px;color:var(--cyan)}
+.balance{font-family:var(--mono);font-size:13px;background:linear-gradient(180deg,#12264D,#0A1730);border:1px solid var(--panel-edge);border-radius:6px;padding:7px 13px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.balance b{color:var(--cyan)}
+.guarantee{margin:8px 16px 0;position:relative;text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:12.5px;font-weight:800;letter-spacing:1.4px;color:#fff;background:linear-gradient(180deg,#13326B,#0B1E44);border:1px solid var(--acc);border-radius:6px;padding:8px 10px 8px 76px;text-transform:uppercase;overflow:hidden;box-shadow:0 2px 16px rgba(15,168,255,.2),inset 0 1px 0 rgba(255,255,255,.1)}
+.guarantee::before{content:"LIVE";position:absolute;left:0;top:0;bottom:0;display:flex;align-items:center;padding:0 12px;background:linear-gradient(180deg,#FF4D67,var(--live));color:#fff;font-weight:800;letter-spacing:1px;box-shadow:0 0 18px rgba(255,46,77,.6)}
+.guarantee::after{content:"";position:absolute;left:62px;top:50%;width:7px;height:7px;margin-top:-3.5px;border-radius:50%;background:#fff;box-shadow:0 0 8px #fff;animation:blip 1.1s infinite}
+@keyframes blip{0%,100%{opacity:1}50%{opacity:.25}}
+.drawbar{margin:10px 16px 0;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,#0F1F42,#0A1730);border:1px solid var(--panel-edge);border-top:2px solid var(--acc);border-radius:7px;padding:10px 12px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:.6px;text-transform:uppercase;color:var(--cyan);box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
+.drawbar b{color:#fff}
+.drawbar .off{color:#fff;font-weight:700}
+.drawbar .off b{color:var(--cyan);font-size:16px}
 .poolref{margin:5px 16px 0;text-align:center;font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.5px}
 .progwrap{margin:6px 16px 0;height:6px;background:var(--panel);border:1px solid var(--panel-edge);border-radius:4px;overflow:hidden}
-.prog{height:100%;width:0;background:linear-gradient(90deg,var(--acc-deep),var(--acc));transition:width .3s}
+.prog{height:100%;width:0;background:linear-gradient(90deg,var(--acc-deep),var(--acc),var(--cyan));box-shadow:0 0 12px rgba(54,224,255,.7);transition:width .3s}
 .comp{margin:8px 16px 0;display:flex;justify-content:space-between;gap:8px}
-.comp .stat{flex:1;background:var(--panel);border:1px solid var(--panel-edge);border-radius:10px;padding:8px 4px;text-align:center}
-.comp .stat b{display:block;font-family:'Bungee';font-size:14px;color:var(--text)}
-.comp .stat i{font-style:normal;font-size:8.5px;letter-spacing:1.2px;color:var(--muted);text-transform:uppercase}
-.comp .stat.gold b{color:var(--gold)}
-.stage-wrap{margin:12px 12px 0;position:relative;background:radial-gradient(ellipse at 50% -10%, #1E2650 0%, var(--panel) 60%);border:1px solid var(--panel-edge);border-radius:16px;overflow:hidden;min-height:340px}
+.comp .stat{flex:1;position:relative;background:linear-gradient(180deg,#12264D 0%,#0A1730 100%);border:1px solid var(--panel-edge);border-radius:8px;padding:9px 4px;text-align:center;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 2px 10px rgba(0,0,0,.3)}
+.comp .stat::before{content:"";position:absolute;top:0;left:0;right:0;height:48%;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,0));pointer-events:none}
+.comp .stat b{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:19px;color:#fff;line-height:1}
+.comp .stat i{font-style:normal;font-size:8px;letter-spacing:1.2px;color:var(--muted);text-transform:uppercase}
+.comp .stat.gold b{color:var(--cyan);text-shadow:0 0 14px rgba(54,224,255,.6)}
+.stage-wrap{margin:12px 12px 0;position:relative;background:radial-gradient(ellipse at 50% -10%, #13306A 0%, #091226 62%);border:1px solid var(--acc-deep);border-radius:12px;overflow:hidden;min-height:340px;box-shadow:inset 0 0 40px rgba(15,168,255,.12),0 0 0 1px rgba(54,224,255,.15),0 10px 40px rgba(0,0,0,.5)}
 canvas{display:block;width:100%}
 .result-pop{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%) scale(.6);opacity:0;pointer-events:none;text-align:center;transition:all .25s cubic-bezier(.2,1.6,.4,1);z-index:5}
 .result-pop.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
-.result-pop .amt{font-family:'Bungee';font-size:42px;color:var(--win);text-shadow:0 0 24px rgba(61,220,132,.6)}
-.result-pop .amt.big{color:var(--gold);text-shadow:0 0 30px rgba(245,197,66,.7)}
-.result-pop .amt.zero{color:var(--muted);font-size:24px;text-shadow:none}
-.result-pop .lbl{font-size:11px;letter-spacing:2px;color:var(--text);text-transform:uppercase;font-weight:700}
+.result-pop .amt{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:54px;color:var(--win);text-shadow:0 0 24px rgba(25,230,160,.6)}
+.result-pop .amt.big{color:var(--cyan);text-shadow:0 0 34px rgba(54,224,255,.85)}
+.result-pop .amt.zero{color:var(--muted);font-size:30px;text-shadow:none}
+.result-pop .lbl{font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:3px;color:var(--text);text-transform:uppercase;font-weight:700}
 .controls{margin:14px 16px 0;display:flex;gap:10px}
-.btn{flex:1;border:none;border-radius:12px;padding:15px 8px;font-family:'Bungee';font-size:15px;cursor:pointer;letter-spacing:.5px;transition:transform .08s}
+.btn{flex:1;border:none;border-radius:8px;padding:16px 8px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:19px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;transition:transform .08s,filter .15s}
 .btn:active{transform:scale(.97)}
-.btn-go{background:linear-gradient(180deg,var(--acc) 0%,var(--acc-deep) 100%);color:#141414;box-shadow:0 4px 18px rgba(0,0,0,.35)}
-.btn-go:disabled{filter:grayscale(.7);opacity:.55;cursor:not-allowed;box-shadow:none}
-.btn-free{background:transparent;color:var(--acc);border:2px dashed var(--acc-deep);font-size:11px;font-family:'Space Grotesk';font-weight:700;letter-spacing:1px;text-transform:uppercase;line-height:1.35}
+.btn-go{position:relative;background:linear-gradient(180deg,var(--cyan) 0%,var(--acc) 42%,var(--acc-deep) 100%);color:#fff;overflow:hidden;box-shadow:0 4px 22px rgba(15,168,255,.5),inset 0 1px 0 rgba(255,255,255,.4);text-shadow:0 1px 2px rgba(0,40,90,.5)}
+.btn-go::before{content:"";position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0));pointer-events:none}
+.btn-go:disabled{filter:grayscale(.6);opacity:.5;cursor:not-allowed;box-shadow:none}
+.btn-free{background:linear-gradient(180deg,#12264D,#0A1730);color:var(--cyan);border:1px solid var(--acc-deep);font-size:12px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase;line-height:1.3;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
 .ticket-line{margin:8px 16px 0;text-align:center;font-family:var(--mono);font-size:10.5px;color:var(--muted);min-height:14px}
 .ticket-line b{color:var(--text)}
-.panel{margin:16px 16px 0;background:var(--panel);border:1px solid var(--panel-edge);border-radius:14px;padding:14px}
-.panel h2{font-family:'Bungee';font-size:12px;color:var(--acc);letter-spacing:1px;margin-bottom:10px}
+.panel{margin:16px 16px 0;background:linear-gradient(180deg,#0E1B38,#0A1528);border:1px solid var(--panel-edge);border-radius:9px;padding:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.panel h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;color:#fff;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;padding-left:10px;border-left:3px solid var(--acc)}
 .prow{display:flex;justify-content:space-between;font-size:12.5px;padding:6px 0;border-bottom:1px solid rgba(139,146,176,.12)}
 .prow:last-child{border-bottom:none}
 .prow .pv{font-family:var(--mono);font-weight:600}
 .prow .pc{color:var(--muted);font-family:var(--mono);font-size:11.5px}
 .odds-line{margin-top:10px;font-size:11px;color:var(--muted);line-height:1.5}
 .odds-line b{color:var(--text)}
-.fair-toggle{width:100%;background:none;border:none;color:var(--acc);font-family:'Space Grotesk';font-weight:700;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 0;cursor:pointer;text-align:left}
+.fair-toggle{width:100%;background:none;border:none;color:var(--cyan);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 0;cursor:pointer;text-align:left}
 .fair-body{display:none;margin-top:10px}
 .fair-body.open{display:block}
-.hash{font-family:var(--mono);font-size:9.5px;word-break:break-all;color:var(--win);background:rgba(61,220,132,.07);border:1px solid rgba(61,220,132,.2);border-radius:8px;padding:8px;margin:6px 0 10px}
-.hash.prev{color:var(--gold);background:rgba(245,197,66,.06);border-color:rgba(245,197,66,.25)}
+.hash{font-family:var(--mono);font-size:9.5px;word-break:break-all;color:var(--win);background:rgba(25,230,160,.07);border:1px solid rgba(25,230,160,.2);border-radius:6px;padding:8px;margin:6px 0 10px}
+.hash.prev{color:var(--cyan);background:rgba(54,224,255,.06);border-color:rgba(54,224,255,.25)}
 .fair-body p{font-size:11.5px;color:var(--muted);line-height:1.55;margin-bottom:8px}
 .fair-body p b{color:var(--text)}
 .log{max-height:150px;overflow-y:auto;font-family:var(--mono);font-size:9.5px}
@@ -97,12 +107,12 @@ canvas{display:block;width:100%}
 .log .lw{color:var(--win)}
 .modal{position:fixed;inset:0;background:rgba(10,13,28,.9);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
 .modal.open{display:flex}
-.modal-card{background:var(--panel);border:1px solid var(--acc-deep);border-radius:16px;padding:22px;max-width:400px;width:100%}
-.modal-card h3{font-family:'Bungee';font-size:15px;color:var(--acc);margin-bottom:12px}
+.modal-card{background:linear-gradient(180deg,#0E1B38,#0A1528);border:1px solid var(--acc);border-top:3px solid var(--acc);border-radius:10px;padding:22px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.modal-card h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:19px;color:#fff;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
 .modal-card p{font-size:13px;line-height:1.6;color:var(--text);margin-bottom:10px}
 .modal-card p.small{font-size:11px;color:var(--muted)}
 .modal-card .addr{font-family:var(--mono);font-size:12px;background:var(--ink);border-radius:8px;padding:12px;margin:10px 0;line-height:1.6}
-.modal-close{width:100%;margin-top:8px;background:var(--acc);border:none;border-radius:10px;padding:12px;font-family:'Bungee';font-size:13px;color:#141414;cursor:pointer}
+.modal-close{width:100%;margin-top:8px;background:linear-gradient(180deg,var(--cyan),var(--acc),var(--acc-deep));border:none;border-radius:7px;padding:13px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;letter-spacing:1px;text-transform:uppercase;color:#fff;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
 footer{margin:20px 16px 24px;font-size:9.5px;color:var(--muted);line-height:1.65;text-align:center}
 footer b{color:var(--text)}
 @media (prefers-reduced-motion: reduce){.result-pop{transition:none}}
@@ -128,7 +138,7 @@ footer b{color:var(--text)}
 </nav>
 
 <header>
-  <div class="logo" style="display:flex;align-items:center;gap:9px"><svg viewBox="0 0 34 34" width="26" height="26" xmlns="http://www.w3.org/2000/svg" style="flex:none;border-radius:7px"><defs><linearGradient id="ib" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3B82F6"/><stop offset="1" stop-color="#1D4ED8"/></linearGradient></defs><rect width="34" height="34" rx="9" fill="url(#ib)"/><path d="M19.5 3.5 L8.5 19.5 H15.5 L13 30.5 L25.5 14 H17.5 Z" fill="#F5C542"/></svg><span style="display:block">ROCKET CASH<span style="display:block">INSTANT GAMES · INSTANTWINS.CO.UK</span></span></div>
+  <div class="logo" style="display:flex;align-items:center;gap:9px"><svg viewBox="0 0 40 40" width="30" height="30" xmlns="http://www.w3.org/2000/svg" style="flex:none"><defs><linearGradient id="bgsm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#36E0FF"/><stop offset=".5" stop-color="#0FA8FF"/><stop offset="1" stop-color="#0551B5"/></linearGradient><linearGradient id="glsm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset=".5" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs><rect x="1" y="1" width="38" height="38" rx="10" fill="url(#bgsm)" stroke="#9BEBFF" stroke-opacity=".5"/><rect x="1" y="1" width="38" height="20" rx="10" fill="url(#glsm)"/><path d="M23 5 L11 22 H19 L16.5 35 L30 17 H21.5 Z" fill="#fff" stroke="#063a7a" stroke-width=".5" stroke-linejoin="round"/></svg><span style="display:block">ROCKET CASH<span style="display:block">INSTANT GAMES · INSTANTWINS.CO.UK</span></span></div>
   <div class="balance">Credit <b id="bal">—</b></div>
 </header>
 
