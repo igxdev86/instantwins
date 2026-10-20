@@ -75,7 +75,7 @@ grant execute on function iw_bot_tick(int) to service_role;
 
 -- schedule it: 80 plays/min (~1.3/sec). Change 80 to taste, or unschedule to stop.
 create extension if not exists pg_cron;
-select cron.unschedule('iw-bots') where exists (select 1 from cron.job where jobname='iw-bots');
+do $$ begin perform cron.unschedule('iw-bots'); exception when others then null; end $$;
 select cron.schedule('iw-bots', '* * * * *', 'select iw_bot_tick(80);');
 
 -- kick one tick now so you see activity immediately
