@@ -10,16 +10,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Barlow+Condensed:wght@600;700;800&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 /*
-  MYSTERY BOX — pool-based instant game, InstantWins.co.uk
+  MYSTERY BOX — batch-based instant game, InstantWins.co.uk
   -----------------------------------------------------
   Part of the site's single continuous arrangement of free-entry prize
   draws (Schedule 2, Gambling Act 2005). Framework invariants:
-  - Each numbered pool is a sub-draw with a fixed set of numbered
+  - Each numbered batch is a sub-draw with a fixed set of numbered
     entries, fixed pot, and a fresh shuffled ticket-to-prize allocation
-    committed (SHA-256) before the pool opens.
+    committed (SHA-256) before the batch opens.
   - Outcome ALWAYS pre-set by hidden ticket number; the game is pure
     reveal theatre routed to the pre-assigned prize.
-  - Seed revealed the moment the pool sells out; anyone can verify.A pool has no time limit — it stays open until every one of its numbered entries has sold, and only then does it settle and reveal its seed.
+  - Seed revealed the moment the batch sells out; anyone can verify.A batch has no time limit — it stays open until every one of its numbered entries has sold, and only then does it settle and reveal its seed.
   - Free postal route at equal prominence, processed ahead of paid sales.
   Legal note: structure subject to solicitor sign-off before launch.
 */
@@ -196,7 +196,7 @@ footer b{color:var(--text)}
   <span class="off"><b id="leftCt">—</b> LEFT</span>
 </div>
 <div class="progwrap"><div class="prog" id="prog"></div></div>
-<div class="poolref">pool <span id="poolNo">—</span> · every pool verifiable in the fairness panel below</div>
+<div class="poolref">batch <span id="poolNo">—</span> · every batch verifiable in the fairness panel below</div>
 
 <div class="comp">
   <div class="stat gold"><b id="potVal">£500</b><i>Prize pot left</i></div>
@@ -236,12 +236,12 @@ footer b{color:var(--text)}
 <div class="panel">
   <button class="fair-toggle" id="fairToggle">&#9656; Provably fair — verify this draw</button>
   <div class="fair-body" id="fairBody">
-    <p>Before each pool opens, a fresh shuffled ticket&rarr;prize allocation is fixed and its SHA-256 hash published below. Your play reveals the prize already attached to your numbered entry — the game is presentation only and changes nothing.</p>
-    <p><b>This pool's commitment:</b></p>
+    <p>Before each batch opens, a fresh shuffled ticket&rarr;prize allocation is fixed and its SHA-256 hash published below. Your play reveals the prize already attached to your numbered entry — the game is presentation only and changes nothing.</p>
+    <p><b>This batch's commitment:</b></p>
     <div class="hash" id="commitHash">computing…</div>
-    <p><b>Previous pool <span id="prevId">—</span> — seed revealed at sell-out:</b></p>
+    <p><b>Previous batch <span id="prevId">—</span> — seed revealed at sell-out:</b></p>
     <div class="hash prev" id="prevSeed">awaiting first sell-out this session…</div>
-    <p>Hash the revealed seed yourself and confirm it matches the commitment published while that pool was live.A pool has no time limit — it stays open until every one of its numbered entries has sold, and only then does it settle and reveal its seed. Reveal log:</p>
+    <p>Hash the revealed seed yourself and confirm it matches the commitment published while that batch was live.A batch has no time limit — it stays open until every one of its numbered entries has sold, and only then does it settle and reveal its seed. Reveal log:</p>
     <div class="log" id="log"><div data-empty="1">No plays yet this session.</div></div>
   </div>
 </div>
@@ -256,11 +256,11 @@ footer b{color:var(--text)}
     <li>Your prize up to £100 rises out and is credited on a win.</li>
   </ul>
   <h2>Odds &amp; prizes</h2>
-  <p>Every Mystery Box pool is a fixed set of 500 numbered entries at £2 with a £500 prize table — a £100 top prize and 86 winners in all, about a 1-in-5.8 chance per entry. The full table resets every time a pool sells out, so the odds never change.</p>
+  <p>Every Mystery Box batch is a fixed set of 500 numbered entries at £2 with a £500 prize table — a £100 top prize and 86 winners in all, about a 1-in-5.8 chance per entry. The full table resets every time a batch sells out, so the odds never change.</p>
   <h2>Is Mystery Box fair?</h2>
-  <p>Before a Mystery Box pool opens, its entire entry-to-prize allocation is shuffled, fixed and published as a SHA-256 fingerprint. When the pool sells out the seed is revealed, so anyone can rebuild the allocation and confirm Mystery Box paid exactly what was sealed. The game on screen is presentation only and changes nothing.</p>
+  <p>Before a Mystery Box batch opens, its entire entry-to-prize allocation is shuffled, fixed and published as a SHA-256 fingerprint. When the batch sells out the seed is revealed, so anyone can rebuild the allocation and confirm Mystery Box paid exactly what was sealed. The game on screen is presentation only and changes nothing.</p>
   <h2>Free entry — no purchase necessary</h2>
-  <p>You can enter every Mystery Box pool completely free by post, with identical odds to a paid entry and processed ahead of paid sales — see our <a href="free-entry.html">Free Entry</a> page. No purchase necessary. 18+, UK residents only.</p>
+  <p>You can enter every Mystery Box batch completely free by post, with identical odds to a paid entry and processed ahead of paid sales — see our <a href="free-entry.html">Free Entry</a> page. No purchase necessary. 18+, UK residents only.</p>
   <h2>Mystery Box FAQ</h2>
   <div class="faq">
     <b>What&#x27;s inside the Mystery Box?</b><p>The prize sealed to your entry — anything from £2 up to the £100 top, or a near-miss. It&#x27;s set before you open.</p>
@@ -269,7 +269,7 @@ footer b{color:var(--text)}
   </div>
 </section>
 <footer>
-  <b>MYSTERY BOX</b> runs as a series of numbered entry pools within the single continuous arrangement of free-entry prize draws on InstantWins.co.uk, structured under the free-entry provisions of Schedule 2 of the Gambling Act 2005 — it is not gambling and no licence is required. Every pool may be entered free by post with identical odds; free entries are processed ahead of paid sales.A pool has no time limit — it stays open until every one of its numbered entries has sold, and only then does it settle and reveal its seed. The unboxing is presentation only. 18+, UK residents only. Full T&amp;Cs apply. Structure subject to solicitor sign-off before launch. Promoter: IGX Ltd.
+  <b>MYSTERY BOX</b> runs as a series of numbered entry batches within the single continuous arrangement of free-entry prize draws on InstantWins.co.uk, structured under the free-entry provisions of Schedule 2 of the Gambling Act 2005 — it is not gambling and no licence is required. Every batch may be entered free by post with identical odds; free entries are processed ahead of paid sales.A batch has no time limit — it stays open until every one of its numbered entries has sold, and only then does it settle and reveal its seed. The unboxing is presentation only. 18+, UK residents only. Full T&amp;Cs apply. Structure subject to solicitor sign-off before launch. Promoter: IGX Ltd.
 </footer>
 
 <div class="modal" id="freeModal">
@@ -277,7 +277,7 @@ footer b{color:var(--text)}
     <h3>ENTER FREE BY POST</h3>
     <p>Every draw on InstantWins.co.uk can be entered completely free, with identical odds to a paid entry. Send an unenclosed postcard with your full name, address, date of birth and email to:</p>
     <div class="addr">InstantWins Free Entry<br>IGX Ltd, PO Box (TBC)<br>United Kingdom</div>
-    <p class="small">Name the game (e.g. &ldquo;MYSTERY BOX&rdquo;) and optionally a pool number, or name nothing — your entry joins that game&rsquo;s open pool (or the next open pool on the site) at processing. One entry per postcard. Free entries are injected ahead of paid sales, from the same numbered sequence, with exactly equal chances of every prize. No purchase necessary.</p>
+    <p class="small">Name the game (e.g. &ldquo;MYSTERY BOX&rdquo;) and optionally a batch number, or name nothing — your entry joins that game&rsquo;s open batch (or the next open batch on the site) at processing. One entry per postcard. Free entries are injected ahead of paid sales, from the same numbered sequence, with exactly equal chances of every prize. No purchase necessary.</p>
     <button class="modal-close" id="freeClose">GOT IT</button>
   </div>
 </div>
@@ -307,20 +307,20 @@ function refresh(){
   TIERS.forEach((t,i)=>{$('t'+i).textContent=t.left+' of '+t.total+' left';});var _pp=TIERS.reduce(function(s,t){return s+t.left*t.v;},0);var _pv=document.getElementById('potVal');if(_pv)_pv.textContent='\u00a3'+_pp.toLocaleString();
   $('topLine').textContent = TIERS[0].left>0
     ? ('£'+TIERS[0].v.toLocaleString()+' TOP PRIZE IN PLAY')
-    : 'TOP PRIZE WON — FRESH POOL SOON';
+    : 'TOP PRIZE WON — FRESH BATCH SOON';
   $('leftCt').textContent=ticketsLeft;
   $('prog').style.width=(100*(CAP-ticketsLeft)/CAP)+'%';
   if(LIVE&&!TOKEN){$('goBtn').textContent='SIGN IN TO PLAY';$('goBtn').disabled=busy;}
   else{$('goBtn').disabled=busy||balance<PRICE||ticketsLeft<=0;}
 }
 
-/* ---------- numbered entry pools (LIVE via /api, demo fallback) ---------- */
+/* ---------- numbered entry batches (LIVE via /api, demo fallback) ---------- */
 function hashStr(s){let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h;}
 async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');}
 let pool={}, prev=null, LIVE=false;
 let poolNo=40+hashStr('MB'+(new Date()).toISOString().slice(0,10))%25;
 
-/* LIVE: real shared pools from Supabase */
+/* LIVE: real shared batchs from Supabase */
 function applyPoolState(s){
   pool={id:s.pool, hash:s.seed_hash};
   ticketsLeft=s.cap-s.sold;
@@ -372,7 +372,7 @@ function rollDemoPool(){
   prev={id:pool.id,seed:pool.seed};
   $('prevId').textContent=prev.id;
   $('prevSeed').textContent=prev.seed;
-  $('ticketLine').innerHTML='SOLD OUT \u2014 every prize claimed! Fresh prizes loaded \u00B7 last pool\u0027s seed revealed in the fairness panel';
+  $('ticketLine').innerHTML='SOLD OUT \u2014 every prize claimed! Fresh prizes loaded \u00B7 last batch\u0027s seed revealed in the fairness panel';
   poolNo++;
   openDemoPool(true);
 }

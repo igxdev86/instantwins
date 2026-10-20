@@ -97,16 +97,16 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:16px;color:var(-
      You don't have to trust us — that's the point.</p>
 
   <div class="panel"><h2>How the instant games work</h2>
-    <div class="step"><div class="n">1</div><div><b>Before a pool opens</b>, we generate a secret seed and build the pool's entire
-      entry&rarr;prize map from it. We publish the seed's <b>SHA-256 fingerprint</b> on the game page while the pool is live.</div></div>
+    <div class="step"><div class="n">1</div><div><b>Before a batch opens</b>, we generate a secret seed and build the batch's entire
+      entry&rarr;prize map from it. We publish the seed's <b>SHA-256 fingerprint</b> on the game page while the batch is live.</div></div>
     <div class="step"><div class="n">2</div><div><b>When you buy</b>, you get the next entry number. Its prize was already sitting
       in the sealed map. The plinko ball, wheel, claw or cards just act it out.</div></div>
-    <div class="step"><div class="n">3</div><div><b>The moment the pool sells out</b>, the seed is revealed in the fairness panel.A pool has no time limit — it stays open until every one of its numbered entries has sold, and only then does it settle and reveal its seed.</div></div>
+    <div class="step"><div class="n">3</div><div><b>The moment the batch sells out</b>, the seed is revealed in the fairness panel.A batch has no time limit — it stays open until every one of its numbered entries has sold, and only then does it settle and reveal its seed.</div></div>
   </div>
 
-  <div class="panel"><h2>Verify a pool — the recipe</h2>
+  <div class="panel"><h2>Verify a batch — the recipe</h2>
     <p class="lead"><b>Check the seal:</b> take the revealed seed, run it through any SHA-256 tool, and confirm the
-       output matches the fingerprint that was displayed while the pool was live. If it matches, that exact
+       output matches the fingerprint that was displayed while the batch was live. If it matches, that exact
        seed existed before entries opened — it couldn't have been swapped without breaking the hash.</p>
     <p class="lead"><b>Rebuild the map (advanced):</b> the shuffle itself is derived from the seed, so you can
        reconstruct the entire prize map:</p>
@@ -130,7 +130,7 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:16px;color:var(-
   <div class="panel"><h2>What this means</h2>
     <p class="lead">We physically cannot favour an entry, dodge a big prize, or rewrite a result — any of those
        would break a fingerprint that was on public display while you played. The games are theatre; the
-       maths is the referee. Questions about any specific pool or draw? Ask in the
+       maths is the referee. Questions about any specific batch or draw? Ask in the
        <a href="support.html" style="color:var(--buy);font-weight:700">Support centre</a> and we'll walk you
        through verifying it.</p>
   </div>
