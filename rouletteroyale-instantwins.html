@@ -176,7 +176,7 @@ footer b{color:var(--text)}
 <div class="poolref">pool <span id="poolNo">—</span> · every pool verifiable in the fairness panel below</div>
 
 <div class="comp">
-  <div class="stat gold"><b>£500</b><i>Pot / pool</i></div>
+  <div class="stat gold"><b id="potVal">£500</b><i>Prize pot left</i></div>
   <div class="stat"><b>£2</b><i>Per spin</i></div>
   <div class="stat"><b>86</b><i>Winners /500</i></div>
   <div class="stat"><b>1-in-5.8</b><i>Win odds</i></div>
@@ -252,7 +252,7 @@ function drawHiddenTicket(){
 }
 function refresh(){
   $('bal').textContent=fmt(balance);
-  TIERS.forEach((t,i)=>{$('t'+i).textContent=t.left+' of '+t.total+' left';});
+  TIERS.forEach((t,i)=>{$('t'+i).textContent=t.left+' of '+t.total+' left';});var _pp=TIERS.reduce(function(s,t){return s+t.left*t.v;},0);var _pv=document.getElementById('potVal');if(_pv)_pv.textContent='\u00a3'+_pp.toLocaleString();
   $('topLine').textContent = TIERS[0].left>0
     ? ('£'+TIERS[0].v.toLocaleString()+' TOP PRIZE IN PLAY')
     : 'TOP PRIZE WON — FRESH POOL SOON';
@@ -468,7 +468,7 @@ function ebClose(){document.getElementById('ebside').classList.remove('open');do
 </script>
 <script>try{var _r=new URLSearchParams(location.search).get("ref");if(_r)localStorage.setItem("iw_ref",_r.slice(0,40));}catch(e){}</script>
 <style>@keyframes iwflash{0%{color:#36E0FF;text-shadow:0 0 14px rgba(54,224,255,.9)}100%{text-shadow:none}}.iwflash{animation:iwflash .6s ease-out}</style>
-<script>document.addEventListener('DOMContentLoaded',function(){['leftCt','soldCt','fiveSold','grandSold','freeSold','poolStat','grandPrize'].forEach(function(id){var el=document.getElementById(id);if(!el)return;try{new MutationObserver(function(){el.classList.remove('iwflash');void el.offsetWidth;el.classList.add('iwflash');}).observe(el,{childList:true,characterData:true,subtree:true});}catch(e){}});});</script>
+<script>document.addEventListener('DOMContentLoaded',function(){['leftCt','soldCt','fiveSold','grandSold','freeSold','poolStat','grandPrize','potVal'].forEach(function(id){var el=document.getElementById(id);if(!el)return;try{new MutationObserver(function(){el.classList.remove('iwflash');void el.offsetWidth;el.classList.add('iwflash');}).observe(el,{childList:true,characterData:true,subtree:true});}catch(e){}});});</script>
 <style>.iwmute{position:fixed;right:14px;bottom:14px;z-index:80;width:40px;height:40px;border-radius:50%;border:1px solid var(--panel-edge,#1C3463);background:linear-gradient(180deg,#12264D,#0A1730);color:#36E0FF;font-size:18px;line-height:1;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.5)}@media(min-width:900px){.iwmute{right:calc(50% - 232px)}}</style>
 <button class="iwmute" id="iwMute" aria-label="Sound on/off">&#128266;</button>
 <script>
