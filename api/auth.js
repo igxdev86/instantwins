@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   const fn = RPC[b && b.action];
   if (!fn) return res.status(400).json({ error: 'bad action' });
   let args;
-  if (b.action === 'signup') args = { p_email: String(b.email||''), p_pass: String(b.password||''), p_name: String(b.name||''), p_dob: String(b.dob||'') };
+  if (b.action === 'signup') args = { p_email: String(b.email||''), p_pass: String(b.password||''), p_name: String(b.name||''), p_dob: String(b.dob||''), p_ref: String(b.ref||'') };
   else if (b.action === 'login') args = { p_email: String(b.email||''), p_pass: String(b.password||'') };
   else args = { p_token: String(b.token||'') };
   const r = await fetch(URL + '/rest/v1/rpc/' + fn, {

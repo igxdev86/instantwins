@@ -101,6 +101,20 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:16px;color:var(-
     <div class="err" id="reErr"></div>
   </div>
   <div class="panel"><h2>Users</h2><div id="users"></div></div>
+  <div class="panel"><h2>Affiliate program</h2>
+    <p class="lead">Create an affiliate, set <b>rev-share %</b> or a <b>CPA</b> (fixed £ per player who places a paid entry). Their link is <span class="mono">?ref=CODE</span>.</p>
+    <label>Name</label><input id="afName" placeholder="Partner name">
+    <label>Email (optional)</label><input id="afEmail" type="email">
+    <label>Referral code</label><input id="afCode" placeholder="e.g. ryan25">
+    <div class="tabs" style="margin-top:12px">
+      <button id="afMrev" class="on" type="button">Rev-share %</button>
+      <button id="afMcpa" type="button">CPA £</button>
+    </div>
+    <label id="afRateLbl">Rev-share percent (e.g. 30)</label><input id="afRate" inputmode="numeric" placeholder="30">
+    <button class="btn" id="afGo">CREATE AFFILIATE</button>
+    <div class="err" id="afErr"></div>
+    <div id="affiliates" style="margin-top:16px"></div>
+  </div>
   </div>
 </div><footer>InstantWins.co.uk is operated by IGX Ltd. All draws form a single continuous arrangement of
 free-entry prize competitions under Schedule 2 of the Gambling Act 2005. Test mode: all credit is
@@ -159,9 +173,44 @@ async function loadUsers(){
   const u=await api('/api/admin',{action:'users',token:s.token});
   $('users').innerHTML=u.map(x=>'<div class="row"><span><b>'+esc(x.name)+'</b> <span class="m">'+esc(x.email)+' · joined '+new Date(x.joined).toLocaleDateString()+'</span></span><span class="mono">'+fmtp(x.balance_p)+'</span></div>').join('');
 }
-(async()=>{ if(await guard()){loadStats();loadThreads();loadUsers();setInterval(loadThreads,20000);} })();
+let afModel='revshare';
+$('afMrev').onclick=()=>{afModel='revshare';$('afMrev').classList.add('on');$('afMcpa').classList.remove('on');$('afRateLbl').textContent='Rev-share percent (e.g. 30)';$('afRate').placeholder='30';};
+$('afMcpa').onclick=()=>{afModel='cpa';$('afMcpa').classList.add('on');$('afMrev').classList.remove('on');$('afRateLbl').textContent='CPA in £ per player (e.g. 25)';$('afRate').placeholder='25';};
+$('afGo').onclick=async()=>{
+  $('afErr').textContent='';$('afErr').className='err';
+  const rate = afModel==='cpa' ? Math.round(parseFloat($('afRate').value||'0')*100) : (parseInt($('afRate').value,10)||0);
+  try{ await api('/api/admin',{action:'aff_create',token:s.token,name:$('afName').value,email:$('afEmail').value,code:$('afCode').value,model:afModel,rate});
+    $('afName').value='';$('afEmail').value='';$('afCode').value='';$('afRate').value='';
+    $('afErr').textContent='Created.';$('afErr').className='err ok'; loadAff();
+  }catch(e){$('afErr').textContent=e.message;}
+};
+function money(p){return '\u00a3'+(p/100).toLocaleString('en-GB',{minimumFractionDigits:2});}
+async function loadAff(){
+  try{
+    const list=await api('/api/admin',{action:'aff_list',token:s.token});
+    $('affiliates').innerHTML = (list||[]).length ? list.map(a=>
+      '<div class="row" style="display:block"><div style="display:flex;justify-content:space-between;gap:8px">'
+      +'<span><b>'+esc(a.name)+'</b> <span class="pill">'+a.code+'</span> <span class="m">'+(a.model==='revshare'?(a.rate+'% rev-share'):(money(a.rate)+' CPA'))+'</span></span>'
+      +'<span class="mono '+(a.status==='active'?'win':'')+'">'+a.status+'</span></div>'
+      +'<div class="m" style="margin-top:5px">'+a.signups+' signups · '+a.players+' players · revenue '+money(a.revenue_p)+' · <b style="color:var(--match)">commission '+money(a.commission_p)+'</b></div>'
+      +'<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">'
+      +'<button class="pill" style="cursor:pointer;border:none" onclick="affRate(\''+a.code+'\',\''+a.model+'\')">Edit rate</button>'
+      +'<button class="pill" style="cursor:pointer;border:none" onclick="affToggle(\''+a.code+'\',\''+(a.status==='active'?'paused':'active')+'\')">'+(a.status==='active'?'Pause':'Activate')+'</button>'
+      +'<span class="m">link: ?ref='+a.code+'</span></div></div>'
+    ).join('') : '<span class="m" style="color:var(--soft)">No affiliates yet.</span>';
+  }catch(e){$('afErr').textContent=e.message;}
+}
+window.affRate=async(code,model)=>{
+  const v=prompt(model==='cpa'?'New CPA in £ per player:':'New rev-share %:'); if(v==null)return;
+  const rate = model==='cpa' ? Math.round(parseFloat(v||'0')*100) : (parseInt(v,10)||0);
+  try{await api('/api/admin',{action:'aff_update',token:s.token,code,model:'',rate,status:''});loadAff();}catch(e){alert(e.message);}
+};
+window.affToggle=async(code,status)=>{ try{await api('/api/admin',{action:'aff_update',token:s.token,code,model:'',rate:'',status});loadAff();}catch(e){alert(e.message);} };
+
+(async()=>{ if(await guard()){loadStats();loadThreads();loadUsers();loadAff();setInterval(loadThreads,20000);} })();
 </script><script>
 function ebOpen(){document.getElementById('ebside').classList.add('open');document.getElementById('ebscrim').classList.add('open');}
 function ebClose(){document.getElementById('ebside').classList.remove('open');document.getElementById('ebscrim').classList.remove('open');}
 </script>
+<script>try{var _r=new URLSearchParams(location.search).get("ref");if(_r)localStorage.setItem("iw_ref",_r.slice(0,40));}catch(e){}</script>
 </body></html>

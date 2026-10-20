@@ -118,7 +118,7 @@ $('tabIn').onclick=()=>{$('tabIn').classList.add('on');$('tabUp').classList.remo
 $('suGo').onclick=async()=>{
   $('suErr').textContent='';$('suGo').disabled=true;
   try{
-    const d=await api('/api/auth',{action:'signup',name:$('suName').value,email:$('suEmail').value,password:$('suPass').value,dob:$('suDob').value});
+    const d=await api('/api/auth',{action:'signup',name:$('suName').value,email:$('suEmail').value,password:$('suPass').value,dob:$('suDob').value,ref:(localStorage.getItem('iw_ref')||'')});
     setSess({token:d.token,name:d.name,is_admin:d.is_admin});
     location.href='account.html';
   }catch(e){$('suErr').textContent=e.message;}
@@ -137,4 +137,5 @@ $('liGo').onclick=async()=>{
 function ebOpen(){document.getElementById('ebside').classList.add('open');document.getElementById('ebscrim').classList.add('open');}
 function ebClose(){document.getElementById('ebside').classList.remove('open');document.getElementById('ebscrim').classList.remove('open');}
 </script>
+<script>try{var _r=new URLSearchParams(location.search).get("ref");if(_r)localStorage.setItem("iw_ref",_r.slice(0,40));}catch(e){}</script>
 </body></html>
