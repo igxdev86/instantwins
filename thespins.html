@@ -180,15 +180,18 @@ theme chosen and any feature animations do not affect the outcome. Part of the s
 arrangement of free-entry prize competitions on InstantWins.co.uk (Schedule 2, Gambling Act 2005).
 Test mode. 18+, UK residents only. Structure subject to solicitor sign-off before launch. Promoter: IGX Ltd.</footer>
 <script>
-fetch('/api/pool?game=SP',{cache:'no-store'}).then(r=>r.json()).then(s=>{
+function pollSpins(){fetch('/api/pool?game=SP',{cache:'no-store'}).then(r=>r.json()).then(s=>{
   if(s&&s.pool){document.getElementById('poolStat').textContent=
     '£1,000 top prize in play · '+(s.cap-s.sold)+' of '+s.cap+' left · LIVE';}
   else{document.getElementById('poolStat').textContent='demo — run spins.sql to open the pool';}
-}).catch(()=>{document.getElementById('poolStat').textContent='demo — backend not connected';});
+}).catch(()=>{document.getElementById('poolStat').textContent='demo — backend not connected';});}
+pollSpins();setInterval(pollSpins,3000);
 </script>
 <script>
 function ebOpen(){document.getElementById('ebside').classList.add('open');document.getElementById('ebscrim').classList.add('open');}
 function ebClose(){document.getElementById('ebside').classList.remove('open');document.getElementById('ebscrim').classList.remove('open');}
 </script>
 <script>try{var _r=new URLSearchParams(location.search).get("ref");if(_r)localStorage.setItem("iw_ref",_r.slice(0,40));}catch(e){}</script>
+<style>@keyframes iwflash{0%{color:#36E0FF;text-shadow:0 0 14px rgba(54,224,255,.9)}100%{text-shadow:none}}.iwflash{animation:iwflash .6s ease-out}</style>
+<script>document.addEventListener('DOMContentLoaded',function(){['leftCt','soldCt','fiveSold','grandSold','freeSold','poolStat','grandPrize'].forEach(function(id){var el=document.getElementById(id);if(!el)return;try{new MutationObserver(function(){el.classList.remove('iwflash');void el.offsetWidth;el.classList.add('iwflash');}).observe(el,{childList:true,characterData:true,subtree:true});}catch(e){}});});</script>
 </body></html>

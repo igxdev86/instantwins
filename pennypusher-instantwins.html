@@ -493,12 +493,14 @@ const GAME={
 /* ================================================= */
 if(GAME.init)GAME.init();
 syncPool();
-setInterval(()=>{if(!busy)syncPool();},6000);
+setInterval(()=>{if(!busy)syncPool();},3000);
 </script>
 <script>
 function ebOpen(){document.getElementById('ebside').classList.add('open');document.getElementById('ebscrim').classList.add('open');}
 function ebClose(){document.getElementById('ebside').classList.remove('open');document.getElementById('ebscrim').classList.remove('open');}
 </script>
 <script>try{var _r=new URLSearchParams(location.search).get("ref");if(_r)localStorage.setItem("iw_ref",_r.slice(0,40));}catch(e){}</script>
+<style>@keyframes iwflash{0%{color:#36E0FF;text-shadow:0 0 14px rgba(54,224,255,.9)}100%{text-shadow:none}}.iwflash{animation:iwflash .6s ease-out}</style>
+<script>document.addEventListener('DOMContentLoaded',function(){['leftCt','soldCt','fiveSold','grandSold','freeSold','poolStat','grandPrize'].forEach(function(id){var el=document.getElementById(id);if(!el)return;try{new MutationObserver(function(){el.classList.remove('iwflash');void el.offsetWidth;el.classList.add('iwflash');}).observe(el,{childList:true,characterData:true,subtree:true});}catch(e){}});});</script>
 </body>
 </html>
