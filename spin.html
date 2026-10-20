@@ -199,10 +199,10 @@ footer b{color:var(--text)}
 <div class="poolref">pool <span id="poolNo">—</span> · every pool verifiable in the fairness panel below</div>
 
 <div class="comp">
-  <div class="stat gold"><b>£500</b><i>Pot / pool</i></div>
+  <div class="stat gold"><b>£5,000</b><i>Pot / pool</i></div>
   <div class="stat"><b>£2</b><i>Per spin</i></div>
-  <div class="stat"><b>86</b><i>Winners /500</i></div>
-  <div class="stat"><b>1-in-5.8</b><i>Win odds</i></div>
+  <div class="stat"><b>786</b><i>Winners /5000</i></div>
+  <div class="stat"><b>1-in-6.4</b><i>Win odds</i></div>
 </div>
 
 <div class="stage-wrap" id="stage">
@@ -218,12 +218,14 @@ footer b{color:var(--text)}
 
 <div class="panel">
   <h2>PRIZE TABLE</h2>
-  <div class="prow"><span class="pv" style="color:var(--gold)">£100</span><span class="pc" id="t0">1 of 1 left</span></div>
-  <div class="prow"><span class="pv">£20</span><span class="pc" id="t1">5 of 5 left</span></div>
-  <div class="prow"><span class="pv">£10</span><span class="pc" id="t2">10 of 10 left</span></div>
-  <div class="prow"><span class="pv">£5</span><span class="pc" id="t3">20 of 20 left</span></div>
-  <div class="prow"><span class="pv">£2</span><span class="pc" id="t4">50 of 50 left</span></div>
-  <div class="odds-line"><b>86 winners in every 500 entries — the odds never change.</b> £2 a go, prizes £2 to £100, and every time 500 entries sell out the full prize table above resets. Every prize is locked in before anyone buys, and you can check it — the how lives in the fairness panel below. <b>All forty slots share one pool</b> — every spin, on any theme, takes the next entry from the same sealed allocation. Themes and features are presentation only.</div>
+  <div class="prow"><span class="pv" style="color:var(--gold)">£1,000</span><span class="pc" id="t0">1 of 1 left</span></div>
+  <div class="prow"><span class="pv">£100</span><span class="pc" id="t1">5 of 5 left</span></div>
+  <div class="prow"><span class="pv">£50</span><span class="pc" id="t2">10 of 10 left</span></div>
+  <div class="prow"><span class="pv">£25</span><span class="pc" id="t3">20 of 20 left</span></div>
+  <div class="prow"><span class="pv">£10</span><span class="pc" id="t4">50 of 50 left</span></div>
+  <div class="prow"><span class="pv">£5</span><span class="pc" id="t5">200 of 200 left</span></div>
+  <div class="prow"><span class="pv">£2</span><span class="pc" id="t6">500 of 500 left</span></div>
+  <div class="odds-line"><b>786 winners in every 5,000 spins — the odds never change.</b> £2 a go, prizes £2 to £1,000, and every time 5,000 spins sell out the full prize table above resets. Every prize is locked in before anyone buys, and you can check it — the how lives in the fairness panel below. <b>All forty slots share one pool</b> — every spin, on any theme, takes the next entry from the same sealed allocation. Themes and features are presentation only.</div>
 </div>
 
 <div class="panel">
@@ -256,8 +258,8 @@ footer b{color:var(--text)}
 <script>
 /* ================= SHARED CHASSIS ================= */
 const PRICE=2;
-const CAP=500;
-const TIERS=[{v:100,total:1,left:1},{v:20,total:5,left:5},{v:10,total:10,left:10},{v:5,total:20,left:20},{v:2,total:50,left:50}];
+const CAP=5000;
+const TIERS=[{v:1000,total:1,left:1},{v:100,total:5,left:5},{v:50,total:10,left:10},{v:25,total:20,left:20},{v:10,total:50,left:50},{v:5,total:200,left:200},{v:2,total:500,left:500}];
 let ticketsLeft=CAP, nextTicket=1, nonce=0, balance=20.00, busy=false;
 const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let TOKEN=null;try{const _s=JSON.parse(localStorage.getItem('iw_session'));TOKEN=_s&&_s.token;}catch(e){}
@@ -329,7 +331,7 @@ async function openDemoPool(fresh){
   const id='SP-P'+String(poolNo).padStart(4,'0');
   TIERS.forEach(t=>t.left=t.total);
   ticketsLeft=CAP;
-  const sold=fresh?0:(430+hashStr(id)%60);
+  const sold=fresh?0:(4300+hashStr(id)%600);
   for(let i=0;i<sold;i++){ticketsLeft--;drawHiddenTicket();}
   nextTicket=sold+1;
   pool={id,seed:id+'|'+crypto.getRandomValues(new Uint32Array(3)).join('-')};

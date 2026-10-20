@@ -117,7 +117,7 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:16px;color:var(-
   <div class="pagehead">
     <h1>THE SPINS</h1>
     <p>Forty slots, one shared pool. Every spin — on any theme — takes the next numbered entry from the
-       same sealed £500 allocation: <b>86 winners in every 500 spins, odds never change</b>. Themes and
+       same sealed £5,000 allocation: <b>786 winners in every 5,000 spins, odds never change</b>. Themes and
        features are pure presentation. The Deluxe row adds feature theatre — free spins, hold &amp; spin,
        cascades, multipliers, expanding wilds — all acting out the same committed outcome.</p>
   </div>
@@ -176,7 +176,7 @@ Test mode. 18+, UK residents only. Structure subject to solicitor sign-off befor
 <script>
 fetch('/api/pool?game=SP',{cache:'no-store'}).then(r=>r.json()).then(s=>{
   if(s&&s.pool){document.getElementById('poolStat').textContent=
-    '£100 top prize in play · '+(s.cap-s.sold)+' of '+s.cap+' left · LIVE';}
+    '£1,000 top prize in play · '+(s.cap-s.sold)+' of '+s.cap+' left · LIVE';}
   else{document.getElementById('poolStat').textContent='demo — run spins.sql to open the pool';}
 }).catch(()=>{document.getElementById('poolStat').textContent='demo — backend not connected';});
 </script>
