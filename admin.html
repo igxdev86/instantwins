@@ -137,13 +137,23 @@ async function guard(){
 }
 async function loadStats(){
   const d=await api('/api/admin',{action:'stats',token:s.token});
+  const ggr=d.ggr_p||0, pct=((d.margin||0)*100);
   $('stats').innerHTML=
-    '<div class="row"><span>Users</span><span class="mono">'+d.users+'</span></div>'
-   +'<div class="row"><span>Game entries sold</span><span class="mono">'+d.entries_sold+'</span></div>'
-   +'<div class="row"><span>Card entries</span><span class="mono">'+d.card_entries+'</span></div>'
-   +'<div class="row"><span>Prizes credited</span><span class="mono win">'+fmtp(d.prizes_paid_p)+'</span></div>'
+    '<div class="row"><b>Revenue (real players — bots excluded)</b><span></span></div>'
+   +'<div class="row"><span>Stakes taken in</span><span class="mono">'+fmtp(d.stakes_p||0)+'</span></div>'
+   +'<div class="row"><span class="m">— from instant games</span><span class="mono">'+fmtp(d.game_stakes_p||0)+'</span></div>'
+   +'<div class="row"><span class="m">— from the Card draws</span><span class="mono">'+fmtp(d.card_stakes_p||0)+'</span></div>'
+   +'<div class="row"><span>Prizes paid out</span><span class="mono" style="color:var(--bad)">−'+fmtp(d.prizes_paid_p||0)+'</span></div>'
+   +'<div class="row"><span><b>Gross income (GGR)</b></span><span class="mono '+(ggr>=0?'win':'')+'" style="font-weight:800'+(ggr<0?';color:var(--bad)':'')+'">'+(ggr<0?'−':'')+fmtp(Math.abs(ggr))+'</span></div>'
+   +'<div class="row"><span>House margin</span><span class="mono">'+pct.toFixed(1)+'%</span></div>'
+   +'<div class="row"><span class="m">Welcome credit issued (liability)</span><span class="mono">'+fmtp(d.welcome_issued_p||0)+'</span></div>'
+   +'<div class="row" style="margin-top:6px"><b>Activity</b><span></span></div>'
+   +'<div class="row"><span>Players</span><span class="mono">'+(d.players||0)+'</span></div>'
+   +'<div class="row"><span>Card entries</span><span class="mono">'+(d.card_entries||0)+'</span></div>'
+   +'<div class="row"><span class="m">Test bots on system</span><span class="mono">'+(d.bots||0)+'</span></div>'
+   +'<div class="row" style="margin-top:6px"><b>Per game sold</b><span></span></div>'
    +(d.per_game||[]).map(g=>'<div class="row"><span class="m">'+esc(g.game)+'</span><span class="mono">'+g.sold+' sold</span></div>').join('')
-   +'<div class="row"><b>Recent wins</b><span></span></div>'
+   +'<div class="row" style="margin-top:6px"><b>Recent wins</b><span></span></div>'
    +((d.recent_wins||[]).map(w=>'<div class="row"><span class="m">'+esc(w.who)+' · '+esc(w.reason)+'</span><span class="mono win">+'+fmtp(w.amount_p)+'</span></div>').join('')||'<div class="row"><span class="m">None yet</span></div>');
 }
 async function loadThreads(){

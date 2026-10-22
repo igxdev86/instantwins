@@ -269,24 +269,48 @@ end $$;
 
 create or replace function iw_admin_stats(p_token uuid)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
-declare v jsonb;
+declare v_stakes int; v_prizes int; v_gstake int; v_cstake int; v_welcome int;
 begin
   perform iw_admin(p_token);
-  select jsonb_build_object(
-    'users',(select count(*) from users),
-    'entries_sold',(select count(*) from allocation where claimed_by is not null),
-    'card_entries',(select count(*) from card_entries),
-    'prizes_paid_p',(select coalesce(sum(delta_p),0) from ledger where delta_p>0 and reason like 'win %' or delta_p>0 and reason like '%draw win%'),
+  -- money figures count REAL players only (bots excluded)
+  select coalesce(sum(-l.delta_p),0) into v_stakes
+    from ledger l join users u on u.id=l.user_id
+   where l.delta_p<0 and not coalesce(u.is_bot,false);
+  select coalesce(sum(-l.delta_p),0) into v_gstake
+    from ledger l join users u on u.id=l.user_id
+   where l.delta_p<0 and l.reason like 'entry %' and not coalesce(u.is_bot,false);
+  select coalesce(sum(-l.delta_p),0) into v_cstake
+    from ledger l join users u on u.id=l.user_id
+   where l.delta_p<0 and l.reason like '% draw %' and not coalesce(u.is_bot,false);
+  select coalesce(sum(l.delta_p),0) into v_prizes
+    from ledger l join users u on u.id=l.user_id
+   where l.delta_p>0 and l.reason not like 'welcome%' and l.reason not like 'bot %'
+     and not coalesce(u.is_bot,false);
+  select coalesce(sum(l.delta_p),0) into v_welcome
+    from ledger l join users u on u.id=l.user_id
+   where l.reason like 'welcome%' and not coalesce(u.is_bot,false);
+  return jsonb_build_object(
+    'players',(select count(*) from users where not coalesce(is_bot,false)),
+    'bots',(select count(*) from users where coalesce(is_bot,false)),
+    'card_entries',(select count(*) from card_entries ce join users u on u.id::text=ce.punter
+                     where not coalesce(u.is_bot,false)),
+    'stakes_p', v_stakes,
+    'game_stakes_p', v_gstake,
+    'card_stakes_p', v_cstake,
+    'prizes_paid_p', v_prizes,
+    'welcome_issued_p', v_welcome,
+    'ggr_p', v_stakes - v_prizes,
+    'margin', case when v_stakes>0 then round((v_stakes - v_prizes)::numeric / v_stakes, 4) else 0 end,
     'per_game',(select coalesce(jsonb_agg(jsonb_build_object('game',g.name,'sold',
                  (select count(*) from allocation a join pools p on p.id=a.pool_id
                    where p.game=g.tag and a.claimed_by is not null and a.claimed_by<>'web'))
                  order by g.name),'[]'::jsonb) from games g),
     'recent_wins',(select coalesce(jsonb_agg(jsonb_build_object('who',u.name,'amount_p',l.delta_p,
                     'reason',l.reason,'at',l.created_at) order by l.created_at desc),'[]'::jsonb)
-                   from (select * from ledger where delta_p>0 and reason not like 'welcome%'
-                          order by created_at desc limit 12) l join users u on u.id=l.user_id))
-  into v;
-  return v;
+                   from (select l.* from ledger l join users u on u.id=l.user_id
+                          where l.delta_p>0 and l.reason not like 'welcome%' and l.reason not like 'bot %'
+                            and not coalesce(u.is_bot,false)
+                          order by l.created_at desc limit 12) l join users u on u.id=l.user_id));
 end $$;
 
 create or replace function iw_admin_users(p_token uuid)

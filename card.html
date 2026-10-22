@@ -42,6 +42,12 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .nd-row{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px}
 .nd-clock{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:2.8rem;color:var(--cyan);line-height:1;text-shadow:0 0 18px rgba(54,224,255,.5)}
 .nextdraw.grand .nd-clock{color:var(--gold)}
+.nd-clockwrap{display:flex;flex-direction:column;gap:4px}
+.nd-cap{font-size:.56rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.nd-at{font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--soft)}
+.nd-at b{font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--ink);letter-spacing:.02em}
+.nextdraw.grand .nd-at b{color:var(--gold)}
+.nextdraw.freed .nd-at b{color:var(--match)}
 .nd-prize{font-size:1.05rem;font-weight:900;color:#fff}
 .nd-prize b{font-family:'IBM Plex Mono',monospace;font-size:1.5rem;color:var(--match)}
 .nextdraw.grand .nd-prize b{color:var(--gold)}
@@ -180,7 +186,7 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
       <span class="ndtag ref" id="fiveId">—</span>
     </div>
     <div class="nd-row">
-      <div class="nd-clock" id="fiveClock">--:--</div>
+      <div class="nd-clockwrap"><span class="nd-cap">Counts down to</span><div class="nd-clock" id="fiveClock">--:--</div><span class="nd-at">Draws at <b id="fiveAt">--:--</b></span></div>
       <div class="nd-prize">Winning number takes <b>£100</b></div>
     </div>
     <div class="ndchips">
@@ -205,7 +211,7 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
       <span class="ndtag ref" id="freeId">—</span>
     </div>
     <div class="nd-row">
-      <div class="nd-clock" id="freeClock">--:--</div>
+      <div class="nd-clockwrap"><span class="nd-cap">Counts down to</span><div class="nd-clock" id="freeClock">--:--</div><span class="nd-at">Draws at <b id="freeAt">--:--</b></span></div>
       <div class="nd-prize">One winner takes <b>£5</b> <span style="font-size:.78rem;color:var(--soft);font-weight:600">site credit or cash</span></div>
     </div>
     <div class="ndchips">
@@ -229,7 +235,7 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
       <span class="ndtag ref" id="grandId">—</span>
     </div>
     <div class="nd-row">
-      <div class="nd-clock" id="grandClock">--:--</div>
+      <div class="nd-clockwrap"><span class="nd-cap">Counts down to</span><div class="nd-clock" id="grandClock">--:--</div><span class="nd-at">Draws at <b id="grandAt">--:--</b></span></div>
       <div class="nd-prize">Jackpot <b id="grandPrize">£1,000</b></div>
     </div>
     <div class="ndchips">
@@ -360,6 +366,7 @@ function applyState(){
   const f=S.open&&S.open.five, g=S.open&&S.open.grand, fr=S.open&&S.open.free;
   if(f){
     $('fiveId').textContent='FIVE-'+hm(f.off_at).replace(':','');
+    $('fiveAt').textContent=hm(f.off_at);
     $('fiveSold').textContent=f.sold.toLocaleString();
     $('fiveHash').textContent=f.seed_hash;
     const m=mine[f.id]||[];
@@ -370,6 +377,7 @@ function applyState(){
   }
   if(g){
     $('grandId').textContent='GRAND-'+hm(g.off_at).replace(':','');
+    $('grandAt').textContent=hm(g.off_at);
     $('grandSold').textContent=g.sold.toLocaleString();
     if($('grandPrize'))$('grandPrize').textContent='£'+(g.prize_p/100).toLocaleString();
     const m=mine[g.id]||[];
@@ -380,6 +388,7 @@ function applyState(){
   }
   if(fr){
     $('freeId').textContent='FREE-'+hm(fr.off_at).replace(':','');
+    $('freeAt').textContent=hm(fr.off_at);
     $('freeSold').textContent=fr.sold.toLocaleString();
     const entered=(mine[fr.id]||[]).length>0;
     $('freeMine').textContent=entered?'You’re in — good luck!':'';
@@ -530,6 +539,9 @@ function demoTick(){
   $('fiveClock').textContent=pad(Math.floor(fs/60))+':'+pad(fs%60);
   $('grandClock').textContent=pad(Math.floor(gs/60))+':'+pad(gs%60);
   $('freeClock').textContent=pad(Math.floor(rs/60))+':'+pad(rs%60);
+  $('fiveAt').textContent=hm(five.end);
+  $('grandAt').textContent=hm(grand.end);
+  $('freeAt').textContent=hm(free.end);
   if(Math.random()<(fs<60?.4:.1)&&five.sold<five.cap){five.sold++;}
   if(Math.random()<.07&&grand.sold<grand.cap){grand.sold++;}
   if(Math.random()<(rs<60?.5:.22)){free.sold++;}
