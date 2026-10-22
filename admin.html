@@ -1,5 +1,5 @@
 <!doctype html><html lang="en-GB"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin console — InstantWins.co.uk</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin dashboard — InstantWins.co.uk</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22bgfv%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2336E0FF%22/%3E%3Cstop%20offset%3D%22.5%22%20stop-color%3D%22%230FA8FF%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230551B5%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22glfv%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ffffff%22%20stop-opacity%3D%22.55%22/%3E%3Cstop%20offset%3D%22.5%22%20stop-color%3D%22%23ffffff%22%20stop-opacity%3D%220%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%2238%22%20height%3D%2238%22%20rx%3D%2210%22%20fill%3D%22url%28%23bgfv%29%22%20stroke%3D%22%239BEBFF%22%20stroke-opacity%3D%22.5%22/%3E%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%2238%22%20height%3D%2220%22%20rx%3D%2210%22%20fill%3D%22url%28%23glfv%29%22/%3E%3Cpath%20d%3D%22M23%205%20L11%2022%20H19%20L16.5%2035%20L30%2017%20H21.5%20Z%22%20fill%3D%22%23fff%22%20stroke%3D%22%23063a7a%22%20stroke-width%3D%22.5%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -79,44 +79,38 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:16px;color:var(-
   body.ebg::before{display:none}
 }
 
-</style></head><body class="ebh">
-<header class="ebtop"><button class="ebham" aria-label="Menu" onclick="ebOpen()"><svg viewBox="0 0 24 24" fill="none" stroke="#9DB4DB" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button><a class="ebtop-logo" href="index.html"><svg class="iwlogo" viewBox="0 0 250 40" height="30" role="img" aria-label="InstantWins" xmlns="http://www.w3.org/2000/svg" style="display:block"><g><defs><linearGradient id="bglg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#36E0FF"/><stop offset=".5" stop-color="#0FA8FF"/><stop offset="1" stop-color="#0551B5"/></linearGradient><linearGradient id="gllg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset=".5" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs><rect x="1" y="1" width="38" height="38" rx="10" fill="url(#bglg)" stroke="#9BEBFF" stroke-opacity=".5"/><rect x="1" y="1" width="38" height="20" rx="10" fill="url(#gllg)"/><path d="M23 5 L11 22 H19 L16.5 35 L30 17 H21.5 Z" fill="#fff" stroke="#063a7a" stroke-width=".5" stroke-linejoin="round"/></g><text x="48" y="30" font-family="Barlow Condensed,Archivo,sans-serif" font-weight="800" font-size="30" letter-spacing="-0.5" fill="#F2F7FF">INSTANT<tspan fill="#36E0FF">WINS</tspan></text></svg></a><a class="ebtop-cta" href="account.html">Sign in</a></header>
+
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
+@media(min-width:620px){.tiles{grid-template-columns:repeat(3,1fr)}}
+.tile{display:block;text-decoration:none;border:1px solid var(--line);border-radius:11px;padding:15px 15px 13px;background:linear-gradient(180deg,#0E1B38,#0A1528);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);transition:transform .15s,border-color .15s,box-shadow .15s}
+.tile:hover{border-color:var(--buy);transform:translateY(-2px);box-shadow:0 10px 26px rgba(15,168,255,.22)}
+.tile-k{display:block;font-size:.58rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.tile-v{display:block;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1.4rem;color:#fff;line-height:1.1;margin-top:7px;word-break:break-word}
+.tile-s{display:block;font-size:.64rem;color:var(--soft);margin-top:4px;min-height:14px}
+.tile-go{display:block;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--cyan);margin-top:9px}
+.tile.gold .tile-v{color:var(--gold)}
+.tile.good .tile-v{color:var(--match)}
+.tile.bad .tile-v{color:var(--bad)}
+.tile.alert{border-color:#5A4614}
+.backlink{display:inline-block;margin:14px 0 0;color:var(--cyan);font-size:.74rem;font-weight:800;text-decoration:none;text-transform:uppercase;letter-spacing:.06em}
+</style></head><body class="ebh"><header class="ebtop"><button class="ebham" aria-label="Menu" onclick="ebOpen()"><svg viewBox="0 0 24 24" fill="none" stroke="#9DB4DB" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button><a class="ebtop-logo" href="index.html"><svg class="iwlogo" viewBox="0 0 250 40" height="30" role="img" aria-label="InstantWins" xmlns="http://www.w3.org/2000/svg" style="display:block"><g><defs><linearGradient id="bglg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#36E0FF"/><stop offset=".5" stop-color="#0FA8FF"/><stop offset="1" stop-color="#0551B5"/></linearGradient><linearGradient id="gllg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset=".5" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs><rect x="1" y="1" width="38" height="38" rx="10" fill="url(#bglg)" stroke="#9BEBFF" stroke-opacity=".5"/><rect x="1" y="1" width="38" height="20" rx="10" fill="url(#gllg)"/><path d="M23 5 L11 22 H19 L16.5 35 L30 17 H21.5 Z" fill="#fff" stroke="#063a7a" stroke-width=".5" stroke-linejoin="round"/></g><text x="48" y="30" font-family="Barlow Condensed,Archivo,sans-serif" font-weight="800" font-size="30" letter-spacing="-0.5" fill="#F2F7FF">INSTANT<tspan fill="#36E0FF">WINS</tspan></text></svg></a><a class="ebtop-cta" href="account.html">Sign in</a></header>
 <div class="ebscrim" id="ebscrim" onclick="ebClose()"></div><aside class="ebside" id="ebside"><div class="ebbrand"><svg class="iwlogo" viewBox="0 0 250 40" height="30" role="img" aria-label="InstantWins" xmlns="http://www.w3.org/2000/svg" style="display:block"><g><defs><linearGradient id="bglg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#36E0FF"/><stop offset=".5" stop-color="#0FA8FF"/><stop offset="1" stop-color="#0551B5"/></linearGradient><linearGradient id="gllg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset=".5" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs><rect x="1" y="1" width="38" height="38" rx="10" fill="url(#bglg)" stroke="#9BEBFF" stroke-opacity=".5"/><rect x="1" y="1" width="38" height="20" rx="10" fill="url(#gllg)"/><path d="M23 5 L11 22 H19 L16.5 35 L30 17 H21.5 Z" fill="#fff" stroke="#063a7a" stroke-width=".5" stroke-linejoin="round"/></g><text x="48" y="30" font-family="Barlow Condensed,Archivo,sans-serif" font-weight="800" font-size="30" letter-spacing="-0.5" fill="#F2F7FF">INSTANT<tspan fill="#36E0FF">WINS</tspan></text></svg></div><nav class="ebnav"><a class="" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span>Home</span></a><a class="" href="card.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg><span>The Card</span></a><a class="" href="games.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Instant Games</span></a><a class="" href="thespins.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg><span>The Spins</span></a><a class="" href="results.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4"/><path d="M6 4h12v4a6 6 0 01-12 0z"/></svg><span>Results</span></a><a class="" href="free-entry.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span>Free Entry</span></a><a class="" href="fairness.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4-3 7-7 10-4-3-7-6-7-10V6z"/></svg><span>Fairness</span></a><a class="on" href="account.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg><span>Account</span></a></nav><a class="ebpromo" href="card.html"><span class="ebpromo-k">On the hour</span><span class="ebpromo-v">£1,000</span><span class="ebpromo-s">Hourly Grand &rarr;</span></a><div class="ebfoot">18+ · Schedule 2 · Test mode</div></aside>
 <div class="wrap">
-  <h1>Admin console</h1>
-  <div class="err" id="gate"></div>
-  <div id="all" style="display:none">
-  <div class="panel"><h2>Tonight's numbers</h2><div id="stats"></div></div>
-  <div class="panel"><h2>Send an announcement to all users</h2>
-    <label>Title</label><input id="anTitle" placeholder="e.g. New games live tonight">
-    <label>Message</label><textarea id="anBody"></textarea>
-    <button class="btn" id="anGo">PUBLISH ANNOUNCEMENT</button>
-    <div class="err" id="anErr"></div>
+<h1>Admin dashboard</h1>
+<div class="err" id="gate"></div>
+<div id="all" style="display:none">
+  <p class="lead">Live highlights. Tap any tile for the full breakdown.</p>
+  <div class="tiles" id="tiles">
+    <a class="tile good" href="admin-revenue.html"><span class="tile-k">Gross income (GGR)</span><span class="tile-v" id="tGgr">\u2014</span><span class="tile-s" id="tGgrS">margin \u2014</span><span class="tile-go">Revenue &rarr;</span></a>
+    <a class="tile" href="admin-revenue.html"><span class="tile-k">Stakes taken in</span><span class="tile-v" id="tStk">\u2014</span><span class="tile-s" id="tStkS">games + card</span><span class="tile-go">Revenue &rarr;</span></a>
+    <a class="tile bad" href="admin-revenue.html"><span class="tile-k">Prizes paid out</span><span class="tile-v" id="tPrz">\u2014</span><span class="tile-s">to real players</span><span class="tile-go">Revenue &rarr;</span></a>
+    <a class="tile" href="admin-users.html"><span class="tile-k">Players</span><span class="tile-v" id="tPly">\u2014</span><span class="tile-s" id="tPlyS">card entries \u2014</span><span class="tile-go">Users &rarr;</span></a>
+    <a class="tile alert" href="admin-support.html"><span class="tile-k">Support</span><span class="tile-v" id="tSup">\u2014</span><span class="tile-s">open threads</span><span class="tile-go">Support &rarr;</span></a>
+    <a class="tile gold" href="admin-affiliates.html"><span class="tile-k">Affiliates</span><span class="tile-v" id="tAff">\u2014</span><span class="tile-s" id="tAffS">active \u2014</span><span class="tile-go">Affiliates &rarr;</span></a>
+    <a class="tile" href="admin-announce.html"><span class="tile-k">Broadcast</span><span class="tile-v">&#9993;</span><span class="tile-s">message all users</span><span class="tile-go">Announce &rarr;</span></a>
   </div>
-  <div class="panel"><h2>Support threads</h2><div id="threads"><span class="m" style="color:var(--soft);font-size:.75rem">Loading…</span></div></div>
-  <div class="panel" id="threadPanel" style="display:none"><h2 id="threadTitle">Thread</h2>
-    <div id="thread" style="display:flex;flex-direction:column"></div>
-    <label>Reply as InstantWins</label><textarea id="reBody"></textarea>
-    <button class="btn" id="reGo">SEND REPLY</button>
-    <div class="err" id="reErr"></div>
-  </div>
-  <div class="panel"><h2>Users</h2><div id="users"></div></div>
-  <div class="panel"><h2>Affiliate program</h2>
-    <p class="lead">Create an affiliate, set <b>rev-share %</b> or a <b>CPA</b> (fixed £ per player who places a paid entry). Their link is <span class="mono">?ref=CODE</span>.</p>
-    <label>Name</label><input id="afName" placeholder="Partner name">
-    <label>Email (optional)</label><input id="afEmail" type="email">
-    <label>Referral code</label><input id="afCode" placeholder="e.g. ryan25">
-    <div class="tabs" style="margin-top:12px">
-      <button id="afMrev" class="on" type="button">Rev-share %</button>
-      <button id="afMcpa" type="button">CPA £</button>
-    </div>
-    <label id="afRateLbl">Rev-share percent (e.g. 30)</label><input id="afRate" inputmode="numeric" placeholder="30">
-    <button class="btn" id="afGo">CREATE AFFILIATE</button>
-    <div class="err" id="afErr"></div>
-    <div id="affiliates" style="margin-top:16px"></div>
-  </div>
-  </div>
-</div><footer>InstantWins.co.uk is operated by IGX Ltd. All draws form a single continuous arrangement of
+</div>
+</div></div><footer>InstantWins.co.uk is operated by IGX Ltd. All draws form a single continuous arrangement of
 free-entry prize competitions under Schedule 2 of the Gambling Act 2005. Test mode: all credit is
 play-money. 18+, UK residents only. Structure subject to solicitor sign-off before launch.</footer>
 <script>
@@ -124,101 +118,36 @@ const $=id=>document.getElementById(id);
 function sess(){try{return JSON.parse(localStorage.getItem('iw_session'))}catch(e){return null}}
 function clearSess(){localStorage.removeItem('iw_session')}
 async function api(path,body){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();if(!r.ok||d.error)throw new Error(d.error||'failed');return d;}
-const fmtp=p=>'£'+(p/100).toLocaleString('en-GB',{minimumFractionDigits:2});
+const fmtp=p=>'\u00a3'+(p/100).toLocaleString('en-GB',{minimumFractionDigits:2});
 function esc(x){const d=document.createElement('div');d.textContent=x;return d.innerHTML;}
-
 const s=sess(); if(!s){location.href='signup.html';}
-let curUser=null;
 async function guard(){
   try{ const me=await api('/api/auth',{action:'me',token:s.token});
     if(!me.is_admin){$('gate').textContent='This account is not an admin. Run the admin SQL flag for your email, then log out and back in.';return false;}
     $('all').style.display='';return true;
   }catch(e){$('gate').textContent=e.message;return false;}
 }
-async function loadStats(){
-  const d=await api('/api/admin',{action:'stats',token:s.token});
-  const ggr=d.ggr_p||0, pct=((d.margin||0)*100);
-  $('stats').innerHTML=
-    '<div class="row"><b>Revenue (real players — bots excluded)</b><span></span></div>'
-   +'<div class="row"><span>Stakes taken in</span><span class="mono">'+fmtp(d.stakes_p||0)+'</span></div>'
-   +'<div class="row"><span class="m">— from instant games</span><span class="mono">'+fmtp(d.game_stakes_p||0)+'</span></div>'
-   +'<div class="row"><span class="m">— from the Card draws</span><span class="mono">'+fmtp(d.card_stakes_p||0)+'</span></div>'
-   +'<div class="row"><span>Prizes paid out</span><span class="mono" style="color:var(--bad)">−'+fmtp(d.prizes_paid_p||0)+'</span></div>'
-   +'<div class="row"><span><b>Gross income (GGR)</b></span><span class="mono '+(ggr>=0?'win':'')+'" style="font-weight:800'+(ggr<0?';color:var(--bad)':'')+'">'+(ggr<0?'−':'')+fmtp(Math.abs(ggr))+'</span></div>'
-   +'<div class="row"><span>House margin</span><span class="mono">'+pct.toFixed(1)+'%</span></div>'
-   +'<div class="row"><span class="m">Welcome credit issued (liability)</span><span class="mono">'+fmtp(d.welcome_issued_p||0)+'</span></div>'
-   +'<div class="row" style="margin-top:6px"><b>Activity</b><span></span></div>'
-   +'<div class="row"><span>Players</span><span class="mono">'+(d.players||0)+'</span></div>'
-   +'<div class="row"><span>Card entries</span><span class="mono">'+(d.card_entries||0)+'</span></div>'
-   +'<div class="row"><span class="m">Test bots on system</span><span class="mono">'+(d.bots||0)+'</span></div>'
-   +'<div class="row" style="margin-top:6px"><b>Per game sold</b><span></span></div>'
-   +(d.per_game||[]).map(g=>'<div class="row"><span class="m">'+esc(g.game)+'</span><span class="mono">'+g.sold+' sold</span></div>').join('')
-   +'<div class="row" style="margin-top:6px"><b>Recent wins</b><span></span></div>'
-   +((d.recent_wins||[]).map(w=>'<div class="row"><span class="m">'+esc(w.who)+' · '+esc(w.reason)+'</span><span class="mono win">+'+fmtp(w.amount_p)+'</span></div>').join('')||'<div class="row"><span class="m">None yet</span></div>');
-}
-async function loadThreads(){
-  const t=await api('/api/admin',{action:'threads',token:s.token});
-  $('threads').innerHTML=t.length?t.map(x=>
-    '<div class="row"><span><b>'+esc(x.name)+'</b> <span class="m">'+esc(x.email)+' · '+x.count+' msgs</span></span>'
-    +'<button class="pill" style="cursor:pointer;border:none" onclick="openThread(\''+x.user_id+'\',\''+esc(x.name)+'\')">Open</button></div>').join('')
-    :'<span style="color:var(--soft);font-size:.75rem">No support messages yet.</span>';
-}
-window.openThread=async(uid,name)=>{
-  curUser=uid;$('threadPanel').style.display='';$('threadTitle').textContent='Thread — '+name;
-  const m=await api('/api/admin',{action:'thread',token:s.token,user_id:uid});
-  $('thread').innerHTML=m.map(x=>'<div class="msg '+(x.sender==='admin'?'user':'admin')+'">'+esc(x.body)+'<div class="t">'+x.sender+' · '+new Date(x.at).toLocaleString()+'</div></div>').join('');
-  $('threadPanel').scrollIntoView({behavior:'smooth'});
-};
-$('reGo').onclick=async()=>{
-  const b=$('reBody').value.trim(); if(!b||!curUser)return;
-  try{await api('/api/admin',{action:'reply',token:s.token,user_id:curUser,body:b});$('reBody').value='';openThread(curUser,$('threadTitle').textContent.slice(9));loadThreads();}
-  catch(e){$('reErr').textContent=e.message;}
-};
-$('anGo').onclick=async()=>{
-  try{await api('/api/admin',{action:'announce',token:s.token,title:$('anTitle').value,body:$('anBody').value});
-    $('anTitle').value='';$('anBody').value='';$('anErr').textContent='Published.';$('anErr').className='err ok';}
-  catch(e){$('anErr').textContent=e.message;}
-};
-async function loadUsers(){
-  const u=await api('/api/admin',{action:'users',token:s.token});
-  $('users').innerHTML=u.map(x=>'<div class="row"><span><b>'+esc(x.name)+'</b> <span class="m">'+esc(x.email)+' · joined '+new Date(x.joined).toLocaleDateString()+'</span></span><span class="mono">'+fmtp(x.balance_p)+'</span></div>').join('');
-}
-let afModel='revshare';
-$('afMrev').onclick=()=>{afModel='revshare';$('afMrev').classList.add('on');$('afMcpa').classList.remove('on');$('afRateLbl').textContent='Rev-share percent (e.g. 30)';$('afRate').placeholder='30';};
-$('afMcpa').onclick=()=>{afModel='cpa';$('afMcpa').classList.add('on');$('afMrev').classList.remove('on');$('afRateLbl').textContent='CPA in £ per player (e.g. 25)';$('afRate').placeholder='25';};
-$('afGo').onclick=async()=>{
-  $('afErr').textContent='';$('afErr').className='err';
-  const rate = afModel==='cpa' ? Math.round(parseFloat($('afRate').value||'0')*100) : (parseInt($('afRate').value,10)||0);
-  try{ await api('/api/admin',{action:'aff_create',token:s.token,name:$('afName').value,email:$('afEmail').value,code:$('afCode').value,model:afModel,rate});
-    $('afName').value='';$('afEmail').value='';$('afCode').value='';$('afRate').value='';
-    $('afErr').textContent='Created.';$('afErr').className='err ok'; loadAff();
-  }catch(e){$('afErr').textContent=e.message;}
-};
-function money(p){return '\u00a3'+(p/100).toLocaleString('en-GB',{minimumFractionDigits:2});}
-async function loadAff(){
-  try{
-    const list=await api('/api/admin',{action:'aff_list',token:s.token});
-    $('affiliates').innerHTML = (list||[]).length ? list.map(a=>
-      '<div class="row" style="display:block"><div style="display:flex;justify-content:space-between;gap:8px">'
-      +'<span><b>'+esc(a.name)+'</b> <span class="pill">'+a.code+'</span> <span class="m">'+(a.model==='revshare'?(a.rate+'% rev-share'):(money(a.rate)+' CPA'))+'</span></span>'
-      +'<span class="mono '+(a.status==='active'?'win':'')+'">'+a.status+'</span></div>'
-      +'<div class="m" style="margin-top:5px">'+a.signups+' signups · '+a.players+' players · revenue '+money(a.revenue_p)+' · <b style="color:var(--match)">commission '+money(a.commission_p)+'</b></div>'
-      +'<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">'
-      +'<button class="pill" style="cursor:pointer;border:none" onclick="affRate(\''+a.code+'\',\''+a.model+'\')">Edit rate</button>'
-      +'<button class="pill" style="cursor:pointer;border:none" onclick="affToggle(\''+a.code+'\',\''+(a.status==='active'?'paused':'active')+'\')">'+(a.status==='active'?'Pause':'Activate')+'</button>'
-      +'<span class="m">link: ?ref='+a.code+'</span></div></div>'
-    ).join('') : '<span class="m" style="color:var(--soft)">No affiliates yet.</span>';
-  }catch(e){$('afErr').textContent=e.message;}
-}
-window.affRate=async(code,model)=>{
-  const v=prompt(model==='cpa'?'New CPA in £ per player:':'New rev-share %:'); if(v==null)return;
-  const rate = model==='cpa' ? Math.round(parseFloat(v||'0')*100) : (parseInt(v,10)||0);
-  try{await api('/api/admin',{action:'aff_update',token:s.token,code,model:'',rate,status:''});loadAff();}catch(e){alert(e.message);}
-};
-window.affToggle=async(code,status)=>{ try{await api('/api/admin',{action:'aff_update',token:s.token,code,model:'',rate:'',status});loadAff();}catch(e){alert(e.message);} };
 
-(async()=>{ if(await guard()){loadStats();loadThreads();loadUsers();loadAff();setInterval(loadThreads,20000);} })();
-</script><script>
+(async()=>{ if(!await guard())return;
+  try{
+    const d=await api('/api/admin',{action:'stats',token:s.token});
+    const ggr=d.ggr_p||0;
+    $('tGgr').textContent=(ggr<0?'-':'')+fmtp(Math.abs(ggr));
+    $('tGgrS').textContent='margin '+(((d.margin||0)*100).toFixed(1))+'%';
+    $('tStk').textContent=fmtp(d.stakes_p||0);
+    $('tStkS').textContent='games '+fmtp(d.game_stakes_p||0)+' \u00b7 card '+fmtp(d.card_stakes_p||0);
+    $('tPrz').textContent=fmtp(d.prizes_paid_p||0);
+    $('tPly').textContent=(d.players||0).toLocaleString();
+    $('tPlyS').textContent='card entries '+(d.card_entries||0).toLocaleString();
+  }catch(e){$('gate').textContent=e.message;}
+  try{ const t=await api('/api/admin',{action:'threads',token:s.token}); $('tSup').textContent=(t||[]).length; }catch(e){}
+  try{ const a=await api('/api/admin',{action:'aff_list',token:s.token});
+    $('tAff').textContent=(a||[]).length;
+    $('tAffS').textContent='active '+(a||[]).filter(x=>x.status==='active').length;
+  }catch(e){}
+})();
+</script>
+<script>
 function ebOpen(){document.getElementById('ebside').classList.add('open');document.getElementById('ebscrim').classList.add('open');}
 function ebClose(){document.getElementById('ebside').classList.remove('open');document.getElementById('ebscrim').classList.remove('open');}
 </script>
