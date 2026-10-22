@@ -1,5 +1,5 @@
 // api/auth.js — signup / login / me / logout. Zero dependencies.
-const RPC = { signup:'iw_signup', login:'iw_login', me:'iw_me', logout:'iw_logout' };
+const RPC = { signup:'iw_signup', login:'iw_login', me:'iw_me', logout:'iw_logout', reset:'iw_reset_password' };
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
   const KEY = process.env.SUPABASE_SERVICE_ROLE_KEY, URL = process.env.SUPABASE_URL;
@@ -10,6 +10,7 @@ export default async function handler(req, res) {
   let args;
   if (b.action === 'signup') args = { p_email: String(b.email||''), p_pass: String(b.password||''), p_name: String(b.name||''), p_dob: String(b.dob||''), p_ref: String(b.ref||'') };
   else if (b.action === 'login') args = { p_email: String(b.email||''), p_pass: String(b.password||'') };
+  else if (b.action === 'reset') args = { p_email: String(b.email||''), p_dob: String(b.dob||''), p_newpass: String(b.password||'') };
   else args = { p_token: String(b.token||'') };
   const r = await fetch(URL + '/rest/v1/rpc/' + fn, {
     method: 'POST',

@@ -100,6 +100,17 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:16px;color:var(-
     <label>Password</label><input id="liPass" type="password" autocomplete="current-password">
     <button class="btn" id="liGo">LOG IN</button>
     <div class="err" id="liErr"></div>
+    <div style="margin-top:12px"><a href="#" id="fpOpen" style="color:var(--cyan);font-size:.76rem;font-weight:700;text-decoration:none">Forgot your password?</a></div>
+  </div>
+  <div class="panel" id="fpPanel" style="display:none">
+    <h2>Reset password</h2>
+    <p class="lead" style="margin-bottom:0">Confirm the email and date of birth on your account, then set a new password.</p>
+    <label>Email</label><input id="fpEmail" type="email" autocomplete="email">
+    <label>Date of birth</label><input id="fpDob" type="date">
+    <label>New password (8+ characters)</label><input id="fpPass" type="password" autocomplete="new-password">
+    <button class="btn" id="fpGo">SET NEW PASSWORD</button>
+    <button class="btn ghost" id="fpBack" type="button">Back to log in</button>
+    <div class="err" id="fpErr"></div>
   </div>
 </div><footer>InstantWins.co.uk is operated by IGX Ltd. All draws form a single continuous arrangement of
 free-entry prize competitions under Schedule 2 of the Gambling Act 2005. Test mode: all credit is
@@ -113,8 +124,17 @@ async function api(path,body){const r=await fetch(path,{method:'POST',headers:{'
 const fmtp=p=>'£'+(p/100).toLocaleString('en-GB',{minimumFractionDigits:2});
 
 if(sess())location.href='account.html';
-$('tabUp').onclick=()=>{$('tabUp').classList.add('on');$('tabIn').classList.remove('on');$('upPanel').style.display='';$('inPanel').style.display='none';};
-$('tabIn').onclick=()=>{$('tabIn').classList.add('on');$('tabUp').classList.remove('on');$('inPanel').style.display='';$('upPanel').style.display='none';};
+function showPanel(which){
+  $('upPanel').style.display = which==='up' ? '' : 'none';
+  $('inPanel').style.display = which==='in' ? '' : 'none';
+  $('fpPanel').style.display = which==='fp' ? '' : 'none';
+  $('tabUp').classList.toggle('on', which==='up');
+  $('tabIn').classList.toggle('on', which==='in' || which==='fp');
+}
+$('tabUp').onclick=()=>showPanel('up');
+$('tabIn').onclick=()=>showPanel('in');
+$('fpOpen').onclick=e=>{e.preventDefault();$('fpErr').textContent='';showPanel('fp');};
+$('fpBack').onclick=()=>showPanel('in');
 $('suGo').onclick=async()=>{
   $('suErr').textContent='';$('suGo').disabled=true;
   try{
@@ -132,6 +152,17 @@ $('liGo').onclick=async()=>{
     location.href='account.html';
   }catch(e){$('liErr').textContent=e.message;}
   $('liGo').disabled=false;
+};
+$('fpGo').onclick=async()=>{
+  $('fpErr').textContent='';
+  if(($('fpPass').value||'').length<8){$('fpErr').textContent='New password must be at least 8 characters.';return;}
+  $('fpGo').disabled=true;
+  try{
+    const d=await api('/api/auth',{action:'reset',email:$('fpEmail').value,dob:$('fpDob').value,password:$('fpPass').value});
+    setSess({token:d.token,name:d.name,is_admin:d.is_admin});
+    location.href='account.html';
+  }catch(e){$('fpErr').textContent=e.message;}
+  $('fpGo').disabled=false;
 };
 </script><script>
 function ebOpen(){document.getElementById('ebside').classList.add('open');document.getElementById('ebscrim').classList.add('open');}
