@@ -14,6 +14,7 @@ create table if not exists users (
   name       text not null,
   dob        date not null,
   is_admin   boolean not null default false,
+  acct_no    text unique,
   created_at timestamptz not null default now(),
   constraint adults_only check (dob <= (current_date - interval '18 years'))
 );
@@ -133,6 +134,7 @@ begin
      order by 1 desc limit 20
   ) s;
   return jsonb_build_object('name',u.name,'email',u.email,'is_admin',u.is_admin,
+                            'acct_no', u.acct_no,
                             'balance_p', iw_balance(u.id), 'entries', v_entries);
 end $$;
 
