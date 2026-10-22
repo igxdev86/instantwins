@@ -32,6 +32,13 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .nextdraw.grand{background:linear-gradient(180deg,#2A2008,#0A1528);border-color:var(--goldline);border-top-color:var(--gold)}
 .nd-label{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--soft)}
 .nextdraw.grand .nd-label{color:var(--gold)}
+.ndtags{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.ndtag{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);background:#0A1730;border:1px solid var(--line);border-radius:5px;padding:3px 7px;line-height:1.1}
+.ndtag.ref{font-family:'IBM Plex Mono',monospace;font-weight:700;letter-spacing:.04em;color:var(--cyan)}
+.ndtag.free{color:#05210f;background:var(--match);border-color:var(--match)}
+.nextdraw .ndtag.key{color:var(--ink);border-color:#2A4578}
+.nextdraw.grand .ndtag.key{color:var(--gold);background:#1B1405;border-color:#5A4614}
+.nextdraw.freed .ndtag.key{color:#05210f;background:var(--match);border-color:var(--match)}
 .nd-row{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px}
 .nd-clock{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:2.8rem;color:var(--cyan);line-height:1;text-shadow:0 0 18px rgba(54,224,255,.5)}
 .nextdraw.grand .nd-clock{color:var(--gold)}
@@ -167,7 +174,11 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
   </div>
 
   <div class="nextdraw" id="fiveCard">
-    <div class="nd-label">NEXT FIVE-MINUTE DRAW · <span id="fiveId">—</span></div>
+    <div class="ndtags">
+      <span class="ndtag key">Five-minute draw</span>
+      <span class="ndtag">Next up</span>
+      <span class="ndtag ref" id="fiveId">—</span>
+    </div>
     <div class="nd-row">
       <div class="nd-clock" id="fiveClock">--:--</div>
       <div class="nd-prize">Winning number takes <b>£100</b></div>
@@ -187,7 +198,12 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
   </div>
 
   <div class="nextdraw freed" id="freeCard" style="margin-top:10px">
-    <div class="nd-label">FREE DRAW · EVERY 10 MIN<span class="freetag">100% free</span> · <span id="freeId">—</span></div>
+    <div class="ndtags">
+      <span class="ndtag key">Free draw</span>
+      <span class="ndtag">Every 10 min</span>
+      <span class="ndtag free">100% free</span>
+      <span class="ndtag ref" id="freeId">—</span>
+    </div>
     <div class="nd-row">
       <div class="nd-clock" id="freeClock">--:--</div>
       <div class="nd-prize">One winner takes <b>£5</b> <span style="font-size:.78rem;color:var(--soft);font-weight:600">site credit or cash</span></div>
@@ -206,7 +222,12 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
   </div>
 
   <div class="nextdraw grand" id="grandCard" style="margin-top:10px">
-    <div class="nd-label">HOURLY GRAND · ON THE HOUR · SNOWBALL · <span id="grandId">—</span></div>
+    <div class="ndtags">
+      <span class="ndtag key">Hourly Grand</span>
+      <span class="ndtag">On the hour</span>
+      <span class="ndtag">Snowball</span>
+      <span class="ndtag ref" id="grandId">—</span>
+    </div>
     <div class="nd-row">
       <div class="nd-clock" id="grandClock">--:--</div>
       <div class="nd-prize">Jackpot <b id="grandPrize">£1,000</b></div>
