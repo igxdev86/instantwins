@@ -88,6 +88,14 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:16px;color:var(-
     <div class="row"><span>Account number</span><span class="mono" id="acctNo" style="font-weight:700">—</span></div>
     <div class="row"><span>Play credit</span><span class="mono" id="bal" style="font-weight:700">—</span></div>
     <p class="lead" style="margin-top:8px">Test mode: credit is play-money. Real top-ups arrive with Stripe.</p>
+    <div id="adminBal" style="display:none;margin-top:10px;border-top:1px solid var(--line);padding-top:12px">
+      <label style="color:var(--gold)">Admin · set my balance (£)</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input id="balAmt" inputmode="decimal" placeholder="1000" style="flex:1">
+        <button class="btn" id="balGo" style="margin-top:0;white-space:nowrap">UPDATE</button>
+      </div>
+      <div class="err" id="balErr"></div>
+    </div>
   </div>
   <div class="panel"><h2>Your entries</h2><div id="entries"><div class="row"><span class="m">Loading…</span></div></div></div>
   <div class="panel"><h2>Help &amp; legal</h2>
@@ -111,13 +119,26 @@ const fmtp=p=>'£'+(p/100).toLocaleString('en-GB',{minimumFractionDigits:2});
 
 const s=sess(); if(!s){location.href='signup.html';}
 $('out').onclick=async()=>{try{await api('/api/auth',{action:'logout',token:s.token});}catch(e){} clearSess();location.href='signup.html';};
+$('balGo').onclick=async()=>{
+  $('balErr').textContent='';$('balErr').className='err';
+  const p=Math.round(parseFloat($('balAmt').value||'0')*100);
+  if(!isFinite(p)){$('balErr').textContent='Enter an amount.';return;}
+  $('balGo').disabled=true;
+  try{
+    const d=await api('/api/admin',{action:'setbal',token:s.token,amount_p:p});
+    $('bal').textContent=fmtp(d.balance_p);
+    $('balErr').textContent='Balance set to '+fmtp(d.balance_p);$('balErr').className='err ok';
+    $('balAmt').value='';
+  }catch(e){$('balErr').textContent=e.message;}
+  $('balGo').disabled=false;
+};
 (async()=>{
   try{
     const me=await api('/api/auth',{action:'me',token:s.token});
     $('hello').textContent='Hello, '+me.name;
     $('acctNo').textContent=me.acct_no||'—';
     $('bal').textContent=fmtp(me.balance_p);
-    if(me.is_admin)$('adminRow').style.display='';
+    if(me.is_admin){$('adminRow').style.display='';$('adminBal').style.display='';}
     const es=me.entries||[];
     $('entries').innerHTML=es.length?es.map(e=>{
       const won=e.prize_p>0, pend=e.prize_p===null;
