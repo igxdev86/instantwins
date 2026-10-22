@@ -40,6 +40,12 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .nextdraw.grand .nd-prize b{color:var(--gold)}
 .nd-meta{font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--soft);margin-top:8px}
 .nd-meta b{color:var(--ink)}
+.ndchips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.ndchip{background:#0A1730;border:1px solid var(--line);border-radius:8px;padding:6px 10px;text-align:center;min-width:56px}
+.ndchip i{display:block;font-style:normal;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
+.ndchip b{display:block;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.92rem;color:#fff;margin-top:2px}
+.ndnote{margin-top:8px;font-size:.66rem;color:var(--soft)}
+.ndnote b{color:var(--gold)}
 .nd-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;align-items:center}
 .enterbtn{border:none;background:linear-gradient(180deg,var(--cyan),var(--buy),var(--acc-deep));color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:.6px;text-transform:uppercase;padding:13px 22px;border-radius:7px;cursor:pointer;box-shadow:0 4px 18px rgba(15,168,255,.4),inset 0 1px 0 rgba(255,255,255,.3)}
 .enterbtn:disabled{opacity:.5;cursor:not-allowed}
@@ -166,7 +172,12 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
       <div class="nd-clock" id="fiveClock">--:--</div>
       <div class="nd-prize">Winning number takes <b>£100</b></div>
     </div>
-    <div class="nd-meta"><b id="fiveSold">—</b>/200 numbers in · £1 each · one number from <b>200</b> drawn · no win if it’s unsold</div>
+    <div class="ndchips">
+      <div class="ndchip"><i>Numbers in</i><b><span id="fiveSold">—</span>/200</b></div>
+      <div class="ndchip"><i>Entry</i><b>£1</b></div>
+      <div class="ndchip"><i>Prize</i><b>£100</b></div>
+    </div>
+    <div class="ndnote">One winning number is drawn from 200 — no winner if that number wasn’t sold.</div>
     <div class="nd-actions">
       <button class="enterbtn" id="fiveEnter">ENTER · £1</button>
       <button class="freebtn" id="freeBtn">Enter free by post</button>
@@ -181,7 +192,12 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
       <div class="nd-clock" id="freeClock">--:--</div>
       <div class="nd-prize">One winner takes <b>£5</b> <span style="font-size:.78rem;color:var(--soft);font-weight:600">site credit or cash</span></div>
     </div>
-    <div class="nd-meta"><b id="freeSold">—</b> free entries in · £0 to enter · one entry per draw</div>
+    <div class="ndchips">
+      <div class="ndchip"><i>Entries in</i><b id="freeSold">—</b></div>
+      <div class="ndchip"><i>Entry</i><b>FREE</b></div>
+      <div class="ndchip"><i>Prize</i><b>£5</b></div>
+    </div>
+    <div class="ndnote">One free entry per draw · paid in site credit or cash.</div>
     <div class="nd-actions">
       <button class="enterbtn" id="freeEnter" style="background:linear-gradient(180deg,#43F0B4,#19E6A0,#0E9F6E);color:#05210f">ENTER FREE</button>
       <span class="myentries" id="freeMine"></span>
@@ -195,7 +211,12 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
       <div class="nd-clock" id="grandClock">--:--</div>
       <div class="nd-prize">Jackpot <b id="grandPrize">£1,000</b></div>
     </div>
-    <div class="nd-meta"><b id="grandSold">—</b>/1,000 numbers in · £2 each · number from <b>1,000</b> drawn · <b style="color:var(--gold)">rolls over &middot; must drop at £2,500</b></div>
+    <div class="ndchips">
+      <div class="ndchip"><i>Numbers in</i><b><span id="grandSold">—</span>/1,000</b></div>
+      <div class="ndchip"><i>Entry</i><b>£2</b></div>
+      <div class="ndchip"><i>Jackpot</i><b id="grandPrize">£1,000</b></div>
+    </div>
+    <div class="ndnote">Drawn from 1,000 · <b>rolls over until won, must drop at £2,500</b>.</div>
     <div class="nd-actions">
       <button class="enterbtn" id="grandEnter">ENTER · £2</button>
       <span class="myentries" id="grandMine"></span>
