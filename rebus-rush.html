@@ -1,0 +1,192 @@
+<!doctype html><html lang="en-GB"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Rebus Rush — Puzzles | InstantWins.co.uk</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22bgfv%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2336E0FF%22/%3E%3Cstop%20offset%3D%22.5%22%20stop-color%3D%22%230FA8FF%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230551B5%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22glfv%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ffffff%22%20stop-opacity%3D%22.55%22/%3E%3Cstop%20offset%3D%22.5%22%20stop-color%3D%22%23ffffff%22%20stop-opacity%3D%220%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%2238%22%20height%3D%2238%22%20rx%3D%2210%22%20fill%3D%22url%28%23bgfv%29%22%20stroke%3D%22%239BEBFF%22%20stroke-opacity%3D%22.5%22/%3E%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%2238%22%20height%3D%2220%22%20rx%3D%2210%22%20fill%3D%22url%28%23glfv%29%22/%3E%3Cpath%20d%3D%22M23%205%20L11%2022%20H19%20L16.5%2035%20L30%2017%20H21.5%20Z%22%20fill%3D%22%23fff%22%20stroke%3D%22%23063a7a%22%20stroke-width%3D%22.5%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#F2F7FF;--soft:#8FA6CC;--line:#1C3463;--wash:#0A1730;--buy:#0FA8FF;--acc-deep:#0668C9;--cyan:#36E0FF;--match:#19E6A0;--gold:#36E0FF;--bad:#FF5C72;--live:#FF2E4D}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;
+  background:radial-gradient(120% 55% at 50% -5%, rgba(15,168,255,.20) 0%, rgba(5,11,26,0) 55%),linear-gradient(180deg,#071027 0%,#050B1A 50%,#030713 100%);background-attachment:fixed}
+.topbar{display:flex;gap:2px;padding:12px 12px;border-bottom:1px solid var(--line);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.5px;max-width:960px;margin:0 auto;flex-wrap:wrap;align-items:center;background:linear-gradient(180deg,#0B1733,#071027)}
+.topbar a{color:#9DB4DB;text-decoration:none;padding:6px 10px;border-radius:5px}
+.topbar a.on{background:linear-gradient(180deg,var(--buy),var(--acc-deep));color:#fff;box-shadow:0 2px 10px rgba(15,168,255,.5)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 40px}
+h1{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:#fff;padding:22px 0 4px}
+p.lead{color:var(--soft);font-size:.85rem;line-height:1.6;margin-bottom:14px}
+.panel{border:1px solid var(--line);border-radius:9px;padding:16px;margin-top:14px;background:linear-gradient(180deg,#0E1B38,#0A1528);box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.panel h2{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#fff;margin-bottom:10px;padding-left:10px;border-left:3px solid var(--buy)}
+label{display:block;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--soft);margin:12px 0 5px}
+input,textarea{width:100%;border:1.5px solid var(--line);border-radius:7px;padding:12px;font-family:'Space Grotesk';font-size:.9rem;background:#050B1A;color:var(--ink)}
+input::placeholder,textarea::placeholder{color:#50638C}
+input:focus,textarea:focus{outline:none;border-color:var(--buy);box-shadow:0 0 0 3px rgba(15,168,255,.18)}
+textarea{min-height:90px;resize:vertical}
+.btn{display:inline-block;border:none;background:linear-gradient(180deg,var(--cyan),var(--buy),var(--acc-deep));color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:.8px;text-transform:uppercase;padding:13px 22px;border-radius:7px;cursor:pointer;margin-top:14px;box-shadow:0 4px 18px rgba(15,168,255,.4),inset 0 1px 0 rgba(255,255,255,.3)}
+.btn.ghost{background:linear-gradient(180deg,#12264D,#0A1730);color:var(--cyan);border:1px solid var(--acc-deep);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.btn:disabled{opacity:.5}
+.err{color:var(--bad);font-size:.78rem;font-weight:700;margin-top:10px;min-height:16px}
+.ok{color:var(--match)}
+.mono{font-family:'IBM Plex Mono',monospace}
+.row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.8rem;align-items:baseline}
+.row:last-child{border-bottom:none}
+.row .m{color:var(--soft);font-size:.7rem}
+.pill{font-family:'IBM Plex Mono',monospace;font-size:.68rem;font-weight:700;background:var(--wash);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--cyan)}
+.win{color:var(--match);font-weight:800}
+footer{border-top:1px solid var(--line);margin-top:26px;padding:16px;color:var(--soft);font-size:.64rem;line-height:1.7;text-align:center}
+.msg{max-width:82%;padding:9px 12px;border-radius:12px;margin:6px 0;font-size:.82rem;line-height:1.45}
+.msg.user{background:linear-gradient(180deg,#123B6B,#0A1730);margin-left:auto;border-bottom-right-radius:3px}
+.msg.admin{background:var(--wash);border:1px solid var(--line);border-bottom-left-radius:3px}
+.msg .t{font-size:.58rem;color:var(--soft);margin-top:3px}
+.tabs{display:flex;gap:8px;margin-top:16px}
+.tabs button{flex:1;border:1.5px solid var(--line);background:linear-gradient(180deg,#0E1B38,#0A1528);border-radius:7px;padding:11px;font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.5px;font-size:.95rem;cursor:pointer;color:var(--soft)}
+.tabs button.on{border-color:var(--buy);color:#fff;background:linear-gradient(180deg,var(--buy),var(--acc-deep))}
+
+/* ===== sports-book app shell ===== */
+.ebside{position:fixed;left:0;top:0;bottom:0;width:240px;z-index:70;display:flex;flex-direction:column;
+  background:linear-gradient(180deg,#0B1733,#060E22);border-right:1px solid #1C3463;transform:translateX(-100%);transition:transform .25s ease;overflow-y:auto}
+.ebside.open{transform:none}
+.ebscrim{position:fixed;inset:0;background:rgba(2,6,16,.6);backdrop-filter:blur(2px);z-index:65;display:none}
+.ebscrim.open{display:block}
+.ebbrand{padding:16px 16px 10px;border-bottom:1px solid #12264D}
+.ebbrand svg{height:30px}
+.ebnav{display:flex;flex-direction:column;padding:8px 0}
+.ebnav a{display:flex;align-items:center;gap:11px;padding:11px 16px;color:#9DB4DB;text-decoration:none;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.6px;font-size:15px;border-left:3px solid transparent}
+.ebnav a svg{width:18px;height:18px;flex:none;opacity:.85}
+.ebnav a:hover{color:#fff;background:rgba(15,168,255,.08)}
+.ebnav a.on{color:#fff;background:linear-gradient(90deg,rgba(15,168,255,.22),rgba(15,168,255,0));border-left-color:#0FA8FF}
+.ebnav a.on svg{opacity:1;color:#36E0FF}
+.ebpromo{margin:10px 12px 0;display:block;text-decoration:none;border-radius:9px;padding:13px 14px;
+  background:linear-gradient(180deg,#2A2008,#0A1528);border:1px solid #5A4614;border-top:2px solid #FFC53D}
+.ebpromo-k{display:block;font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#C9A24B}
+.ebpromo-v{display:block;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1.5rem;color:#FFC53D;line-height:1.1}
+.ebpromo-s{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.5px;font-size:.78rem;color:#fff;margin-top:2px}
+.ebfoot{margin:auto 0 0;padding:14px 16px;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:#5B6E93;border-top:1px solid #12264D}
+.ebtop{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:12px;padding:9px 14px;
+  background:linear-gradient(180deg,#0B1733,#071027);border-bottom:1px solid #1C3463}
+.ebham{background:none;border:1px solid #1C3463;border-radius:7px;padding:7px 9px;cursor:pointer;line-height:0;background:#0A1730}
+.ebham svg{width:20px;height:20px}
+.ebtop-logo{flex:1}.ebtop-logo svg{height:26px}
+.ebtop-cta{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.5px;font-size:.8rem;
+  color:#fff;text-decoration:none;background:linear-gradient(180deg,#36E0FF,#0FA8FF,#0668C9);padding:8px 13px;border-radius:6px;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+@media(min-width:900px){
+  .ebside{transform:none}
+  .ebscrim{display:none!important}
+  .ebtop{display:none}
+  body.ebh{padding-left:240px}
+  body.ebg{margin-left:240px}
+  body.ebg::before{display:none}
+}
+
+</style><style>
+.rb-hero{border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-top:14px;position:relative;overflow:hidden;background:linear-gradient(120deg,#07304a,#0b2036 45%,#0A1528)}
+.rb-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.12),rgba(255,255,255,0) 32%);pointer-events:none}
+.rb-tag{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:#9BEBFF;background:rgba(54,224,255,.14);border:1px solid rgba(54,224,255,.4);border-radius:999px;padding:4px 11px}
+.rb-h{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:2.2rem;text-transform:uppercase;color:#fff;margin-top:8px}
+.rb-h b{color:#36E0FF}
+.rb-sub{color:#B6D4E6;font-size:.9rem;margin-top:6px;max-width:52ch}
+.backlink{display:inline-block;margin:14px 0 0;color:#36E0FF;font-size:.74rem;font-weight:800;text-decoration:none;text-transform:uppercase;letter-spacing:.06em}
+.rb-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.rb-chip{background:#0A1730;border:1px solid var(--line);border-radius:8px;padding:7px 11px;text-align:center;min-width:64px}
+.rb-chip i{display:block;font-style:normal;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
+.rb-chip b{display:block;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1rem;color:#fff;margin-top:2px}
+.rb-chip.win b{color:#36E0FF}
+.rb-card{border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin-top:12px;background:linear-gradient(180deg,#0E1B38,#0A1528)}
+.rb-q{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.rb-no{font-family:'Barlow Condensed',sans-serif;font-weight:800;color:#36E0FF;font-size:1.1rem;min-width:22px}
+.rb-emoji{font-size:1.9rem;letter-spacing:4px;line-height:1.1}
+.rb-hint{font-size:.7rem;color:var(--soft);margin-left:auto;text-align:right}
+.rb-in{display:flex;gap:8px}
+.rb-in input{flex:1}
+.rb-state{font-size:.78rem;font-weight:700;min-height:16px;margin-top:6px}
+.rb-state.good{color:var(--match)} .rb-state.bad{color:var(--bad)}
+.rb-solved input{border-color:var(--match);box-shadow:0 0 0 2px rgba(25,230,160,.2)}
+.rb-btn{border:none;background:linear-gradient(180deg,#36E0FF,#0FA8FF,#0668C9);color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:.8px;text-transform:uppercase;padding:13px 22px;border-radius:8px;cursor:pointer;margin-top:14px;box-shadow:0 4px 18px rgba(15,168,255,.4),inset 0 1px 0 rgba(255,255,255,.3)}
+.rb-btn.ghost{background:linear-gradient(180deg,#12264D,#0A1730);color:#36E0FF;border:1px solid #0668C9}
+.rb-tie{border:1px solid #0668C9;border-radius:11px;padding:14px 16px;margin-top:14px;background:linear-gradient(180deg,#0b2444,#0A1528);display:none}
+.rb-tie.show{display:block}
+.rb-tie h3{font-family:'Barlow Condensed',sans-serif;color:#9BEBFF;text-transform:uppercase;letter-spacing:.5px;font-size:1rem;margin-bottom:6px}
+.rb-banner{margin-top:12px;border-radius:9px;padding:13px 15px;font-weight:700;display:none}
+.rb-banner.show{display:block}
+.rb-banner.win{background:linear-gradient(180deg,#07351f,#0A1528);border:1px solid #0E9F6E;color:#43F0B4}
+.rb-banner.part{background:#0A1730;border:1px solid var(--line);color:var(--soft)}
+.rb-note{font-size:.72rem;color:var(--soft);margin-top:10px;line-height:1.5}
+.seo{margin-top:22px;color:var(--soft);font-size:.82rem;line-height:1.7}
+.seo h2{font-family:'Barlow Condensed',sans-serif;color:#fff;font-size:1.2rem;text-transform:uppercase;letter-spacing:.5px;margin:16px 0 6px}
+.seo p{margin-bottom:8px}
+</style></head><body class="ebh"><header class="ebtop"><button class="ebham" aria-label="Menu" onclick="ebOpen()"><svg viewBox="0 0 24 24" fill="none" stroke="#9DB4DB" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button><a class="ebtop-logo" href="index.html"><svg class="iwlogo" viewBox="0 0 250 40" height="30" role="img" aria-label="InstantWins" xmlns="http://www.w3.org/2000/svg" style="display:block"><g><defs><linearGradient id="bglg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#36E0FF"/><stop offset=".5" stop-color="#0FA8FF"/><stop offset="1" stop-color="#0551B5"/></linearGradient><linearGradient id="gllg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset=".5" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs><rect x="1" y="1" width="38" height="38" rx="10" fill="url(#bglg)" stroke="#9BEBFF" stroke-opacity=".5"/><rect x="1" y="1" width="38" height="20" rx="10" fill="url(#gllg)"/><path d="M23 5 L11 22 H19 L16.5 35 L30 17 H21.5 Z" fill="#fff" stroke="#063a7a" stroke-width=".5" stroke-linejoin="round"/></g><text x="48" y="30" font-family="Barlow Condensed,Archivo,sans-serif" font-weight="800" font-size="30" letter-spacing="-0.5" fill="#F2F7FF">INSTANT<tspan fill="#36E0FF">WINS</tspan></text></svg></a><a class="ebtop-cta" href="account.html">Sign in</a></header>
+<div class="ebscrim" id="ebscrim" onclick="ebClose()"></div><aside class="ebside" id="ebside"><div class="ebbrand"><svg class="iwlogo" viewBox="0 0 250 40" height="30" role="img" aria-label="InstantWins" xmlns="http://www.w3.org/2000/svg" style="display:block"><g><defs><linearGradient id="bglg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#36E0FF"/><stop offset=".5" stop-color="#0FA8FF"/><stop offset="1" stop-color="#0551B5"/></linearGradient><linearGradient id="gllg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset=".5" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs><rect x="1" y="1" width="38" height="38" rx="10" fill="url(#bglg)" stroke="#9BEBFF" stroke-opacity=".5"/><rect x="1" y="1" width="38" height="20" rx="10" fill="url(#gllg)"/><path d="M23 5 L11 22 H19 L16.5 35 L30 17 H21.5 Z" fill="#fff" stroke="#063a7a" stroke-width=".5" stroke-linejoin="round"/></g><text x="48" y="30" font-family="Barlow Condensed,Archivo,sans-serif" font-weight="800" font-size="30" letter-spacing="-0.5" fill="#F2F7FF">INSTANT<tspan fill="#36E0FF">WINS</tspan></text></svg></div><nav class="ebnav"><a class="" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span>Home</span></a><a class="" href="card.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg><span>The Card</span></a><a class="" href="games.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Instant Games</span></a><a class="" href="thespins.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg><span>The Spins</span></a><a class="on" href="puzzles.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11H19V7a2 2 0 00-2-2h-4V3.5a2.5 2.5 0 00-5 0V5H4a2 2 0 00-2 2v3.8h1.5a2.2 2.2 0 110 4.4H2V19a2 2 0 002 2h3.8v-1.5a2.2 2.2 0 014.4 0V21H17a2 2 0 002-2v-4h1.5a2.5 2.5 0 000-5z"/></svg><span>Puzzles</span></a><a class="" href="quizzes.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.3 9.2a2.7 2.7 0 015.3.8c0 1.8-2.6 2.2-2.6 3.9"/><circle cx="12" cy="17.1" r=".7" fill="currentColor" stroke="none"/></svg><span>Quizzes</span></a><a class="" href="results.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4"/><path d="M6 4h12v4a6 6 0 01-12 0z"/></svg><span>Results</span></a><a class="" href="free-entry.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span>Free Entry</span></a><a class="" href="fairness.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4-3 7-7 10-4-3-7-6-7-10V6z"/></svg><span>Fairness</span></a><a class="" href="account.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg><span>Account</span></a></nav><a class="ebpromo" href="card.html"><span class="ebpromo-k">On the hour</span><span class="ebpromo-v">£1,000</span><span class="ebpromo-s">Hourly Grand &rarr;</span></a><div class="ebfoot">18+ · Schedule 2 · Test mode</div></aside>
+<div class="wrap">
+  <a class="backlink" href="puzzles.html">&larr; All puzzles</a>
+  <div class="rb-hero">
+    <span class="rb-tag">Puzzle &middot; Rebus Rush</span>
+    <div class="rb-h">REBUS <b>RUSH</b></div>
+    <p class="rb-sub">Five picture-puzzles, one answer each. Crack all five to qualify for the round &mdash; the fastest correct solver takes the prize. Pure skill, no luck in the solve.</p>
+    <div class="rb-meta"><div class="rb-chip"><i>Entry</i><b>£1</b></div><div class="rb-chip"><i>Solved</i><b><span id="rbScore">0</span>/5</b></div><div class="rb-chip win"><i>Prize</i><b>£250</b></div></div>
+  </div>
+  <div class="rb-card" id="rbCard"></div>
+  <button class="rb-btn" id="rbCheck">CHECK ANSWERS</button>
+  <button class="rb-btn ghost" id="rbReveal" style="display:none">Show answers</button>
+  <div class="rb-tie" id="rbTie">
+    <h3>You qualified &mdash; tiebreaker</h3>
+    <p class="rb-note" style="margin-top:0">Many players solve all five, so the winner is decided by a committed tiebreaker. Nearest without going over wins.</p>
+    <label>How many entries were sold this round?</label>
+    <div class="rb-in"><input id="rbGuess" inputmode="numeric" placeholder="e.g. 1800"><button class="rb-btn" id="rbSubmit" style="margin-top:0">SUBMIT</button></div>
+  </div>
+  <div class="rb-banner" id="rbBanner"></div>
+  <p class="rb-note">Answers are committed before the round opens and published after &mdash; provably fair. Free entry by post always available with the same chance to win. 18+ &middot; Schedule 2.</p>
+  <section class="seo">
+    <h2>How Rebus Rush works</h2>
+    <p>Rebus Rush is a skill-based prize puzzle. Each round shows five rebus puzzles &mdash; pictures and symbols that spell out a word or title. Solve all five correctly to qualify. Because many players can solve them, a committed estimation tiebreaker decides the single winner, so skill determines the outcome under Schedule 2 of the Gambling Act 2005.</p>
+    <p>Entry is &pound;1, or free by post with no purchase necessary. Answers and the tiebreaker are hashed before the round opens and revealed afterwards, so every result is verifiable.</p>
+  </section>
+</div><footer>InstantWins.co.uk is operated by IGX Ltd. All draws form a single continuous arrangement of
+free-entry prize competitions under Schedule 2 of the Gambling Act 2005. Test mode: all credit is
+play-money. 18+, UK residents only. Structure subject to solicitor sign-off before launch.</footer><script>
+const $=id=>document.getElementById(id);
+const PUZZLES=[
+  {e:'\uD83E\uDD81 + \uD83D\uDC51', hint:'Animated film, 2 words', a:['lion king','the lion king']},
+  {e:'\uD83C\uDFE0 + \uD83D\uDEB6\u200D\u2642\uFE0F', hint:'Christmas comedy, 2 words', a:['home alone']},
+  {e:'\uD83E\uDDCA + \u2764\uFE0F', hint:'Disney hit, 1 word', a:['frozen']},
+  {e:'\uD83D\uDC7B + \uD83D\uDEAB', hint:'80s classic, 1 word', a:['ghostbusters']},
+  {e:'\uD83D\uDC20 + \u2753', hint:'Pixar film, 2 words (Finding __)', a:['finding nemo','nemo']}
+];
+const norm=s=>(s||'').toLowerCase().replace(/^the\s+/,'').replace(/[^a-z0-9]/g,'');
+let done=false;
+function build(){
+  $('rbCard').innerHTML=PUZZLES.map((p,i)=>
+    '<div class="rb-row" data-i="'+i+'">'
+    +'<div class="rb-q"><span class="rb-no">'+(i+1)+'</span><span class="rb-emoji">'+p.e+'</span><span class="rb-hint">'+p.hint+'</span></div>'
+    +'<div class="rb-in"><input id="rbA'+i+'" autocomplete="off" placeholder="Your answer"></div>'
+    +'<div class="rb-state" id="rbS'+i+'"></div></div>'
+    + (i<PUZZLES.length-1?'<hr style="border:none;border-top:1px solid var(--line);margin:12px 0">':'')
+  ).join('');
+}
+build();
+$('rbCheck').onclick=()=>{
+  let n=0;
+  PUZZLES.forEach((p,i)=>{
+    const v=$('rbA'+i).value, ok=p.a.some(x=>norm(x)===norm(v));
+    const st=$('rbS'+i), row=$('rbA'+i).closest('.rb-row');
+    if(ok){n++;st.textContent='Correct';st.className='rb-state good';row.classList.add('rb-solved');}
+    else{st.textContent=v?'Not quite \u2014 try again':'';st.className='rb-state bad';row.classList.remove('rb-solved');}
+  });
+  $('rbScore').textContent=n;
+  $('rbReveal').style.display='';
+  if(n===5){ $('rbTie').classList.add('show'); $('rbCheck').style.display='none'; $('rbTie').scrollIntoView({behavior:'smooth'}); }
+};
+$('rbReveal').onclick=()=>{ PUZZLES.forEach((p,i)=>{ $('rbA'+i).value=p.a[0]; }); };
+$('rbSubmit').onclick=()=>{
+  const g=parseInt($('rbGuess').value,10); if(!isFinite(g))return;
+  // demo: random 'actual' entries number
+  const actual=1500+Math.floor(Math.random()*900);
+  const b=$('rbBanner');
+  const diff=actual-g;
+  if(diff>=0 && diff<=40){ b.className='rb-banner win show'; b.innerHTML='&#127942; <b>You\u2019re the closest without going over \u2014 you win £250!</b> Actual entries: '+actual+'.'; }
+  else { b.className='rb-banner part show'; b.innerHTML='Qualified &#9989; &mdash; actual entries were '+actual+'. Your guess: '+g+'. Closest player takes this round; a new round is open now.'; }
+  b.scrollIntoView({behavior:'smooth'});
+};
+</script><script>function ebOpen(){document.getElementById('ebside').classList.add('open');document.getElementById('ebscrim').classList.add('open');}
+function ebClose(){document.getElementById('ebside').classList.remove('open');document.getElementById('ebscrim').classList.remove('open');}</script>
+</body></html>
