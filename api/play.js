@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   if (b.game) {
     const game = String(b.game).toUpperCase();
     if (!TAGS.includes(game)) return res.status(400).json({ error: 'unknown game' });
-    fn = 'buy_entry2'; args = { p_game: game, p_token: token };
+    fn = 'buy_entry3'; args = { p_game: game, p_token: token, p_mult: Math.max(parseInt(b.mult, 10) || 1, 1) };
   } else if (b.kind === 'five' || b.kind === 'grand' || b.kind === 'free') {
     fn = 'card_enter2'; args = { p_kind: b.kind, p_token: token };
   } else return res.status(400).json({ error: 'bad request' });

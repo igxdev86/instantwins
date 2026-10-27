@@ -272,7 +272,7 @@ footer b{color:var(--text)}
 
 <script>
 /* ================= SHARED CHASSIS ================= */
-const PRICE=2;
+const PRICE=2; let STAKE_MUL=1;
 const CAP=500;
 const TIERS=[{v:100,total:1,left:1},{v:20,total:5,left:5},{v:10,total:10,left:10},{v:5,total:20,left:20},{v:2,total:50,left:50}];
 let ticketsLeft=CAP, nextTicket=1, nonce=0, balance=20.00, busy=false;
@@ -299,7 +299,7 @@ function refresh(){
   $('leftCt').textContent=ticketsLeft;
   $('prog').style.width=(100*(CAP-ticketsLeft)/CAP)+'%';
   if(LIVE&&!TOKEN){$('goBtn').textContent='SIGN IN TO PLAY';$('goBtn').disabled=busy;}
-  else{$('goBtn').disabled=busy||balance<PRICE||ticketsLeft<=0;}
+  else{$('goBtn').disabled=busy||balance<PRICE*STAKE_MUL||ticketsLeft<=0;}
 }
 
 /* ---------- numbered entry rounds (LIVE via /api, demo fallback) ---------- */
@@ -371,8 +371,8 @@ function finish(tier,sub){
   const srv=srvPend!=null;
   if(srv){balance=srvPend;srvPend=null;}
   if(tier){
-    if(!srv)balance+=tier.v;
-    amtEl.textContent='£'+tier.v.toLocaleString();
+    if(!srv)balance+=tier.v*STAKE_MUL;
+    amtEl.textContent='£'+(tier.v*STAKE_MUL).toLocaleString();
     amtEl.className='amt'+(tier.v>=20?' big':'');
     lblEl.textContent=sub||(tier.v>=20?'BIG WIN!':'WINNER');
   }else{
@@ -385,15 +385,15 @@ function finish(tier,sub){
   const log=$('log');
   if(log.firstChild&&log.firstChild.dataset&&log.firstChild.dataset.empty)log.innerHTML='';
   const row=document.createElement('div');
-  row.innerHTML=pool.id+' · entry <b>'+String(curTicket).padStart(3,'0')+'</b> · '+(tier?'<span class="lw">£'+tier.v+'</span>':'no win');
+  row.innerHTML=pool.id+' · entry <b>'+String(curTicket).padStart(3,'0')+'</b> · '+(tier?'<span class="lw">£'+(tier.v*STAKE_MUL)+'</span>':'no win');
   log.prepend(row);
-  $('ticketLine').innerHTML='Entry <b>#'+String(curTicket).padStart(3,'0')+'</b> in '+pool.id+' · '+(tier?'won <b>£'+tier.v.toLocaleString()+'</b>':'no win');
+  $('ticketLine').innerHTML='Entry <b>#'+String(curTicket).padStart(3,'0')+'</b> in '+pool.id+' · '+(tier?'won <b>£'+(tier.v*STAKE_MUL).toLocaleString()+'</b>':'no win');
   busy=false; refresh();
   if(LIVE){setTimeout(syncPool,600);}
   else if(ticketsLeft<=0)setTimeout(rollDemoPool,1400);
 }
 $('goBtn').addEventListener('click',async ()=>{
-  if(busy||balance<PRICE||ticketsLeft<=0)return;
+  if(busy||balance<PRICE*STAKE_MUL||ticketsLeft<=0)return;
   busy=true; nonce++;
   $('pop').classList.remove('show');
   let tier=null;
@@ -401,14 +401,14 @@ $('goBtn').addEventListener('click',async ()=>{
     if(!TOKEN){busy=false;location.href='signup.html';return;}
     // REAL: server debits the wallet and hands out the next committed entry
     try{
-      const r=await fetch('/api/play',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:TOKEN,game:'DD'})});
+      const r=await fetch('/api/play',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:TOKEN,game:'DD',mult:STAKE_MUL})});
       const d=await r.json();
       if(!r.ok||d.error)throw new Error((d&&d.error)||'entry failed');
       curTicket=d.entry_no;
       ticketsLeft=d.cap-d.sold;
-      tier=TIERS.find(t=>t.v===d.prize_p/100)||null;
+      tier=TIERS.find(t=>t.v===d.prize_p/100/STAKE_MUL)||null;
       srvPend=d.balance_p/100;
-      balance=srvPend-(tier?tier.v:0);
+      balance=srvPend-(tier?tier.v*STAKE_MUL:0);
       if(d.sold_out){
         prev={id:d.pool,seed:d.seed};
         $('prevId').textContent=prev.id;
@@ -423,7 +423,7 @@ $('goBtn').addEventListener('click',async ()=>{
       refresh(); return;
     }
   }else{
-    balance-=PRICE; ticketsLeft--;
+    balance-=PRICE*STAKE_MUL; ticketsLeft--;
     curTicket=nextTicket++;
     tier=drawHiddenTicket();   // demo: outcome fixed HERE, before any theatre
   }
@@ -513,5 +513,32 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 </script>
 
+
+<style>
+.stakebar{margin:10px 16px 0;border:1px solid var(--panel-edge,#1C3463);border-radius:9px;padding:10px 12px;background:linear-gradient(180deg,#0E1B38,#0A1528)}
+.stakebar-k{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#8FA6CC;margin-bottom:8px}
+.stakebar-row{display:flex;gap:7px;flex-wrap:wrap}
+.stakechip{flex:1 1 auto;min-width:52px;border:1.5px solid #1C3463;background:#0A1730;color:#9DB4DB;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.92rem;padding:9px 6px;border-radius:7px;cursor:pointer;transition:.12s}
+.stakechip:hover{border-color:#0FA8FF;color:#fff}
+.stakechip.on{background:linear-gradient(180deg,#36E0FF,#0FA8FF,#0668C9);border-color:#36E0FF;color:#fff;box-shadow:0 2px 10px rgba(15,168,255,.4)}
+</style>
+<script>(function(){
+  if(typeof PRICE==='undefined')return;
+  var go=document.getElementById('goBtn'); if(!go)return;
+  var cand=[1,2,5,10,25,50], MULTS=cand.filter(function(m){return PRICE*m<=50;});
+  if(MULTS.indexOf(1)<0)MULTS.unshift(1);
+  var verb=(go.textContent.split('·')[0]||'PLAY').trim()||'PLAY';
+  window.__stakeLabel=function(){ if(go.textContent.indexOf('SIGN IN')<0) go.textContent=verb+' · £'+(PRICE*STAKE_MUL); };
+  var bar=document.createElement('div'); bar.className='stakebar';
+  bar.innerHTML='<div class="stakebar-k">Stake per entry · prizes scale with your stake (up to £50)</div>';
+  var row=document.createElement('div'); row.className='stakebar-row';
+  MULTS.forEach(function(m){
+    var c=document.createElement('button'); c.type='button'; c.className='stakechip'+(m===1?' on':''); c.textContent='£'+(PRICE*m);
+    c.onclick=function(){ STAKE_MUL=m; Array.prototype.forEach.call(row.children,function(x){x.classList.remove('on');}); c.classList.add('on'); window.__stakeLabel(); if(typeof refresh==='function')refresh(); };
+    row.appendChild(c);
+  });
+  bar.appendChild(row); var ctrls=go.parentNode; ctrls.parentNode.insertBefore(bar,ctrls);
+  window.__stakeLabel();
+})();</script>
 </body>
 </html>
