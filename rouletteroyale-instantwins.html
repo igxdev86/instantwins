@@ -533,7 +533,7 @@ document.addEventListener('DOMContentLoaded',function(){
 </style>
 <script>(function(){
   if(typeof PRICE==='undefined')return;
-  function scaleTable(){try{if(typeof TIERS!=='undefined'){var pv=document.querySelectorAll('.prow .pv');for(var i=0;i<pv.length&&i<TIERS.length;i++){pv[i].textContent='£'+(TIERS[i].v*STAKE_MUL).toLocaleString();}}var st=document.querySelectorAll('.stat');for(var k=0;k<st.length;k++){var lab=st[k].querySelector('i'),val=st[k].querySelector('b');if(lab&&val&&/^per\b/i.test((lab.textContent||'').trim())){val.textContent='£'+(PRICE*STAKE_MUL);}}var tw=document.getElementById('iwTopWin');if(tw&&typeof TIERS!=='undefined'){tw.innerHTML='You could win up to <b>£'+(TIERS[0].v*STAKE_MUL).toLocaleString()+'</b> at this stake'+(STAKE_MUL>1?' · every prize ×'+STAKE_MUL:'');}}catch(e){}}
+  function scaleTable(){try{if(typeof TIERS!=='undefined'){var pv=document.querySelectorAll('.prow .pv');for(var i=0;i<pv.length&&i<TIERS.length;i++){pv[i].textContent='£'+(TIERS[i].v*STAKE_MUL).toLocaleString();}}var st=document.querySelectorAll('.stat');for(var k=0;k<st.length;k++){var lab=st[k].querySelector('i'),val=st[k].querySelector('b');if(lab&&val&&/^per\b/i.test((lab.textContent||'').trim())){val.textContent='£'+(PRICE*STAKE_MUL);}}var tw=document.getElementById('iwTopWin');if(tw&&typeof TIERS!=='undefined'){tw.innerHTML='You could win up to <b>£'+(TIERS[0].v*STAKE_MUL).toLocaleString()+'</b>';}}catch(e){}}
   var go=document.getElementById('goBtn'); if(!go)return;
   var cand=[1,2,5,10,25,50], MULTS=cand.filter(function(m){return PRICE*m<=50;});
   if(MULTS.indexOf(1)<0)MULTS.unshift(1);
