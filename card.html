@@ -194,6 +194,27 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .hs-art svg{height:112%;width:auto;max-width:70%;filter:drop-shadow(0 6px 14px rgba(0,0,0,.35))}
 .heroslide>*:not(.hs-art){position:relative;z-index:1}
 @media(max-width:600px){.hs-art{opacity:.10}.hs-art svg{max-width:85%}}
+
+.offbanner{background:radial-gradient(120% 120% at 50% 0%,rgba(15,168,255,.22),rgba(5,11,26,.96) 60%)}
+.dm-k{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:#9DB4DB}
+.dm-wrap{transform:translateY(-70px) scale(.6);opacity:0;transition:transform .55s cubic-bezier(.2,.9,.3,1.2),opacity .3s}
+.dm-wrap.in{transform:none;opacity:1}
+.dm-ball{width:92px;height:92px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:2.1rem;color:#0A0D1C;
+  background:radial-gradient(circle at 35% 30%,#fff 0%,#E8F4FF 35%,#9BEBFF 70%,#36A8E0 100%);box-shadow:0 10px 30px rgba(0,0,0,.6),inset 0 -8px 14px rgba(0,0,0,.18),0 0 24px rgba(54,224,255,.45);transition:background .3s,box-shadow .3s}
+.dm-ball.spin{animation:dmTumble .09s linear infinite}
+@keyframes dmTumble{0%{transform:rotate(-4deg) translateY(0)}50%{transform:rotate(4deg) translateY(-3px)}100%{transform:rotate(-4deg) translateY(0)}}
+.dm-ball.land{animation:dmLand .5s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes dmLand{0%{transform:scale(.85)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+.dm-ball.gold{background:radial-gradient(circle at 35% 30%,#fff 0%,#FFE9A8 30%,#FFC53D 68%,#C8860A 100%);box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 30px rgba(255,197,61,.7)}
+.dm-ball.grey{background:radial-gradient(circle at 35% 30%,#fff 0%,#D7DEF0 35%,#8B92B0 75%,#5B6E93 100%);color:#1a2340;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+.dm-res{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.25rem;letter-spacing:.04em;text-transform:uppercase;opacity:0;transform:translateY(6px);transition:all .35s}
+.dm-res.in{opacity:1;transform:none}
+.dm-res.win{color:#43F0B4;text-shadow:0 0 14px rgba(67,240,180,.5)}
+.dm-res.you{color:#FFE9A8;text-shadow:0 0 16px rgba(255,197,61,.7)}
+.dm-res.miss{color:#9DB4DB}
+.dm-sub{font-size:.76rem;color:#B9C9E8;opacity:0;transition:opacity .35s .1s}
+.dm-sub.in{opacity:1}
+.dm-range{font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:#6B7EA3}
 </style>
 </head>
 <body class="ebh">
@@ -365,17 +386,39 @@ let seenSettled=load('iw_card_seen',[]);
 function saveAll(){store('iw_credit',balance);store('iw_card_mine',mine);store('iw_card_seen',seenSettled.slice(-40));}
 
 /* ================= shared render bits ================= */
-function banner(el,kindLabel,winner,iWon,prize,who,noWinText){
-  const b=$(el);
-  b.innerHTML='<div class="sub">'+kindLabel+' — OFF!</div>'
-    +'<div class="big">'+(winner?('WINNING NUMBER #'+winner):'NO WINNER')+'</div>'
-    +(winner?(iWon?'<div class="win">THAT’S YOU — £'+prize.toLocaleString()+' WON!</div>'
-                  :'<div class="sub">'+who+' takes £'+prize.toLocaleString()+'</div>')
-            :'<div class="sub">'+(noWinText||'the drawn number wasn’t sold')+'</div>')
-    +'<div class="sub" style="opacity:.7">seed revealed · next draw opening…</div>';
+function banner(el,kindLabel,winner,iWon,prize,who,noWinText,drawn,cap,sold){
+  const b=$(el); const n = winner || drawn || null;           // the number that came out of the machine
+  const range = cap || sold || 0;
+  b.innerHTML='<div class="dm-k">'+kindLabel+' — DRAWING…</div>'
+    +'<div class="dm-wrap"><div class="dm-ball">'+(range?pad2(1+Math.floor(Math.random()*range)):'—')+'</div></div>'
+    +'<div class="dm-range">'+(range?('one number from '+range.toLocaleString()+(sold!=null?' · '+sold.toLocaleString()+' sold':'')):'')+'</div>'
+    +'<div class="dm-res"></div><div class="dm-sub"></div>';
   b.classList.add('show');
-  setTimeout(()=>b.classList.remove('show'),3800);
+  const ball=b.querySelector('.dm-ball'), res=b.querySelector('.dm-res'), sub=b.querySelector('.dm-sub'), wrap=b.querySelector('.dm-wrap');
+  requestAnimationFrame(()=>wrap.classList.add('in'));
+  if(!n){ // nothing to draw (no capacity and nothing sold)
+    ball.classList.add('grey'); ball.textContent='—';
+    res.textContent='NO DRAW'; res.className='dm-res miss in'; sub.textContent=noWinText||'no entries this round'; sub.classList.add('in');
+    setTimeout(()=>b.classList.remove('show'),4200); return;
+  }
+  // tumble: fast random numbers, slowing, then land on the drawn number
+  ball.classList.add('spin'); let t=0, steps=18;
+  const tick=()=>{ t++; ball.textContent=pad2(1+Math.floor(Math.random()*(range||99)));
+    if(t<steps){ setTimeout(tick, 45 + Math.pow(t/steps,2.2)*260); } else { land(); } };
+  const land=()=>{
+    ball.classList.remove('spin'); ball.classList.add('land'); ball.textContent='#'+n; b.querySelector('.dm-k').textContent=kindLabel+' — NUMBER DRAWN';
+    if(winner){ ball.classList.add('gold');
+      res.textContent=iWon?('THAT’S YOU — £'+prize.toLocaleString()+' WON!'):('#'+n+' WAS SOLD — WINNER!'); res.className='dm-res '+(iWon?'you':'win')+' in';
+      sub.textContent=iWon?'credited to your wallet':(who+' takes £'+prize.toLocaleString()); }
+    else { ball.classList.add('grey');
+      res.textContent='#'+n+' WAS NOT SOLD'; res.className='dm-res miss in';
+      sub.textContent=noWinText||'no winner this time'; }
+    sub.classList.add('in');
+    setTimeout(()=>b.classList.remove('show'),5200);
+  };
+  setTimeout(tick,500);
 }
+function pad2(n){return String(n).padStart(2,'0');}
 function renderUpcomingFrom(){
   const base=new Date();base.setSeconds(0,0);const now=Date.now();const rows=[];let first=true;
   for(let m=0;m<=70 && rows.length<7;m++){
@@ -451,8 +494,9 @@ function applyState(){
     const age=(new Date(S.server_now)-new Date(r.off_at))/1000;
     const el=r.kind==='grand'?'grandOff':r.kind==='free'?'freeOff':'fiveOff';
     const noWin=r.kind==='grand'?'JACKPOT ROLLS OVER':'no win — prize retained';
-    if(age<120) banner(el, drawLabel(r.kind).toUpperCase(),
-      r.winner_entry,iWon,r.prize_p/100,'Number #'+r.winner_entry,noWin);
+    const drawn = r.drawn_no!=null ? r.drawn_no : r.winner_entry;
+    if(age<600) banner(el, drawLabel(r.kind).toUpperCase(),
+      r.winner_entry,iWon,r.prize_p/100,'Number #'+r.winner_entry,noWin,drawn,r.cap,r.sold);
   }
   results=(S.results||[]).map(r=>{
     const won=(mine[r.draw_id]||[]).includes(r.winner_entry);
@@ -554,12 +598,12 @@ function fakeResult(t,kind){
   return {time:hm(t),kind,prize:base,entry,who,me:false};
 }
 function demoOff(d,el){
-  let winNo=null;
-  if(d.cap==null){ if(d.sold>0)winNo=1+Math.floor(Math.random()*d.sold); }
-  else{ const draw=1+Math.floor(Math.random()*d.cap); if(d.sold>0&&draw<=d.sold)winNo=draw; }
+  let winNo=null, drawNo=null;
+  if(d.cap==null){ if(d.sold>0){drawNo=1+Math.floor(Math.random()*d.sold);winNo=drawNo;} }
+  else{ drawNo=1+Math.floor(Math.random()*d.cap); if(d.sold>0&&drawNo<=d.sold)winNo=drawNo; }
   if(winNo==null){
     const noWin=d.kind==='grand'?'JACKPOT ROLLS OVER':'no win — prize retained';
-    banner(el,drawLabel(d.kind).toUpperCase(),null,false,0,'',noWin);
+    banner(el,drawLabel(d.kind).toUpperCase(),null,false,0,'',noWin,drawNo,d.cap,d.sold);
     results.unshift({time:hm(d.end),kind:d.kind,prize:d.prize,entry:null,
       who:(d.kind==='grand'?'no winner — rolled over':'no winner'),me:false});
     if(d.kind==='grand')demoRollGrand=d.prize;
@@ -567,7 +611,7 @@ function demoOff(d,el){
     const iWon=d.mine.includes(winNo);
     const who=iWon?'YOU':(FIRSTNAMES[Math.floor(Math.random()*FIRSTNAMES.length)]+' from '+TOWNS[Math.floor(Math.random()*TOWNS.length)]);
     if(iWon)balance+=d.prize;
-    banner(el,drawLabel(d.kind).toUpperCase(),winNo,iWon,d.prize,who);
+    banner(el,drawLabel(d.kind).toUpperCase(),winNo,iWon,d.prize,who,null,drawNo,d.cap,d.sold);
     results.unshift({time:hm(d.end),kind:d.kind,prize:d.prize,entry:winNo,who:iWon?'YOU':who,me:iWon});
     if(d.kind==='grand')demoRollGrand=0;
   }

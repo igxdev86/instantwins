@@ -188,7 +188,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 <path d="M290 120h236" stroke="#fff" stroke-width="3" stroke-dasharray="8 8"/>
 <g fill="#fff"><path d="M120 50l9 20 22 2-16 15 5 22-20-11-20 11 5-22-16-15 22-2z"/><path d="M60 170l6 13 14 1-10 10 3 14-13-7-13 7 3-14-10-10 14-1z"/><path d="M220 190l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1z"/><circle cx="200" cy="80" r="16" fill="none" stroke="#fff" stroke-width="4"/><circle cx="200" cy="80" r="5"/></g></svg></div>
       <div class="hs-tag">The Spins · 40 slots</div>
-      <div class="hs-pot"><b id="spinsHeroPot">£5,000</b><i>prize fund live now</i></div><div class="hs-h" style="font-size:1.7rem">40 SLOTS · ONE SHARED ROUND</div><div class="hs-live" id="spinsHeroLine">Forty themed slots, one shared prize fund. 86 winners in every 500 — odds never change.</div>
+      <div class="hs-pot"><b id="spinsHeroPot">£125,000</b><i>prize fund live · up to, at max stake</i></div><div class="hs-h" style="font-size:1.7rem">40 SLOTS · ONE SHARED ROUND</div><div class="hs-live" id="spinsHeroLine">Forty themed slots, one shared prize fund. 86 winners in every 500 — odds never change.</div>
       <div class="hs-cta">Pick a slot &rarr;</div></a>
     <a class="heroslide hs-free" href="free-entry.html"><div class="hs-art"><svg viewBox="0 0 520 240" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet">
 <g fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"><rect x="290" y="60" width="200" height="130" rx="10"/><path d="M290 70l100 76 100-76"/></g>
@@ -416,8 +416,9 @@ setInterval(function(){go((i+1)%n);},5000);})();
     var left=(s.tiers||[]).reduce(function(a,t){return a+t.left*t.prize_p;},0);
     var top=(s.tiers||[]).filter(function(t){return t.left>0;}).map(function(t){return t.prize_p;});
     var topP=top.length?Math.max.apply(null,top):0;
-    var h=document.getElementById('spinsHeroPot'); if(h) h.textContent=gbp(left);
-    var l=document.getElementById('spinsHeroLine'); if(l) l.innerHTML=(topP?'<b>'+gbp(topP)+'</b> top prize in play · ':'')+'<b>'+(s.cap-s.sold).toLocaleString()+'</b> spins left this round · <span class="livedot"></span>LIVE';
+    var mm=Math.max(1,Math.floor(5000/(s.price_p||200)));           // max stake multiplier (£50 cap)
+    var h=document.getElementById('spinsHeroPot'); if(h) h.textContent=gbp(left*mm);
+    var l=document.getElementById('spinsHeroLine'); if(l) l.innerHTML='<b>'+gbp(left)+'</b> at £'+((s.price_p||200)/100)+' stake · ×'+mm+' at £50 · '+(topP?'<b>'+gbp(topP*mm)+'</b> top prize · ':'')+'<b>'+(s.cap-s.sold).toLocaleString()+'</b> spins left · <span class="livedot"></span>LIVE';
   }
   function go(){fetch('/api/pool?game=SP',{cache:'no-store'}).then(function(r){return r.json();}).then(function(s){if(s&&s.pool)paint(s);}).catch(function(){});}
   go(); setInterval(go,3000);
