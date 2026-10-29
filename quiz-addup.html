@@ -33,7 +33,6 @@ textarea{min-height:90px;resize:vertical}
 .row .m{color:var(--soft);font-size:.7rem}
 .pill{font-family:'IBM Plex Mono',monospace;font-size:.68rem;font-weight:700;background:var(--wash);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--cyan)}
 .win{color:var(--match);font-weight:800}
-footer{border-top:1px solid var(--line);margin-top:26px;padding:16px;color:var(--soft);font-size:.64rem;line-height:1.7;text-align:center}
 .msg{max-width:82%;padding:9px 12px;border-radius:12px;margin:6px 0;font-size:.82rem;line-height:1.45}
 .msg.user{background:linear-gradient(180deg,#123B6B,#0A1730);margin-left:auto;border-bottom-right-radius:3px}
 .msg.admin{background:var(--wash);border:1px solid var(--line);border-bottom-left-radius:3px}
@@ -79,6 +78,31 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:16px;color:var(-
   body.ebg::before{display:none}
 }
 
+
+/* ===== site footer ===== */
+.sf{margin-top:34px;border-top:1px solid var(--line,#1C3463);background:linear-gradient(180deg,#07112A 0%,#040918 100%);color:#8FA6CC;font-family:'Space Grotesk',system-ui,sans-serif}
+.sf-in{max-width:1080px;margin:0 auto;padding:30px 20px 22px}
+.sf-legal{font-size:.68rem;line-height:1.7;color:#7E93B8;border-bottom:1px solid #12264D;padding-bottom:18px;margin-bottom:22px}
+.sf-legal b{color:#B9C9E8}
+.sf-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:26px}
+@media(max-width:820px){.sf-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.sf-grid{grid-template-columns:1fr}}
+.sf-brand svg{height:28px;display:block}
+.sf-brand p{font-size:.74rem;line-height:1.6;margin-top:10px;max-width:34ch}
+.sf-h{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#fff;margin-bottom:10px}
+.sf-links a{display:block;color:#9DB4DB;text-decoration:none;font-size:.78rem;padding:4px 0}
+.sf-links a:hover{color:#36E0FF}
+.sf-pay{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.sf-pay span{display:inline-flex;align-items:center;justify-content:center;width:52px;height:32px;border-radius:6px;background:#fff;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.sf-pay svg{height:18px;width:auto;display:block}
+.sf-pay span.dark{background:#000}
+.sf-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-top:22px;padding-top:16px;border-top:1px solid #12264D;font-size:.68rem;color:#6B7EA3}
+.sf-badges{display:flex;gap:8px;flex-wrap:wrap}
+.sf-badge{display:inline-flex;align-items:center;gap:6px;border:1px solid #1C3463;border-radius:999px;padding:4px 10px;font-family:'Barlow Condensed',sans-serif;font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:.62rem;color:#B9C9E8}
+.sf-badge.age{border-color:#C8004B;color:#fff;background:#C8004B}
+.sf-badge svg{width:12px;height:12px}
+.gamelegal{max-width:1080px;margin:26px auto 0;padding:14px 20px 0;border-top:1px solid var(--line,#1C3463);color:#7E93B8;font-size:.66rem;line-height:1.7}
+.gamelegal b{color:#B9C9E8}
 </style><style>
 :root{--mint:#FF2E8B;--mint2:#B3178F;--mgold:#FFC53D}
 .mq-hero{border:1px solid #4A1246;border-radius:12px;padding:18px 20px;margin-top:14px;position:relative;overflow:hidden;background:radial-gradient(120% 90% at 80% -10%,rgba(255,46,139,.35),rgba(10,21,40,0) 55%),linear-gradient(120deg,#2a0730,#1a0b38 50%,#0A1528)}
@@ -138,9 +162,20 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:16px;color:var(-
     <h2>How Add &rsquo;Em Up works</h2>
     <p>Add &rsquo;Em Up is a participation prize quiz in the classic call-TV style. A board of numbers appears on screen; work out the grand total. Lock in your total for &pound;1, or free by post. The nearest guess without going over the true total wins the prize, and exact answers split it. The correct total is hashed before the board opens and revealed afterwards, so the result is provably fair and fixed in advance. 18+, Schedule 2 of the Gambling Act 2005.</p>
   </section>
-</div><footer>InstantWins.co.uk is operated by IGX Ltd. All draws form a single continuous arrangement of
-free-entry prize competitions under Schedule 2 of the Gambling Act 2005. Test mode: all credit is
-play-money. 18+, UK residents only. Structure subject to solicitor sign-off before launch.</footer><script>
+</div><footer class="sf"><div class="sf-in">
+  <div class="sf-legal"><b>InstantWins.co.uk is operated by IGX Ltd</b> (company no. 13057559), Penarth, Wales. All draws form a single continuous arrangement of free-entry prize competitions under Schedule 2 of the Gambling Act 2005 &mdash; not gambling, no licence required. Every draw can be entered free by post with identical odds; no purchase necessary. <b>Test mode:</b> all credit is play-money. Structure subject to solicitor sign-off before launch.</div>
+  <div class="sf-grid">
+    <div class="sf-brand"><svg viewBox="0 0 250 40" role="img" aria-label="InstantWins" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sfbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#36E0FF"/><stop offset=".5" stop-color="#0FA8FF"/><stop offset="1" stop-color="#0551B5"/></linearGradient></defs><rect x="1" y="1" width="38" height="38" rx="10" fill="url(#sfbg)"/><path d="M23 5 L11 22 H19 L16.5 35 L30 17 H21.5 Z" fill="#fff"/><text x="48" y="30" font-family="Barlow Condensed,Archivo,sans-serif" font-weight="800" font-size="30" letter-spacing="-0.5" fill="#F2F7FF">INSTANT<tspan fill="#36E0FF">WINS</tspan></text></svg><p>Provably fair prize games, puzzles and draws. Every outcome is committed before you play and verifiable after.</p></div>
+    <div><div class="sf-h">Play</div><div class="sf-links"><a href="card.html">The Card</a><a href="games.html">Instant Games</a><a href="thespins.html">The Spins</a><a href="puzzles.html">Puzzles</a><a href="quizzes.html">Quizzes</a><a href="results.html">Results</a></div></div>
+    <div><div class="sf-h">Help</div><div class="sf-links"><a href="free-entry.html">Free entry by post</a><a href="fairness.html">Fairness &amp; verification</a><a href="support.html">Support centre</a><a href="account.html">My account</a><a href="affiliate.html">Affiliates</a></div></div>
+    <div><div class="sf-h">Secure payments</div><div class="sf-pay"><span><svg viewBox="0 0 48 16" aria-label="Visa"><text x="24" y="13.5" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-style="italic" font-size="15" fill="#1A1F71">VISA</text></svg></span><span><svg viewBox="0 0 36 22" aria-label="Mastercard"><circle cx="13" cy="11" r="9" fill="#EB001B"/><circle cx="23" cy="11" r="9" fill="#F79E1B"/><path d="M18 4.2a9 9 0 0 1 0 13.6a9 9 0 0 1 0-13.6z" fill="#FF5F00"/></svg></span><span><svg viewBox="0 0 48 16" aria-label="American Express"><rect width="48" height="16" rx="2" fill="#2E77BC"/><text x="24" y="11.5" text-anchor="middle" font-family="Arial,sans-serif" font-weight="800" font-size="8.5" fill="#fff" letter-spacing=".5">AMEX</text></svg></span><span class="dark"><svg viewBox="0 0 50 20" aria-label="Apple Pay"><path d="M9.6 3.3c.6-.8 1-1.8.9-2.9-.9 0-2 .6-2.6 1.4-.6.7-1.1 1.8-.9 2.8 1 .1 2-.5 2.6-1.3zM10.5 4.8c-1.4-.1-2.7.8-3.3.8-.7 0-1.7-.8-2.8-.8-1.5 0-2.8.9-3.6 2.2-1.5 2.6-.4 6.5 1.1 8.6.7 1 1.6 2.2 2.7 2.2 1.1 0 1.5-.7 2.8-.7s1.7.7 2.8.7c1.2 0 1.9-1 2.6-2.1.8-1.2 1.2-2.4 1.2-2.4s-2.3-.9-2.3-3.5c0-2.2 1.8-3.2 1.9-3.3-1-1.5-2.6-1.7-3.1-1.7z" fill="#fff"/><text x="31" y="15" text-anchor="middle" font-family="Helvetica Neue,Arial,sans-serif" font-weight="600" font-size="12.5" fill="#fff">Pay</text></svg></span><span><svg viewBox="0 0 54 20" aria-label="Google Pay"><text x="8" y="15" font-family="Arial,sans-serif" font-weight="700" font-size="15" fill="#4285F4">G</text><text x="36" y="15" text-anchor="middle" font-family="Arial,sans-serif" font-weight="500" font-size="13" fill="#5F6368">Pay</text></svg></span><span><svg viewBox="0 0 54 16" aria-label="PayPal"><text x="2" y="12.5" font-family="Verdana,Arial,sans-serif" font-weight="800" font-style="italic" font-size="11.5" fill="#003087">Pay</text><text x="25" y="12.5" font-family="Verdana,Arial,sans-serif" font-weight="800" font-style="italic" font-size="11.5" fill="#009CDE">Pal</text></svg></span></div><div class="sf-h" style="margin-top:16px">Legal</div><div class="sf-links"><a href="terms.html">Terms &amp; conditions</a><a href="privacy.html">Privacy policy</a></div></div>
+  </div>
+  <div class="sf-bar">
+    <div class="sf-badges"><span class="sf-badge age">18+</span><span class="sf-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 3l7 3v5c0 4-3 7-7 10-4-3-7-6-7-10V6z"/></svg>Provably fair</span><span class="sf-badge">UK residents only</span><span class="sf-badge">Schedule 2</span></div>
+    <div>&copy; <span id="sfYear">2026</span> IGX Ltd. All rights reserved.</div>
+  </div>
+</div></footer>
+<script>try{document.getElementById('sfYear').textContent=new Date().getFullYear();}catch(e){}</script><script>
 const $=id=>document.getElementById(id);
 function hash(){const a='0123456789abcdef';let h='';for(let i=0;i<64;i++)h+=a[Math.floor(Math.random()*16)];return h;}
 let total=0, locked=false;
