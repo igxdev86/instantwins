@@ -282,9 +282,9 @@ function drawHiddenTicket(){
 }
 function refresh(){
   $('bal').textContent=fmt(balance);
-  TIERS.forEach((t,i)=>{$('t'+i).textContent=t.left+' of '+t.total+' left';});var _pp=TIERS.reduce(function(s,t){return s+t.left*t.v;},0);var _pv=document.getElementById('potVal');if(_pv)_pv.textContent='\u00a3'+_pp.toLocaleString();
+  TIERS.forEach((t,i)=>{$('t'+i).textContent=t.left+' of '+t.total+' left';});var _pp=TIERS.reduce(function(s,t){return s+t.left*t.v;},0);var _pv=document.getElementById('potVal');if(_pv)_pv.textContent='\u00a3'+(_pp*STAKE_MUL).toLocaleString();
   $('topLine').textContent = TIERS[0].left>0
-    ? ('£'+TIERS[0].v.toLocaleString()+' TOP PRIZE IN PLAY')
+    ? ('£'+(TIERS[0].v*STAKE_MUL).toLocaleString()+' TOP PRIZE IN PLAY')
     : 'TOP PRIZE WON — RELOADING';
   $('leftCt').textContent=ticketsLeft;
   $('prog').style.width=(100*(CAP-ticketsLeft)/CAP)+'%';
@@ -531,6 +531,7 @@ document.addEventListener('DOMContentLoaded',function(){
 </style>
 <script>(function(){
   if(typeof PRICE==='undefined')return;
+  function scaleTable(){try{if(typeof TIERS!=='undefined'){var pv=document.querySelectorAll('.prow .pv');for(var i=0;i<pv.length&&i<TIERS.length;i++){pv[i].textContent='£'+(TIERS[i].v*STAKE_MUL).toLocaleString();}}var st=document.querySelectorAll('.stat');for(var k=0;k<st.length;k++){var lab=st[k].querySelector('i'),val=st[k].querySelector('b');if(lab&&val&&/^per\b/i.test((lab.textContent||'').trim())){val.textContent='£'+(PRICE*STAKE_MUL);}}}catch(e){}}
   var go=document.getElementById('goBtn'); if(!go)return;
   var cand=[1,2,5,10,25,50], MULTS=cand.filter(function(m){return PRICE*m<=50;});
   if(MULTS.indexOf(1)<0)MULTS.unshift(1);
@@ -541,11 +542,11 @@ document.addEventListener('DOMContentLoaded',function(){
   var row=document.createElement('div'); row.className='stakebar-row';
   MULTS.forEach(function(m){
     var c=document.createElement('button'); c.type='button'; c.className='stakechip'+(m===1?' on':''); c.textContent='£'+(PRICE*m);
-    c.onclick=function(){ STAKE_MUL=m; Array.prototype.forEach.call(row.children,function(x){x.classList.remove('on');}); c.classList.add('on'); window.__stakeLabel(); if(typeof refresh==='function')refresh(); };
+    c.onclick=function(){ STAKE_MUL=m; Array.prototype.forEach.call(row.children,function(x){x.classList.remove('on');}); c.classList.add('on'); window.__stakeLabel(); if(typeof refresh==='function')refresh(); scaleTable(); };
     row.appendChild(c);
   });
   bar.appendChild(row); var ctrls=go.parentNode; ctrls.parentNode.insertBefore(bar,ctrls);
-  window.__stakeLabel();
+  window.__stakeLabel(); scaleTable();
 })();</script>
 </body>
 </html>
