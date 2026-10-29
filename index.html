@@ -150,6 +150,16 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .hs-art svg{height:112%;width:auto;max-width:70%;filter:drop-shadow(0 6px 14px rgba(0,0,0,.35))}
 .heroslide>*:not(.hs-art){position:relative;z-index:1}
 @media(max-width:600px){.hs-art{opacity:.10}.hs-art svg{max-width:85%}}
+
+.hs-pot{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:2px 0 6px}
+.hs-pot b{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(1.9rem,5.5vw,3rem);line-height:1;color:#fff;text-shadow:0 0 22px rgba(255,255,255,.35)}
+.hs-pot i{font-style:normal;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.hs-live{font-size:.78rem;color:rgba(255,255,255,.85);margin-top:4px}
+.hs-live b{color:#fff}
+.livedot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#43F0B4;margin:0 5px 1px 0;box-shadow:0 0 8px #43F0B4;animation:lvp 1.1s ease-in-out infinite}
+@keyframes lvp{50%{opacity:.35}}
+@keyframes iwflashk{0%{color:#FFE9A8;text-shadow:0 0 26px #FFC53D}100%{}}
+.iwflash{animation:iwflashk .9s ease-out}
 </style>
 </head>
 <body class="ebh">
@@ -178,8 +188,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 <path d="M290 120h236" stroke="#fff" stroke-width="3" stroke-dasharray="8 8"/>
 <g fill="#fff"><path d="M120 50l9 20 22 2-16 15 5 22-20-11-20 11 5-22-16-15 22-2z"/><path d="M60 170l6 13 14 1-10 10 3 14-13-7-13 7 3-14-10-10 14-1z"/><path d="M220 190l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1z"/><circle cx="200" cy="80" r="16" fill="none" stroke="#fff" stroke-width="4"/><circle cx="200" cy="80" r="5"/></g></svg></div>
       <div class="hs-tag">The Spins · 40 slots</div>
-      <div class="hs-h">SPIN TO WIN £100</div>
-      <div class="hs-p">Forty themed slots, one shared prize fund. 86 winners in every 500 — odds never change.</div>
+      <div class="hs-pot"><b id="spinsHeroPot">£5,000</b><i>prize fund live now</i></div><div class="hs-h" style="font-size:1.7rem">40 SLOTS · ONE SHARED ROUND</div><div class="hs-live" id="spinsHeroLine">Forty themed slots, one shared prize fund. 86 winners in every 500 — odds never change.</div>
       <div class="hs-cta">Pick a slot &rarr;</div></a>
     <a class="heroslide hs-free" href="free-entry.html"><div class="hs-art"><svg viewBox="0 0 520 240" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet">
 <g fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"><rect x="290" y="60" width="200" height="130" rx="10"/><path d="M290 70l100 76 100-76"/></g>
@@ -399,5 +408,21 @@ function go(x){i=x;t.style.transform='translateX(-'+(i*100)+'%)';[].forEach.call
 setInterval(function(){go((i+1)%n);},5000);})();
 </script>
 <script>try{var _r=new URLSearchParams(location.search).get("ref");if(_r)localStorage.setItem("iw_ref",_r.slice(0,40));}catch(e){}</script>
+
+<script>
+(function(){
+  function gbp(p){return '£'+Math.round(p/100).toLocaleString('en-GB');}
+  function paint(s){
+    var left=(s.tiers||[]).reduce(function(a,t){return a+t.left*t.prize_p;},0);
+    var top=(s.tiers||[]).filter(function(t){return t.left>0;}).map(function(t){return t.prize_p;});
+    var topP=top.length?Math.max.apply(null,top):0;
+    var h=document.getElementById('spinsHeroPot'); if(h) h.textContent=gbp(left);
+    var l=document.getElementById('spinsHeroLine'); if(l) l.innerHTML=(topP?'<b>'+gbp(topP)+'</b> top prize in play · ':'')+'<b>'+(s.cap-s.sold).toLocaleString()+'</b> spins left this round · <span class="livedot"></span>LIVE';
+  }
+  function go(){fetch('/api/pool?game=SP',{cache:'no-store'}).then(function(r){return r.json();}).then(function(s){if(s&&s.pool)paint(s);}).catch(function(){});}
+  go(); setInterval(go,3000);
+  try{var el=document.getElementById('spinsHeroPot');if(el){new MutationObserver(function(){el.classList.remove('iwflash');void el.offsetWidth;el.classList.add('iwflash');}).observe(el,{childList:true,characterData:true,subtree:true});}}catch(e){}
+})();
+</script>
 </body>
 </html>
