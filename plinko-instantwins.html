@@ -443,25 +443,47 @@ const GAME={
   init(){this.draw(null,-1);},
   draw(ball,glowBin){
     cx.clearRect(0,0,W,H);
+    // depth: soft glow down the drop lane + floor shade
+    const rg=cx.createRadialGradient(W/2,PAD_TOP-4,2,W/2,PAD_TOP-4,W*0.62);
+    rg.addColorStop(0,'rgba(15,168,255,.12)');rg.addColorStop(1,'rgba(15,168,255,0)');
+    cx.fillStyle=rg;cx.fillRect(0,0,W,H);
+    // drop marker
+    cx.textAlign='center';cx.font='700 9px IBM Plex Mono';cx.fillStyle='#8FB4E0';
+    cx.fillText('▼ DROP ZONE',W/2,13);
+    // pegs with glow
+    cx.save();cx.shadowColor='rgba(130,205,255,.6)';cx.shadowBlur=6;
     for(let r=1;r<=ROWS;r++)for(let j=0;j<r;j++){
       const {x,y}=pegPos(r,j);
-      cx.beginPath();cx.arc(x,y,3.2,0,7);cx.fillStyle='rgba(139,146,176,.55)';cx.fill();
-      cx.beginPath();cx.arc(x,y,1.4,0,7);cx.fillStyle='rgba(234,236,246,.9)';cx.fill();
+      cx.beginPath();cx.arc(x,y,2.7,0,7);cx.fillStyle='#D4E6FF';cx.fill();
     }
-    const by=H-PAD_BOT+8;
+    cx.restore();
+    const by=H-PAD_BOT+6, binH=44;
     const TOPV=Math.max.apply(null,BINS);
     for(let b=0;b<BINS.length;b++){
       const x=W/2+(b-ROWS/2)*binW, v=BINS[b], isTop=v===TOPV&&v>0;
-      cx.fillStyle= glowBin===b
-        ? (isTop?'rgba(255,211,77,.45)':v>=20?'rgba(54,224,255,.35)':v>0?'rgba(61,220,132,.3)':'rgba(139,146,176,.25)')
-        : (isTop?'rgba(255,211,77,.14)':v>=20?'rgba(54,224,255,.10)':v>0?'rgba(61,220,132,.08)':'rgba(139,146,176,.07)');
-      roundRect(x-binW/2+2,by,binW-4,40,6);cx.fill();
+      const cxl=x-binW/2+2, cw=binW-4, lit=glowBin===b;
+      const rgb= isTop?[255,211,77] : v>=20?[54,224,255] : v>0?[61,220,132] : [122,138,178];
+      // slot wall
+      cx.strokeStyle='rgba(130,150,200,.16)';cx.lineWidth=1;
+      cx.beginPath();cx.moveTo(cxl-1,by-12);cx.lineTo(cxl-1,by+binH);cx.stroke();
+      // bin body gradient
+      const g=cx.createLinearGradient(0,by,0,by+binH);
+      g.addColorStop(0,`rgba(${rgb[0]},${rgb[1]},${rgb[2]},${lit?0.55:0.15})`);
+      g.addColorStop(1,`rgba(${rgb[0]},${rgb[1]},${rgb[2]},${lit?0.18:0.04})`);
+      roundRect(cxl,by,cw,binH,6);cx.fillStyle=g;cx.fill();
+      // top accent bar
+      roundRect(cxl,by,cw,3,2);cx.fillStyle=`rgba(${rgb[0]},${rgb[1]},${rgb[2]},${lit?1:0.65})`;cx.fill();
+      // label
       const lbl=binLabel(v);
       cx.font=(v>0?'700 ':'600 ')+(isTop?11:10)+'px IBM Plex Mono';cx.textAlign='center';
-      cx.fillStyle= v<=0?'#5B6E93' : isTop?'#FFD34D' : v>=20?'#36E0FF' : '#3DDC84';
-      cx.fillText(lbl,x,by+(isTop?22:25));
-      if(isTop){cx.font='700 7px IBM Plex Mono';cx.fillStyle='#FFE9A8';cx.fillText('TOP WIN',x,by+33);}
+      cx.fillStyle= v<=0?'#6B7EA3' : isTop?'#FFE9A8' : v>=20?'#9BEBFF' : '#7DF0B4';
+      if(isTop){cx.save();cx.shadowColor='rgba(255,211,77,.85)';cx.shadowBlur=9;}
+      cx.fillText(lbl,x,by+(isTop?24:27));
+      if(isTop){cx.restore();cx.font='700 7px IBM Plex Mono';cx.fillStyle='#FFD34D';cx.fillText('TOP WIN',x,by+35);}
     }
+    // far-right wall
+    cx.strokeStyle='rgba(130,150,200,.16)';cx.lineWidth=1;
+    cx.beginPath();cx.moveTo(W/2+(BINS.length-1-ROWS/2)*binW+binW/2-1,by-12);cx.lineTo(W/2+(BINS.length-1-ROWS/2)*binW+binW/2-1,by+binH);cx.stroke();
     if(ball){
       for(let i=0;i<ball.trail.length;i++){
         const t=ball.trail[i],a=(i+1)/ball.trail.length*.35;
