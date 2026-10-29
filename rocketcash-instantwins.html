@@ -191,6 +191,14 @@ footer b{color:var(--text)}
 .sf-badge svg{width:12px;height:12px}
 .gamelegal{max-width:1080px;margin:26px auto 0;padding:14px 20px 0;border-top:1px solid var(--line,#1C3463);color:#7E93B8;font-size:.66rem;line-height:1.7}
 .gamelegal b{color:#B9C9E8}
+
+.glock{display:flex;align-items:center;gap:12px;min-width:0}
+.glock-ic{flex:none;width:52px;height:52px;border-radius:13px;overflow:hidden;border:1px solid rgba(54,224,255,.35);box-shadow:0 4px 14px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12)}
+.glock-ic svg{width:100%;height:100%;display:block}
+.glock-t{min-width:0}
+.glock-k{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);line-height:1}
+.glock-n{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.65rem;letter-spacing:.02em;text-transform:uppercase;color:#fff;line-height:1;margin-top:3px;text-shadow:0 2px 0 rgba(0,0,0,.55),0 0 18px rgba(54,224,255,.25);font-size:clamp(1.05rem,4.2vw,1.65rem)}
+@media(max-width:480px){.glock-ic{width:44px;height:44px;border-radius:11px}}
 </style>
 </head>
 <body class="ebg">
@@ -200,7 +208,7 @@ footer b{color:var(--text)}
 
 
 <header>
-  <div class="logo" style="display:flex;align-items:center;gap:9px"><svg viewBox="0 0 40 40" width="30" height="30" xmlns="http://www.w3.org/2000/svg" style="flex:none"><defs><linearGradient id="bgsm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#36E0FF"/><stop offset=".5" stop-color="#0FA8FF"/><stop offset="1" stop-color="#0551B5"/></linearGradient><linearGradient id="glsm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset=".5" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs><rect x="1" y="1" width="38" height="38" rx="10" fill="url(#bgsm)" stroke="#9BEBFF" stroke-opacity=".5"/><rect x="1" y="1" width="38" height="20" rx="10" fill="url(#glsm)"/><path d="M23 5 L11 22 H19 L16.5 35 L30 17 H21.5 Z" fill="#fff" stroke="#063a7a" stroke-width=".5" stroke-linejoin="round"/></svg><span style="display:block">ROCKET CASH<span style="display:block">INSTANT GAMES · INSTANTWINS.CO.UK</span></span></div>
+  <a class="glock" href="games.html" style="text-decoration:none"><div class="glock-ic"><svg viewBox="60 0 80 80" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img"><defs><linearGradient id="glbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E2650"/><stop offset="1" stop-color="#10152E"/></linearGradient></defs><rect width="200" height="80" fill="url(#glbg)"/><line x1="14" y1="18" x2="186" y2="18" stroke="#4FD8EB" stroke-width="1" stroke-dasharray="4 6" opacity=".3"/><line x1="14" y1="34" x2="186" y2="34" stroke="#4FD8EB" stroke-width="1" stroke-dasharray="4 6" opacity=".3"/><line x1="14" y1="50" x2="186" y2="50" stroke="#4FD8EB" stroke-width="1" stroke-dasharray="4 6" opacity=".3"/><g transform="rotate(-18 100 42)"><path d="M100 16 Q112 34 109 52 L91 52 Q88 34 100 16 Z" fill="#EAECF6"/><path d="M100 16 Q107 26 108 34 L92 34 Q93 26 100 16 Z" fill="#FF7A2F"/><circle cx="100" cy="40" r="4.5" fill="#4FD8EB"/><path d="M91 46 L82 60 L91 55 Z" fill="#FF7A2F"/><path d="M109 46 L118 60 L109 55 Z" fill="#FF7A2F"/><path d="M94 54 L106 54 L100 74 Z" fill="#FF7A2F" opacity=".85"/><path d="M96 54 L104 54 L100 66 Z" fill="#FFD9A0"/></g></svg></div><div class="glock-t"><div class="glock-k">Instant Games</div><div class="glock-n">ROCKET CASH</div></div></a>
   <div class="balance">Credit <b id="bal">—</b></div>
 </header>
 
