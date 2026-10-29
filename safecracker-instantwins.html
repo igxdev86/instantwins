@@ -545,7 +545,7 @@ document.addEventListener('DOMContentLoaded',function(){
   var row=document.createElement('div'); row.className='stakebar-row';
   MULTS.forEach(function(m){
     var c=document.createElement('button'); c.type='button'; c.className='stakechip'+(m===1?' on':''); c.textContent='£'+(PRICE*m);
-    c.onclick=function(){ STAKE_MUL=m; Array.prototype.forEach.call(row.children,function(x){x.classList.remove('on');}); c.classList.add('on'); window.__stakeLabel(); if(typeof refresh==='function')refresh(); scaleTable(); };
+    c.onclick=function(){ STAKE_MUL=m; Array.prototype.forEach.call(row.children,function(x){x.classList.remove('on');}); c.classList.add('on'); window.__stakeLabel(); if(typeof refresh==='function')refresh(); scaleTable(); if(typeof window.__stakeRedraw==='function')window.__stakeRedraw(); };
     row.appendChild(c);
   });
   bar.appendChild(row); var ctrls=go.parentNode; ctrls.parentNode.insertBefore(bar,ctrls);

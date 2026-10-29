@@ -433,6 +433,7 @@ $('freeModal').addEventListener('click',e=>{if(e.target.id==='freeModal')$('free
 
 const ROWS=12;
 const BINS=[100,20,10,5,2,0,0,0,2,5,10,20,100];
+function binLabel(v){ if(v<=0) return 'MISS'; var p=v*STAKE_MUL; if(p>=1000){var k=p/1000;return '£'+(k%1===0?k:k.toFixed(1))+'K';} return '£'+p; }
 const cv=$('cv'),cx=cv.getContext('2d'),W=cv.width,H=cv.height;
 const PAD_TOP=40,PAD_BOT=60;
 const binW=W/(ROWS+1), rowH=(H-PAD_TOP-PAD_BOT)/(ROWS+1);
@@ -448,14 +449,18 @@ const GAME={
       cx.beginPath();cx.arc(x,y,1.4,0,7);cx.fillStyle='rgba(234,236,246,.9)';cx.fill();
     }
     const by=H-PAD_BOT+8;
+    const TOPV=Math.max.apply(null,BINS);
     for(let b=0;b<BINS.length;b++){
-      const x=W/2+(b-ROWS/2)*binW, v=BINS[b];
-      cx.fillStyle= glowBin===b ? (v>=20?'rgba(54,224,255,.35)':v>0?'rgba(61,220,132,.3)':'rgba(139,146,176,.25)')
-        : v>=20?'rgba(54,224,255,.10)' : v>0?'rgba(61,220,132,.08)':'rgba(139,146,176,.07)';
+      const x=W/2+(b-ROWS/2)*binW, v=BINS[b], isTop=v===TOPV&&v>0;
+      cx.fillStyle= glowBin===b
+        ? (isTop?'rgba(255,211,77,.45)':v>=20?'rgba(54,224,255,.35)':v>0?'rgba(61,220,132,.3)':'rgba(139,146,176,.25)')
+        : (isTop?'rgba(255,211,77,.14)':v>=20?'rgba(54,224,255,.10)':v>0?'rgba(61,220,132,.08)':'rgba(139,146,176,.07)');
       roundRect(x-binW/2+2,by,binW-4,40,6);cx.fill();
-      cx.font='600 10px IBM Plex Mono';cx.textAlign='center';
-      cx.fillStyle=v>=20?'#36E0FF':v>0?'#3DDC84':'#8B92B0';
-      cx.fillText(v>0?v:'\u00B7',x,by+25);
+      const lbl=binLabel(v);
+      cx.font=(v>0?'700 ':'600 ')+(isTop?11:10)+'px IBM Plex Mono';cx.textAlign='center';
+      cx.fillStyle= v<=0?'#5B6E93' : isTop?'#FFD34D' : v>=20?'#36E0FF' : '#3DDC84';
+      cx.fillText(lbl,x,by+(isTop?22:25));
+      if(isTop){cx.font='700 7px IBM Plex Mono';cx.fillStyle='#FFE9A8';cx.fillText('TOP WIN',x,by+33);}
     }
     if(ball){
       for(let i=0;i<ball.trail.length;i++){
@@ -498,6 +503,7 @@ const GAME={
 
 /* ================================================= */
 if(GAME.init)GAME.init();
+window.__stakeRedraw=function(){try{GAME.draw(null,-1);}catch(e){}};
 syncPool();
 setInterval(()=>{if(!busy)syncPool();},3000);
 </script>
@@ -553,7 +559,7 @@ document.addEventListener('DOMContentLoaded',function(){
   var row=document.createElement('div'); row.className='stakebar-row';
   MULTS.forEach(function(m){
     var c=document.createElement('button'); c.type='button'; c.className='stakechip'+(m===1?' on':''); c.textContent='£'+(PRICE*m);
-    c.onclick=function(){ STAKE_MUL=m; Array.prototype.forEach.call(row.children,function(x){x.classList.remove('on');}); c.classList.add('on'); window.__stakeLabel(); if(typeof refresh==='function')refresh(); scaleTable(); };
+    c.onclick=function(){ STAKE_MUL=m; Array.prototype.forEach.call(row.children,function(x){x.classList.remove('on');}); c.classList.add('on'); window.__stakeLabel(); if(typeof refresh==='function')refresh(); scaleTable(); if(typeof window.__stakeRedraw==='function')window.__stakeRedraw(); };
     row.appendChild(c);
   });
   bar.appendChild(row); var ctrls=go.parentNode; ctrls.parentNode.insertBefore(bar,ctrls);
