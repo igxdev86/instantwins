@@ -109,6 +109,7 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:16px;color:var(-
 .pz-cell::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:rgba(54,224,255,.25)}
 .pz-cell .n{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.8rem;color:#8FB0E0;text-shadow:0 1px 2px #000}
 .pz-cell:hover{transform:translateY(-2px) scale(1.03);z-index:2;box-shadow:0 0 0 2px #36E0FF inset,0 6px 16px rgba(54,224,255,.3)}
+.pz-cell.sel{box-shadow:0 0 0 2px #FFC53D inset,0 0 14px rgba(255,197,61,.5);z-index:2}
 .pz-cell.mine{background:linear-gradient(160deg,rgba(54,224,255,.22),rgba(11,23,48,.15));box-shadow:0 0 0 2px #36E0FF inset;cursor:default}
 .pz-cell.mine .n{color:#9BEBFF}
 .pz-cell.taken{opacity:0;pointer-events:none}
@@ -140,16 +141,17 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:16px;color:var(-
   <div class="pz-hero">
     <span class="pz-tag">The Puzzle</span>
     <div class="pz-h">PICK A <b>PIECE</b></div>
-    <p class="pz-sub">One hidden picture, split into 48 pieces. Claim a piece, reveal your corner of the image &mdash; and if you hold the winning piece when the board completes, the prize is yours.</p>
+    <p class="pz-sub">One hidden picture, split into 48 pieces. Pick any piece for &pound;2 and reveal your corner. One piece on every board is the committed winner &mdash; hold it at the close and the jackpot is yours. Unsold winner? It rolls over.</p>
     <div class="pz-meta">
-      <div class="pz-chip"><i>Pieces</i><b><span id="pzClaimed">0</span>/48</b></div>
+      <div class="pz-chip"><i>Pieces taken</i><b><span id="pzClaimed">0</span>/48</b></div>
       <div class="pz-chip"><i>Per piece</i><b>£2</b></div>
-      <div class="pz-chip win"><i>Prize</i><b id="pzPrize">£500</b></div>
+      <div class="pz-chip win"><i>Jackpot</i><b id="pzPrize">£100</b></div>
+      <div class="pz-chip"><i>Board closes</i><b id="pzClock">--:--</b></div>
     </div>
   </div>
 
   <div class="pz-board-wrap">
-    <div class="pz-barrow"><h2>The board</h2><span class="pz-pick" id="pzPick">No piece yet</span></div>
+    <div class="pz-barrow"><h2>Board <span id="pzBoardNo" style="color:#D08BFF">#&mdash;</span></h2><span class="pz-pick" id="pzPick">Draws at <b id="pzAt">--:--</b></span></div>
     <div class="pz-prog"><i id="pzBar"></i></div>
     <div class="pz-board">
       <svg class="pz-img" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
@@ -178,108 +180,113 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:16px;color:var(-
     <circle cx="90" cy="300" r="30" fill="url(#coin)" stroke="#7a4e05" stroke-width="3"/>
     <circle cx="710" cy="300" r="34" fill="url(#coin)" stroke="#7a4e05" stroke-width="3"/>
   </g>
-  <text x="400" y="560" font-family="Barlow Condensed,sans-serif" font-size="52" font-weight="900" fill="#FFC53D" text-anchor="middle" letter-spacing="2">£500 PRIZE</text>
+  <text id="pzImgPrize" x="400" y="560" font-family="Barlow Condensed,sans-serif" font-size="52" font-weight="900" fill="#FFC53D" text-anchor="middle" letter-spacing="2">£100 JACKPOT</text>
 </svg>
       <div class="pz-grid" id="pzGrid"></div>
     </div>
     <div class="pz-banner" id="pzBanner"></div>
     <div class="pz-actions">
-      <button class="pz-buy" id="pzBuy" disabled>PICK A PIECE &middot; £2</button>
+      <button class="pz-buy" id="pzBuy" disabled>PICK A PIECE &middot; £2</button><span class="pz-pick" id="pzMine" style="align-self:center"></span>
       <button class="pz-free" id="pzFree">Free entry by post</button>
     </div>
-    <p class="pz-note">Tap any lit piece to select it, then confirm. One winning piece is committed before the board opens (hash below) and revealed only when all 48 are claimed. <b>If the winning piece went unclaimed, the prize rolls into the next board.</b> 18+ &middot; Schedule 2 free-entry prize competition.</p>
+    <p class="pz-note">Tap any free piece, then confirm. A new board runs every hour. The winning piece is committed before the board opens (hash below) and revealed at the close. <b>If the winning piece wasn’t sold, no one wins and the jackpot rolls over (+&pound;100). At &pound;1,000 it must drop</b> &mdash; drawn from the pieces that were sold. 18+ &middot; Schedule 2 free-entry prize competition.</p>
     <div class="fairhash" id="pzHash">commit: &mdash;</div>
   </div>
 
   <section class="seo">
     <h2>How Pick a Piece works</h2>
-    <p>Pick a Piece is a provably fair prize puzzle. A single picture is divided into a grid of 48 pieces. Each entry claims one numbered piece for &pound;2, or free by post, and uncovers that fragment of the hidden image. Before the board opens we draw one winning piece and publish its SHA-256 commitment hash, so the result is fixed in advance and verifiable &mdash; we can&rsquo;t change it once play starts.</p>
-    <h3>Winning</h3>
-    <p>When all 48 pieces are claimed the board completes, the full picture is revealed, and the committed winning piece is unsealed. Whoever holds that piece wins the &pound;500 prize. If the winning piece was never claimed in that round, there is no winner and the prize rolls over &mdash; growing the pot for the next board.</p>
+    <p>Pick a Piece is a provably fair prize puzzle that runs on hourly boards. Each board is a picture divided into 48 pieces. Pick any free piece for &pound;2 &mdash; or free by post &mdash; and it uncovers that fragment of the hidden image. Before a board opens we commit one winning piece and publish its SHA-256 hash, so the result is fixed in advance and can be verified when the seed is revealed at the close.</p>
+    <h3>Winning and the rolling jackpot</h3>
+    <p>At the top of the hour the board closes and the committed winning piece is unsealed. Whoever holds it wins the jackpot. If that piece was never picked, there is no winner and the jackpot rolls into the next board, growing by &pound;100 each time. Once the jackpot reaches &pound;1,000 it must drop: if the committed piece is unsold, the winner is drawn from the pieces that were sold.</p>
     <h3>Free entry</h3>
-    <p>You can always enter free by post with no purchase necessary, under Schedule 2 of the Gambling Act 2005. Free and paid entries have exactly the same chance of holding the winning piece.</p>
-    <h3>Is it fair?</h3>
-    <p>Yes. The winning piece is committed as a hash before any piece is sold, and the seed is published afterwards so anyone can confirm the draw was never altered. This is the same provably-fair method used across InstantWins draws.</p>
+    <p>You can always enter free by post with no purchase necessary, under Schedule 2 of the Gambling Act 2005. Free and paid pieces have exactly the same chance of being the winning piece.</p>
   </section>
 </div><footer>InstantWins.co.uk is operated by IGX Ltd. All draws form a single continuous arrangement of
 free-entry prize competitions under Schedule 2 of the Gambling Act 2005. Test mode: all credit is
 play-money. 18+, UK residents only. Structure subject to solicitor sign-off before launch.</footer><script>
 const $=id=>document.getElementById(id);
-const N=48, PRICE=2, PRIZE=500;
-let claimed={}, myPiece=null, selected=null, winPiece=null, done=false;
-// demo committed hash (visual only). Live version commits server-side.
-function demoHash(){const a='0123456789abcdef';let h='';for(let i=0;i<64;i++)h+=a[Math.floor(Math.random()*16)];return h;}
-winPiece=1+Math.floor(Math.random()*N);
-$('pzHash').innerHTML='commit: '+demoHash();
+const N=48, PRICE=2, POLL_MS=3000;
+let TOKEN=null;try{const _s=JSON.parse(localStorage.getItem('iw_session'));TOKEN=_s&&_s.token;}catch(e){}
+let S=null, LIVE=false, selected=null, busy=false, skewMs=0, lastBoardShown=null, demoTaken={}, demoMine={};
+const pad=n=>String(n).padStart(2,'0');
+const hm=t=>{t=new Date(t);return pad(t.getHours())+':'+pad(t.getMinutes());};
+const gbp=p=>'£'+(p/100).toLocaleString('en-GB',{maximumFractionDigits:0});
 
+/* board */
 const grid=$('pzGrid');
-for(let i=1;i<=N;i++){
-  const c=document.createElement('div');c.className='pz-cell';c.dataset.n=i;
-  c.innerHTML='<span class="n">'+i+'</span>';
-  c.onclick=()=>pick(i,c);
-  grid.appendChild(c);
-}
+for(let i=1;i<=N;i++){const c=document.createElement('div');c.className='pz-cell';c.dataset.n=i;c.innerHTML='<span class="n">'+i+'</span>';c.onclick=()=>select(i);grid.appendChild(c);}
 function cell(n){return grid.querySelector('.pz-cell[data-n="'+n+'"]');}
-function pick(n,c){
-  if(done||claimed[n]||myPiece)return;
-  if(selected){cell(selected).classList.remove('mine');}
-  selected=n; c.classList.add('mine');
-  $('pzPick').textContent='Piece #'+n+' selected';
-  $('pzBuy').disabled=false;
+function taken(){return LIVE?new Set(S.taken||[]):new Set(Object.keys(demoTaken).map(Number));}
+function mine(){return LIVE?new Set(S.mine||[]):new Set(Object.keys(demoMine).map(Number));}
+function select(n){
+  if(busy||taken().has(n))return;
+  if(selected&&!taken().has(selected))cell(selected).classList.remove('sel');
+  selected=n;cell(n).classList.add('sel');
+  $('pzBuy').disabled=false;$('pzBuy').textContent='PICK PIECE #'+n+' · £'+PRICE;
 }
 function render(){
-  const count=Object.keys(claimed).length+(myPiece?1:0);
-  $('pzClaimed').textContent=count;
-  $('pzBar').style.width=(count/N*100)+'%';
-  if(count>=N&&!done)finish();
+  const tk=taken(), mn=mine();
+  for(let i=1;i<=N;i++){const c=cell(i);c.classList.remove('taken','mine');
+    if(mn.has(i))c.classList.add('mine'); else if(tk.has(i))c.classList.add('taken');}
+  const count=tk.size;
+  $('pzClaimed').textContent=count;$('pzBar').style.width=(count/N*100)+'%';
+  const jack=LIVE?S.jackpot_p:10000;
+  $('pzPrize').textContent=gbp(jack);
+  const ip=$('pzImgPrize');if(ip)ip.textContent=gbp(jack)+' JACKPOT';
+  $('pzHash').textContent='commit: '+(LIVE?S.seed_hash:'demo — backend not connected');
+  $('pzBoardNo').textContent=LIVE?('#'+pad(S.board_no).padStart(4,'0')):'#demo';
+  const off=LIVE?S.off_at:demoOff();
+  $('pzAt').textContent=hm(off);
+  $('pzMine').textContent=mn.size?('You hold '+mn.size+' piece'+(mn.size>1?'s':'')+': #'+[...mn].join(', #')):'';
+  if(selected&&tk.has(selected)){selected=null;$('pzBuy').disabled=true;$('pzBuy').textContent='PICK A PIECE · £'+PRICE;}
+  if(LIVE&&!TOKEN){$('pzBuy').textContent='SIGN IN TO PICK';$('pzBuy').disabled=false;}
+  // last result banner (once per board)
+  if(LIVE&&S.last&&S.last.board_no!==lastBoardShown){
+    lastBoardShown=S.last.board_no;const l=S.last,b=$('pzBanner');
+    if(l.won){b.className='pz-banner winb show';b.innerHTML='&#127942; Board #'+pad(l.board_no).padStart(4,'0')+' &mdash; winning piece <b>#'+l.winning_piece+'</b> '+(l.mine?'<b>was yours! You won '+gbp(l.jackpot_p)+'.</b>':'won '+gbp(l.jackpot_p)+(l.winner_name?' for '+l.winner_name:'')+'.');}
+    else{b.className='pz-banner noneb show';b.innerHTML='Board #'+pad(l.board_no).padStart(4,'0')+' &mdash; winning piece <b>#'+l.winning_piece+'</b> wasn’t sold. No winner &mdash; jackpot rolls on to <b>'+gbp(S.jackpot_p)+'</b>.';}
+  }
 }
-$('pzBuy').onclick=()=>{
-  if(!selected||myPiece)return;
-  myPiece=selected; claimed[selected]=true;
-  const c=cell(selected); c.classList.remove('mine'); c.classList.add('mine');
-  $('pzBuy').textContent='Your piece: #'+myPiece; $('pzBuy').disabled=true;
-  $('pzPick').textContent='You hold piece #'+myPiece;
-  $('pzFree').style.display='none';
-  render();
-};
-$('pzFree').onclick=()=>{ alert('Free entry by post: send your name, address and chosen piece number to IGX Ltd. No purchase necessary. (Postal route wired at launch.)'); };
+function demoOff(){const d=new Date();d.setMinutes(0,0,0);d.setHours(d.getHours()+1);return d;}
 
-// bots claim random pieces over time to fill the board
-function botTick(){
-  if(done)return;
-  const free=[];
-  for(let i=1;i<=N;i++) if(!claimed[i] && i!==selected && i!==myPiece) free.push(i);
-  if(!free.length){render();return;}
-  // claim 1-2 per tick, faster as it fills
-  const taken=Object.keys(claimed).length;
-  const n=free[Math.floor(Math.random()*free.length)];
-  claimed[n]=true;
-  const c=cell(n); c.classList.add('taken');
-  render();
+/* live sync */
+async function sync(){
+  try{
+    const r=await fetch('/api/piece',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'state',token:TOKEN})});
+    const d=await r.json(); if(!r.ok||d.error||!d.board)throw new Error(d.error||'bad');
+    S=d; skewMs=new Date(d.server_now)-new Date(); LIVE=true; render();
+  }catch(e){ if(!LIVE){render();} }
 }
-function finish(){
-  done=true;
-  // reveal full picture
-  grid.querySelectorAll('.pz-cell').forEach(c=>{ if(!c.classList.contains('mine')) c.classList.add('revealed'); });
-  const wc=cell(winPiece); if(wc){wc.classList.remove('taken','revealed');wc.classList.add('win');wc.style.opacity='';}
-  const iWon = (myPiece===winPiece);
-  const b=$('pzBanner');
-  if(iWon){ b.className='pz-banner winb show'; b.innerHTML='&#127942; Winning piece #'+winPiece+' &mdash; <b>that&rsquo;s yours! You win '+('£'+PRIZE)+'.</b>'; }
-  else { b.className='pz-banner noneb show'; b.innerHTML='Winning piece was #'+winPiece+(claimed[winPiece]?' &mdash; claimed by another player.':' &mdash; unclaimed, so the £'+PRIZE+' rolls into the next board.'); }
-  $('pzBuy').disabled=true;
-  setTimeout(()=>{ b.innerHTML+='<div style="margin-top:8px;font-weight:600;font-size:.8rem;opacity:.85">New board opening&hellip;</div>'; setTimeout(reset,2600); },1400);
+function tick(){
+  const off=LIVE?new Date(S.off_at):demoOff(); const now=new Date(Date.now()+skewMs);
+  const s=Math.max(Math.floor((off-now)/1000),0);
+  $('pzClock').textContent=pad(Math.floor(s/60))+':'+pad(s%60);
+  if(LIVE&&s===0)sync();
 }
-function reset(){
-  claimed={};myPiece=null;selected=null;done=false;winPiece=1+Math.floor(Math.random()*N);
-  $('pzHash').innerHTML='commit: '+demoHash();
-  $('pzBanner').className='pz-banner'; $('pzBanner').innerHTML='';
-  $('pzBuy').textContent='PICK A PIECE · £2'; $('pzBuy').disabled=true;
-  $('pzFree').style.display=''; $('pzPick').textContent='No piece yet';
-  grid.querySelectorAll('.pz-cell').forEach(c=>{c.className='pz-cell';c.style.opacity='';});
-  render();
-}
-/* demo auto-fill removed */
-render();
+
+/* pick */
+$('pzBuy').onclick=async()=>{
+  if(busy)return;
+  if(LIVE&&!TOKEN){location.href='signup.html';return;}
+  if(!selected)return;
+  busy=true;$('pzBuy').disabled=true;
+  if(LIVE){
+    try{
+      const r=await fetch('/api/piece',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'pick',token:TOKEN,piece:selected})});
+      const d=await r.json(); if(!r.ok||d.error)throw new Error(d.error||'pick failed');
+      S=d;const n=selected;selected=null;render();
+      const b=$('pzBanner');b.className='pz-banner winb show';b.innerHTML='&#9989; Piece <b>#'+n+'</b> is yours. Board draws at <b>'+hm(S.off_at)+'</b>.';
+    }catch(e){
+      const b=$('pzBanner');b.className='pz-banner noneb show';
+      b.innerHTML=/credit/.test(e.message)?'Not enough play credit.':(/signed in/.test(e.message)?'Session expired — <a href="signup.html" style="color:#D08BFF">sign in again</a>.':(e.message||'Pick failed — try again.'));
+      if(/signed in/.test(e.message))TOKEN=null;
+    }
+  }else{ demoTaken[selected]=true;demoMine[selected]=true;selected=null;render(); }
+  busy=false;$('pzBuy').disabled=!selected;$('pzBuy').textContent='PICK A PIECE · £'+PRICE;
+};
+$('pzFree').onclick=()=>alert('Free entry by post: send your name, address and chosen piece number to IGX Ltd. No purchase necessary. (Postal route wired at launch.)');
+
+render(); sync(); setInterval(sync,POLL_MS); setInterval(tick,500); tick();
 </script>
 <script>
 function ebOpen(){document.getElementById('ebside').classList.add('open');document.getElementById('ebscrim').classList.add('open');}
