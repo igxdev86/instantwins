@@ -142,6 +142,19 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .hs-art svg{height:112%;width:auto;max-width:70%;filter:drop-shadow(0 6px 14px rgba(0,0,0,.35))}
 .heroslide>*:not(.hs-art){position:relative;z-index:1}
 @media(max-width:600px){.hs-art{opacity:.10}.hs-art svg{max-width:85%}}
+
+/* ===== signed-in header ===== */
+.ebtop-cta.in{display:inline-flex;align-items:center;gap:8px;padding:5px 6px 5px 12px;background:linear-gradient(180deg,#12264D,#0A1730);border:1px solid #1C3463;box-shadow:inset 0 1px 0 rgba(255,255,255,.08);color:#fff}
+.ebtop-cta.in .hb{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.86rem;color:#36E0FF;letter-spacing:0;text-transform:none}
+.ebtop-cta.in .hav{width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#36E0FF,#0FA8FF,#0668C9);color:#04101f;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:.85rem;box-shadow:inset 0 1px 0 rgba(255,255,255,.45)}
+.ebacct{margin:10px 12px 0;display:flex;align-items:center;gap:10px;text-decoration:none;border:1px solid #1C3463;border-radius:9px;padding:10px 12px;background:linear-gradient(180deg,#12264D,#0A1730)}
+.ebacct .hav{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#36E0FF,#0FA8FF,#0668C9);color:#04101f;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:.95rem;flex:none}
+.ebacct>span:last-child{display:flex;flex-direction:column;min-width:0}
+.ebacct .n{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.9rem;text-transform:uppercase;letter-spacing:.04em;color:#fff;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ebacct .b{display:block;margin-top:2px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.78rem;color:#36E0FF;line-height:1.2}
+.ebacct .b i{font-style:normal;color:#8FA6CC;font-weight:600;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;margin-right:5px}
+.iwflash{animation:iwflashk .9s ease-out}
+@keyframes iwflashk{0%{color:#FFE9A8;text-shadow:0 0 18px #FFC53D}100%{}}
 </style>
 </head>
 <body class="ebh">
@@ -355,5 +368,27 @@ function ebOpen(){document.getElementById('ebside').classList.add('open');docume
 function ebClose(){document.getElementById('ebside').classList.remove('open');document.getElementById('ebscrim').classList.remove('open');}
 </script>
 <script>try{var _r=new URLSearchParams(location.search).get("ref");if(_r)localStorage.setItem("iw_ref",_r.slice(0,40));}catch(e){}</script>
+<script>
+(function(){
+  var s=null; try{s=JSON.parse(localStorage.getItem('iw_session'));}catch(e){}
+  if(!s||!s.token) return;
+  var fmt=function(p){return '\u00a3'+(p/100).toLocaleString('en-GB',{minimumFractionDigits:2});};
+  var init=((s.name||'?').trim()[0]||'?').toUpperCase();
+  var cta=document.querySelector('.ebtop-cta');
+  if(cta){cta.classList.add('in');cta.setAttribute('aria-label','My account');cta.innerHTML='<span class="hb" id="hdrBal">\u2014</span><span class="hav">'+init+'</span>';}
+  var acct=document.querySelector('.ebnav a[href="account.html"]');
+  if(acct){acct.style.display='none';
+    var a=document.createElement('a');a.className='ebacct';a.href='account.html';
+    a.innerHTML='<span class="hav">'+init+'</span><span style="min-width:0"><span class="n">'+(s.name||'My account')+'</span><span class="b"><i>Credit</i><span id="sideBal">\u2014</span></span></span>';
+    var nav=document.querySelector('.ebnav'); nav.parentNode.insertBefore(a,nav.nextSibling);
+  }
+  function paint(p){['hdrBal','sideBal'].forEach(function(id){var el=document.getElementById(id);if(el&&el.textContent!==fmt(p)){el.textContent=fmt(p);el.classList.remove('iwflash');void el.offsetWidth;el.classList.add('iwflash');}});}
+  function me(){fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'me',token:s.token})})
+    .then(function(r){return r.json();}).then(function(m){ if(m&&m.balance_p!=null)paint(m.balance_p); else if(m&&m.error&&/signed in|session/i.test(m.error)){localStorage.removeItem('iw_session');location.reload();} }).catch(function(){});}
+  me(); setInterval(me,4000);
+  // any page that already tracks balance can push it instantly
+  window.__hdrBalance=paint;
+})();
+</script>
 </body>
 </html>
