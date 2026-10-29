@@ -302,12 +302,14 @@ const TOWNS=['Cardiff','Leeds','Barry','Swindon','Glasgow','Luton','Wrexham','Hu
 function store(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 let TOKEN=null;try{const _s=JSON.parse(localStorage.getItem('iw_session'));TOKEN=_s&&_s.token;}catch(e){}
+function syncCredit(){try{var _b=document.querySelector('.balance');if(_b)_b.style.display=TOKEN?'':'none';}catch(e){}}
+syncCredit();
 async function fetchMe(){
   if(!TOKEN)return;
   try{const r=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({action:'me',token:TOKEN})});
     const m=await r.json();
-    if(m&&m.balance_p!=null){balance=m.balance_p/100;$('bal').textContent=fmt(balance);}
+    if(m&&m.balance_p!=null){balance=m.balance_p/100;$('bal').textContent=fmt(balance);syncCredit();}
     else if(m&&m.error){TOKEN=null;}
   }catch(e){}
 }
@@ -416,7 +418,7 @@ function applyState(){
       me:won};
   });
   renderResults();
-  $('bal').textContent=fmt(balance);
+  $('bal').textContent=fmt(balance);syncCredit();
   saveAll();
 }
 async function syncLive(){
@@ -480,7 +482,7 @@ function newDraw(kind){
   return d;
 }
 function renderDemoTop(){
-  $('bal').textContent=fmt(balance);
+  $('bal').textContent=fmt(balance);syncCredit();
   $('fiveId').textContent=five.id;$('grandId').textContent=grand.id;$('freeId').textContent=free.id;
   $('fiveSold').textContent=five.sold.toLocaleString();
   $('grandSold').textContent=grand.sold.toLocaleString();
