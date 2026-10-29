@@ -21,6 +21,24 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .pagehead p{color:var(--soft);font-size:.85rem;margin-top:6px;line-height:1.55;max-width:640px}
 .nextbar{display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,#0F1F42,#0A1730);border:1px solid var(--line);border-top:2px solid var(--buy);border-radius:7px;padding:12px 14px;margin:14px 0 4px;font-size:.8rem;font-weight:600;box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
 .nextbar .num{font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--cyan);font-size:1rem}
+.xbar{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;border-radius:11px;padding:13px 16px;margin:14px 0 4px;text-decoration:none;color:#fff;border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.xbar.card{background:linear-gradient(110deg,#102a5c 0%,#0A1730 62%);border-top:2px solid var(--buy)}
+.xbar.spins{background:linear-gradient(110deg,#2E0F26 0%,#0A1528 62%);border-top:2px solid #FF5FA2}
+.xbar-bg{position:absolute;inset:0;pointer-events:none;opacity:.10;overflow:hidden}
+.xbar-bg svg{position:absolute;right:4%;top:50%;transform:translateY(-50%);height:150%}
+.xbar-ic{flex:none;width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.xbar.card .xbar-ic{background:linear-gradient(180deg,rgba(54,224,255,.2),rgba(15,168,255,.05));border:1px solid rgba(54,224,255,.4)}
+.xbar.spins .xbar-ic{background:linear-gradient(180deg,rgba(255,95,162,.2),rgba(194,38,133,.05));border:1px solid rgba(255,143,190,.4)}
+.xbar-ic svg{width:22px;height:22px}
+.xbar-main{flex:1;min-width:0;position:relative;z-index:1}
+.xbar-k{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:#8FB4E0;margin-bottom:2px}
+.xbar.spins .xbar-k{color:#FF8FBE}
+.xbar-t{font-weight:700;font-size:.92rem;line-height:1.3}
+.xbar-s{font-size:.72rem;color:#9DB4DB;margin-top:2px}
+.xbar.spins .xbar-s{color:#CDA2BC}
+.xbar .num{font-family:'IBM Plex Mono',monospace;font-weight:800;color:var(--cyan);font-size:1.12rem;vertical-align:-1px}
+.xbar-cta{flex:none;position:relative;z-index:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.06em;font-size:.84rem;color:#FF8FBE;white-space:nowrap}
+.xbar.card .xbar-cta{color:#5FC8FF}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;padding:16px 0 8px}
 .gcard{display:block;border:1px solid var(--line);border-radius:10px;padding:16px 14px;text-decoration:none;color:var(--ink);transition:box-shadow .15s,transform .15s;position:relative;background:linear-gradient(180deg,#0E1B38,#0A1528)}
 .gcard:hover{box-shadow:0 10px 26px rgba(0,0,0,.5),0 0 0 1px rgba(54,224,255,.3);transform:translateY(-2px)}
@@ -109,10 +127,25 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 16px 30px;c
        round sells out. Every prize is locked in before you buy, and every round can be checked. Same
        free postal route as every draw on the site. More games coming soon.</p>
   </div>
-  <div class="nextbar">Card draws off every five minutes — next in <span class="num" id="clock">--:--</span> &middot; in the games, the &pound;100 top prize is always in play and the odds never change</div>
-  <a class="nextbar" href="thespins.html" style="text-decoration:none;color:#fff;border-color:#4A1C38;border-top:2px solid #FF5FA2;background:linear-gradient(180deg,#2A0E22,#0A1528)">
-    <span><b style="color:#FF8FBE">THE SPINS</b> &middot; 40 slot themes &middot; one shared prize fund &middot; same odds, pick your flavour</span>
-    <span class="sub" style="color:#C21A5B;font-weight:800">Open &rarr;</span>
+  <a class="xbar card" href="card.html">
+    <div class="xbar-bg"><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><circle cx="60" cy="60" r="52" fill="none" stroke="#36E0FF" stroke-width="4"/><g stroke="#36E0FF" stroke-width="4" stroke-linecap="round"><line x1="60" y1="60" x2="60" y2="26"/><line x1="60" y1="60" x2="86" y2="60"/></g></svg></div>
+    <div class="xbar-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#36E0FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+    <div class="xbar-main">
+      <div class="xbar-k">Live Card draws</div>
+      <div class="xbar-t">Next draw in <span class="num" id="clock">--:--</span> &middot; one every 5 minutes</div>
+      <div class="xbar-s">The &pound;1,000 Hourly Grand on the hour &middot; a 100% free &pound;5 draw every ten</div>
+    </div>
+    <span class="xbar-cta">Play &rarr;</span>
+  </a>
+  <a class="xbar spins" href="thespins.html">
+    <div class="xbar-bg"><svg viewBox="0 0 170 120" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#FF5FA2" stroke-width="4"><rect x="12" y="24" width="40" height="72" rx="7"/><rect x="65" y="24" width="40" height="72" rx="7"/><rect x="118" y="24" width="40" height="72" rx="7"/></g><g fill="#FF5FA2" font-family="'IBM Plex Mono',monospace" font-weight="bold" font-size="26" text-anchor="middle"><text x="32" y="69">7</text><text x="85" y="69">7</text><text x="138" y="69">7</text></g></svg></div>
+    <div class="xbar-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#FF8FBE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M9 5v14M15 5v14"/></svg></div>
+    <div class="xbar-main">
+      <div class="xbar-k">The Spins</div>
+      <div class="xbar-t">40 slot themes &middot; one shared &pound;5,000 prize fund</div>
+      <div class="xbar-s">Same odds on every theme &mdash; pick your flavour</div>
+    </div>
+    <span class="xbar-cta">Open &rarr;</span>
   </a>
   <div class="grid">
   <a class="gcard" href="plinko-instantwins.html">
