@@ -8,6 +8,7 @@ export default async function handler(req, res) {
   if (!TAGS.includes(game)) {
     return res.status(400).json({ error: 'unknown game' });
   }
+  const mult = Math.max(parseInt(req.query.mult, 10) || 1, 1);
   const r = await fetch(process.env.SUPABASE_URL + '/rest/v1/rpc/pool_state', {
     method: 'POST',
     headers: {
@@ -15,7 +16,7 @@ export default async function handler(req, res) {
       apikey: process.env.SUPABASE_SERVICE_ROLE_KEY,
       Authorization: 'Bearer ' + process.env.SUPABASE_SERVICE_ROLE_KEY,
     },
-    body: JSON.stringify({ p_game: game }),
+    body: JSON.stringify({ p_game: game, p_mult: mult }),
   });
   const data = await r.json();
   res.setHeader('Cache-Control', 'no-store');

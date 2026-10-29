@@ -302,14 +302,14 @@ let poolNo=40+hashStr('GG'+(new Date()).toISOString().slice(0,10))%25;
 function applyPoolState(s){
   pool={id:s.pool, hash:s.seed_hash};
   ticketsLeft=s.cap-s.sold;
-  TIERS.forEach(t=>{const m=(s.tiers||[]).find(x=>x.prize_p===t.v*100); t.left=m?m.left:0;});
+  TIERS.forEach(t=>{const m=(s.tiers||[]).find(x=>x.prize_p===t.v*STAKE_MUL*100); t.left=m?m.left:0;});
   $('poolNo').textContent='#'+(s.pool.split('-P')[1]||s.pool);
   $('commitHash').textContent=s.seed_hash;
   refresh();
 }
 async function syncPool(){
   try{
-    const r=await fetch('/api/pool?game=GG',{cache:'no-store'});
+    const r=await fetch('/api/pool?game=GG&mult='+STAKE_MUL,{cache:'no-store'});
     if(!r.ok)throw 0;
     const s=await r.json();
     if(!s||s.error||!s.pool)throw 0;
@@ -570,7 +570,7 @@ document.addEventListener('DOMContentLoaded',function(){
   var row=document.createElement('div'); row.className='stakebar-row';
   MULTS.forEach(function(m){
     var c=document.createElement('button'); c.type='button'; c.className='stakechip'+(m===1?' on':''); c.textContent='£'+(PRICE*m);
-    c.onclick=function(){ STAKE_MUL=m; Array.prototype.forEach.call(row.children,function(x){x.classList.remove('on');}); c.classList.add('on'); window.__stakeLabel(); if(typeof refresh==='function')refresh(); scaleTable(); if(typeof window.__stakeRedraw==='function')window.__stakeRedraw(); };
+    c.onclick=function(){ STAKE_MUL=m; Array.prototype.forEach.call(row.children,function(x){x.classList.remove('on');}); c.classList.add('on'); window.__stakeLabel(); if(typeof refresh==='function')refresh(); scaleTable(); if(typeof window.__stakeRedraw==='function')window.__stakeRedraw(); if(typeof syncPool==='function')syncPool(); };
     row.appendChild(c);
   });
   bar.appendChild(row); var ctrls=go.parentNode; ctrls.parentNode.insertBefore(bar,ctrls);
