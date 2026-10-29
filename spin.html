@@ -119,10 +119,11 @@ footer b{color:var(--text)}
 .rrwrap{min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:12px 0}
 .slotname{font-family:'Bungee';font-size:18px;color:var(--acc);letter-spacing:1px;text-align:center}
 .featTag{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;color:#0A0D1C;background:var(--acc);border-radius:5px;padding:3px 9px}
-.reels{display:flex;gap:12px;background:#0E1330;border:3px solid var(--acc);border-radius:16px;padding:16px}
-.reel{width:88px;height:106px;border-radius:10px;background:linear-gradient(180deg,#EAECF6,#C9D0E4);color:#141414;font-size:48px;line-height:106px;text-align:center;position:relative;transition:transform .3s}
+.reels{position:relative;display:flex;gap:12px;background:linear-gradient(180deg,#0A1024,#0E1330);border:3px solid var(--acc);border-radius:16px;padding:16px;box-shadow:0 0 28px var(--acc),inset 0 2px 14px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.05)}
+.reels::before{content:"";position:absolute;left:10px;right:10px;top:50%;transform:translateY(-50%);height:2px;background:linear-gradient(90deg,transparent,var(--acc),transparent);opacity:.6;pointer-events:none;z-index:3;box-shadow:0 0 8px var(--acc)}
+.reel{width:88px;height:106px;border-radius:10px;background:linear-gradient(180deg,#F6F8FF 0%,#DCE2F0 48%,#C2C9DC 100%);color:#141414;font-size:48px;line-height:106px;text-align:center;position:relative;transition:transform .3s;box-shadow:inset 0 3px 9px rgba(0,0,0,.3),inset 0 -3px 9px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.9)}
 .reel.blur{filter:blur(3px)}
-.reel.hot{background:linear-gradient(180deg,#FFF3CE,#36E0FF)}
+.reel.hot{background:linear-gradient(180deg,#FFF3CE,#36E0FF);box-shadow:0 0 16px rgba(54,224,255,.7),inset 0 1px 0 rgba(255,255,255,.9)}
 .reel.wildhot{background:linear-gradient(180deg,var(--acc),var(--acc-deep));color:#fff}
 .reel.tall{transform:scaleY(1.12)}
 .grid3{display:grid;grid-template-columns:repeat(3,84px);gap:8px;background:#0E1330;border:3px solid var(--acc);border-radius:16px;padding:14px}
@@ -458,6 +459,16 @@ document.title=SLOT.n+' \u00B7 THE SPINS \u2014 InstantWins.co.uk';
 const WILD='\uD83C\uDCCF', SCAT='\uD83C\uDF1F', COIN='\uD83E\uDE99';
 function rnd(a){return a[Math.floor(Math.random()*a.length)];}
 function two(){const a=rnd(SLOT.s);let b=a;while(b===a)b=rnd(SLOT.s);return [a,b];}
+function sym(i){return SLOT.s[Math.min(Math.max(i,0),SLOT.s.length-1)];}
+function renderLegend(){
+  if(!document.getElementById('slotLegend'))return;
+  const leg=TIERS.map((t,i)=>sym(i)+'×3 £'+(t.v*STAKE_MUL).toLocaleString()).join(' · ');
+  const extra={wild:' · '+WILD+' substitutes',respin:' · near-miss triggers a respin',
+    mult:' · line × multiplier',cascade:' · wins drop in',free:' · 3×'+SCAT+' = free spins',
+    hold:' · 3+ coins pay their total',expand:' · wild fills reel 2',wheel:' · 3×'+SCAT+' spins the wheel'}[SLOT.f]||'';
+  document.getElementById('slotLegend').textContent=leg+extra;
+}
+window.__stakeRedraw=function(){try{renderLegend();}catch(e){}};
 
 /* ---------- stage construction ---------- */
 const GRID=(SLOT.f==='cascade'||SLOT.f==='hold');
@@ -477,11 +488,7 @@ function buildStage(){
   h+='<div class="rrlegend" id="slotLegend"></div>';
   h+='<a class="slotswitch" href="thespins.html">&larr; all 40 slots</a>';
   $('stagebox').innerHTML=h;
-  const leg=TIERS.map((t,i)=>SLOT.s[i]+'\u00D73 \u00A3'+t.v).join(' \u00B7 ');
-  const extra={wild:' \u00B7 '+WILD+' substitutes',respin:' \u00B7 near-miss triggers a respin',
-    mult:' \u00B7 line \u00D7 multiplier',cascade:' \u00B7 wins drop in',free:' \u00B7 3\u00D7'+SCAT+' = free spins',
-    hold:' \u00B7 3+ coins pay their total',expand:' \u00B7 wild fills reel 2',wheel:' \u00B7 3\u00D7'+SCAT+' spins the wheel'}[SLOT.f]||'';
-  $('slotLegend').textContent=leg+extra;
+  renderLegend();
 }
 
 /* ---------- shared spin helpers ---------- */
@@ -501,7 +508,7 @@ function clearFeat(){$('featZone').innerHTML='';}
 const RUN={};
 
 RUN.plain=(tier,done)=>{
-  const t=tier?[SLOT.s[TIERS.indexOf(tier)],SLOT.s[TIERS.indexOf(tier)],SLOT.s[TIERS.indexOf(tier)]]
+  const t=tier?[sym(TIERS.indexOf(tier)),sym(TIERS.indexOf(tier)),sym(TIERS.indexOf(tier))]
               :(Math.random()<.55?(x=>[x[0],x[0],x[1]])(two()):(()=>{const [a,b]=two();let c=a;while(c===a||c===b)c=rnd(SLOT.s);return[a,b,c];})());
   const iv=startBlur(reels());
   stopSeq(reels(),iv,t,900,520,(i,el)=>{if(tier)el.classList.add('hot');},
@@ -511,7 +518,7 @@ RUN.plain=(tier,done)=>{
 RUN.wild=(tier,done)=>{
   const els=reels(), iv=startBlur(els);
   let t;
-  if(tier){const s=SLOT.s[TIERS.indexOf(tier)];t=[s,WILD,s];}
+  if(tier){const s=sym(TIERS.indexOf(tier));t=[s,WILD,s];}
   else{const [a,b]=two();t=[a,WILD,b];}
   stopSeq(els,iv,t,900,520,null,()=>{
     els[1].classList.add('wildhot');
@@ -525,7 +532,7 @@ RUN.wild=(tier,done)=>{
 
 RUN.respin=(tier,done)=>{
   const els=reels(), iv=startBlur(els);
-  const s=tier?SLOT.s[TIERS.indexOf(tier)]:two()[0];
+  const s=tier?sym(TIERS.indexOf(tier)):two()[0];
   stopSeq(els,iv,[s,s,rnd(SLOT.s.filter(x=>x!==s))],900,520,null,()=>{
     featMsg('<span class="fx">RESPIN!</span>');
     els[2].classList.add('blur');
@@ -543,7 +550,7 @@ RUN.mult=(tier,done)=>{
   const els=reels(), iv=startBlur(els);
   const PAIRS={100:['\u00A310','\u00D710'],20:['\u00A310','\u00D72'],10:['\u00A32','\u00D75'],5:['\u00A31','\u00D75'],2:['\u00A31','\u00D72']};
   let t;
-  if(tier){const s=SLOT.s[TIERS.indexOf(tier)];t=[s,s,s];}
+  if(tier){const s=sym(TIERS.indexOf(tier));t=[s,s,s];}
   else{const [a,b]=two();let c=a;while(c===a||c===b)c=rnd(SLOT.s);t=[a,b,c];}
   stopSeq(els,iv,t,900,520,(i,el)=>{if(tier)el.classList.add('hot');},()=>{
     if(!tier){featMsg('<span class="fxoff">MULTIPLIER \u2014 no line</span>');done('no line, no multiplier');return;}
@@ -562,7 +569,7 @@ RUN.free=(tier,done)=>{
   const big=tier&&TIERS.indexOf(tier)<2;
   if(!big){ // small win or loser: scatter tease then normal line
     let t;
-    if(tier){const s=SLOT.s[TIERS.indexOf(tier)];t=[s,s,s];}
+    if(tier){const s=sym(TIERS.indexOf(tier));t=[s,s,s];}
     else t=[SCAT,SCAT,rnd(SLOT.s)];
     stopSeq(els,iv,t,900,520,(i,el)=>{if(tier)el.classList.add('hot');},
       ()=>done(tier?null:'two scatters \u2014 so close to free spins\u2026'));
@@ -575,7 +582,7 @@ RUN.free=(tier,done)=>{
       spin++;
       featMsg('<span class="fx">FREE SPIN '+spin+' / 3</span>');
       const iv2=startBlur(els);
-      const s=SLOT.s[TIERS.indexOf(tier)];
+      const s=sym(TIERS.indexOf(tier));
       const t=spin<3?(x=>[x[0],x[1],rnd(SLOT.s)])(two()):[s,s,s];
       stopSeq(els,iv2,t,600,340,(i,el)=>{if(spin===3)el.classList.add('hot');},
         ()=>{ if(spin<3)doFree(); else done(null); });
@@ -633,7 +640,7 @@ RUN.cascade=(tier,done)=>{
       else setTimeout(()=>{
         // final board: middle row is the line
         const mid=[3,4,5];
-        if(tier){const s=SLOT.s[TIERS.indexOf(tier)];mid.forEach(i=>{cells[i].textContent=s;cells[i].classList.add('hot');});done(null);}
+        if(tier){const s=sym(TIERS.indexOf(tier));mid.forEach(i=>{cells[i].textContent=s;cells[i].classList.add('hot');});done(null);}
         else{const [a,b]=two();let c2=a;while(c2===a||c2===b)c2=rnd(SLOT.s);
           [a,b,c2].forEach((s,j)=>cells[mid[j]].textContent=s);done('nothing lined up\u2026');}
       },420);
@@ -645,7 +652,7 @@ RUN.cascade=(tier,done)=>{
 RUN.expand=(tier,done)=>{
   const els=reels(), iv=startBlur(els);
   let sides;
-  if(tier){const s=SLOT.s[TIERS.indexOf(tier)];sides=[s,s];}
+  if(tier){const s=sym(TIERS.indexOf(tier));sides=[s,s];}
   else sides=two();
   stopSeq(els,iv,[sides[0],rnd(SLOT.s),sides[1]],900,520,null,()=>{
     els[1].classList.add('wildhot');
@@ -682,9 +689,9 @@ const GAME={
     clearFeat();
     if(REDUCE){ // reduced motion: settle instantly on a plain line
       if(GRID){const cells=[...Array(9)].map((_,i)=>$('g'+i));cells.forEach(c=>{c.className='cell';c.textContent=rnd(SLOT.s);});
-        const mid=[3,4,5];const s=tier?SLOT.s[TIERS.indexOf(tier)]:null;
+        const mid=[3,4,5];const s=tier?sym(TIERS.indexOf(tier)):null;
         if(s)mid.forEach(i=>{cells[i].textContent=s;cells[i].classList.add('hot');});}
-      else{const s=tier?SLOT.s[TIERS.indexOf(tier)]:null;
+      else{const s=tier?sym(TIERS.indexOf(tier)):null;
         const t=s?[s,s,s]:(x=>[x[0],x[1],x[0]])(two());
         reels().forEach((r,i)=>{r.className='reel'+(s?' hot':'');r.textContent=t[i];});}
       done(tier?null:'no line');return;
