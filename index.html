@@ -145,6 +145,11 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .sf-badge svg{width:12px;height:12px}
 .gamelegal{max-width:1080px;margin:26px auto 0;padding:14px 20px 0;border-top:1px solid var(--line,#1C3463);color:#7E93B8;font-size:.66rem;line-height:1.7}
 .gamelegal b{color:#B9C9E8}
+
+.hs-art{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.14;display:flex;justify-content:flex-end;align-items:center;padding-right:3%}
+.hs-art svg{height:112%;width:auto;max-width:70%;filter:drop-shadow(0 6px 14px rgba(0,0,0,.35))}
+.heroslide>*:not(.hs-art){position:relative;z-index:1}
+@media(max-width:600px){.hs-art{opacity:.10}.hs-art svg{max-width:85%}}
 </style>
 </head>
 <body class="ebh">
@@ -154,17 +159,34 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 
 <div class="wrap"><div class="herowrap">
   <div class="herotrack" id="heroTrack">
-    <a class="heroslide hs-card" href="card.html">
+    <a class="heroslide hs-card" href="card.html"><div class="hs-art"><svg viewBox="0 0 520 240" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet">
+<g fill="none" stroke="#fff" stroke-width="3"><circle cx="440" cy="120" r="78"/><circle cx="440" cy="120" r="6" fill="#fff"/><path d="M440 120V62M440 120l44 26" stroke-linecap="round" stroke-width="5"/></g>
+<g font-family="IBM Plex Mono,monospace" font-weight="700" fill="#fff" text-anchor="middle">
+<circle cx="300" cy="60" r="30" fill="none" stroke="#fff" stroke-width="3"/><text x="300" y="70" font-size="26">7</text>
+<circle cx="250" cy="150" r="36" fill="none" stroke="#fff" stroke-width="3"/><text x="250" y="162" font-size="32">42</text>
+<circle cx="340" cy="190" r="28" fill="none" stroke="#fff" stroke-width="3"/><text x="340" y="199" font-size="24">13</text>
+<circle cx="170" cy="60" r="22" fill="none" stroke="#fff" stroke-width="3"/><text x="170" y="68" font-size="20">88</text>
+</g>
+<g fill="#fff"><circle cx="60" cy="200" r="4"/><circle cx="110" cy="40" r="3"/><circle cx="200" cy="215" r="3"/><circle cx="380" cy="30" r="4"/></g></svg></div>
       <div class="hs-tag">The Card · Live</div>
       <div class="hs-h">£1,000 HOURLY GRAND</div>
       <div class="hs-p">A draw off every five minutes. One winner takes the lot, on the hour.</div>
       <div class="hs-cta">Open the Card &rarr;</div></a>
-    <a class="heroslide hs-spins" href="thespins.html">
+    <a class="heroslide hs-spins" href="thespins.html"><div class="hs-art"><svg viewBox="0 0 520 240" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet">
+<g fill="none" stroke="#fff" stroke-width="4"><rect x="300" y="38" width="62" height="164" rx="12"/><rect x="376" y="38" width="62" height="164" rx="12"/><rect x="452" y="38" width="62" height="164" rx="12"/></g>
+<g font-family="Barlow Condensed,Arial Black,sans-serif" font-weight="900" fill="#fff" text-anchor="middle"><text x="331" y="140" font-size="64">7</text><text x="407" y="140" font-size="64">7</text><text x="483" y="140" font-size="64">7</text></g>
+<path d="M290 120h236" stroke="#fff" stroke-width="3" stroke-dasharray="8 8"/>
+<g fill="#fff"><path d="M120 50l9 20 22 2-16 15 5 22-20-11-20 11 5-22-16-15 22-2z"/><path d="M60 170l6 13 14 1-10 10 3 14-13-7-13 7 3-14-10-10 14-1z"/><path d="M220 190l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1z"/><circle cx="200" cy="80" r="16" fill="none" stroke="#fff" stroke-width="4"/><circle cx="200" cy="80" r="5"/></g></svg></div>
       <div class="hs-tag">The Spins · 40 slots</div>
       <div class="hs-h">SPIN TO WIN £100</div>
       <div class="hs-p">Forty themed slots, one shared prize fund. 86 winners in every 500 — odds never change.</div>
       <div class="hs-cta">Pick a slot &rarr;</div></a>
-    <a class="heroslide hs-free" href="free-entry.html">
+    <a class="heroslide hs-free" href="free-entry.html"><div class="hs-art"><svg viewBox="0 0 520 240" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet">
+<g fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"><rect x="290" y="60" width="200" height="130" rx="10"/><path d="M290 70l100 76 100-76"/></g>
+<g fill="none" stroke="#fff" stroke-width="3"><circle cx="455" cy="95" r="26"/><circle cx="455" cy="95" r="18" stroke-dasharray="3 4"/></g>
+<text x="455" y="100" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="13" fill="#fff" text-anchor="middle">FREE</text>
+<g stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M70 90h120M70 112h90M70 134h110"/></g>
+<g fill="#fff"><path d="M200 40l8 18 19 2-14 13 4 19-17-10-17 10 4-19-14-13 19-2z"/><circle cx="120" cy="200" r="5"/><circle cx="250" cy="215" r="4"/></g></svg></div>
       <div class="hs-tag">No purchase necessary</div>
       <div class="hs-h">ENTER FREE BY POST</div>
       <div class="hs-p">Every draw, every round — free postal entry with identical odds. Always.</div>
