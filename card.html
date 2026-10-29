@@ -226,6 +226,10 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .cstake-win{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.82rem;color:#9DB4DB;white-space:nowrap}
 .cstake-win b{font-family:'IBM Plex Mono',monospace;color:var(--cyan)}
 @media(max-width:560px){.cstake-win{width:100%;white-space:normal}}
+
+.nd-art{position:absolute;right:-2%;top:50%;transform:translateY(-50%);height:118%;width:auto;max-width:46%;opacity:.11;pointer-events:none;z-index:0;filter:drop-shadow(0 6px 14px rgba(0,0,0,.4))}
+.nextdraw>*:not(.nd-art):not(.offbanner){position:relative;z-index:1}
+@media(max-width:560px){.nd-art{opacity:.08;max-width:60%}}
 </style>
 </head>
 <body class="ebh">
@@ -254,6 +258,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
     <div class="cstake-win">Win <b id="cstakeWin">£100</b> if your number’s drawn</div>
   </div>
   <div class="nextdraw" id="fiveCard">
+    <svg class="nd-art" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="#36E0FF" stroke-width="5" stroke-linecap="round"><circle cx="220" cy="100" r="70"/><path d="M220 100V52M220 100l34 20"/><path d="M220 18v8M220 174v8M138 100h8M294 100h8" stroke-width="4"/></g><g font-family="IBM Plex Mono,monospace" font-weight="700" fill="#36E0FF" text-anchor="middle"><circle cx="70" cy="60" r="30" fill="none" stroke="#36E0FF" stroke-width="5"/><text x="70" y="70" font-size="26">5</text><circle cx="95" cy="150" r="24" fill="none" stroke="#36E0FF" stroke-width="5"/><text x="95" y="158" font-size="20">100</text></g></svg>
     <div class="ndtags">
       <span class="ndtag key">Five-minute draw</span>
       <span class="ndtag">Next up</span>
@@ -278,6 +283,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
   </div>
 
   <div class="nextdraw freed" id="freeCard" style="margin-top:10px">
+    <svg class="nd-art" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="#19E6A0" stroke-width="5" stroke-linejoin="round"><rect x="110" y="50" width="180" height="110" rx="10"/><path d="M110 60l90 66 90-66"/></g><g fill="none" stroke="#19E6A0" stroke-width="4"><circle cx="260" cy="80" r="24"/><circle cx="260" cy="80" r="16" stroke-dasharray="3 4"/></g><text x="260" y="85" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="12" fill="#19E6A0" text-anchor="middle">FREE</text><g fill="#19E6A0"><path d="M50 60l8 17 19 2-14 13 4 19-17-10-17 10 4-19-14-13 19-2z"/><circle cx="60" cy="150" r="6"/></g></svg>
     <div class="ndtags">
       <span class="ndtag key">Free draw</span>
       <span class="ndtag">Every 10 min</span>
@@ -302,6 +308,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
   </div>
 
   <div class="nextdraw grand" id="grandCard" style="margin-top:10px">
+    <svg class="nd-art" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="#FFC53D" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M160 40h100v22a50 50 0 0 1-100 0z"/><path d="M260 48q30 0 30 24 0 26-38 30"/><path d="M160 48q-30 0-30 24 0 26 38 30"/><path d="M200 112h20v26h-20zM182 138h56v12h-56z"/><path d="M60 120l10-22 10 22"/></g><g font-family="IBM Plex Mono,monospace" font-weight="700" fill="#FFC53D" text-anchor="middle"><text x="210" y="84" font-size="30">£</text><circle cx="70" cy="60" r="26" fill="none" stroke="#FFC53D" stroke-width="5"/><text x="70" y="69" font-size="22">1K</text></g><g fill="#FFC53D"><path d="M290 150l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1z"/><path d="M40 160l4 9 10 1-7 7 2 10-9-5-9 5 2-10-7-7 10-1z"/></g></svg>
     <div class="ndtags">
       <span class="ndtag key">Hourly Grand</span>
       <span class="ndtag">On the hour</span>
