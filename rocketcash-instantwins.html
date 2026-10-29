@@ -586,6 +586,8 @@ document.addEventListener('DOMContentLoaded',function(){
 <style>
 .stakebar{margin:10px 16px 0;border:1px solid var(--panel-edge,#1C3463);border-radius:9px;padding:10px 12px;background:linear-gradient(180deg,#0E1B38,#0A1528)}
 .stakebar-k{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#8FA6CC;margin-bottom:8px}
+.stakebar-top{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.02em;color:#9DB4DB;margin-top:9px}
+.stakebar-top b{font-family:'IBM Plex Mono',monospace;color:#36E0FF;font-size:.95rem}
 .stakebar-row{display:flex;gap:7px;flex-wrap:wrap}
 .stakechip{flex:1 1 auto;min-width:52px;border:1.5px solid #1C3463;background:#0A1730;color:#9DB4DB;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.92rem;padding:9px 6px;border-radius:7px;cursor:pointer;transition:.12s}
 .stakechip:hover{border-color:#0FA8FF;color:#fff}
@@ -593,14 +595,14 @@ document.addEventListener('DOMContentLoaded',function(){
 </style>
 <script>(function(){
   if(typeof PRICE==='undefined')return;
-  function scaleTable(){try{if(typeof TIERS!=='undefined'){var pv=document.querySelectorAll('.prow .pv');for(var i=0;i<pv.length&&i<TIERS.length;i++){pv[i].textContent='£'+(TIERS[i].v*STAKE_MUL).toLocaleString();}}var st=document.querySelectorAll('.stat');for(var k=0;k<st.length;k++){var lab=st[k].querySelector('i'),val=st[k].querySelector('b');if(lab&&val&&/^per\b/i.test((lab.textContent||'').trim())){val.textContent='£'+(PRICE*STAKE_MUL);}}}catch(e){}}
+  function scaleTable(){try{if(typeof TIERS!=='undefined'){var pv=document.querySelectorAll('.prow .pv');for(var i=0;i<pv.length&&i<TIERS.length;i++){pv[i].textContent='£'+(TIERS[i].v*STAKE_MUL).toLocaleString();}}var st=document.querySelectorAll('.stat');for(var k=0;k<st.length;k++){var lab=st[k].querySelector('i'),val=st[k].querySelector('b');if(lab&&val&&/^per\b/i.test((lab.textContent||'').trim())){val.textContent='£'+(PRICE*STAKE_MUL);}}var tw=document.getElementById('iwTopWin');if(tw&&typeof TIERS!=='undefined'){tw.innerHTML='You could win up to <b>£'+(TIERS[0].v*STAKE_MUL).toLocaleString()+'</b> at this stake'+(STAKE_MUL>1?' · every prize ×'+STAKE_MUL:'');}}catch(e){}}
   var go=document.getElementById('goBtn'); if(!go)return;
   var cand=[1,2,5,10,25,50], MULTS=cand.filter(function(m){return PRICE*m<=50;});
   if(MULTS.indexOf(1)<0)MULTS.unshift(1);
   var verb=(go.textContent.split('·')[0]||'PLAY').trim()||'PLAY';
   window.__stakeLabel=function(){ if(go.textContent.indexOf('SIGN IN')<0) go.textContent=verb+' · £'+(PRICE*STAKE_MUL); };
   var bar=document.createElement('div'); bar.className='stakebar';
-  bar.innerHTML='<div class="stakebar-k">Stake per entry · prizes scale with your stake (up to £50)</div>';
+  bar.innerHTML='<div class="stakebar-k">Stake per entry · prizes scale with your stake (up to £50)</div><div class="stakebar-top" id="iwTopWin"></div>';
   var row=document.createElement('div'); row.className='stakebar-row';
   MULTS.forEach(function(m){
     var c=document.createElement('button'); c.type='button'; c.className='stakechip'+(m===1?' on':''); c.textContent='£'+(PRICE*m);
