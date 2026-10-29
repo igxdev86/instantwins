@@ -298,7 +298,7 @@ function drawHiddenTicket(){
   return null;
 }
 function refresh(){
-  $('bal').textContent=fmt(balance);
+  $('bal').textContent=fmt(balance);var _bc=document.querySelector('.balance');if(_bc)_bc.style.display=TOKEN?'':'none';
   TIERS.forEach((t,i)=>{$('t'+i).textContent=t.left+' of '+t.total+' left';});var _pp=TIERS.reduce(function(s,t){return s+t.left*t.v;},0);var _pv=document.getElementById('potVal');if(_pv)_pv.textContent='\u00a3'+(_pp*STAKE_MUL).toLocaleString();
   $('topLine').textContent = TIERS[0].left>0
     ? ('£'+(TIERS[0].v*STAKE_MUL).toLocaleString()+' TOP PRIZE IN PLAY')
