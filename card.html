@@ -250,6 +250,17 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .pickrow label{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);width:44px}
 .pickrow select{flex:1;background:#050B1A;color:#fff;border:1px solid var(--line);border-radius:7px;padding:10px;font-family:'IBM Plex Mono',monospace;font-size:.85rem}
 .pickinfo{margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--match);min-height:1.2em}
+/* compact tiles (legal-review layout) */
+.nextdraw{padding:14px 14px 12px}
+.nd-clock{font-size:2.1rem}
+.nd-prize{font-size:.9rem}.nd-prize b{font-size:1.25rem}
+.ndchips{gap:6px}.ndchip{flex:1 1 0;min-width:0;padding:5px 6px}.ndchip b{font-size:.82rem}
+.ndnote{font-size:.62rem;line-height:1.4}
+.nd-actions{gap:6px;margin-top:10px}
+.nd-actions .enterbtn{flex:1 1 auto;font-size:.92rem;padding:11px 12px}
+.nd-actions .freebtn{flex:0 1 auto;font-size:.72rem;padding:10px 10px}
+.nd-actions .myentries{width:100%;font-size:.64rem}
+.nd-art{opacity:.10}
 </style>
 </head>
 <body class="ebh">
@@ -293,13 +304,12 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
       <div class="ndchip"><i>Numbers in</i><b><span id="fiveSold">—</span>/200</b></div>
       <div class="ndchip"><i>Entry</i><b>£1</b></div>
       <div class="ndchip"><i>Prize</i><b>£100</b></div>
-      <div class="ndchip"><i>By post</i><b>Name any draw</b></div>
-    </div>
+          </div>
     <div class="ndnote">The winner is drawn from the numbers actually entered, so the £100 is always paid. Enter this draw, or any Five-Minute Draw in the next 7 days.</div>
     <div class="nd-actions">
       <button class="enterbtn" id="fiveEnter">ENTER NEXT · £1</button>
-      <button class="freebtn" data-pick="five">Pick a later draw</button>
-      <button class="freebtn" id="freeBtn">Enter free by post</button>
+      <button class="freebtn" data-pick="five">Later draw</button>
+      <button class="freebtn" id="freeBtn">Free by post</button>
       <span class="myentries" id="fiveMine"></span>
     </div>
     <div class="offbanner" id="fiveOff"></div>
@@ -346,12 +356,11 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
       <div class="ndchip"><i>Numbers in</i><b><span id="grandSold">—</span>/1,000</b></div>
       <div class="ndchip"><i>Entry</i><b>£2</b></div>
       <div class="ndchip"><i>Prize</i><b>£1,000</b></div>
-      <div class="ndchip"><i>By post</i><b>Name any draw</b></div>
-    </div>
+          </div>
     <div class="ndnote">£1,000 every hour, paid to one of the numbers entered — no rollover, no retained prize. Enter this hour or any Grand in the next 7 days.</div>
     <div class="nd-actions">
       <button class="enterbtn" id="grandEnter">ENTER NEXT · £2</button>
-      <button class="freebtn" data-pick="grand">Pick a later draw</button>
+      <button class="freebtn" data-pick="grand">Later draw</button>
       <span class="myentries" id="grandMine"></span>
     </div>
     <div class="offbanner" id="grandOff"></div>
