@@ -112,3 +112,12 @@ fixes apply everywhere at once.
 Stage 1 today (10 minutes). Stage 2 whenever you find the old zip.
 Stage 3 when you've got 20 minutes with a cuppa. Stage 4 is ongoing.
 After that: payments + accounts + solicitor, then it's a real business.
+
+## Legal review changes (30 Oct 2026)
+Benchmark: Omaze. Run in order: `card-legal.sql`, `pieces-legal.sql`, `limits-legal.sql`.
+- Card: Five-Minute (£1→£100), Hourly Grand (£2→£1,000 fixed), Free Draw. Every draw open 7 days ahead; postcards name a draw; winner always drawn from numbers entered. 60-second draw and stake multipliers withdrawn.
+- Games/Spins → `reveal.html` (Gold/Platinum/Mega ticket books, static reveal, no chance presentation). Old game pages redirect.
+- Quizzes withdrawn. Pick a Piece daily, winner from claimed pieces, fixed £50.
+- Affiliates CPA only. GB residents only. Responsible-play controls on Account (ledger trigger enforces).
+- New pages: responsible-play.html, complaints.html, admin-postal.html. Footer carries Trading Disclosures details.
+- Still to do before launch: live PO Box, independent RNG audit, age-verification provider, solicitor sign-off, official payment logos.

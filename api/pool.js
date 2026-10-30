@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   if (!TAGS.includes(game)) {
     return res.status(400).json({ error: 'unknown game' });
   }
-  const mult = Math.max(parseInt(req.query.mult, 10) || 1, 1);
+  const mult = 1; // flat price — stake multipliers withdrawn
   const r = await fetch(process.env.SUPABASE_URL + '/rest/v1/rpc/pool_state', {
     method: 'POST',
     headers: {

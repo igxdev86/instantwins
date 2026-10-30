@@ -12,9 +12,12 @@ export default async function handler(req, res) {
   if (b.game) {
     const game = String(b.game).toUpperCase();
     if (!TAGS.includes(game)) return res.status(400).json({ error: 'unknown game' });
-    fn = 'buy_entry3'; args = { p_game: game, p_token: token, p_mult: Math.max(parseInt(b.mult, 10) || 1, 1) };
-  } else if (b.kind === 'minute' || b.kind === 'five' || b.kind === 'grand' || b.kind === 'free') {
-    fn = 'card_enter3'; args = { p_kind: b.kind, p_token: token, p_mult: b.kind==='five' ? Math.max(parseInt(b.mult,10)||1,1) : 1 };
+    // one flat price per ticket — no multipliers (legal review, Oct 2026)
+    fn = 'buy_entry3'; args = { p_game: game, p_token: token, p_mult: 1 };
+  } else if (b.kind === 'five' || b.kind === 'grand' || b.kind === 'free') {
+    // optional off_at = a named draw up to 7 days ahead (ISO timestamp)
+    fn = 'card_enter3'; args = { p_kind: b.kind, p_token: token };
+    if (b.off_at) { const t = new Date(b.off_at); if (isNaN(t)) return res.status(400).json({ error: 'bad draw time' }); args.p_off_at = t.toISOString(); }
   } else return res.status(400).json({ error: 'bad request' });
   const r = await fetch(URL + '/rest/v1/rpc/' + fn, {
     method: 'POST',
