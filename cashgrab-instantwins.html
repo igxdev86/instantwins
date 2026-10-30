@@ -71,7 +71,7 @@ header{padding:14px 16px 6px;display:flex;align-items:center;justify-content:spa
 .stage-wrap{margin:12px 12px 0;position:relative;background:radial-gradient(ellipse at 50% -10%, #13306A 0%, #091226 62%);border:1px solid var(--acc-deep);border-radius:12px;overflow:hidden;min-height:340px;box-shadow:inset 0 0 40px rgba(15,168,255,.12),0 0 0 1px rgba(54,224,255,.15),0 10px 40px rgba(0,0,0,.5)}
 canvas{display:block;width:100%}
 .result-pop{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%) scale(.6);opacity:0;pointer-events:none;text-align:center;transition:all .25s cubic-bezier(.2,1.6,.4,1);z-index:5}
-.result-pop.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.result-pop.show{opacity:0;transform:translate(-50%,-50%) scale(1)}
 .result-pop .amt{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:54px;color:var(--win);text-shadow:0 0 24px rgba(25,230,160,.6)}
 .result-pop .amt.big{color:var(--cyan);text-shadow:0 0 34px rgba(54,224,255,.85)}
 .result-pop .amt.zero{color:var(--muted);font-size:30px;text-shadow:none}
@@ -214,6 +214,28 @@ footer b{color:var(--text)}
 .ebacct .b i{font-style:normal;color:#8FA6CC;font-weight:600;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;margin-right:5px}
 .iwflash{animation:iwflashk .9s ease-out}
 @keyframes iwflashk{0%{color:#FFE9A8;text-shadow:0 0 18px #FFC53D}100%{}}
+
+/* ===== result modal ===== */
+.rmodal{position:fixed;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(3,7,19,.66);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .22s}
+.rmodal.show{opacity:1;pointer-events:auto}
+.rmodal-card{position:relative;width:min(380px,100%);border-radius:18px;padding:28px 24px 22px;text-align:center;border:1px solid #1C3463;background:linear-gradient(180deg,#0F1F42,#0A1528);box-shadow:0 30px 80px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.08);transform:translateY(14px) scale(.94);transition:transform .28s cubic-bezier(.2,1.4,.4,1)}
+.rmodal.show .rmodal-card{transform:none}
+.rmodal-k{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:#8FA6CC}
+.rmodal-amt{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:3.4rem;line-height:1;margin:8px 0 6px;color:#fff}
+.rmodal-sub{font-size:.86rem;color:#B9C9E8}
+.rmodal-bar{height:3px;border-radius:99px;background:#12264D;overflow:hidden;margin-top:18px}
+.rmodal-bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#36E0FF,#0FA8FF);transform-origin:left;animation:rmrun var(--rm-ms,2200ms) linear forwards}
+@keyframes rmrun{to{transform:scaleX(0)}}
+.rmodal-x{position:absolute;top:10px;right:12px;background:none;border:none;color:#6B7EA3;font-size:20px;cursor:pointer;line-height:1}
+.rmodal.win .rmodal-card{border-color:#0E9F6E;box-shadow:0 30px 80px rgba(0,0,0,.65),0 0 40px rgba(25,230,160,.25)}
+.rmodal.win .rmodal-amt{color:#43F0B4;text-shadow:0 0 28px rgba(67,240,180,.55)}
+.rmodal.win .rmodal-bar i{background:linear-gradient(90deg,#43F0B4,#19E6A0)}
+.rmodal.big .rmodal-card{border-color:#FFC53D;background:linear-gradient(180deg,#2A2008,#0A1528);box-shadow:0 30px 80px rgba(0,0,0,.65),0 0 60px rgba(255,197,61,.35)}
+.rmodal.big .rmodal-amt{color:#FFE9A8;text-shadow:0 0 34px rgba(255,197,61,.8);font-size:3.9rem}
+.rmodal.big .rmodal-bar i{background:linear-gradient(90deg,#FFE9A8,#FFC53D)}
+.rmodal.miss .rmodal-card{border-color:#1C3463}
+.rmodal.miss .rmodal-amt{color:#9DB4DB;font-size:2.4rem}
+.rmodal-ic{font-size:2rem;line-height:1}
 </style>
 </head>
 <body class="ebg">
@@ -439,6 +461,8 @@ function finish(tier,sub){
     amtEl.className='amt zero';
     lblEl.textContent=sub||'play again';
   }
+  try{ if(tier){ const big=tier.v>=20; window.showResult({kind:big?'big':'win',icon:big?'\uD83C\uDFC6':'\uD83C\uDF89',k:big?'Big win!':'Winner',amt:'\u00A3'+(tier.v*STAKE_MUL).toLocaleString(),sub:(sub||'')+(sub?' \u00B7 ':'')+'credited to your balance'}); }
+       else { window.showResult({kind:'miss',icon:'\uD83C\uDFB2',k:'Entry #'+String(curTicket).padStart(3,'0'),amt:'No win',sub:sub||'Every prize is still locked in \u2014 play again'}); } }catch(e){}
   $('pop').classList.add('show');
   setTimeout(()=>$('pop').classList.remove('show'),1700);
   const log=$('log');
@@ -689,6 +713,15 @@ document.addEventListener('DOMContentLoaded',function(){
   // any page that already tracks balance can push it instantly
   window.__hdrBalance=paint;
 })();
+</script>
+<div class="rmodal" id="rmodal" aria-live="polite"><div class="rmodal-card"><button class="rmodal-x" aria-label="Close">&times;</button><div class="rmodal-ic" id="rmIc"></div><div class="rmodal-k" id="rmK"></div><div class="rmodal-amt" id="rmAmt"></div><div class="rmodal-sub" id="rmSub"></div><div class="rmodal-bar"><i id="rmBar"></i></div></div></div>
+<script>
+window.showResult=function(o){var m=document.getElementById('rmodal');if(!m)return;var ms=o.ms||(o.kind==='miss'?1900:o.kind==='big'?3400:2600);
+  m.className='rmodal '+o.kind;document.getElementById('rmIc').textContent=o.icon||'';document.getElementById('rmK').textContent=o.k||'';document.getElementById('rmAmt').textContent=o.amt||'';document.getElementById('rmSub').textContent=o.sub||'';
+  var bar=document.getElementById('rmBar');bar.style.setProperty('--rm-ms',ms+'ms');bar.style.animation='none';void bar.offsetWidth;bar.style.animation='';
+  clearTimeout(window.__rmT);requestAnimationFrame(function(){m.classList.add('show');});window.__rmT=setTimeout(window.hideResult,ms);};
+window.hideResult=function(){var m=document.getElementById('rmodal');if(m)m.classList.remove('show');clearTimeout(window.__rmT);};
+document.addEventListener('DOMContentLoaded',function(){var m=document.getElementById('rmodal');if(m){m.addEventListener('click',function(e){if(e.target===m||e.target.classList.contains('rmodal-x'))window.hideResult();});}});
 </script>
 </body>
 </html>
