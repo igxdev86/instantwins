@@ -219,8 +219,8 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .cstake{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 14px;padding:12px 14px;border:1px solid var(--line);border-radius:11px;background:linear-gradient(180deg,#0E1B38,#0A1528);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
 .cstake-k{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);line-height:1.2}
 .cstake-k b{display:block;font-size:.8rem;color:#fff;letter-spacing:.06em;margin-top:2px}
-.cstake-row{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:220px}
-.cchip{flex:1 1 auto;min-width:48px;border:1.5px solid var(--line);background:#0A1730;color:#9DB4DB;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.9rem;padding:9px 6px;border-radius:7px;cursor:pointer;transition:.12s}
+.cstake-row{display:flex;gap:6px;flex-wrap:nowrap;flex:1 1 300px;min-width:0}
+.cchip{flex:1 1 0;min-width:44px;border:1.5px solid var(--line);background:#0A1730;color:#9DB4DB;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.9rem;padding:9px 6px;border-radius:7px;cursor:pointer;transition:.12s}
 .cchip:hover{border-color:var(--buy);color:#fff}
 .cchip.on{background:linear-gradient(180deg,var(--cyan),var(--buy),var(--acc-deep));border-color:var(--cyan);color:#fff;box-shadow:0 2px 10px rgba(15,168,255,.4)}
 .cstake-win{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.82rem;color:#9DB4DB;white-space:nowrap}
@@ -243,6 +243,14 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .ebacct .b i{font-style:normal;color:#8FA6CC;font-weight:600;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;margin-right:5px}
 .iwflash{animation:iwflashk .9s ease-out}
 @keyframes iwflashk{0%{color:#FFE9A8;text-shadow:0 0 18px #FFC53D}100%{}}
+
+.nextdraw.mins{border-top-color:#FF5FA2;background:linear-gradient(180deg,#2A0E22,#0A1528)}
+.nextdraw.mins .nd-clock{color:#FF8FC4;text-shadow:0 0 18px rgba(255,95,162,.5)}
+.nextdraw.mins .nd-prize b{color:#FF8FC4}
+.nextdraw.mins .ndtag.key{color:#FF8FC4;background:#2A0E22;border-color:#7A1F6F}
+.nextdraw.mins .nd-at b{color:#FF8FC4}
+.nextdraw.mins .enterbtn{background:linear-gradient(180deg,#FF8FC4,#FF2E8B,#B3178F);box-shadow:0 4px 18px rgba(255,46,139,.4),inset 0 1px 0 rgba(255,255,255,.3)}
+.brow.mins .t,.brow.mins .pz{color:#FF8FC4}
 </style>
 </head>
 <body class="ebh">
@@ -258,7 +266,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 <circle cx="340" cy="190" r="28" fill="none" stroke="#fff" stroke-width="3"/><text x="340" y="199" font-size="24">13</text>
 <circle cx="170" cy="60" r="22" fill="none" stroke="#fff" stroke-width="3"/><text x="170" y="68" font-size="20">88</text>
 </g>
-<g fill="#fff"><circle cx="60" cy="200" r="4"/><circle cx="110" cy="40" r="3"/><circle cx="200" cy="215" r="3"/><circle cx="380" cy="30" r="4"/></g></svg></div><div class="hs-tag">The Card</div><div class="hs-h" style="font-size:2.4rem">£1,000 HOURLY GRAND</div><div class="hs-p">A draw every five minutes, plus a 100% free £5 draw every ten. The big one lands on the hour.</div></div></div></div>
+<g fill="#fff"><circle cx="60" cy="200" r="4"/><circle cx="110" cy="40" r="3"/><circle cx="200" cy="215" r="3"/><circle cx="380" cy="30" r="4"/></g></svg></div><div class="hs-tag">The Card</div><div class="hs-h" style="font-size:2.4rem">£1,000 HOURLY GRAND</div><div class="hs-p">A draw every 60 seconds, every five minutes, a 100% free £5 draw every ten — and the big one on the hour.</div></div></div></div>
   <div class="head">
     <h1>The Card</h1>
     <div style="text-align:right"><span class="balance" style="display:none">Credit <b id="bal">£20.00</b></span><div id="modeBadge" style="font-size:.58rem;font-weight:800;letter-spacing:.12em;color:var(--soft);margin-top:3px">CONNECTING…</div></div>
@@ -268,6 +276,29 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
     <div class="cstake-k">Five-minute stake<b>Prize scales with stake</b></div>
     <div class="cstake-row" id="cstakeRow"></div>
     <div class="cstake-win">Win <b id="cstakeWin">£100</b> if your number’s drawn</div>
+  </div>
+  <div class="nextdraw mins" id="minCard" style="margin-bottom:10px">
+    <svg class="nd-art" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="#FF5FA2" stroke-width="5" stroke-linecap="round"><circle cx="230" cy="100" r="62"/><path d="M230 100V58M230 100l28 16"/><path d="M190 40l-14-14M270 40l14-14" /></g><g fill="none" stroke="#FF5FA2" stroke-width="4"><path d="M60 70h60M60 100h44M60 130h52"/></g><text x="100" y="178" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="22" fill="#FF5FA2" text-anchor="middle">60s</text></svg>
+    <div class="ndtags">
+      <span class="ndtag key">60-second draw</span>
+      <span class="ndtag">Every minute</span>
+      <span class="ndtag ref" id="minId">—</span>
+    </div>
+    <div class="nd-row">
+      <div class="nd-clockwrap"><div class="nd-clock" id="minClock">--:--</div><span class="nd-at">Draws at <b id="minAt">--:--</b></span></div>
+      <div class="nd-prize">Winning number takes <b>£10</b></div>
+    </div>
+    <div class="ndchips">
+      <div class="ndchip"><i>Numbers in</i><b><span id="minSold">—</span>/50</b></div>
+      <div class="ndchip"><i>Entry</i><b>50p</b></div>
+      <div class="ndchip"><i>Prize</i><b>£10</b></div>
+    </div>
+    <div class="ndnote">One number drawn from 50 every minute — no winner if it wasn’t sold.</div>
+    <div class="nd-actions">
+      <button class="enterbtn" id="minEnter">ENTER · 50p</button>
+      <span class="myentries" id="minMine"></span>
+    </div>
+    <div class="offbanner" id="minOff"></div>
   </div>
   <div class="nextdraw" id="fiveCard">
     <svg class="nd-art" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="#36E0FF" stroke-width="5" stroke-linecap="round"><circle cx="220" cy="100" r="70"/><path d="M220 100V52M220 100l34 20"/><path d="M220 18v8M220 174v8M138 100h8M294 100h8" stroke-width="4"/></g><g font-family="IBM Plex Mono,monospace" font-weight="700" fill="#36E0FF" text-anchor="middle"><circle cx="70" cy="60" r="30" fill="none" stroke="#36E0FF" stroke-width="5"/><text x="70" y="70" font-size="26">5</text><circle cx="95" cy="150" r="24" fill="none" stroke="#36E0FF" stroke-width="5"/><text x="95" y="158" font-size="20">100</text></g></svg>
@@ -394,7 +425,7 @@ function hashStr(s){let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return
 async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');}
 function nextBoundary(mins){const d=new Date();d.setSeconds(0,0);d.setMinutes(d.getMinutes()-(d.getMinutes()%mins)+mins);return d;}
 function hm(t){t=new Date(t);return pad(t.getHours())+':'+pad(t.getMinutes());}
-function drawLabel(k){return k==='grand'?'Hourly Grand':k==='free'?'Free Draw':'Five-Minute Draw';}
+function drawLabel(k){return k==='grand'?'Hourly Grand':k==='free'?'Free Draw':k==='minute'?'60-Second Draw':'Five-Minute Draw';}
 const FIRSTNAMES=['Dave','Sarah','Mo','Kelly','Tom','Priya','Gareth','Lisa','Jamal','Ffion','Steve','Aisha','Rhys','Donna','Marek','Jo'];
 const TOWNS=['Cardiff','Leeds','Barry','Swindon','Glasgow','Luton','Wrexham','Hull','Derby','Newport','Bolton','Penarth'];
 
@@ -470,10 +501,10 @@ function renderUpcomingFrom(){
   for(let m=0;m<=70 && rows.length<7;m++){
     const t=new Date(base.getTime()+m*60000);if(t.getTime()<=now)continue;
     const mn=t.getMinutes();let k=null;
-    if(mn%60===0)k='grand';else if(mn%10===0)k='free';else if(mn%5===0)k='five';
+    if(mn%60===0)k='grand';else if(mn%10===0)k='free';else if(mn%5===0)k='five';else if(m<=3)k='minute';
     if(!k)continue;
-    const pz=k==='grand'?'JACKPOT':k==='free'?'£5 FREE':'£100';
-    rows.push('<div class="brow'+(first?' next':'')+(k==='grand'?' grand':'')+(k==='free'?' freed':'')+'">'
+    const pz=k==='grand'?'JACKPOT':k==='free'?'£5 FREE':k==='minute'?'£10':'£100';
+    rows.push('<div class="brow'+(first?' next':'')+(k==='grand'?' grand':'')+(k==='free'?' freed':'')+(k==='minute'?' mins':'')+'">'
       +'<span class="t">'+pad(t.getHours())+':'+pad(t.getMinutes())+'</span>'
       +'<span class="nm">'+drawLabel(k)+'</span>'
       +'<span class="pz">'+pz+'</span>'
@@ -485,7 +516,7 @@ function renderUpcomingFrom(){
 let results=[];
 function renderResults(){
   $('results').innerHTML=results.slice(0,8).map(r=>
-    '<div class="brow'+(r.kind==='grand'?' grand':'')+(r.kind==='free'?' freed':'')+(r.me?' me':'')+'">'
+    '<div class="brow'+(r.kind==='grand'?' grand':'')+(r.kind==='free'?' freed':'')+(r.kind==='minute'?' mins':'')+(r.me?' me':'')+'">'
     +'<span class="t">'+r.time+'</span>'
     +'<span class="nm">'+drawLabel(r.kind)
     +' <span class="who">'+(r.entry?('number <b>#'+r.entry+'</b> · '+r.who):(r.who||'no winner'))+'</span></span>'
@@ -498,7 +529,17 @@ function renderResults(){
 let LIVE=false, S=null, skewMs=0;
 function fullBtn(btn,sold,cap){ if(cap&&sold>=cap){$(btn).textContent='DRAW FULL';$(btn).disabled=true;return true;} return false;}
 function applyState(){
-  const f=S.open&&S.open.five, g=S.open&&S.open.grand, fr=S.open&&S.open.free;
+  const f=S.open&&S.open.five, g=S.open&&S.open.grand, fr=S.open&&S.open.free, mi=S.open&&S.open.minute;
+  if(mi){
+    $('minId').textContent='MIN-'+hm(mi.off_at).replace(':','');
+    $('minAt').textContent=hm(mi.off_at);
+    $('minSold').textContent=mi.sold.toLocaleString();
+    const mm=mine[mi.id]||[];
+    $('minMine').textContent=mm.length?('You’re in ×'+mm.length+' (number '+mm.join(', ')+')'):'';
+    if(!fullBtn('minEnter',mi.sold,mi.cap)){
+      $('minEnter').textContent=TOKEN?'ENTER · 50p':'SIGN IN TO ENTER';
+      $('minEnter').disabled=TOKEN?balance<0.5:false;}
+  }
   if(f){
     $('fiveId').textContent='FIVE-'+hm(f.off_at).replace(':','');
     $('fiveAt').textContent=hm(f.off_at);
@@ -539,7 +580,7 @@ function applyState(){
     const wm=r.win_mult||1;
     if(iWon){if(TOKEN){setTimeout(fetchMe,300);}else{balance+=r.prize_p*wm/100;}}
     const age=(new Date(S.server_now)-new Date(r.off_at))/1000;
-    const el=r.kind==='grand'?'grandOff':r.kind==='free'?'freeOff':'fiveOff';
+    const el=r.kind==='grand'?'grandOff':r.kind==='free'?'freeOff':r.kind==='minute'?'minOff':'fiveOff';
     const noWin=r.kind==='grand'?'JACKPOT ROLLS OVER':'no win — prize retained';
     const drawn = r.drawn_no!=null ? r.drawn_no : r.winner_entry;
     if(age<600) banner(el, drawLabel(r.kind).toUpperCase(),
@@ -588,7 +629,9 @@ async function enterLive(kind){
 function liveClockTick(){
   if(!LIVE||!S||!S.open)return;
   const now=new Date(Date.now()+skewMs);
-  const f=S.open.five,g=S.open.grand,fr=S.open.free;
+  const f=S.open.five,g=S.open.grand,fr=S.open.free,mi=S.open.minute;
+  if(mi){const s=Math.max(Math.floor((new Date(mi.off_at)-now)/1000),0);
+    $('minClock').textContent=pad(Math.floor(s/60))+':'+pad(s%60); if(s===0)syncLive();}
   if(f){const s=Math.max(Math.floor((new Date(f.off_at)-now)/1000),0);
     $('fiveClock').textContent=pad(Math.floor(s/60))+':'+pad(s%60); if(s===0)syncLive();}
   if(g){const s=Math.max(Math.floor((new Date(g.off_at)-now)/1000),0);
@@ -600,17 +643,17 @@ function liveClockTick(){
 /* ==================================================================
    DEMO MODE — simulated board (until the backend is connected)
    ================================================================== */
-let DEMO_RUNNING=false, five={}, grand={}, free={}, demoRollGrand=0;
+let DEMO_RUNNING=false, five={}, grand={}, free={}, minute={}, demoRollGrand=0;
 function newDraw(kind){
-  const end=kind==='grand'?nextBoundary(60):kind==='free'?nextBoundary(10):nextBoundary(5);
-  const pre=kind==='grand'?'GRAND-':kind==='free'?'FREE-':'FIVE-';
+  const end=kind==='grand'?nextBoundary(60):kind==='free'?nextBoundary(10):kind==='minute'?nextBoundary(1):nextBoundary(5);
+  const pre=kind==='grand'?'GRAND-':kind==='free'?'FREE-':kind==='minute'?'MIN-':'FIVE-';
   const id=pre+hm(end).replace(':','');
-  const price=kind==='grand'?2:kind==='free'?0:1;
-  const cap=kind==='grand'?1000:kind==='free'?null:200;
-  const base=kind==='grand'?1000:kind==='free'?5:100;
+  const price=kind==='grand'?2:kind==='free'?0:kind==='minute'?0.5:1;
+  const cap=kind==='grand'?1000:kind==='free'?null:kind==='minute'?50:200;
+  const base=kind==='grand'?1000:kind==='free'?5:kind==='minute'?10:100;
   const prize=kind==='grand'?(1000+demoRollGrand):base;
-  const baseSold=kind==='grand'?380:kind==='free'?65:85;
-  const span=kind==='grand'?320:kind==='free'?140:95;
+  const baseSold=kind==='grand'?380:kind==='free'?65:kind==='minute'?12:85;
+  const span=kind==='grand'?320:kind==='free'?140:kind==='minute'?25:95;
   const d={kind,end,id,price,cap,base,prize,sold:baseSold+hashStr(id)%span,mine:[],
     seed:id+'|'+crypto.getRandomValues(new Uint32Array(3)).join('-')};
   sha256(d.seed).then(h=>{d.hash=h;if(kind==='five')$('fiveHash').textContent=h;});
@@ -618,7 +661,8 @@ function newDraw(kind){
 }
 function renderDemoTop(){
   $('bal').textContent=fmt(balance);syncCredit();
-  $('fiveId').textContent=five.id;$('grandId').textContent=grand.id;$('freeId').textContent=free.id;
+  $('fiveId').textContent=five.id;$('grandId').textContent=grand.id;$('freeId').textContent=free.id;$('minId').textContent=minute.id;$('minSold').textContent=minute.sold.toLocaleString();$('minAt').textContent=hm(minute.end);
+  $('minEnter').disabled=balance<0.5||minute.sold>=minute.cap;$('minEnter').textContent=minute.sold>=minute.cap?'DRAW FULL':'ENTER · 50p';
   $('fiveSold').textContent=five.sold.toLocaleString();
   $('grandSold').textContent=grand.sold.toLocaleString();
   $('freeSold').textContent=free.sold.toLocaleString();
@@ -666,10 +710,12 @@ function demoOff(d,el){
 }
 function demoTick(){
   if(LIVE)return;
+  if((minute.end-new Date())<=0){demoOff(minute,'minOff');minute=newDraw('minute');}
   if((five.end-new Date())<=0){demoOff(five,'fiveOff');five=newDraw('five');}
   if((grand.end-new Date())<=0){demoOff(grand,'grandOff');grand=newDraw('grand');}
   if((free.end-new Date())<=0){demoOff(free,'freeOff');free=newDraw('free');}
   renderUpcomingFrom();
+  const ms_=Math.max(Math.floor((minute.end-new Date())/1000),0);$('minClock').textContent=pad(Math.floor(ms_/60))+':'+pad(ms_%60);
   const fs=Math.max(Math.floor((five.end-new Date())/1000),0);
   const gs=Math.max(Math.floor((grand.end-new Date())/1000),0);
   const rs=Math.max(Math.floor((free.end-new Date())/1000),0);
@@ -688,7 +734,7 @@ function startDemo(){
   if(DEMO_RUNNING)return;DEMO_RUNNING=true;
   $('modeBadge').textContent='DEMO MODE — backend not connected';
   $('modeBadge').style.color='var(--gold)';
-  five=newDraw('five');grand=newDraw('grand');free=newDraw('free');
+  five=newDraw('five');grand=newDraw('grand');free=newDraw('free');minute=newDraw('minute');
   renderDemoTop();renderUpcomingFrom();
   let t=new Date(nextBoundary(5).getTime()-5*60000);
   for(let i=0;i<6;i++){
@@ -701,6 +747,11 @@ function startDemo(){
 }
 
 /* ================= wiring ================= */
+$('minEnter').addEventListener('click',()=>{
+  try{IWS.start();}catch(e){}
+  if(LIVE){enterLive('minute');}
+  else if(balance>=0.5&&minute.sold<minute.cap){balance-=0.5;minute.sold++;minute.mine.push(minute.sold);renderDemoTop();}
+});
 $('fiveEnter').addEventListener('click',()=>{
   try{IWS.start();}catch(e){}
   if(LIVE){enterLive('five');}
