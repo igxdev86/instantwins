@@ -126,8 +126,8 @@ function renderCard(rows){
     var won=r.winner_entry;
     return '<div class="row '+(k==='grand'?'grand':k==='free'?'free':'')+'">'
       +'<span class="t">'+dmy(r.off_at)+'</span>'
-      +'<span class="nm">'+lbl+' <small>'+(won?('winning number #'+won+' · '):'no winner · ')+seedCut(r.seed)+'</small></span>'
-      +'<span class="pz'+(won?'':' none')+'">'+(won?('£'+(r.prize_p/100).toLocaleString()):(k==='grand'?'rolled over':'—'))+'</span></div>';
+      +'<span class="nm">'+lbl+' <small>'+(won?('winning number #'+won+' · '):'no entries · ')+seedCut(r.seed)+'</small></span>'
+      +'<span class="pz'+(won?'':' none')+'">'+(won?('£'+(r.prize_p/100).toLocaleString()):'—')+'</span></div>';
   }).join('');
 }
 function renderPools(rows){
@@ -143,7 +143,7 @@ function demo(){
     card.push({kind:k,off_at:now-i*600000,prize_p:k==='grand'?100000:k==='free'?500:10000,
       winner_entry:(i%3===0&&k!=='grand')?(40+i*7):(k==='grand'?null:(55+i*3)),seed:'DEMO-'+k+'-'+i+'-xxxxxxxxxxxxxxxx'});}
   renderCard(card);
-  var games=['Plinko Drop','Rocket Cash','The Spins','Safe Cracker','Diamond Dig'],pools=[];
+  var games=['Gold Ticket','Mega Ticket','Platinum Ticket','Gold Ticket','Mega Ticket'],pools=[];
   for(i=0;i<5;i++)pools.push({game:games[i],pool_no:40+i,settled_at:now-i*3600000,winners:86,top_p:i===3?25000:10000,seed:'DEMO-pool-'+i+'-xxxxxxxxxxxx'});
   renderPools(pools);
 }
