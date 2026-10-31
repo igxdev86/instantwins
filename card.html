@@ -266,6 +266,20 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .nextdraw.plat{border-top-color:#B07CFF;background:linear-gradient(180deg,#1E1236,#0A1528)}.nextdraw.plat .nd-clock,.nextdraw.plat .nd-prize b,.nextdraw.plat .nd-at b{color:#C9A6FF;text-shadow:none}.nextdraw.plat .ndtag.key{color:#C9A6FF;border-color:#5A3A8C}.nextdraw.plat .enterbtn{background:linear-gradient(180deg,#D7BFFF,#B07CFF,#6E3FD1);color:#1E1236}
 .brow.silver .pz{color:#DDE6F7}.brow.goldd .pz{color:#FFC577}.brow.plat .pz{color:#C9A6FF}
 .tierbar{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 2px}.tierbar a{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:#9DB4DB;text-decoration:none;border:1px solid var(--line);border-radius:7px;padding:6px 10px;background:#0A1730}
+.hub-k{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--soft);margin:14px 0 8px}
+.hub-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:720px){.hub-grid{grid-template-columns:repeat(4,1fr)}}
+.htile{position:relative;overflow:hidden;display:block;text-decoration:none;border:1px solid var(--line);border-top:3px solid var(--tc,#36E0FF);border-radius:12px;padding:14px 14px 12px;background:linear-gradient(180deg,#0F1F42,#0A1528);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);transition:transform .15s}
+.htile:active{transform:scale(.98)}
+.htile .hk{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.htile .hv{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(1.35rem,7vw,1.9rem);white-space:nowrap;line-height:1;color:var(--tc,#36E0FF);margin-top:4px;text-shadow:0 0 18px color-mix(in srgb,var(--tc,#36E0FF) 45%,transparent)}
+.htile .hp{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.78rem;color:#fff;margin-top:6px}
+.htile .hp i{font-style:normal;color:var(--soft);font-weight:600;font-size:.62rem}
+.htile .hn{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:.66rem;color:var(--soft)}
+.htile .hn b{color:var(--tc,#36E0FF);font-size:.9rem}
+.htile .hgo{display:block;margin-top:10px;text-align:right;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.66rem;letter-spacing:.1em;color:var(--tc,#36E0FF)}
+.htile.freed{border-top-color:var(--match)}
+.hub-back{display:inline-block;margin:12px 0 2px;color:var(--cyan);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}
 </style>
 </head>
 <body class="ebh">
@@ -294,7 +308,12 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
     <span><b>Every prize paid</b> — the winner is drawn from the numbers entered</span>
   </div>
 
-  <div class="tierbar"><a href="#minuteCard">50p · £10</a><a href="#fiveCard">£1 · £100</a><a href="#silverCard">£5 · £400</a><a href="#goldCard">£10 · £750</a><a href="#grandCard">£2 · £1,000</a><a href="#platinumCard">£20 · £1,500</a><a href="#freeCard">Free · £5</a></div>
+  <div class="hub" id="hub">
+    <div class="hub-k">Pick a prize to play for</div>
+    <div class="hub-grid" id="hubGrid"></div>
+  </div>
+  <a class="hub-back" id="hubBack" href="card.html" style="display:none">&larr; All draws</a>
+  <div id="single">
   <div class="nextdraw mins" id="minuteCard" style="margin-top:10px">
     <svg class="nd-art" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="#FF5FA2" stroke-width="5" stroke-linecap="round"><circle cx="230" cy="100" r="62"/><path d="M230 100V58M230 100l28 16"/><path d="M190 40l-14-14M270 40l14-14"/></g><text x="100" y="178" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="22" fill="#FF5FA2" text-anchor="middle">60s</text></svg>
     <div class="ndtags">
@@ -464,10 +483,11 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
     <div class="offbanner" id="freeOff"></div>
   </div>
 
+  </div>
   <div class="sechead" id="mineHead" style="display:none"><h2>Your upcoming numbers</h2><span>draws you’re already in</span></div>
   <div class="board" id="mineList" style="display:none"></div>
 
-  <div class="sechead"><h2>Coming up</h2><span>every draw is open for entry 7 days ahead</span></div>
+  <div class="sechead"><h2>Coming up</h2><span id="upSub">next draw of each kind · all open 7 days ahead</span></div>
   <div class="board" id="upcoming"></div>
 
   <div class="sechead"><h2>Just gone</h2><span>latest winners on the card</span></div>
@@ -585,16 +605,39 @@ function banner(el,kindLabel,winner,iWon,prize,who,sold){
 }
 
 /* ================= boards ================= */
+/* ================= hub / single view ================= */
+const VIEW=(new URLSearchParams(location.search).get('draw')||'').toLowerCase(); const SINGLE=SPEC[VIEW]?VIEW:null;
+const COLS={minute:'#FF5FA2',five:'#36E0FF',silver:'#DDE6F7',gold:'#FFB347',grand:'#FFC53D',platinum:'#C9A6FF',free:'#19E6A0'};
+function priceLabel(k){const p=SPEC[k].price;return p===0?'FREE':p<1?Math.round(p*100)+'p':'£'+p;}
+function cadence(k){return {minute:'every minute',five:'every 5 min',silver:'every 15 min',gold:'hourly at :30',grand:'on the hour',platinum:'daily 21:00',free:'every 10 min'}[k];}
+function renderHub(){
+  const now=Date.now()+skewMs; const order=KINDS.slice().sort((a,b)=>SPEC[a].prize-SPEC[b].prize);
+  $('hubGrid').innerHTML=order.map(k=>{const d=S&&S.open&&S.open[k]; const off=d?new Date(d.off_at):nextOff(k); const sec=Math.max(Math.floor((off-now)/1000),0);
+    const clock=(sec>=3600?pad(Math.floor(sec/3600))+':':'')+pad(Math.floor(sec/60)%60)+':'+pad(sec%60);
+    return '<a class="htile '+SPEC[k].cls+'" style="--tc:'+COLS[k]+'" href="card.html?draw='+k+'">'
+      +'<div class="hk">'+drawLabel(k)+'</div><div class="hv">'+(k==='free'?'£5 FREE':'WIN £'+SPEC[k].prize.toLocaleString())+'</div>'
+      +'<div class="hp">'+priceLabel(k)+' <i>a number · '+cadence(k)+'</i></div>'
+      +'<div class="hn"><span>next draw</span><b data-hub-clock="'+k+'">'+clock+'</b></div>'
+      +'<div class="hn" style="margin-top:4px"><span>numbers in</span><span>'+(d?d.sold.toLocaleString()+(d.cap?'/'+d.cap.toLocaleString():''):'—')+'</span></div><span class="hgo">PLAY &rarr;</span></a>';}).join('');
+}
+function hubClockTick(){ if(SINGLE)return; const now=Date.now()+skewMs; document.querySelectorAll('[data-hub-clock]').forEach(el=>{const k=el.dataset.hubClock; const d=S&&S.open&&S.open[k]; const off=d?new Date(d.off_at):nextOff(k); const sec=Math.max(Math.floor((off-now)/1000),0); el.textContent=(sec>=3600?pad(Math.floor(sec/3600))+':':'')+pad(Math.floor(sec/60)%60)+':'+pad(sec%60); if(sec===0&&LIVE)syncLive();}); }
+(function(){
+  if(SINGLE){ $('hub').style.display='none'; $('hubBack').style.display=''; document.title=drawLabel(SINGLE)+' — The Card — InstantWins.co.uk';
+    KINDS.forEach(k=>{const t=$(k+'Card'); if(t)t.style.display=k===SINGLE?'':'none';});
+    const h=document.querySelector('.head h1'); if(h)h.textContent=drawLabel(SINGLE); const us=$('upSub'); if(us)us.textContent='the next '+drawLabel(SINGLE)+'s — enter any of them';
+  } else { $('single').style.display='none'; }
+})();
+
 let S=null, LIVE=false, skewMs=0, results=[];
 function aheadSold(k,t){const a=(S&&S.ahead)||[];const m=a.find(x=>x.kind===k&&new Date(x.off_at).getTime()===t.getTime());return m?m.sold:0;}
 function renderUpcoming(){
   const now=Date.now()+skewMs; const rows=[]; const seen={};
   // next 8 scheduled draws across kinds, then any further-ahead draws that already have numbers in
   const cands=[];
-  KINDS.forEach(k=>{let t=nextOff(k,now+1);for(let i=0;i<10&&t.getTime()<now+2*3600000;i++){cands.push([k,t]);t=nextOff(k,t.getTime()+1);}});
+  (SINGLE?[SINGLE]:KINDS).forEach(k=>{let t=nextOff(k,now+1);for(let i=0;i<(SINGLE?12:1);i++){cands.push([k,t]);t=nextOff(k,t.getTime()+1);}});
   cands.sort((a,b)=>a[1]-b[1]);
   for(const [k,t] of cands){const key=k+t.getTime();if(seen[key])continue;seen[key]=1;rows.push({k,t});if(rows.length>=8)break;}
-  ((S&&S.ahead)||[]).forEach(x=>{const t=new Date(x.off_at);if(t.getTime()>rows[rows.length-1].t.getTime()){rows.push({k:x.kind,t,far:true});}});
+  ((S&&S.ahead)||[]).forEach(x=>{if(SINGLE&&x.kind!==SINGLE)return;const t=new Date(x.off_at);if(rows.length&&t.getTime()>rows[rows.length-1].t.getTime()){rows.push({k:x.kind,t,far:true});}});
   $('upcoming').innerHTML=rows.map((r,i)=>{const sold=aheadSold(r.k,r.t);const sp=SPEC[r.k];
     return '<div class="brow'+(i===0?' next':'')+' '+SPEC[r.k].cls+'">'
       +'<span class="t">'+when(r.t)+'</span><span class="nm">'+drawLabel(r.k)+(sold?' <span class="who">'+sold+(sp.cap?'/'+sp.cap:'')+' in</span>':'')+'</span>'
@@ -602,7 +645,7 @@ function renderUpcoming(){
       +'<span class="st">'+(i===0?'NEXT':'OPEN')+'</span></div>';}).join('');
 }
 function renderResults(){
-  $('results').innerHTML=results.slice(0,8).map(r=>
+  $('results').innerHTML=results.filter(r=>!SINGLE||r.kind===SINGLE).slice(0,8).map(r=>
     '<div class="brow '+(SPEC[r.kind]?SPEC[r.kind].cls:'')+(r.me?' me':'')+'">'
     +'<span class="t">'+when(r.off_at)+'</span>'
     +'<span class="nm">'+drawLabel(r.kind)+' <span class="who">'+(r.entry?('number <b>#'+r.entry+'</b> · '+r.who):'no entries')+'</span></span>'
@@ -628,7 +671,7 @@ function applyState(){
     $(k+'Id').textContent=refId(k,d.off_at); $(k+'At').textContent=(SPEC[k].daily!=null?dayLabel(d.off_at)+' ':'')+hm(d.off_at); $(k+'Sold').textContent=d.sold.toLocaleString();
     if(k==='five')$('fiveHash').textContent=d.seed_hash;
     const m=mine[d.id]||[]; $(k+'Mine').textContent=k==='free'?(m.length?'You’re in — good luck!':''):(m.length?('You’re in ×'+m.length+' (number '+m.join(', ')+')'):'');});
-  applyButtons(); renderUpcoming();
+  applyButtons(); renderUpcoming(); if(!SINGLE)renderHub();
   let changed=false;
   for(const r of (S.results||[])){
     if(seenSettled.includes(r.draw_id))continue; seenSettled.push(r.draw_id); changed=true;
@@ -636,7 +679,7 @@ function applyState(){
     if(iWon&&TOKEN)setTimeout(fetchMe,300);
     const age=(new Date(S.server_now)-new Date(r.off_at))/1000;
     const el=$(r.kind+'Off')?r.kind+'Off':'fiveOff';
-    if(age<600) banner(el,drawLabel(r.kind).toUpperCase(),r.winner_entry,iWon,r.prize_p/100,r.winner_name?r.winner_name:'Number #'+r.winner_entry,r.sold);
+    if(age<600&&(!SINGLE||r.kind===SINGLE)) banner(el,drawLabel(r.kind).toUpperCase(),r.winner_entry,iWon,r.prize_p/100,r.winner_name?r.winner_name:'Number #'+r.winner_entry,r.sold);
   }
   results=(S.results||[]).map(r=>{const won=(mine[r.draw_id]||[]).includes(r.winner_entry);
     return {off_at:r.off_at,kind:r.kind,prize:r.prize_p/100,entry:r.winner_entry,who:won?'YOU':(r.winner_name||'')+' · of '+r.sold+' entered',me:won};});
@@ -652,7 +695,7 @@ async function syncLive(){
   }catch(e){
     if(!LIVE){$('modeBadge').textContent='BACKEND NOT CONNECTED';$('modeBadge').style.color='var(--gold)';
       KINDS.forEach(k=>{if(!$(k+'Id'))return;const t=nextOff(k);$(k+'Id').textContent=refId(k,t);$(k+'At').textContent=hm(t);});
-      renderUpcoming(); renderResults(); applyButtons();}
+      renderUpcoming(); renderResults(); applyButtons(); if(!SINGLE)renderHub();}
   }
 }
 async function enterLive(kind,off_at){
@@ -712,7 +755,7 @@ $('freeClose').addEventListener('click',()=>$('freeModal').classList.remove('ope
 $('freeModal').addEventListener('click',e=>{if(e.target.id==='freeModal')$('freeModal').classList.remove('open');});
 applyButtons(); syncLive();
 setInterval(syncLive,5000);
-setInterval(liveClockTick,500);
+setInterval(liveClockTick,500); setInterval(hubClockTick,500); if(!SINGLE)renderHub();
 </script>
 <script>
 function ebOpen(){document.getElementById('ebside').classList.add('open');document.getElementById('ebscrim').classList.add('open');}
