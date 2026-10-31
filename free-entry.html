@@ -138,7 +138,7 @@ textarea{min-height:90px;resize:vertical}
     <div class="step"><div class="n">2</div><div>Write on it your <b>full name, postal address, date of birth</b>, and the <b>email address of your InstantWins account</b>.
       No account yet? Include your email anyway and we will open one for you when we process your card, so your entry and any prize have somewhere to go.</div></div>
     <div class="step"><div class="n">3</div><div><b>Name what you are entering:</b><br>
-      &bull; a Card draw by name, day and time &mdash; e.g. <i>"Five-Minute Draw, Tue 3 Nov, 19:05"</i> or <i>"Hourly Grand, Sat 7 Nov, 20:00"</i>. Every draw in the next seven days is open, so name one at least three working days ahead and your card will be there in time.<br>
+      &bull; a Card draw by its <b>game number</b> &mdash; e.g. <i>F100-041126-1905</i>. Every draw shows its number, and the finder below gives you the number for any draw in the next seven days. Name one at least three working days ahead and your card will be there in time.<br>
       &bull; a ticket book by name &mdash; <i>"Gold Ticket"</i>, <i>"Platinum Ticket"</i> or <i>"Mega Ticket"</i> &mdash; and you take the next ticket in that book's open round.<br>
       &bull; <i>"Pick a Piece"</i> and, if you like, a piece number.<br>
       &bull; or <b>nothing at all</b> &mdash; your card enters the next Five-Minute Draw after it is processed <b>and every Five-Minute Draw for the rest of that day</b>.</div></div>
@@ -146,6 +146,52 @@ textarea{min-height:90px;resize:vertical}
       <div class="code" style="margin-top:8px">InstantWins Free Entry<br>IGX Ltd<br>PO Box (confirmed at launch)<br>United Kingdom</div></div></div>
   </div>
 
+  <div class="panel" id="gnf"><h2>Game number finder</h2>
+    <p class="lead">Every draw has a game number: <b>draw code – date – time</b>, e.g. <b>F100-041126-1905</b> is the £1 Five-Minute draw on 4 November at 19:05. Pick the draw you want below and copy the number onto your postcard. Any draw in the next 7 days is open.</p>
+    <div class="gnf-row"><label>Draw</label><select id="gnKind"></select></div>
+    <div class="gnf-row"><label>Day</label><select id="gnDay"></select></div>
+    <div class="gnf-row"><label>Time</label><select id="gnTime"></select></div>
+    <div class="gnf-out"><span>Write on your postcard</span><b id="gnOut">—</b><i id="gnSub"></i></div>
+  </div>
+<style>
+.gnf-row{display:flex;align-items:center;gap:10px;margin-top:8px}
+.gnf-row label{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);width:44px}
+.gnf-row select{flex:1;background:#050B1A;color:#fff;border:1px solid var(--line);border-radius:7px;padding:10px;font-family:'IBM Plex Mono',monospace;font-size:.85rem}
+.gnf-out{margin-top:14px;border:1px dashed var(--cyan);border-radius:10px;padding:14px;text-align:center;background:#050B1A}
+.gnf-out span{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.gnf-out b{display:block;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1.6rem;color:var(--cyan);margin:6px 0 4px;letter-spacing:.04em}
+.gnf-out i{font-style:normal;font-size:.72rem;color:var(--soft)}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id); const pad=n=>String(n).padStart(2,'0');
+  let KINDS=[
+   {kind:'minute',code:'S10',label:'60-Second £10 (50p)',step_s:60,offset_s:0,daily_hour:null,prize_p:1000},{kind:'s60_20',code:'S20',label:'60-Second £20 (£1)',step_s:60,offset_s:0,daily_hour:null,prize_p:2000},
+   {kind:'s60_50',code:'S50',label:'60-Second £50 (£2)',step_s:60,offset_s:0,daily_hour:null,prize_p:5000},{kind:'s60_100',code:'S100',label:'60-Second £100 (£5)',step_s:60,offset_s:0,daily_hour:null,prize_p:10000},
+   {kind:'five',code:'F100',label:'Five-Minute £100 (£1)',step_s:300,offset_s:0,daily_hour:null,prize_p:10000},{kind:'m5_200',code:'F200',label:'Five-Minute £200 (£2)',step_s:300,offset_s:0,daily_hour:null,prize_p:20000},
+   {kind:'m5_500',code:'F500',label:'Five-Minute £500 (£5)',step_s:300,offset_s:0,daily_hour:null,prize_p:50000},{kind:'m5_1000',code:'F1K',label:'Five-Minute £1,000 (£10)',step_s:300,offset_s:0,daily_hour:null,prize_p:100000},
+   {kind:'m15_150',code:'Q150',label:'15-Minute £150 (£2)',step_s:900,offset_s:0,daily_hour:null,prize_p:15000},{kind:'silver',code:'Q400',label:'15-Minute £400 (£5)',step_s:900,offset_s:0,daily_hour:null,prize_p:40000},
+   {kind:'m15_1000',code:'Q1K',label:'15-Minute £1,000 (£10)',step_s:900,offset_s:0,daily_hour:null,prize_p:100000},{kind:'m15_2000',code:'Q2K',label:'15-Minute £2,000 (£20)',step_s:900,offset_s:0,daily_hour:null,prize_p:200000},
+   {kind:'gold',code:'H750',label:'Hourly £750 (£10, :30)',step_s:3600,offset_s:1800,daily_hour:null,prize_p:75000},{kind:'grand',code:'H1K',label:'Hourly Grand £1,000 (£2)',step_s:3600,offset_s:0,daily_hour:null,prize_p:100000},
+   {kind:'h_2000',code:'H2K',label:'Hourly £2,000 (£20, :30)',step_s:3600,offset_s:1800,daily_hour:null,prize_p:200000},{kind:'h_5000',code:'H5K',label:'Hourly £5,000 (£50, :30)',step_s:3600,offset_s:1800,daily_hour:null,prize_p:500000},
+   {kind:'d_400',code:'D400',label:'Daily £400 (£5)',step_s:86400,offset_s:0,daily_hour:21,prize_p:40000},{kind:'d_1000',code:'D1K',label:'Daily £1,000 (£10)',step_s:86400,offset_s:0,daily_hour:21,prize_p:100000},
+   {kind:'platinum',code:'D1500',label:'Daily £1,500 (£20)',step_s:86400,offset_s:0,daily_hour:21,prize_p:150000},{kind:'d_5000',code:'D5K',label:'Daily £5,000 (£50)',step_s:86400,offset_s:0,daily_hour:21,prize_p:500000},
+   {kind:'free',code:'FREE',label:'Free Draw £5',step_s:600,offset_s:0,daily_hour:null,prize_p:500}];
+  const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function sp(){return KINDS.find(k=>k.kind===$('gnKind').value)||KINDS[4];}
+  function nextOff(k,from){const t=from;if(k.daily_hour!=null){const d=new Date(t);d.setHours(k.daily_hour,0,0,0);if(d.getTime()<=t)d.setDate(d.getDate()+1);return d;}const s=k.step_s*1000,o=(k.offset_s||0)*1000;return new Date(Math.ceil((t-o)/s)*s+o);}
+  function gameNo(k,t){return k.code+'-'+pad(t.getDate())+pad(t.getMonth()+1)+String(t.getFullYear()).slice(2)+'-'+pad(t.getHours())+pad(t.getMinutes());}
+  function fillKinds(){$('gnKind').innerHTML=KINDS.map(k=>'<option value="'+k.kind+'"'+(k.kind==='five'?' selected':'')+'>'+k.label+'</option>').join('');}
+  function fillDays(){const d=$('gnDay');d.innerHTML='';const n=new Date();for(let i=0;i<=7;i++){const x=new Date(n.getFullYear(),n.getMonth(),n.getDate()+i);const o=document.createElement('option');o.value=x.getTime();o.textContent=(i===0?'Today':i===1?'Tomorrow':DAYS[x.getDay()])+' '+x.getDate()+' '+MON[x.getMonth()];d.appendChild(o);}}
+  function fillTimes(){const k=sp(),day=+$('gnDay').value,now=Date.now(),max=now+7*864e5,sel=$('gnTime');sel.innerHTML='';let t=nextOff(k,day-1).getTime(),g=0;
+    while(t<day+864e5&&g++<2000){if(t>now+3*3600000&&t<=max){const o=document.createElement('option');o.value=t;o.textContent=pad(new Date(t).getHours())+':'+pad(new Date(t).getMinutes());sel.appendChild(o);}t=nextOff(k,t+1).getTime();}
+    if(!sel.options.length){const o=document.createElement('option');o.value='';o.textContent='No draws far enough ahead on this day — pick a later day';sel.appendChild(o);} out();}
+  function out(){const t=+$('gnTime').value;if(!t){$('gnOut').textContent='—';$('gnSub').textContent='';return;}const k=sp(),d=new Date(t);$('gnOut').textContent=gameNo(k,d);$('gnSub').textContent=k.label+' · '+DAYS[d.getDay()]+' '+d.getDate()+' '+MON[d.getMonth()]+' at '+pad(d.getHours())+':'+pad(d.getMinutes())+' · £'+(k.prize_p/100).toLocaleString()+' to the winner';}
+  fillKinds();fillDays();fillTimes();
+  $('gnKind').onchange=fillTimes;$('gnDay').onchange=fillTimes;$('gnTime').onchange=out;
+  fetch('/api/card',{cache:'no-store'}).then(r=>r.json()).then(s=>{if(s&&s.kinds&&s.kinds.length){KINDS=s.kinds.map(k=>({...k,label:k.label+(k.price_p?' (£'+(k.price_p/100)+(k.offset_s?', :30':'')+')':'')}));fillKinds();fillTimes();}}).catch(()=>{});
+})();
+</script>
   <div class="panel"><h2>What happens to your card</h2>
     <p class="lead">Postcards are opened and keyed in <b>on the working day they arrive</b>. Your entry takes the <b>next number in the same sequence</b> as
        everyone else &mdash; same draw, same sealed commitment, same odds, to the decimal. Nobody can choose a number, and nobody can hold a card back.

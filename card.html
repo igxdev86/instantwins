@@ -350,7 +350,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
       <div class="ndnote" id="tNote"></div>
       <div class="nd-actions">
         <button class="enterbtn" id="tEnter">CONNECTING…</button>
-        <button class="freebtn" id="tLater">Later draw</button>
+        <button class="freebtn" id="tLater">Later draw / game number</button>
         <button class="freebtn" id="freeBtn">Free by post</button>
         <span class="myentries" id="tMine"></span>
       </div>
@@ -606,7 +606,7 @@ async function enterLive(kind,off_at){
 function liveClockTick(){ if(!SINGLE)return; const now=Date.now()+skewMs; const d=S&&S.open&&S.open[SINGLE]; const off=d?new Date(d.off_at):nextOff(SINGLE); $('tClock').textContent=clockStr(off,now); if(off-now<=0&&LIVE)syncLive(); }
 
 /* ================= pick a later draw ================= */
-function openPick(){ const k=SINGLE; $('pickTitle').textContent='PICK A LATER '+drawLabel(k).toUpperCase(); $('pickGo').textContent='ENTER · '+priceLabel(SPEC[k].price_p); $('pickInfo').textContent='';
+function openPick(){ const k=SINGLE; $('pickTitle').textContent='PICK A LATER '+drawLabel(k).toUpperCase(); $('pickGo').textContent=TOKEN?('ENTER · '+priceLabel(SPEC[k].price_p)):'SIGN IN TO ENTER ONLINE'; $('pickInfo').textContent='';
   const day=$('pickDay'); day.innerHTML=''; const n=new Date();
   for(let i=0;i<=7;i++){const d=new Date(n.getFullYear(),n.getMonth(),n.getDate()+i);const o=document.createElement('option');o.value=d.getTime();o.textContent=dayLabel(d)+(i>1?' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]:'');day.appendChild(o);}
   fillTimes(); $('pickModal').classList.add('open'); }
@@ -615,10 +615,10 @@ function fillTimes(){ const k=SINGLE, day=+$('pickDay').value, now=Date.now()+sk
   while(t<day+864e5&&guard++<2000){ if(t>now&&t<=max){ const d=new Date(t); const sold=aheadSold(k,d); const o=document.createElement('option'); o.value=t; o.textContent=hm(d)+'  ·  '+gameNo(k,d)+(sold?('  ·  '+sold+' in'):''); sel.appendChild(o);} t=nextOff(k,t+1).getTime(); }
   if(!sel.options.length){const o=document.createElement('option');o.value='';o.textContent='No draws left on this day';sel.appendChild(o);} pickInfo(); }
 function pickInfo(){const t=+$('pickTime').value; if(!t){$('pickInfo').textContent='';return;} const sold=aheadSold(SINGLE,new Date(t)); const sp=SPEC[SINGLE];
-  $('pickInfo').textContent=drawLabel(SINGLE)+' · '+when(new Date(t))+' · '+sold+(sp.cap?'/'+sp.cap:'')+' numbers in · '+gbp(sp.prize_p)+' to the winner';}
-$('tLater').addEventListener('click',()=>{if(!TOKEN){location.href='signup.html';return;}openPick();});
+  $('pickInfo').innerHTML='<div class="gameno" style="margin:0 0 6px">Game number <b>'+gameNo(SINGLE,new Date(t))+'</b> <i>write this on a postcard to enter free</i></div>'+drawLabel(SINGLE)+' · '+when(new Date(t))+' · '+sold+(sp.cap?'/'+sp.cap:'')+' numbers in · '+gbp(sp.prize_p)+' to the winner';}
+$('tLater').addEventListener('click',()=>openPick());
 $('pickDay').addEventListener('change',fillTimes); $('pickTime').addEventListener('change',pickInfo);
-$('pickGo').addEventListener('click',()=>{const t=+$('pickTime').value;if(t)enterLive(SINGLE,t);});
+$('pickGo').addEventListener('click',()=>{if(!TOKEN){location.href='signup.html';return;}const t=+$('pickTime').value;if(t)enterLive(SINGLE,t);});
 $('pickClose').addEventListener('click',()=>$('pickModal').classList.remove('open'));
 $('pickModal').addEventListener('click',e=>{if(e.target.id==='pickModal')$('pickModal').classList.remove('open');});
 
