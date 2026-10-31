@@ -393,7 +393,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 <div class="modal" id="freeModal">
   <div class="mcard">
     <h3>ENTER FREE BY POST</h3>
-    <p>Send an unenclosed postcard with your full name, address, date of birth and the email on your InstantWins account to:</p>
+    <p>Send an unenclosed postcard with your <b>full name</b>, your <b>account number</b> (starts IW — see your Account page), your address and date of birth to:</p>
     <div class="addr">InstantWins Free Entry<br>IGX Ltd, PO Box (confirmed at launch)<br>United Kingdom</div>
     <p class="small"><b>Write the game number of the draw you want</b> — it’s shown on every draw, e.g. <b>F100-031126-1905</b> (that’s the £1 Five-Minute draw on 3 Nov at 19:05). Any draw in the next 7 days is open; allow 3 working days for second-class post. If you name no draw, your card enters the next draw after it is processed <b>and every Five-Minute Draw for the rest of that day</b>.</p>
     <p class="small">Postal entries take the next number in the same sequence as paid entries — same draw, same odds, same prize. One entry per postcard; send as many as you like. Postcards are processed the working day they arrive. No purchase necessary.</p>
@@ -615,7 +615,7 @@ function fillTimes(){ const k=SINGLE, day=+$('pickDay').value, now=Date.now()+sk
   while(t<day+864e5&&guard++<2000){ if(t>now&&t<=max){ const d=new Date(t); const sold=aheadSold(k,d); const o=document.createElement('option'); o.value=t; o.textContent=hm(d)+'  ·  '+gameNo(k,d)+(sold?('  ·  '+sold+' in'):''); sel.appendChild(o);} t=nextOff(k,t+1).getTime(); }
   if(!sel.options.length){const o=document.createElement('option');o.value='';o.textContent='No draws left on this day';sel.appendChild(o);} pickInfo(); }
 function pickInfo(){const t=+$('pickTime').value; if(!t){$('pickInfo').textContent='';return;} const sold=aheadSold(SINGLE,new Date(t)); const sp=SPEC[SINGLE];
-  $('pickInfo').innerHTML='<div class="gameno" style="margin:0 0 6px">Game number <b>'+gameNo(SINGLE,new Date(t))+'</b> <i>write this on a postcard to enter free</i></div>'+drawLabel(SINGLE)+' · '+when(new Date(t))+' · '+sold+(sp.cap?'/'+sp.cap:'')+' numbers in · '+gbp(sp.prize_p)+' to the winner';}
+  $('pickInfo').innerHTML='<div class="gameno" style="margin:0 0 6px">Game number <b>'+gameNo(SINGLE,new Date(t))+'</b> <i>write this, your name and your IW account number on a postcard</i></div>'+drawLabel(SINGLE)+' · '+when(new Date(t))+' · '+sold+(sp.cap?'/'+sp.cap:'')+' numbers in · '+gbp(sp.prize_p)+' to the winner';}
 $('tLater').addEventListener('click',()=>openPick());
 $('pickDay').addEventListener('change',fillTimes); $('pickTime').addEventListener('change',pickInfo);
 $('pickGo').addEventListener('click',()=>{if(!TOKEN){location.href='signup.html';return;}const t=+$('pickTime').value;if(t)enterLive(SINGLE,t);});
