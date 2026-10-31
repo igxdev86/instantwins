@@ -184,7 +184,7 @@ async function guard(){
 
 $('poNoGo').onclick=async()=>{
   try{const d=await api('/api/admin',{action:'postal_no',token:s.token,email:$('poEmail').value,game_no:$('poNo').value});
-    $('poErr').textContent='Entered into '+d.game_no+' — number #'+(d.first&&d.first.entry_no)+'.';$('poErr').className='err ok';$('poNo').value='';}
+    $('poErr').textContent=(d.moved?('The draw named ('+d.named+') was full or closed — entered into the next with room, '+d.game_no):'Entered into '+d.game_no)+' — number #'+(d.first&&d.first.entry_no)+'.'+(d.moved?' Email the entrant the new game number.':'');$('poErr').className='err ok';$('poNo').value='';}
   catch(e){$('poErr').textContent=e.message;$('poErr').className='err';}
 };
 $('poGo').onclick=async()=>{
