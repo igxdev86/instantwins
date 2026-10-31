@@ -500,9 +500,9 @@ function renderHub(){
       +ks.map(k=>{const d=S&&S.open&&S.open[k.kind]; const off=d?new Date(d.off_at):nextOff(k.kind);
         return '<a class="htile" style="--tc:'+g.col+'" href="card.html?draw='+k.kind+'">'
           +'<div class="hv">'+(k.price_p===0?'£5 FREE':'WIN '+gbp(k.prize_p))+'</div>'
-          +'<div class="hp">'+priceLabel(k.price_p)+' <i>a number</i></div>'
-          +'<div class="hn"><span>next</span><b data-hub-clock="'+k.kind+'">'+clockStr(off,now)+'</b></div>'
-          +'<div class="hn"><span>in</span><span>'+(d?d.sold.toLocaleString()+(k.cap?'/'+k.cap.toLocaleString():''):'—')+'</span></div>'
+          +'<div class="hp">'+(k.price_p===0?'FREE <i>entry</i>':priceLabel(k.price_p)+' <i>entry</i>')+'</div>'
+          +'<div class="hn"><span>closes</span><b data-hub-clock="'+k.kind+'">'+clockStr(off,now)+'</b></div>'
+          +'<div class="hn"><span>entries</span><span>'+(d?d.sold.toLocaleString()+(k.cap?'/'+k.cap.toLocaleString():''):'—')+'</span></div>'
           +'<span class="hbtn">'+(k.price_p===0?'ENTER FREE':'PLAY FOR '+priceLabel(k.price_p))+' &rarr;</span></a>';}).join('')
       +'</div></div>';}).join('');
 }
