@@ -561,10 +561,14 @@ function renderMine(){
   const show=TOKEN&&MINE.length; $('mineHead').style.display=show?'':'none'; $('mineList').style.display=show?'':'none'; if(!show)return;
   $('mineList').innerHTML=MINE.slice(0,20).map(e=>'<div class="brow '+(SPEC[e.kind]?group(e.kind).cls:'')+'"><span class="t">'+when(e.off_at)+'</span><span class="nm">'+drawLabel(e.kind)+' <span class="who">'+gameNo(e.kind,e.off_at)+' · number <b>#'+e.entry_no+'</b>'+(e.via==='post'?' · by post':'')+'</span></span><span class="st">IN</span></div>').join('');
 }
+function nextOpenSlot(k,d){ // first future slot after d with room
+  const sp=SPEC[k]; let t=nextOff(k,new Date(d.off_at).getTime()+1); for(let i=0;i<500;i++){ const a=(S&&S.ahead||[]).find(x=>x.kind===k&&new Date(x.off_at).getTime()===t.getTime()); if(!a||!sp.cap||a.sold<sp.cap)return t; t=nextOff(k,t.getTime()+1);} return t; }
 function applyButtons(){
   if(!SINGLE)return; const d=S&&S.open&&S.open[SINGLE]; const sp=SPEC[SINGLE]; const btn=$('tEnter'); const full=d&&d.cap&&d.sold>=d.cap;
   if(SINGLE==='free'){const entered=d&&(mine[d.id]||[]).length>0; btn.textContent=!LIVE?'CONNECTING…':!TOKEN?'SIGN IN TO ENTER':(entered?'ENTERED ✓':'ENTER FREE'); btn.disabled=!LIVE||(TOKEN&&entered);}
-  else { btn.textContent=!LIVE?'CONNECTING…':full?'DRAW FULL':TOKEN?('ENTER NEXT · '+priceLabel(sp.price_p)):'SIGN IN TO ENTER'; btn.disabled=!LIVE||full||(TOKEN&&balance<sp.price_p/100); }
+  else { const nx=full?nextOpenSlot(SINGLE,d):null; btn.dataset.off=nx?nx.getTime():'';
+    btn.textContent=!LIVE?'CONNECTING…':full?(TOKEN?('FULL — ENTER '+hm(nx)+' · '+priceLabel(sp.price_p)):'SIGN IN TO ENTER'):TOKEN?('ENTER NEXT · '+priceLabel(sp.price_p)):'SIGN IN TO ENTER';
+    btn.disabled=!LIVE||(TOKEN&&balance<sp.price_p/100); }
   $('tLater').disabled=!LIVE;
 }
 function applyState(){
@@ -599,9 +603,9 @@ async function enterLive(kind,off_at){
     const r=await fetch('/api/play',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); const d=await r.json();
     if(!r.ok||d.error||!d.draw_id)throw new Error((d&&d.error)||'entry failed');
     if(d.balance_p!=null)balance=d.balance_p/100; mine[d.draw_id]=(mine[d.draw_id]||[]).concat([d.entry_no]); saveAll(); syncCredit(); try{IWS.coin&&IWS.coin(0,.2);}catch(e){}
-    if(off_at){$('pickInfo').textContent='In! Number #'+d.entry_no+' for the '+drawLabel(kind)+' at '+when(d.off_at)+'.';}
+    const okmsg='In! Number #'+d.entry_no+' for '+drawLabel(kind)+' '+when(d.off_at)+' ('+gameNo(kind,d.off_at)+').'; if(off_at&&$('pickModal').classList.contains('open'))$('pickInfo').textContent=okmsg; else $('tMine').textContent=okmsg;
     await syncLive(); fetchMine();
-  }catch(e){ if(/signed in/.test(e.message)){TOKEN=null;location.href='signup.html';return;} const msg=/credit/.test(e.message)?'Not enough credit':e.message; if(off_at)$('pickInfo').textContent=msg; else $('tMine').textContent=msg; }
+  }catch(e){ if(/signed in/.test(e.message)){TOKEN=null;location.href='signup.html';return;} const msg=/credit/.test(e.message)?'Not enough credit':e.message; if(off_at&&$('pickModal').classList.contains('open'))$('pickInfo').textContent=msg; else $('tMine').textContent=msg; }
 }
 function liveClockTick(){ if(!SINGLE)return; const now=Date.now()+skewMs; const d=S&&S.open&&S.open[SINGLE]; const off=d?new Date(d.off_at):nextOff(SINGLE); $('tClock').textContent=clockStr(off,now); if(off-now<=0&&LIVE)syncLive(); }
 
@@ -623,7 +627,7 @@ $('pickClose').addEventListener('click',()=>$('pickModal').classList.remove('ope
 $('pickModal').addEventListener('click',e=>{if(e.target.id==='pickModal')$('pickModal').classList.remove('open');});
 
 /* ================= wiring ================= */
-$('tEnter').addEventListener('click',()=>enterLive(SINGLE));
+$('tEnter').addEventListener('click',()=>{const o=$('tEnter').dataset.off; enterLive(SINGLE, o?+o:undefined);});
 $('freeBtn').addEventListener('click',()=>$('freeModal').classList.add('open'));
 $('freeClose').addEventListener('click',()=>$('freeModal').classList.remove('open'));
 $('freeModal').addEventListener('click',e=>{if(e.target.id==='freeModal')$('freeModal').classList.remove('open');});
