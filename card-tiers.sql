@@ -22,6 +22,8 @@ language sql immutable as $$ select case k
   when 'gold' then 'Gold Draw' when 'grand' then 'Hourly Grand' when 'platinum' then 'Platinum Draw'
   when 'free' then 'Free Draw' else k end $$;
 
+drop function if exists card_spec(text);   -- OUT-parameter shape changed
+
 -- price/prize/cap/step; offset_s shifts the grid (gold runs at :30); daily kinds use step 86400 + London 21:00
 create or replace function card_spec(k text, out price_p int, out prize_p int, out cap int, out step_s int, out offset_s int)
 language sql immutable as $$
