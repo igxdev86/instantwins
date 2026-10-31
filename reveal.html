@@ -288,7 +288,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
     <div style="margin-left:auto;text-align:right"><div id="modeBadge" style="font-size:.58rem;font-weight:800;letter-spacing:.12em;color:var(--soft)">CONNECTING…</div></div>
   </div>
 
-  <div class="rvtabs" style="display:none"><a href="reveal.html?t=gold" data-t="gold">Gold · £2</a><a href="reveal.html?t=platinum" data-t="platinum">Platinum · £5</a><a href="reveal.html?t=mega" data-t="mega">Mega · £2</a></div>
+  <div class="rvtabs"><a href="reveal.html?t=gold" data-t="gold">Golden · £2</a><a href="reveal.html?t=platinum" data-t="platinum">Platinum · £5</a><a href="reveal.html?t=mega" data-t="mega">Mega · £2</a><a href="reveal.html?t=diamond" data-t="diamond">Diamond · £10</a></div>
 
   <div class="nextdraw" id="rvCard">
     <div class="ndtags">
@@ -357,7 +357,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
     <h3>ENTER FREE BY POST</h3>
     <p>Send an unenclosed postcard with your <b>full name</b>, your <b>account number</b> (starts IW — see your Account page), your address and date of birth to:</p>
     <div class="addr">InstantWins Free Entry<br>IGX Ltd, PO Box (confirmed at launch)<br>United Kingdom</div>
-    <p class="small"><b>Write “Golden Ticket”</b>, your full name and your IW account number. Your entry takes the next ticket in the open round of that book, in the same sequence as paid tickets, with the same chance of every prize. Any prize is credited to your account and can be withdrawn.</p>
+    <p class="small"><b>Write the book name</b> — “Golden Ticket”, “Platinum Ticket”, “Mega Ticket” or “Diamond Ticket” — plus your full name and your IW account number. Your entry takes the next ticket in the open round of that book, in the same sequence as paid tickets, with the same chance of every prize. Any prize is credited to your account and can be withdrawn.</p>
     <p class="small">One ticket per postcard; send as many as you like. Postcards are processed the working day they arrive. No purchase necessary.</p>
     <button class="mclose" id="freeClose">GOT IT</button>
   </div>
@@ -368,7 +368,8 @@ const $=id=>document.getElementById(id);
 const BOOKS={
   gold:    {tag:'PL',name:'Golden Ticket',  book:'Golden book',    price:2,cap:500, col:'#FFC53D',tiers:[[100,1],[20,5],[10,10],[5,20],[2,50]]},
   platinum:{tag:'SC',name:'Platinum Ticket',book:'Platinum book',price:5,cap:500, col:'#C9D6F2',tiers:[[250,1],[50,1],[25,4],[10,5],[5,10]]},
-  mega:    {tag:'SP',name:'Mega Ticket',    book:'Mega book',    price:2,cap:5000,col:'#FF5FA2',tiers:[[1000,1],[100,5],[50,10],[25,20],[10,50],[5,200],[2,500]]}
+  mega:    {tag:'SP',name:'Mega Ticket',    book:'Mega book',    price:2,cap:5000,col:'#FF5FA2',tiers:[[1000,1],[100,5],[50,10],[25,20],[10,50],[5,200],[2,500]]},
+  diamond: {tag:'DD',name:'Diamond Ticket', book:'Diamond book', price:10,cap:1000,col:'#6FD3FF',tiers:[[2500,1],[500,1],[200,5],[50,10],[20,20],[10,40]]}
 };
 const T=(new URLSearchParams(location.search).get('t')||'gold').toLowerCase(); const B=BOOKS[T]||BOOKS.gold;
 document.title=B.name+' — InstantWins.co.uk';
