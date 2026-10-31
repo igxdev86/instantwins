@@ -261,6 +261,11 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .nd-actions .freebtn{flex:0 1 auto;font-size:.72rem;padding:10px 10px}
 .nd-actions .myentries{width:100%;font-size:.64rem}
 .nd-art{opacity:.10}
+.nextdraw.silver{border-top-color:#C9D6F2;background:linear-gradient(180deg,#1A2236,#0A1528)}.nextdraw.silver .nd-clock,.nextdraw.silver .nd-prize b,.nextdraw.silver .nd-at b{color:#DDE6F7;text-shadow:none}.nextdraw.silver .ndtag.key{color:#E6EEFF;border-color:#5B6B8C}.nextdraw.silver .enterbtn{background:linear-gradient(180deg,#F2F6FF,#C9D6F2,#8E9DBF);color:#101A30}
+.nextdraw.goldd{border-top-color:#FFB347;background:linear-gradient(180deg,#2A1A08,#0A1528)}.nextdraw.goldd .nd-clock,.nextdraw.goldd .nd-prize b,.nextdraw.goldd .nd-at b{color:#FFC577;text-shadow:none}.nextdraw.goldd .ndtag.key{color:#FFC577;border-color:#7A4E14}.nextdraw.goldd .enterbtn{background:linear-gradient(180deg,#FFD08A,#FFB347,#C77A14);color:#2A1A08}
+.nextdraw.plat{border-top-color:#B07CFF;background:linear-gradient(180deg,#1E1236,#0A1528)}.nextdraw.plat .nd-clock,.nextdraw.plat .nd-prize b,.nextdraw.plat .nd-at b{color:#C9A6FF;text-shadow:none}.nextdraw.plat .ndtag.key{color:#C9A6FF;border-color:#5A3A8C}.nextdraw.plat .enterbtn{background:linear-gradient(180deg,#D7BFFF,#B07CFF,#6E3FD1);color:#1E1236}
+.brow.silver .pz{color:#DDE6F7}.brow.goldd .pz{color:#FFC577}.brow.plat .pz{color:#C9A6FF}
+.tierbar{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 2px}.tierbar a{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:#9DB4DB;text-decoration:none;border:1px solid var(--line);border-radius:7px;padding:6px 10px;background:#0A1730}
 </style>
 </head>
 <body class="ebh">
@@ -276,24 +281,49 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 <circle cx="340" cy="190" r="28" fill="none" stroke="#fff" stroke-width="3"/><text x="340" y="199" font-size="24">13</text>
 <circle cx="170" cy="60" r="22" fill="none" stroke="#fff" stroke-width="3"/><text x="170" y="68" font-size="20">88</text>
 </g>
-<g fill="#fff"><circle cx="60" cy="200" r="4"/><circle cx="110" cy="40" r="3"/><circle cx="200" cy="215" r="3"/><circle cx="380" cy="30" r="4"/></g></svg></div><div class="hs-tag">The Card</div><div class="hs-h" style="font-size:2.4rem">£1,000 HOURLY GRAND</div><div class="hs-p">A Five-Minute Draw all day, a free £5 draw every ten minutes and the Grand on the hour. Every draw is open for seven days — enter any of them online or free by post. Every prize is paid.</div></div></div></div>
+<g fill="#fff"><circle cx="60" cy="200" r="4"/><circle cx="110" cy="40" r="3"/><circle cx="200" cy="215" r="3"/><circle cx="380" cy="30" r="4"/></g></svg></div><div class="hs-tag">The Card</div><div class="hs-h" style="font-size:2.4rem">£1,000 HOURLY GRAND</div><div class="hs-p">Draws from 50p to £20 a number, from every minute to once a day, and the Grand on the hour. Every draw is open for seven days — enter any of them online or free by post. Every prize is paid.</div></div></div></div>
   <div class="head">
     <h1>The Card</h1>
     <div style="text-align:right"><span class="balance" style="display:none">Credit <b id="bal">£0.00</b></span><div id="modeBadge" style="font-size:.58rem;font-weight:800;letter-spacing:.12em;color:var(--soft);margin-top:3px">CONNECTING…</div></div>
   </div>
 
   <div class="rulebar">
-    <span><b>£1 a number, £100 prize</b> — one price for everyone</span>
+    <span><b>One price per draw</b> — 50p to £20, the same for everyone</span>
     <span><b>Every draw open 7 days</b> — pick any draw, today or next week</span>
     <span><b>Free by post</b> — same numbers, same draw, same odds</span>
     <span><b>Every prize paid</b> — the winner is drawn from the numbers entered</span>
   </div>
 
+  <div class="tierbar"><a href="#minuteCard">50p · £10</a><a href="#fiveCard">£1 · £100</a><a href="#silverCard">£5 · £400</a><a href="#goldCard">£10 · £750</a><a href="#grandCard">£2 · £1,000</a><a href="#platinumCard">£20 · £1,500</a><a href="#freeCard">Free · £5</a></div>
+  <div class="nextdraw mins" id="minuteCard" style="margin-top:10px">
+    <svg class="nd-art" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="#FF5FA2" stroke-width="5" stroke-linecap="round"><circle cx="230" cy="100" r="62"/><path d="M230 100V58M230 100l28 16"/><path d="M190 40l-14-14M270 40l14-14"/></g><text x="100" y="178" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="22" fill="#FF5FA2" text-anchor="middle">60s</text></svg>
+    <div class="ndtags">
+      <span class="ndtag key">60-second draw</span>
+      <span class="ndtag">Every minute</span>
+      <span class="ndtag ref" id="minuteId">—</span>
+    </div>
+    <div class="nd-row">
+      <div class="nd-clockwrap"><div class="nd-clock" id="minuteClock">--:--</div><span class="nd-at">Draws at <b id="minuteAt">--:--</b></span></div>
+      <div class="nd-prize">Winning number takes <b>£10</b></div>
+    </div>
+    <div class="ndchips">
+      <div class="ndchip"><i>Numbers in</i><b><span id="minuteSold">—</span>/50</b></div>
+      <div class="ndchip"><i>Entry</i><b>50p</b></div>
+      <div class="ndchip"><i>Prize</i><b>£10</b></div>
+    </div>
+    <div class="ndnote">A number every minute. The winner is drawn from the numbers entered, so the £10 is always paid.</div>
+    <div class="nd-actions">
+      <button class="enterbtn" id="minuteEnter">ENTER NEXT · 50p</button>
+      <button class="freebtn" data-pick="minute">Later draw</button>
+      <span class="myentries" id="minuteMine"></span>
+    </div>
+    <div class="offbanner" id="minuteOff"></div>
+  </div>
   <div class="nextdraw" id="fiveCard">
     <svg class="nd-art" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="#36E0FF" stroke-width="5" stroke-linecap="round"><circle cx="220" cy="100" r="70"/><path d="M220 100V52M220 100l34 20"/><path d="M220 18v8M220 174v8M138 100h8M294 100h8" stroke-width="4"/></g><g font-family="IBM Plex Mono,monospace" font-weight="700" fill="#36E0FF" text-anchor="middle"><circle cx="70" cy="60" r="30" fill="none" stroke="#36E0FF" stroke-width="5"/><text x="70" y="70" font-size="26">5</text><circle cx="95" cy="150" r="24" fill="none" stroke="#36E0FF" stroke-width="5"/><text x="95" y="158" font-size="20">100</text></g></svg>
     <div class="ndtags">
       <span class="ndtag key">Five-minute draw</span>
-      <span class="ndtag">Next up</span>
+      <span class="ndtag">Every 5 min</span>
       <span class="ndtag ref" id="fiveId">—</span>
     </div>
     <div class="nd-row">
@@ -304,17 +334,111 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
       <div class="ndchip"><i>Numbers in</i><b><span id="fiveSold">—</span>/200</b></div>
       <div class="ndchip"><i>Entry</i><b>£1</b></div>
       <div class="ndchip"><i>Prize</i><b>£100</b></div>
-          </div>
+    </div>
     <div class="ndnote">The winner is drawn from the numbers actually entered, so the £100 is always paid. Enter this draw, or any Five-Minute Draw in the next 7 days.</div>
     <div class="nd-actions">
       <button class="enterbtn" id="fiveEnter">ENTER NEXT · £1</button>
-      <button class="freebtn" data-pick="five">Later draw</button>
-      <button class="freebtn" id="freeBtn">Free by post</button>
+      <button class="freebtn" data-pick="five">Later draw</button><button class="freebtn" id="freeBtn">Free by post</button>
       <span class="myentries" id="fiveMine"></span>
     </div>
     <div class="offbanner" id="fiveOff"></div>
   </div>
-
+  <div class="nextdraw silver" id="silverCard" style="margin-top:10px">
+    <svg class="nd-art" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="#C9D6F2" stroke-width="5"><rect x="150" y="50" width="130" height="100" rx="12"/><path d="M150 85h130"/></g><text x="215" y="130" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="30" fill="#C9D6F2" text-anchor="middle">£5</text></svg>
+    <div class="ndtags">
+      <span class="ndtag key">Silver draw</span>
+      <span class="ndtag">Every 15 min</span>
+      <span class="ndtag ref" id="silverId">—</span>
+    </div>
+    <div class="nd-row">
+      <div class="nd-clockwrap"><div class="nd-clock" id="silverClock">--:--</div><span class="nd-at">Draws at <b id="silverAt">--:--</b></span></div>
+      <div class="nd-prize">Winning number takes <b>£400</b></div>
+    </div>
+    <div class="ndchips">
+      <div class="ndchip"><i>Numbers in</i><b><span id="silverSold">—</span>/160</b></div>
+      <div class="ndchip"><i>Entry</i><b>£5</b></div>
+      <div class="ndchip"><i>Prize</i><b>£400</b></div>
+    </div>
+    <div class="ndnote">£5 a number, £400 to one of the numbers entered. Every quarter hour.</div>
+    <div class="nd-actions">
+      <button class="enterbtn" id="silverEnter">ENTER NEXT · £5</button>
+      <button class="freebtn" data-pick="silver">Later draw</button>
+      <span class="myentries" id="silverMine"></span>
+    </div>
+    <div class="offbanner" id="silverOff"></div>
+  </div>
+  <div class="nextdraw goldd" id="goldCard" style="margin-top:10px">
+    <svg class="nd-art" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="#FFB347" stroke-width="5"><circle cx="215" cy="100" r="64"/><circle cx="215" cy="100" r="44"/></g><text x="215" y="112" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="34" fill="#FFB347" text-anchor="middle">£10</text></svg>
+    <div class="ndtags">
+      <span class="ndtag key">Gold draw</span>
+      <span class="ndtag">Hourly at :30</span>
+      <span class="ndtag ref" id="goldId">—</span>
+    </div>
+    <div class="nd-row">
+      <div class="nd-clockwrap"><div class="nd-clock" id="goldClock">--:--</div><span class="nd-at">Draws at <b id="goldAt">--:--</b></span></div>
+      <div class="nd-prize">Winning number takes <b>£750</b></div>
+    </div>
+    <div class="ndchips">
+      <div class="ndchip"><i>Numbers in</i><b><span id="goldSold">—</span>/150</b></div>
+      <div class="ndchip"><i>Entry</i><b>£10</b></div>
+      <div class="ndchip"><i>Prize</i><b>£750</b></div>
+    </div>
+    <div class="ndnote">£10 a number, £750 to one of the numbers entered. Every hour on the half hour.</div>
+    <div class="nd-actions">
+      <button class="enterbtn" id="goldEnter">ENTER NEXT · £10</button>
+      <button class="freebtn" data-pick="gold">Later draw</button>
+      <span class="myentries" id="goldMine"></span>
+    </div>
+    <div class="offbanner" id="goldOff"></div>
+  </div>
+  <div class="nextdraw grand" id="grandCard" style="margin-top:10px">
+    <svg class="nd-art" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="#FFC53D" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M160 40h100v22a50 50 0 0 1-100 0z"/><path d="M260 48q30 0 30 24 0 26-38 30"/><path d="M160 48q-30 0-30 24 0 26 38 30"/><path d="M200 112h20v26h-20zM182 138h56v12h-56z"/><path d="M60 120l10-22 10 22"/></g><g font-family="IBM Plex Mono,monospace" font-weight="700" fill="#FFC53D" text-anchor="middle"><text x="210" y="84" font-size="30">£</text><circle cx="70" cy="60" r="26" fill="none" stroke="#FFC53D" stroke-width="5"/><text x="70" y="69" font-size="22">1K</text></g><g fill="#FFC53D"><path d="M290 150l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1z"/><path d="M40 160l4 9 10 1-7 7 2 10-9-5-9 5 2-10-7-7 10-1z"/></g></svg>
+    <div class="ndtags">
+      <span class="ndtag key">Hourly Grand</span>
+      <span class="ndtag">On the hour</span>
+      <span class="ndtag ref" id="grandId">—</span>
+    </div>
+    <div class="nd-row">
+      <div class="nd-clockwrap"><div class="nd-clock" id="grandClock">--:--</div><span class="nd-at">Draws at <b id="grandAt">--:--</b></span></div>
+      <div class="nd-prize">Winning number takes <b>£1,000</b></div>
+    </div>
+    <div class="ndchips">
+      <div class="ndchip"><i>Numbers in</i><b><span id="grandSold">—</span>/1,000</b></div>
+      <div class="ndchip"><i>Entry</i><b>£2</b></div>
+      <div class="ndchip"><i>Prize</i><b>£1,000</b></div>
+    </div>
+    <div class="ndnote">£1,000 every hour, paid to one of the numbers entered — no rollover, no retained prize.</div>
+    <div class="nd-actions">
+      <button class="enterbtn" id="grandEnter">ENTER NEXT · £2</button>
+      <button class="freebtn" data-pick="grand">Later draw</button>
+      <span class="myentries" id="grandMine"></span>
+    </div>
+    <div class="offbanner" id="grandOff"></div>
+  </div>
+  <div class="nextdraw plat" id="platinumCard" style="margin-top:10px">
+    <svg class="nd-art" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="#B07CFF" stroke-width="5" stroke-linejoin="round"><path d="M215 36l60 50-60 78-60-78z"/><path d="M155 86h120M215 36l-24 50 24 78 24-78z"/></g></svg>
+    <div class="ndtags">
+      <span class="ndtag key">Platinum draw</span>
+      <span class="ndtag">Daily 21:00</span>
+      <span class="ndtag ref" id="platinumId">—</span>
+    </div>
+    <div class="nd-row">
+      <div class="nd-clockwrap"><div class="nd-clock" id="platinumClock">--:--</div><span class="nd-at">Draws at <b id="platinumAt">--:--</b></span></div>
+      <div class="nd-prize">Winning number takes <b>£1,500</b></div>
+    </div>
+    <div class="ndchips">
+      <div class="ndchip"><i>Numbers in</i><b><span id="platinumSold">—</span>/150</b></div>
+      <div class="ndchip"><i>Entry</i><b>£20</b></div>
+      <div class="ndchip"><i>Prize</i><b>£1,500</b></div>
+    </div>
+    <div class="ndnote">£20 a number, £1,500 to one of the numbers entered. One draw a day at 21:00.</div>
+    <div class="nd-actions">
+      <button class="enterbtn" id="platinumEnter">ENTER NEXT · £20</button>
+      <button class="freebtn" data-pick="platinum">Later draw</button>
+      <span class="myentries" id="platinumMine"></span>
+    </div>
+    <div class="offbanner" id="platinumOff"></div>
+  </div>
   <div class="nextdraw freed" id="freeCard" style="margin-top:10px">
     <svg class="nd-art" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="#19E6A0" stroke-width="5" stroke-linejoin="round"><rect x="110" y="50" width="180" height="110" rx="10"/><path d="M110 60l90 66 90-66"/></g><g fill="none" stroke="#19E6A0" stroke-width="4"><circle cx="260" cy="80" r="24"/><circle cx="260" cy="80" r="16" stroke-dasharray="3 4"/></g><text x="260" y="85" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="12" fill="#19E6A0" text-anchor="middle">FREE</text><g fill="#19E6A0"><path d="M50 60l8 17 19 2-14 13 4 19-17-10-17 10 4-19-14-13 19-2z"/><circle cx="60" cy="150" r="6"/></g></svg>
     <div class="ndtags">
@@ -338,32 +462,6 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
       <span class="myentries" id="freeMine"></span>
     </div>
     <div class="offbanner" id="freeOff"></div>
-  </div>
-
-  <div class="nextdraw grand" id="grandCard" style="margin-top:10px">
-    <svg class="nd-art" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="#FFC53D" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M160 40h100v22a50 50 0 0 1-100 0z"/><path d="M260 48q30 0 30 24 0 26-38 30"/><path d="M160 48q-30 0-30 24 0 26 38 30"/><path d="M200 112h20v26h-20zM182 138h56v12h-56z"/><path d="M60 120l10-22 10 22"/></g><g font-family="IBM Plex Mono,monospace" font-weight="700" fill="#FFC53D" text-anchor="middle"><text x="210" y="84" font-size="30">£</text><circle cx="70" cy="60" r="26" fill="none" stroke="#FFC53D" stroke-width="5"/><text x="70" y="69" font-size="22">1K</text></g><g fill="#FFC53D"><path d="M290 150l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1z"/><path d="M40 160l4 9 10 1-7 7 2 10-9-5-9 5 2-10-7-7 10-1z"/></g></svg>
-    <div class="ndtags">
-      <span class="ndtag key">Hourly Grand</span>
-      <span class="ndtag">On the hour</span>
-      <span class="ndtag">Fixed £1,000</span>
-      <span class="ndtag ref" id="grandId">—</span>
-    </div>
-    <div class="nd-row">
-      <div class="nd-clockwrap"><div class="nd-clock" id="grandClock">--:--</div><span class="nd-at">Draws at <b id="grandAt">--:--</b></span></div>
-      <div class="nd-prize">Winning number takes <b>£1,000</b></div>
-    </div>
-    <div class="ndchips">
-      <div class="ndchip"><i>Numbers in</i><b><span id="grandSold">—</span>/1,000</b></div>
-      <div class="ndchip"><i>Entry</i><b>£2</b></div>
-      <div class="ndchip"><i>Prize</i><b>£1,000</b></div>
-          </div>
-    <div class="ndnote">£1,000 every hour, paid to one of the numbers entered — no rollover, no retained prize. Enter this hour or any Grand in the next 7 days.</div>
-    <div class="nd-actions">
-      <button class="enterbtn" id="grandEnter">ENTER NEXT · £2</button>
-      <button class="freebtn" data-pick="grand">Later draw</button>
-      <span class="myentries" id="grandMine"></span>
-    </div>
-    <div class="offbanner" id="grandOff"></div>
   </div>
 
   <div class="sechead" id="mineHead" style="display:none"><h2>Your upcoming numbers</h2><span>draws you’re already in</span></div>
@@ -430,10 +528,14 @@ const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 function dayLabel(t){t=new Date(t);const n=new Date();const d0=new Date(n.getFullYear(),n.getMonth(),n.getDate());const d=Math.round((new Date(t.getFullYear(),t.getMonth(),t.getDate())-d0)/864e5);
   return d===0?'Today':d===1?'Tomorrow':DAYS[t.getDay()]+' '+t.getDate();}
 function when(t){const d=dayLabel(t);return (d==='Today'?'':d+' ')+hm(t);}
-function drawLabel(k){return k==='grand'?'Hourly Grand':k==='free'?'Free Draw':'Five-Minute Draw';}
-const SPEC={five:{step:300,price:1,prize:100,cap:200,pre:'FIVE-'},grand:{step:3600,price:2,prize:1000,cap:1000,pre:'GRAND-'},free:{step:600,price:0,prize:5,cap:null,pre:'FREE-'}};
-function nextOff(k,from){const s=SPEC[k].step*1000;const t=from||Date.now();return new Date(Math.ceil(t/s)*s);}
-function refId(k,t){return SPEC[k].pre+hm(t).replace(':','');}
+const LABELS={minute:'60-Second Draw',five:'Five-Minute Draw',silver:'Silver Draw',gold:'Gold Draw',grand:'Hourly Grand',platinum:'Platinum Draw',free:'Free Draw'};
+function drawLabel(k){return LABELS[k]||k;}
+const SPEC={minute:{step:60,off:0,price:.5,prize:10,cap:50,pre:'MIN-',cls:'mins'},five:{step:300,off:0,price:1,prize:100,cap:200,pre:'FIVE-',cls:''},silver:{step:900,off:0,price:5,prize:400,cap:160,pre:'SLV-',cls:'silver'},gold:{step:3600,off:1800,price:10,prize:750,cap:150,pre:'GLD-',cls:'goldd'},grand:{step:3600,off:0,price:2,prize:1000,cap:1000,pre:'GRAND-',cls:'grand'},platinum:{step:86400,daily:21,price:20,prize:1500,cap:150,pre:'PLAT-',cls:'plat'},free:{step:600,off:0,price:0,prize:5,cap:null,pre:'FREE-',cls:'freed'}};
+const KINDS=Object.keys(SPEC);
+function nextOff(k,from){const sp=SPEC[k];const t=from||Date.now();
+  if(sp.daily!=null){const d=new Date(t);d.setHours(sp.daily,0,0,0);if(d.getTime()<=t)d.setDate(d.getDate()+1);return d;}
+  const s=sp.step*1000,o=(sp.off||0)*1000;return new Date(Math.ceil((t-o)/s)*s+o);}
+function refId(k,t){return SPEC[k].pre+(SPEC[k].daily!=null?DAYS[new Date(t).getDay()].toUpperCase():hm(t).replace(':',''));}
 function store(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 let TOKEN=null;try{const _s=JSON.parse(localStorage.getItem('iw_session'));TOKEN=_s&&_s.token;}catch(e){}
@@ -489,21 +591,19 @@ function renderUpcoming(){
   const now=Date.now()+skewMs; const rows=[]; const seen={};
   // next 8 scheduled draws across kinds, then any further-ahead draws that already have numbers in
   const cands=[];
-  for(let i=0;i<40;i++){const t=nextOff('five',now+i*300000+1);cands.push(['five',t]);}
-  for(let i=0;i<4;i++){const t=nextOff('grand',now+i*3600000+1);cands.push(['grand',t]);}
-  for(let i=0;i<6;i++){const t=nextOff('free',now+i*600000+1);cands.push(['free',t]);}
+  KINDS.forEach(k=>{let t=nextOff(k,now+1);for(let i=0;i<10&&t.getTime()<now+2*3600000;i++){cands.push([k,t]);t=nextOff(k,t.getTime()+1);}});
   cands.sort((a,b)=>a[1]-b[1]);
   for(const [k,t] of cands){const key=k+t.getTime();if(seen[key])continue;seen[key]=1;rows.push({k,t});if(rows.length>=8)break;}
   ((S&&S.ahead)||[]).forEach(x=>{const t=new Date(x.off_at);if(t.getTime()>rows[rows.length-1].t.getTime()){rows.push({k:x.kind,t,far:true});}});
   $('upcoming').innerHTML=rows.map((r,i)=>{const sold=aheadSold(r.k,r.t);const sp=SPEC[r.k];
-    return '<div class="brow'+(i===0?' next':'')+(r.k==='grand'?' grand':'')+(r.k==='free'?' freed':'')+'">'
+    return '<div class="brow'+(i===0?' next':'')+' '+SPEC[r.k].cls+'">'
       +'<span class="t">'+when(r.t)+'</span><span class="nm">'+drawLabel(r.k)+(sold?' <span class="who">'+sold+(sp.cap?'/'+sp.cap:'')+' in</span>':'')+'</span>'
       +'<span class="pz">'+(r.k==='free'?'£5 FREE':'£'+sp.prize.toLocaleString())+'</span>'
       +'<span class="st">'+(i===0?'NEXT':'OPEN')+'</span></div>';}).join('');
 }
 function renderResults(){
   $('results').innerHTML=results.slice(0,8).map(r=>
-    '<div class="brow'+(r.kind==='grand'?' grand':'')+(r.kind==='free'?' freed':'')+(r.me?' me':'')+'">'
+    '<div class="brow '+(SPEC[r.kind]?SPEC[r.kind].cls:'')+(r.me?' me':'')+'">'
     +'<span class="t">'+when(r.off_at)+'</span>'
     +'<span class="nm">'+drawLabel(r.kind)+' <span class="who">'+(r.entry?('number <b>#'+r.entry+'</b> · '+r.who):'no entries')+'</span></span>'
     +'<span class="pz">'+(r.entry?('£'+r.prize.toLocaleString()):'—')+'</span></div>').join('')||'<div class="brow"><span class="nm" style="color:var(--soft)">No draws settled yet.</span></div>';
@@ -514,25 +614,20 @@ function renderMine(){
   $('mineList').innerHTML=MINE.slice(0,20).map(e=>'<div class="brow'+(e.kind==='grand'?' grand':'')+(e.kind==='free'?' freed':'')+'"><span class="t">'+when(e.off_at)+'</span><span class="nm">'+drawLabel(e.kind)+' <span class="who">number <b>#'+e.entry_no+'</b>'+(e.via==='post'?' · by post':'')+'</span></span><span class="st">IN</span></div>').join('');
 }
 function applyButtons(){
-  const f=S&&S.open&&S.open.five, g=S&&S.open&&S.open.grand, fr=S&&S.open&&S.open.free;
   const full=(d)=>d&&d.cap&&d.sold>=d.cap;
-  $('fiveEnter').textContent=!LIVE?'CONNECTING…':full(f)?'DRAW FULL':TOKEN?'ENTER NEXT · £1':'SIGN IN TO ENTER';
-  $('fiveEnter').disabled=!LIVE||full(f)||(TOKEN&&balance<1);
-  $('grandEnter').textContent=!LIVE?'CONNECTING…':full(g)?'DRAW FULL':TOKEN?'ENTER NEXT · £2':'SIGN IN TO ENTER';
-  $('grandEnter').disabled=!LIVE||full(g)||(TOKEN&&balance<2);
-  const entered=fr&&(mine[fr.id]||[]).length>0;
-  $('freeEnter').textContent=!LIVE?'CONNECTING…':!TOKEN?'SIGN IN TO ENTER':(entered?'ENTERED ✓':'ENTER FREE');
-  $('freeEnter').disabled=!LIVE||(TOKEN&&entered);
+  KINDS.forEach(k=>{const d=S&&S.open&&S.open[k]; const sp=SPEC[k]; const btn=$(k+'Enter'); if(!btn)return;
+    if(k==='free'){const entered=d&&(mine[d.id]||[]).length>0;
+      btn.textContent=!LIVE?'CONNECTING…':!TOKEN?'SIGN IN TO ENTER':(entered?'ENTERED ✓':'ENTER FREE'); btn.disabled=!LIVE||(TOKEN&&entered); return;}
+    const pr=sp.price<1?Math.round(sp.price*100)+'p':'£'+sp.price;
+    btn.textContent=!LIVE?'CONNECTING…':full(d)?'DRAW FULL':TOKEN?('ENTER NEXT · '+pr):'SIGN IN TO ENTER';
+    btn.disabled=!LIVE||full(d)||(TOKEN&&balance<sp.price);});
   document.querySelectorAll('[data-pick]').forEach(b=>b.disabled=!LIVE);
 }
 function applyState(){
-  const f=S.open&&S.open.five, g=S.open&&S.open.grand, fr=S.open&&S.open.free;
-  if(f){$('fiveId').textContent=refId('five',f.off_at);$('fiveAt').textContent=hm(f.off_at);$('fiveSold').textContent=f.sold.toLocaleString();$('fiveHash').textContent=f.seed_hash;
-    const m=mine[f.id]||[];$('fiveMine').textContent=m.length?('You’re in ×'+m.length+' (number '+m.join(', ')+')'):'';}
-  if(g){$('grandId').textContent=refId('grand',g.off_at);$('grandAt').textContent=hm(g.off_at);$('grandSold').textContent=g.sold.toLocaleString();
-    const m=mine[g.id]||[];$('grandMine').textContent=m.length?('You’re in ×'+m.length+' (number '+m.join(', ')+')'):'';}
-  if(fr){$('freeId').textContent=refId('free',fr.off_at);$('freeAt').textContent=hm(fr.off_at);$('freeSold').textContent=fr.sold.toLocaleString();
-    $('freeMine').textContent=(mine[fr.id]||[]).length?'You’re in — good luck!':'';}
+  KINDS.forEach(k=>{const d=S.open&&S.open[k]; if(!d||!$(k+'Id'))return;
+    $(k+'Id').textContent=refId(k,d.off_at); $(k+'At').textContent=(SPEC[k].daily!=null?dayLabel(d.off_at)+' ':'')+hm(d.off_at); $(k+'Sold').textContent=d.sold.toLocaleString();
+    if(k==='five')$('fiveHash').textContent=d.seed_hash;
+    const m=mine[d.id]||[]; $(k+'Mine').textContent=k==='free'?(m.length?'You’re in — good luck!':''):(m.length?('You’re in ×'+m.length+' (number '+m.join(', ')+')'):'');});
   applyButtons(); renderUpcoming();
   let changed=false;
   for(const r of (S.results||[])){
@@ -540,7 +635,7 @@ function applyState(){
     const m=mine[r.draw_id]||[]; const iWon=!!(r.winner_entry&&m.includes(r.winner_entry));
     if(iWon&&TOKEN)setTimeout(fetchMe,300);
     const age=(new Date(S.server_now)-new Date(r.off_at))/1000;
-    const el=r.kind==='grand'?'grandOff':r.kind==='free'?'freeOff':'fiveOff';
+    const el=$(r.kind+'Off')?r.kind+'Off':'fiveOff';
     if(age<600) banner(el,drawLabel(r.kind).toUpperCase(),r.winner_entry,iWon,r.prize_p/100,r.winner_name?r.winner_name:'Number #'+r.winner_entry,r.sold);
   }
   results=(S.results||[]).map(r=>{const won=(mine[r.draw_id]||[]).includes(r.winner_entry);
@@ -556,7 +651,7 @@ async function syncLive(){
     applyState();
   }catch(e){
     if(!LIVE){$('modeBadge').textContent='BACKEND NOT CONNECTED';$('modeBadge').style.color='var(--gold)';
-      ['five','grand','free'].forEach(k=>{const t=nextOff(k);$(k+'Id').textContent=refId(k,t);$(k+'At').textContent=hm(t);});
+      KINDS.forEach(k=>{if(!$(k+'Id'))return;const t=nextOff(k);$(k+'Id').textContent=refId(k,t);$(k+'At').textContent=hm(t);});
       renderUpcoming(); renderResults(); applyButtons();}
   }
 }
@@ -581,7 +676,7 @@ async function enterLive(kind,off_at){
 }
 function liveClockTick(){
   if(!S||!S.open)return; const now=Date.now()+skewMs;
-  ['five','grand','free'].forEach(k=>{const d=S.open[k];if(!d)return;const s=Math.max(Math.floor((new Date(d.off_at)-now)/1000),0);
+  KINDS.forEach(k=>{const d=S.open[k];if(!d||!$(k+'Clock'))return;const s=Math.max(Math.floor((new Date(d.off_at)-now)/1000),0);
     $(k+'Clock').textContent=(s>=3600?pad(Math.floor(s/3600))+':':'')+pad(Math.floor(s/60)%60)+':'+pad(s%60); if(s===0&&LIVE)syncLive();});
 }
 
@@ -589,15 +684,16 @@ function liveClockTick(){
 let pickKind='five';
 function openPick(k){
   pickKind=k; $('pickTitle').textContent='PICK A LATER '+drawLabel(k).toUpperCase();
-  $('pickGo').textContent='ENTER · £'+SPEC[k].price; $('pickInfo').textContent='';
+  $('pickGo').textContent='ENTER · '+(SPEC[k].price<1?Math.round(SPEC[k].price*100)+'p':'£'+SPEC[k].price); $('pickInfo').textContent='';
   const day=$('pickDay'); day.innerHTML='';
   const n=new Date(); for(let i=0;i<=7;i++){const d=new Date(n.getFullYear(),n.getMonth(),n.getDate()+i);const o=document.createElement('option');o.value=d.getTime();o.textContent=dayLabel(d)+(i>1?' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]:'');day.appendChild(o);}
   fillTimes(); $('pickModal').classList.add('open');
 }
 function fillTimes(){
-  const k=pickKind, step=SPEC[k].step*1000, day=+$('pickDay').value, now=Date.now()+skewMs, max=now+7*864e5;
+  const k=pickKind, day=+$('pickDay').value, now=Date.now()+skewMs, max=now+7*864e5;
   const sel=$('pickTime'); sel.innerHTML='';
-  for(let t=day;t<day+864e5;t+=step){ if(t<=now||t>max)continue; const d=new Date(t); const sold=aheadSold(k,d); const o=document.createElement('option'); o.value=t; o.textContent=hm(d)+(sold?('  ·  '+sold+' in'):''); sel.appendChild(o); }
+  let t=nextOff(k,day-1).getTime(); let guard=0;
+  while(t<day+864e5&&guard++<2000){ if(t>now&&t<=max){ const d=new Date(t); const sold=aheadSold(k,d); const o=document.createElement('option'); o.value=t; o.textContent=hm(d)+(sold?('  ·  '+sold+' in'):''); sel.appendChild(o);} t=nextOff(k,t+1).getTime(); }
   if(!sel.options.length){const o=document.createElement('option');o.value='';o.textContent='No draws left on this day';sel.appendChild(o);}
   pickInfo();
 }
@@ -610,9 +706,7 @@ $('pickClose').addEventListener('click',()=>$('pickModal').classList.remove('ope
 $('pickModal').addEventListener('click',e=>{if(e.target.id==='pickModal')$('pickModal').classList.remove('open');});
 
 /* ================= wiring ================= */
-$('fiveEnter').addEventListener('click',()=>enterLive('five'));
-$('grandEnter').addEventListener('click',()=>enterLive('grand'));
-$('freeEnter').addEventListener('click',()=>enterLive('free'));
+KINDS.forEach(k=>{const b=$(k+'Enter');if(b)b.addEventListener('click',()=>enterLive(k));});
 $('freeBtn').addEventListener('click',()=>$('freeModal').classList.add('open'));
 $('freeClose').addEventListener('click',()=>$('freeModal').classList.remove('open'));
 $('freeModal').addEventListener('click',e=>{if(e.target.id==='freeModal')$('freeModal').classList.remove('open');});

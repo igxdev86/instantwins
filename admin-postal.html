@@ -140,7 +140,7 @@ textarea{min-height:90px;resize:vertical}
     <p class="lead">Enter the card exactly as written. The entry takes the next number in the named draw or book, in the same sequence as paid entries. Unnamed cards go into the next Five-Minute Draw and every Five-Minute Draw for the rest of today. Log every card, including rejected ones.</p>
     <label>Account email on the card</label><input id="poEmail" placeholder="name@example.com">
     <label>Draw named</label>
-    <select id="poKind" style="width:100%;border:1.5px solid var(--line);border-radius:7px;padding:12px;background:#050B1A;color:var(--ink);font-family:inherit"><option value="five">Five-Minute Draw</option><option value="grand">Hourly Grand</option><option value="free">Free Draw</option></select>
+    <select id="poKind" style="width:100%;border:1.5px solid var(--line);border-radius:7px;padding:12px;background:#050B1A;color:var(--ink);font-family:inherit"><option value="minute">60-Second Draw (50p)</option><option value="five" selected>Five-Minute Draw (£1)</option><option value="silver">Silver Draw (£5)</option><option value="gold">Gold Draw (£10)</option><option value="grand">Hourly Grand (£2)</option><option value="platinum">Platinum Draw (£20)</option><option value="free">Free Draw</option></select>
     <label>Date and time named (leave blank if none)</label><input id="poAt" type="datetime-local">
     <button class="btn" id="poGo">ENTER POSTCARD</button>
     <div class="err" id="poErr"></div>
