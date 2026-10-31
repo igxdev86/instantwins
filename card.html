@@ -425,11 +425,17 @@ let KINDS=[
  {kind:'five',label:'Five-Minute £100',price_p:100,prize_p:10000,cap:200,step_s:300,offset_s:0,daily_hour:null},
  {kind:'m5_200',label:'Five-Minute £200',price_p:200,prize_p:20000,cap:200,step_s:300,offset_s:0,daily_hour:null},
  {kind:'m5_500',label:'Five-Minute £500',price_p:500,prize_p:50000,cap:200,step_s:300,offset_s:0,daily_hour:null},
+ {kind:'m5_1000',label:'Five-Minute £1,000',price_p:1000,prize_p:100000,cap:200,step_s:300,offset_s:0,daily_hour:null},
+ {kind:'m15_150',label:'15-Minute £150',price_p:200,prize_p:15000,cap:150,step_s:900,offset_s:0,daily_hour:null},
  {kind:'silver',label:'15-Minute £400',price_p:500,prize_p:40000,cap:160,step_s:900,offset_s:0,daily_hour:null},
  {kind:'m15_1000',label:'15-Minute £1,000',price_p:1000,prize_p:100000,cap:200,step_s:900,offset_s:0,daily_hour:null},
+ {kind:'m15_2000',label:'15-Minute £2,000',price_p:2000,prize_p:200000,cap:200,step_s:900,offset_s:0,daily_hour:null},
  {kind:'gold',label:'Hourly £750',price_p:1000,prize_p:75000,cap:150,step_s:3600,offset_s:1800,daily_hour:null},
  {kind:'grand',label:'Hourly Grand £1,000',price_p:200,prize_p:100000,cap:1000,step_s:3600,offset_s:0,daily_hour:null},
  {kind:'h_2000',label:'Hourly £2,000',price_p:2000,prize_p:200000,cap:200,step_s:3600,offset_s:1800,daily_hour:null},
+ {kind:'h_5000',label:'Hourly £5,000',price_p:5000,prize_p:500000,cap:200,step_s:3600,offset_s:1800,daily_hour:null},
+ {kind:'d_400',label:'Daily £400',price_p:500,prize_p:40000,cap:160,step_s:86400,offset_s:0,daily_hour:21},
+ {kind:'d_1000',label:'Daily £1,000',price_p:1000,prize_p:100000,cap:200,step_s:86400,offset_s:0,daily_hour:21},
  {kind:'platinum',label:'Daily £1,500',price_p:2000,prize_p:150000,cap:150,step_s:86400,offset_s:0,daily_hour:21},
  {kind:'d_5000',label:'Daily £5,000',price_p:5000,prize_p:500000,cap:200,step_s:86400,offset_s:0,daily_hour:21},
  {kind:'free',label:'Free Draw £5',price_p:0,prize_p:500,cap:null,step_s:600,offset_s:0,daily_hour:null}];
@@ -489,7 +495,7 @@ function setupHub(){ $('single').style.display='none'; $('hubBack').style.displa
 function clockStr(off,now){const sec=Math.max(Math.floor((off-now)/1000),0);return (sec>=3600?pad(Math.floor(sec/3600))+':':'')+pad(Math.floor(sec/60)%60)+':'+pad(sec%60);}
 function renderHub(){
   const now=Date.now()+skewMs;
-  $('hub').innerHTML=GROUPS.map(g=>{const ks=KINDS.filter(k=>k.step_s===g.step); if(!ks.length)return '';
+  $('hub').innerHTML=GROUPS.map(g=>{const ks=KINDS.filter(k=>k.step_s===g.step).sort((a,b)=>a.prize_p-b.prize_p); if(!ks.length)return '';
     return '<div class="hub-sec"><div class="hub-k" style="--tc:'+g.col+'"><b>'+g.name+'</b><span>'+g.sub+'</span></div><div class="hub-grid">'
       +ks.map(k=>{const d=S&&S.open&&S.open[k.kind]; const off=d?new Date(d.off_at):nextOff(k.kind);
         return '<a class="htile" style="--tc:'+g.col+'" href="card.html?draw='+k.kind+'">'
