@@ -308,6 +308,9 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .htile .hv{padding-right:34px}
 .tic{display:inline-flex;vertical-align:middle;margin-right:5px}.tic svg{width:12px;height:12px;stroke:currentColor}
 .hbtn{position:relative;overflow:hidden}.hbtn::after{content:"";position:absolute;left:0;right:0;top:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0));pointer-events:none}
+.head h1.glossy{display:flex;align-items:center;gap:10px}
+.head h1.glossy .hic{position:static;width:36px;height:36px;border-radius:10px}.head h1.glossy .hic svg{width:20px;height:20px}
+.head h1.glossy span.gt{background:linear-gradient(180deg,#fff 0%,color-mix(in srgb,var(--tc,#36E0FF) 35%,#fff) 45%,var(--tc,#36E0FF) 60%,color-mix(in srgb,var(--tc,#36E0FF) 70%,#000) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 rgba(0,0,0,.45)) drop-shadow(0 0 14px color-mix(in srgb,var(--tc,#36E0FF) 35%,transparent));letter-spacing:.5px}
 </style>
 </head>
 <body class="ebh">
@@ -506,7 +509,7 @@ const ART={60:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" pre
 function setupSingle(){
   const sp=SPEC[SINGLE], g=group(SINGLE);
   $('hub').style.display='none'; $('hubBack').style.display=''; $('single').style.display='';
-  document.title=sp.label+' — Draws — InstantWins.co.uk'; $('pageH1').textContent=sp.label;
+  document.title=sp.label+' — Draws — InstantWins.co.uk'; const h1=$('pageH1'); h1.className='glossy'; h1.style.setProperty('--tc',g.col); h1.innerHTML='<span class="hic">'+ICONS[sp.step_s]+'</span><span class="gt">'+sp.label+'</span>';
   const tile=$('tile'); tile.className='nextdraw '+g.cls; tile.style.setProperty('--tc',g.col);
   $('tArt').innerHTML=ART[sp.step_s].replace(/\{c\}/g,g.col);
   $('tLabel').innerHTML='<span class="tic">'+ICONS[sp.step_s]+'</span>'+sp.label; $('tCad').textContent=cadence(SINGLE);
@@ -518,7 +521,7 @@ function setupSingle(){
   const sibs=KINDS.filter(k=>k.step_s===sp.step_s&&k.kind!==SINGLE);
   $('siblings').innerHTML=sibs.length?'<span style="font-family:Barlow Condensed,sans-serif;font-weight:800;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);align-self:center">Same cadence:</span>'+sibs.map(k=>'<a href="card.html?draw='+k.kind+'">'+priceLabel(k.price_p)+' &rarr; '+gbp(k.prize_p)+'</a>').join(''):'';
 }
-function setupHub(){ $('single').style.display='none'; $('hubBack').style.display='none'; $('hub').style.display=''; $('hashLine').style.display='none'; $('pageH1').textContent='Draws'; }
+function setupHub(){ $('single').style.display='none'; $('hubBack').style.display='none'; $('hub').style.display=''; $('hashLine').style.display='none'; const h1=$('pageH1'); h1.className='glossy'; h1.style.setProperty('--tc','#36E0FF'); h1.innerHTML='<span class="hic">'+ICONS[300]+'</span><span class="gt">Draws</span>'; }
 
 /* ================= hub ================= */
 function clockStr(off,now){const sec=Math.max(Math.floor((off-now)/1000),0);return (sec>=3600?pad(Math.floor(sec/3600))+':':'')+pad(Math.floor(sec/60)%60)+':'+pad(sec%60);}
