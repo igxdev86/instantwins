@@ -165,6 +165,8 @@ textarea{min-height:90px;resize:vertical}
 (function(){
   const $=id=>document.getElementById(id); const pad=n=>String(n).padStart(2,'0');
   let KINDS=[
+   {kind:'t_1',code:'T1',label:'Two-Minute £1 (10p)',step_s:120,offset_s:0,daily_hour:null,prize_p:100},{kind:'t_2',code:'T2',label:'Two-Minute £2 (20p)',step_s:120,offset_s:0,daily_hour:null,prize_p:200},
+   {kind:'t_5',code:'T5',label:'Two-Minute £5 (50p)',step_s:120,offset_s:0,daily_hour:null,prize_p:500},{kind:'t_8',code:'T8',label:'Two-Minute £8 (£1)',step_s:120,offset_s:0,daily_hour:null,prize_p:800},
    {kind:'minute',code:'S10',label:'60-Second £10 (50p)',step_s:60,offset_s:0,daily_hour:null,prize_p:1000},{kind:'s60_20',code:'S20',label:'60-Second £20 (£1)',step_s:60,offset_s:0,daily_hour:null,prize_p:2000},
    {kind:'s60_50',code:'S50',label:'60-Second £50 (£2)',step_s:60,offset_s:0,daily_hour:null,prize_p:5000},{kind:'s60_100',code:'S100',label:'60-Second £100 (£5)',step_s:60,offset_s:0,daily_hour:null,prize_p:10000},
    {kind:'five',code:'F100',label:'Five-Minute £100 (£1)',step_s:300,offset_s:0,daily_hour:null,prize_p:10000},{kind:'m5_200',code:'F200',label:'Five-Minute £200 (£2)',step_s:300,offset_s:0,daily_hour:null,prize_p:20000},
@@ -188,7 +190,7 @@ textarea{min-height:90px;resize:vertical}
   function out(){const t=+$('gnTime').value;if(!t){$('gnOut').textContent='—';$('gnSub').textContent='';return;}const k=sp(),d=new Date(t);$('gnOut').textContent=gameNo(k,d);$('gnSub').textContent=k.label+' · '+DAYS[d.getDay()]+' '+d.getDate()+' '+MON[d.getMonth()]+' at '+pad(d.getHours())+':'+pad(d.getMinutes())+' · £'+(k.prize_p/100).toLocaleString()+' to the winner';}
   fillKinds();fillDays();fillTimes();
   $('gnKind').onchange=fillTimes;$('gnDay').onchange=fillTimes;$('gnTime').onchange=out;
-  fetch('/api/card',{cache:'no-store'}).then(r=>r.json()).then(s=>{if(s&&s.kinds&&s.kinds.length){KINDS=s.kinds.map(k=>({...k,label:k.label+(k.price_p?' (£'+(k.price_p/100)+(k.offset_s?', :30':'')+')':'')}));fillKinds();fillTimes();}}).catch(()=>{});
+  fetch('/api/card',{cache:'no-store'}).then(r=>r.json()).then(s=>{if(s&&s.kinds&&s.kinds.length){KINDS=s.kinds.map(k=>({...k,label:k.label+(k.price_p?' ('+(k.price_p<100?k.price_p+'p':'£'+(k.price_p/100))+(k.offset_s?', :30':'')+')':'')}));fillKinds();fillTimes();}}).catch(()=>{});
 })();
 </script>
   <div class="panel"><h2>What happens to your card</h2>
