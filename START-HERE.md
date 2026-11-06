@@ -116,7 +116,7 @@ After that: payments + accounts + solicitor, then it's a real business.
 ## Legal review changes (30 Oct 2026)
 Benchmark: Omaze. Run in order: `card-legal.sql`, `pieces-legal.sql`, `limits-legal.sql`.
 - Card: Five-Minute (£1→£100), Hourly Grand (£2→£1,000 fixed), Free Draw. Every draw open 7 days ahead; postcards name a draw; winner always drawn from numbers entered. 60-second draw and stake multipliers withdrawn.
-- Games/Spins → `reveal.html` (Gold/Platinum/Mega ticket books, static reveal, no chance presentation). Old game pages redirect.
+- Games/Spins → `reveal.html` (Gold/Platinum/Mega Instant Win rounds, static reveal, no chance presentation). Old game pages redirect.
 - Quizzes withdrawn. Pick a Piece daily, winner from claimed pieces, fixed £50.
 - Affiliates CPA only. GB residents only. Responsible-play controls on Account (ledger trigger enforces).
 - New pages: responsible-play.html, complaints.html, admin-postal.html. Footer carries Trading Disclosures details.
