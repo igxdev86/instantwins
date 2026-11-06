@@ -16,6 +16,8 @@ export default async function handler(req, res) {
     const token = String((body && body.token) || '');
     if (!token || (body && body.action) !== 'mine') return res.status(400).json({ error: 'bad request' });
     r = await rpc('card_mine', { p_token: token });
+  } else if (req.query && req.query.g) {
+    r = await rpc('card_lookup', { p_game_no: String(req.query.g).slice(0, 40) });
   } else {
     r = await rpc('card_state', {});
   }
