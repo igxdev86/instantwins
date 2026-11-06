@@ -180,7 +180,7 @@ async function guard(){
   }catch(e){$('gate').textContent=e.message;return false;}
 }
 
-const GN={120:'Two-Minute Draws',60:'60-Second Draws',300:'Five-Minute Draws',900:'Quarter-Hour Draws',3600:'Hourly Draws',86400:'Daily Draws',600:'Free Draw'};
+const GN={30:'30-Second Draws',60:'60-Second Draws',300:'Five-Minute Draws',900:'Quarter-Hour Draws',3600:'Hourly Draws',86400:'Daily Draws',600:'Free Draw'};
 function money(p){return p===0?'free':p<100?p+'p':'£'+(p/100).toLocaleString();}
 function paint(ks){
   const steps=[...new Set(ks.map(k=>k.step_s))];

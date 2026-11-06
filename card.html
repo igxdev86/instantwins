@@ -443,10 +443,10 @@ function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;
 
 /* ================= draw catalogue (server-driven; fallback until connected) ================= */
 let KINDS=[
- {kind:'t_1',code:'T1',label:'Two-Minute £1',price_p:10,prize_p:100,cap:20,step_s:120,offset_s:0,daily_hour:null},
- {kind:'t_2',code:'T2',label:'Two-Minute £2',price_p:20,prize_p:200,cap:20,step_s:120,offset_s:0,daily_hour:null},
- {kind:'t_5',code:'T5',label:'Two-Minute £5',price_p:50,prize_p:500,cap:20,step_s:120,offset_s:0,daily_hour:null},
- {kind:'t_8',code:'T8',label:'Two-Minute £8',price_p:100,prize_p:800,cap:16,step_s:120,offset_s:0,daily_hour:null},
+ {kind:'t_1',code:'T1',label:'30-Second £1',price_p:10,prize_p:100,cap:20,step_s:30,offset_s:0,daily_hour:null},
+ {kind:'t_2',code:'T2',label:'30-Second £2',price_p:20,prize_p:200,cap:20,step_s:30,offset_s:0,daily_hour:null},
+ {kind:'t_5',code:'T5',label:'30-Second £5',price_p:50,prize_p:500,cap:20,step_s:30,offset_s:0,daily_hour:null},
+ {kind:'t_8',code:'T8',label:'30-Second £8',price_p:100,prize_p:800,cap:16,step_s:30,offset_s:0,daily_hour:null},
  {kind:'minute',code:'S10',label:'60-Second £10',price_p:50,prize_p:1000,cap:50,step_s:60,offset_s:0,daily_hour:null},
  {kind:'s60_20',code:'S20',label:'60-Second £20',price_p:100,prize_p:2000,cap:40,step_s:60,offset_s:0,daily_hour:null},
  {kind:'s60_50',code:'S50',label:'60-Second £50',price_p:200,prize_p:5000,cap:50,step_s:60,offset_s:0,daily_hour:null},
@@ -469,14 +469,14 @@ let KINDS=[
  {kind:'d_5000',code:'D5K',label:'Daily £5,000',price_p:5000,prize_p:500000,cap:200,step_s:86400,offset_s:0,daily_hour:21},
  {kind:'free',code:'FREE',label:'Free Draw £5',price_p:0,prize_p:500,cap:null,step_s:600,offset_s:0,daily_hour:null}];
 let SPEC={}; function indexKinds(){SPEC={};KINDS.forEach(k=>SPEC[k.kind]=k);} indexKinds();
-const ICONS={120:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 10.5h5M9.5 13.5h5"/></svg>',
+const ICONS={30:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 10.5h5M9.5 13.5h5"/></svg>',
  60:'<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 1.5M9 2h6M12 2v3"/></svg>',
  300:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
  900:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
  3600:'<svg viewBox="0 0 24 24"><path d="M8 4h8v3a4 4 0 0 1-8 0z"/><path d="M16 5h2a2 2 0 0 1 0 4h-2M8 5H6a2 2 0 0 0 0 4h2M12 11v4M9 19h6M10 15h4v4h-4z"/></svg>',
  86400:'<svg viewBox="0 0 24 24"><path d="M12 3l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L3 10l6-1z"/></svg>',
  600:'<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 8l9 6 9-6"/></svg>'};
-const GROUPS=[{step:120,name:'Two-Minute Draws',sub:'small prizes from 10p',col:'#8BE9A8',cls:'mini'},
+const GROUPS=[{step:30,name:'30-Second Draws',sub:'small prizes from 10p',col:'#8BE9A8',cls:'mini'},
               {step:60,name:'60-Second Draws',sub:'a winner every minute',col:'#FF5FA2',cls:'mins'},
               {step:300,name:'Five-Minute Draws',sub:'every five minutes, all day',col:'#36E0FF',cls:''},
               {step:900,name:'Quarter-Hour Draws',sub:'on the quarter hour',col:'#DDE6F7',cls:'silver'},
@@ -485,7 +485,7 @@ const GROUPS=[{step:120,name:'Two-Minute Draws',sub:'small prizes from 10p',col:
               {step:600,name:'Free Draw',sub:'100% free, every ten minutes',col:'#19E6A0',cls:'freed'}];
 function group(k){const sp=SPEC[k];return GROUPS.find(g=>g.step===sp.step_s)||GROUPS[1];}
 function drawLabel(k){return SPEC[k]?SPEC[k].label:k;}
-function cadence(k){const sp=SPEC[k];if(sp.daily_hour!=null)return 'daily '+pad(sp.daily_hour)+':00';return {120:'every 2 min',60:'every minute',300:'every 5 min',600:'every 10 min',900:'every 15 min',3600:sp.offset_s?'hourly at :30':'on the hour'}[sp.step_s]||'';}
+function cadence(k){const sp=SPEC[k];if(sp.daily_hour!=null)return 'daily '+pad(sp.daily_hour)+':00';return {30:'every 30 sec',60:'every minute',300:'every 5 min',600:'every 10 min',900:'every 15 min',3600:sp.offset_s?'hourly at :30':'on the hour'}[sp.step_s]||'';}
 function nextOff(k,from){const sp=SPEC[k];const t=from||Date.now();
   if(sp.daily_hour!=null){const d=new Date(t);d.setHours(sp.daily_hour,0,0,0);if(d.getTime()<=t)d.setDate(d.getDate()+1);return d;}
   const s=sp.step_s*1000,o=(sp.offset_s||0)*1000;return new Date(Math.ceil((t-o)/s)*s+o);}

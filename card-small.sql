@@ -1,10 +1,10 @@
--- card-small.sql — Two-Minute "small" draws (£1, £2, £5, £8) + back-office on/off switches
+-- card-small.sql — 30-Second "small" draws (£1, £2, £5, £8) + back-office on/off switches
 -- for draw kinds and whole cadence groups. Run AFTER postal-roll.sql.
 insert into card_kinds (kind,code,label,price_p,prize_p,cap,step_s,offset_s,daily_hour,sort) values
- ('t_1','T1','Two-Minute £1',  10,  100, 20, 120, 0, null, 1),
- ('t_2','T2','Two-Minute £2',  20,  200, 20, 120, 0, null, 2),
- ('t_5','T5','Two-Minute £5',  50,  500, 20, 120, 0, null, 3),
- ('t_8','T8','Two-Minute £8', 100,  800, 16, 120, 0, null, 4)
+ ('t_1','T1','30-Second £1',  10,  100, 20, 30, 0, null, 1),
+ ('t_2','T2','30-Second £2',  20,  200, 20, 30, 0, null, 2),
+ ('t_5','T5','30-Second £5',  50,  500, 20, 30, 0, null, 3),
+ ('t_8','T8','30-Second £8', 100,  800, 16, 30, 0, null, 4)
 on conflict (kind) do update set code=excluded.code, label=excluded.label, price_p=excluded.price_p, prize_p=excluded.prize_p,
   cap=excluded.cap, step_s=excluded.step_s, offset_s=excluded.offset_s, daily_hour=excluded.daily_hour, sort=excluded.sort;
 
