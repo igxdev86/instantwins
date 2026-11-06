@@ -259,7 +259,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .rvtabs{display:flex;gap:6px;margin:8px 0 2px;flex-wrap:wrap}
 .rvtabs a{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:#9DB4DB;text-decoration:none;border:1px solid var(--line);border-radius:7px;padding:7px 12px;background:#0A1730}
 .rvtabs a.on{color:#fff;border-color:var(--bookcol,#36E0FF);box-shadow:inset 0 0 0 1px var(--bookcol,#36E0FF)}
-#rvCard{border-top-color:var(--bookcol,#36E0FF)} #rvCard .nd-clock,#rvCard .nd-prize b{color:var(--bookcol,#36E0FF);text-shadow:none}
+#rvCard{border-top-color:var(--bookcol,#36E0FF);position:relative;overflow:hidden}#rvCard div.nd-art{position:absolute;inset:0;right:0;top:0;transform:none;height:auto;width:auto;max-width:none;opacity:1;filter:none;pointer-events:none;z-index:0}#rvCard .nd-art svg{position:absolute;right:-2%;top:50%;transform:translateY(-50%);height:118%;width:auto;max-width:46%;opacity:.11}#rvCard>*:not(.nd-art){position:relative;z-index:1} #rvCard .nd-clock,#rvCard .nd-prize b{color:var(--bookcol,#36E0FF);text-shadow:none}
 .ticket{display:none;margin-top:12px;border:2px dashed var(--bookcol,#36E0FF);border-radius:12px;padding:18px 20px;background:linear-gradient(180deg,#0F1F42,#0A1528);text-align:center;opacity:0;transform:translateY(6px)}
 .ticket.show{display:block;animation:tkin .45s ease-out forwards}
 @keyframes tkin{to{opacity:1;transform:none}}
@@ -291,6 +291,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
   <div class="rvtabs"><a href="reveal.html?t=gold" data-t="gold">Golden · £2</a><a href="reveal.html?t=platinum" data-t="platinum">Platinum · £5</a><a href="reveal.html?t=mega" data-t="mega">Mega · £2</a><a href="reveal.html?t=diamond" data-t="diamond">Diamond · £10</a></div>
 
   <div class="nextdraw" id="rvCard">
+    <div class="nd-art" id="rvArt"></div>
     <div class="ndtags">
       <span class="ndtag key" id="rvBook">Golden round</span>
       <span class="ndtag">Open until sold out</span>
@@ -380,6 +381,13 @@ $('rvSub').textContent=B.cap.toLocaleString()+' tickets · '+nPrizes+' prizes ·
 document.querySelectorAll('.rvtabs a').forEach(a=>a.classList.toggle('on',a.dataset.t===T));
 $('rvIcon').innerHTML='<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><g transform="rotate(-10 32 32)"><rect x="8" y="18" width="48" height="28" rx="4" fill="none" stroke="'+B.col+'" stroke-width="3" stroke-dasharray="4 3"/><rect x="13" y="23" width="38" height="18" rx="2" fill="'+B.col+'" fill-opacity=".18"/><circle cx="32" cy="32" r="3" fill="'+B.col+'"/></g></svg>';
 document.documentElement.style.setProperty('--bookcol',B.col);
+const ARTS={
+ gold:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g transform="rotate(-12 200 100)" fill="none" stroke="{c}" stroke-width="5"><rect x="110" y="60" width="180" height="80" rx="10" stroke-dasharray="10 7"/><rect x="124" y="74" width="152" height="52" rx="5"/></g><g fill="{c}"><path d="M60 40l8 17 19 2-14 13 4 19-17-10-17 10 4-19-14-13 19-2z"/><path d="M70 160l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1z"/></g></svg>',
+ platinum:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g transform="rotate(-12 200 100)" fill="none" stroke="{c}" stroke-width="5"><rect x="110" y="60" width="180" height="80" rx="10" stroke-dasharray="10 7"/><path d="M124 100h152"/></g><g fill="none" stroke="{c}" stroke-width="5"><circle cx="60" cy="60" r="24"/><circle cx="60" cy="60" r="12"/><path d="M40 160l20-24 20 24z"/></g></svg>',
+ mega:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g transform="rotate(-12 200 100)" fill="none" stroke="{c}" stroke-width="5"><rect x="110" y="60" width="180" height="80" rx="10" stroke-dasharray="10 7"/></g><g fill="none" stroke="{c}" stroke-width="5" stroke-linecap="round"><path d="M50 50l-12-12M70 42v-16M90 50l12-12M50 150l-12 12M70 158v16M90 150l12 12"/><circle cx="70" cy="100" r="22"/></g><text x="200" y="110" font-family="Barlow Condensed,sans-serif" font-weight="900" font-size="34" fill="{c}" text-anchor="middle" transform="rotate(-12 200 100)">MEGA</text></svg>',
+ diamond:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="{c}" stroke-width="5" stroke-linejoin="round"><path d="M215 36l60 50-60 78-60-78z"/><path d="M155 86h120M215 36l-24 50 24 78 24-78z"/></g><g fill="none" stroke="{c}" stroke-width="4" stroke-linejoin="round"><path d="M60 120l26 22-26 34-26-34z"/><path d="M34 142h52"/></g><g fill="{c}"><circle cx="90" cy="50" r="4"/><circle cx="120" cy="30" r="3"/></g></svg>'};
+$('rvArt').innerHTML=(ARTS[T]||ARTS.gold).replace(/\{c\}/g,B.col);
+
 
 let TOKEN=null;try{const _s=JSON.parse(localStorage.getItem('iw_session'));TOKEN=_s&&_s.token;}catch(e){}
 let LIVE=false, balance=0, pool=null, left={}, MINE=[], busy=false;
