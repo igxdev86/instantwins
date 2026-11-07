@@ -189,6 +189,28 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .mtab a.on{color:#36E0FF}.mtab a.on svg{filter:drop-shadow(0 0 6px rgba(54,224,255,.6))}
 .mtab a.iw.on{color:#FF5FA2}.mtab a.iw.on svg{filter:drop-shadow(0 0 6px rgba(255,95,162,.6))}
 @media(max-width:899px){.mtab{display:flex}body{padding-bottom:64px}#iwMute{bottom:150px!important}}
+
+.livestrip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0 4px}
+.livestrip div{background:linear-gradient(180deg,#0F1F42,#0A1528);border:1px solid var(--line);border-radius:10px;padding:10px 12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
+.livestrip div.wide{grid-column:1/-1}
+.livestrip i{display:block;font-style:normal;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.livestrip b{display:block;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1.1rem;color:#fff;margin-top:2px}
+.livestrip .wide b{font-size:.9rem;color:var(--match)}
+.pgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:720px){.pgrid{grid-template-columns:repeat(4,1fr)}}
+.ptile{position:relative;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;border:1px solid color-mix(in srgb,var(--tc) 28%,#1C3463);border-top:3px solid var(--tc);border-radius:12px;padding:12px;background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 14%,#0F1F42),#0A1528 60%);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 8px 24px rgba(0,0,0,.35);min-height:150px}
+.ptile::after{content:"";position:absolute;left:0;right:0;top:0;height:46%;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,0));pointer-events:none}
+.ptile>span{position:relative;z-index:1}
+.pt-art{position:absolute!important;right:-6px;top:6px;width:74px;height:74px;opacity:.14;z-index:0!important;pointer-events:none;transform:rotate(-8deg)}.pt-art svg{width:100%;height:100%}
+.pt-k{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.pt-v{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(1.5rem,7vw,2rem);line-height:1;color:var(--tc);margin-top:3px;text-shadow:0 0 18px color-mix(in srgb,var(--tc) 40%,transparent);padding-right:30px}
+.pt-s{font-size:.64rem;color:var(--soft);margin-top:4px;line-height:1.3}
+.pt-live{font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:var(--match);margin-top:6px;min-height:1em;font-weight:700}
+.pt-btn{margin-top:auto;padding-top:8px}.pt-btn{display:block}
+.pt-btn{text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase;color:var(--td);padding:9px 6px;border-radius:8px;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 55%,#fff),var(--tc) 48%,color-mix(in srgb,var(--tc) 70%,#000));box-shadow:0 4px 14px color-mix(in srgb,var(--tc) 45%,transparent),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(0,0,0,.25)}
+.pt-btn::after{content:"";position:absolute;left:0;right:0;top:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0))}
+.ptile:active .pt-btn{transform:translateY(1px)}
 </style>
 </head>
 <body class="ebh">
@@ -226,28 +248,74 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 </div>
   <div class="hero">
     <h1>Next draw in <span class="num" id="heroClock">5:00</span></h1>
-    <p>Draws run every minute, every five minutes, every quarter hour, every hour and every day, with four prize levels in each &mdash; from 50p to &pound;50 a number. Every draw is open for entry seven days ahead, online or by postcard, and carries a game number. One price per draw, the same for everyone, and every advertised prize is paid. Instant Wins reveal a prize that was fixed before you bought.</p>
-    <div class="gbadge">Every prize on this site is paid &mdash; the winner is always drawn from the entries made</div>
+    <p>Draws from 10p to &pound;50 a number, every 30 seconds to every day, and Instant Win tickets with the prize fixed before you buy.
+       Every draw is open seven days ahead, online or free by post, and <b>every prize is paid</b> &mdash; the winner is always one of the numbers entered.</p>
     <div class="heroctas">
       <a class="cta primary" href="card.html">Open the Draws</a>
       <a class="cta free" href="free-entry.html">Enter free by post</a>
     </div>
   </div>
 
-  <div class="nextbar">
-    <span>Next draw in <span class="num" id="clock">--:--</span></span>
-    <span class="sub">&pound;1 a number &middot; &pound;100 to the winner &middot; pick this draw or any draw in the next 7 days</span>
+  <div class="livestrip" id="livestrip">
+    <div><i>Entries today</i><b id="lsEntries">—</b></div>
+    <div><i>Winners today</i><b id="lsWinners">—</b></div>
+    <div><i>Paid out today</i><b id="lsPaid">—</b></div>
+    <div class="wide"><i>Latest winner</i><b id="lsLast">—</b></div>
   </div>
 
-  <a class="nextbar" href="card.html" style="text-decoration:none;color:#fff;border-color:var(--goldline,#5A4614);border-top:2px solid var(--gold,#FFC53D);background:linear-gradient(180deg,#2A2008,#0A1528)">
-    <span style="font-size:.92rem">DRAWS &middot; every minute to every day &middot; <b style="color:var(--gold);font-size:1.25rem;font-family:'IBM Plex Mono',monospace">&pound;1,000</b> <b>Hourly Grand</b> on the hour &middot; fixed, no rollover</span>
-    <span class="sub" style="color:var(--buy);font-weight:800">Open the draws &rarr;</span>
-  </a>
+  <div class="sechead"><h2>Pick a prize</h2><span>live &middot; every one paid &middot; free by post</span></div>
+  <div class="pgrid">
+    <a class="ptile" style="--tc:#19E6A0;--td:#05210F" href="card.html?draw=free" data-kind="free">
+      <span class="pt-art"><svg viewBox="0 0 64 64" fill="none" stroke="#19E6A0" stroke-width="4" stroke-linejoin="round"><rect x="8" y="16" width="48" height="32" rx="4"/><path d="M8 20l24 16 24-16"/></svg></span>
+      <span class="pt-k">Every 10 minutes</span><span class="pt-v">£5 FREE</span><span class="pt-s">no purchase, one entry per draw</span>
+      <span class="pt-live" data-live="free"></span>
+      <span class="pt-btn">ENTER FREE &rarr;</span>
+    </a>
+    <a class="ptile" style="--tc:#FFC53D;--td:#241B06" href="card.html?draw=grand" data-kind="grand">
+      <span class="pt-art"><svg viewBox="0 0 64 64" fill="none" stroke="#FFC53D" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"><path d="M20 10h24v10a12 12 0 0 1-24 0z"/><path d="M44 14h6a4 4 0 0 1 0 8h-6M20 14h-6a4 4 0 0 0 0 8h6"/><path d="M29 32h6v8h-6zM24 40h16v6H24z"/></svg></span>
+      <span class="pt-k">On the hour</span><span class="pt-v">£1,000</span><span class="pt-s">Hourly Grand · £2 a number</span>
+      <span class="pt-live" data-live="grand"></span>
+      <span class="pt-btn">PLAY FOR £2 &rarr;</span>
+    </a>
+    <a class="ptile" style="--tc:#FF5FA2;--td:#2A0E22" href="card.html?draw=minute" data-kind="minute">
+      <span class="pt-art"><svg viewBox="0 0 64 64" fill="none" stroke="#FF5FA2" stroke-width="4" stroke-linecap="round"><circle cx="32" cy="36" r="20"/><path d="M32 24v12l8 5M24 6h16M32 6v10"/></svg></span>
+      <span class="pt-k">Every minute</span><span class="pt-v">£10</span><span class="pt-s">60-Second Draw · 50p a number</span>
+      <span class="pt-live" data-live="minute"></span>
+      <span class="pt-btn">PLAY FOR 50P &rarr;</span>
+    </a>
+    <a class="ptile" style="--tc:#36E0FF;--td:#07122A" href="card.html?draw=five" data-kind="five">
+      <span class="pt-art"><svg viewBox="0 0 64 64" fill="none" stroke="#36E0FF" stroke-width="4" stroke-linecap="round"><circle cx="32" cy="32" r="24"/><path d="M32 16v16l10 6"/></svg></span>
+      <span class="pt-k">Every 5 minutes</span><span class="pt-v">£100</span><span class="pt-s">Five-Minute Draw · £1 a number</span>
+      <span class="pt-live" data-live="five"></span>
+      <span class="pt-btn">PLAY FOR £1 &rarr;</span>
+    </a>
+    <a class="ptile" style="--tc:#B07CFF;--td:#1E1236" href="card.html?draw=d_5000" data-kind="d_5000">
+      <span class="pt-art"><svg viewBox="0 0 64 64" fill="#B07CFF"><path d="M32 6l8 16 18 2-13 12 3 18-16-9-16 9 3-18L6 24l18-2z"/></svg></span>
+      <span class="pt-k">Daily 21:00</span><span class="pt-v">£5,000</span><span class="pt-s">Platinum Draw · £50 a number</span>
+      <span class="pt-live" data-live="d_5000"></span>
+      <span class="pt-btn">PLAY FOR £50 &rarr;</span>
+    </a>
+    <a class="ptile" style="--tc:#6FD3FF;--td:#07122A" href="reveal.html?t=diamond">
+      <span class="pt-art"><svg viewBox="0 0 64 64" fill="none" stroke="#6FD3FF" stroke-width="4" stroke-linejoin="round"><path d="M32 8l22 18-22 30-22-30z"/><path d="M10 26h44M32 8l-9 18 9 30 9-30z"/></svg></span>
+      <span class="pt-k">Instant Win</span><span class="pt-v">£2,500</span><span class="pt-s">Diamond Ticket · £10 · prize fixed before you buy</span>
+      <span class="pt-live" data-live=""></span>
+      <span class="pt-btn">PLAY FOR £10 &rarr;</span>
+    </a>
+    <a class="ptile" style="--tc:#FFC53D;--td:#241B06" href="reveal.html?t=gold">
+      <span class="pt-art"><svg viewBox="0 0 64 64" fill="none" stroke="#FFC53D" stroke-width="4" stroke-linejoin="round"><g transform="rotate(-12 32 32)"><rect x="8" y="18" width="48" height="28" rx="5" stroke-dasharray="6 4"/><rect x="14" y="24" width="36" height="16" rx="2"/></g></svg></span>
+      <span class="pt-k">Instant Win</span><span class="pt-v">£100</span><span class="pt-s">Golden Ticket · £2 · 86 prizes in every 500</span>
+      <span class="pt-live" data-live=""></span>
+      <span class="pt-btn">PLAY FOR £2 &rarr;</span>
+    </a>
+    <a class="ptile" style="--tc:#C9D6F2;--td:#101A30" href="card.html">
+      <span class="pt-art"><svg viewBox="0 0 64 64" fill="none" stroke="#C9D6F2" stroke-width="4" stroke-linecap="round"><circle cx="32" cy="32" r="24"/><path d="M32 16v16l10 6"/></svg></span>
+      <span class="pt-k">All draws</span><span class="pt-v">24 draws</span><span class="pt-s">30-second to daily · four prize levels each</span>
+      <span class="pt-live" data-live=""></span>
+      <span class="pt-btn">SEE THEM ALL &rarr;</span>
+    </a>
+  </div>
 
-  <a class="nextbar" href="instantwins.html" style="text-decoration:none;color:#fff;border-color:#4A1C38;border-top:2px solid #FF5FA2;background:linear-gradient(180deg,#2A0E22,#0A1528);margin-top:10px">
-    <span><b style="color:#FF8FBE">INSTANT WINS</b> &middot; Golden &pound;2 &middot; Platinum &pound;5 &middot; Mega &pound;2 &middot; Diamond &pound;10 with a &pound;2,500 top &middot; the prize is fixed before you buy and revealed the moment you do</span>
-    <span class="sub" style="color:#C21A5B;font-weight:800">Play &rarr;</span>
-  </a>
+  <div class="gbadge">Every prize on this site is paid &mdash; the winner is always drawn from the entries made. <a href="verify.html" style="color:inherit">Check any draw yourself &rarr;</a></div>
 
   <div class="trust">
     <div class="tcell">
@@ -271,6 +339,24 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 </div>
 
 <nav class="mtab" aria-label="Quick navigation"><a class="home on" href="index.html"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></a><a class="draws" href="card.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Draws</span></a><a class="iw" href="instantwins.html"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><span>Instant</span></a><a class="free" href="free-entry.html"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 8l9 6 9-6"/></svg><span>Free Entry</span></a><a class="acct" href="account.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Account</span></a></nav>
+<script>
+(function(){
+  const $=id=>document.getElementById(id); const pad=n=>String(n).padStart(2,'0');
+  const gbp=p=>'£'+(p/100).toLocaleString('en-GB',{maximumFractionDigits:0});
+  function clock(off,now){const s=Math.max(Math.floor((off-now)/1000),0);return (s>=3600?pad(Math.floor(s/3600))+':':'')+pad(Math.floor(s/60)%60)+':'+pad(s%60);}
+  let S=null, skew=0;
+  async function card(){try{const r=await fetch('/api/card',{cache:'no-store'});S=await r.json();skew=new Date(S.server_now)-new Date();paint();}catch(e){}}
+  function paint(){ if(!S||!S.open)return; const now=Date.now()+skew;
+    document.querySelectorAll('.pt-live[data-live]').forEach(el=>{const k=el.dataset.live;if(!k)return;const d=S.open[k];if(!d)return;
+      const sold=d.sold||0; const full=d.cap&&sold>=d.cap;
+      el.textContent=(full?'full · next one open':sold===0?'nobody in yet — be first!':sold+' in · odds 1 in '+(sold+1))+' · closes '+clock(new Date(d.off_at),now);});
+    const f=S.open.five||S.open.minute; if(f){const c=clock(new Date(f.off_at),now); const h=$('heroClock'); if(h)h.textContent=c;} }
+  async function stats(){try{const r=await fetch('/api/stats',{cache:'no-store'});const d=await r.json(); if(d.error)return;
+    $('lsEntries').textContent=(d.entries_today||0).toLocaleString(); $('lsWinners').textContent=(d.winners_today||0).toLocaleString(); $('lsPaid').textContent=gbp(d.paid_today_p||0);
+    $('lsLast').textContent=d.last?((d.last.name||'A player')+' won '+gbp(d.last.prize_p)+' · '+d.last.label):'first winner of the day still to come';}catch(e){}}
+  card(); stats(); setInterval(card,5000); setInterval(stats,20000); setInterval(paint,1000);
+})();
+</script>
 <footer class="sf"><div class="sf-in">
   <div class="sf-legal"><b>InstantWins.co.uk is operated by IGX Ltd</b>, registered in England and Wales, company no. 13057559. Registered office: 20-22 Wenlock Road, London N1 7GU. Director: Ryan Hughes. Email: <a href="mailto:support@instantwins.co.uk" style="color:#B9C9E8">support@instantwins.co.uk</a>. Every draw and Instant Win ticket on this site is a prize competition with a free postal entry route, run under Schedule 2 of the Gambling Act 2005; postal and paid entries go into the same draw with the same chance of every prize, and every advertised prize is awarded. Open to residents of Great Britain aged 18 or over. <b>Test mode:</b> no payments are taken and all credit is play-money until launch; the mechanics described here are subject to written solicitor sign-off before any real-money operation.</div>
   <div class="sf-grid">
@@ -287,22 +373,10 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 <script>try{document.getElementById('sfYear').textContent=new Date().getFullYear();}catch(e){}</script>
 
 <script>
-const pad=n=>String(n).padStart(2,'0');
-function tick(){
-  const d=new Date(); const e=new Date(d); e.setSeconds(0,0);
-  e.setMinutes(e.getMinutes()-(e.getMinutes()%5)+5);
-  const s=Math.floor((e-d)/1000);
-  const t=pad(Math.floor(s/60))+':'+pad(s%60);
-  document.getElementById('clock').textContent=t;
-  document.getElementById('heroClock').textContent=t;
-}
-setInterval(tick,250); tick();
-</script>
-<script>
 function ebOpen(){document.getElementById('ebside').classList.add('open');document.getElementById('ebscrim').classList.add('open');}
 function ebClose(){document.getElementById('ebside').classList.remove('open');document.getElementById('ebscrim').classList.remove('open');}
 
-(function(){var i=0,n=3,t=document.getElementById('heroTrack'),d=document.getElementById('heroDots');if(!t)return;
+(function(){var i=0,n=document.querySelectorAll('#heroTrack>.heroslide').length,t=document.getElementById('heroTrack'),d=document.getElementById('heroDots');if(!t)return;
 for(var k=0;k<n;k++){(function(k){var b=document.createElement('button');if(k===0)b.className='on';b.onclick=function(){go(k);};d.appendChild(b);})(k);}
 function go(x){i=x;t.style.transform='translateX(-'+(i*100)+'%)';[].forEach.call(d.children,function(b,j){b.className=j===i?'on':'';});}
 setInterval(function(){go((i+1)%n);},5000);})();
