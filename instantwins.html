@@ -186,7 +186,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .it-v{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(1.35rem,6.2vw,2.3rem);line-height:1;margin-top:4px;white-space:nowrap;
   background:linear-gradient(180deg,#fff 0%,color-mix(in srgb,var(--tc) 35%,#fff) 40%,var(--tc) 58%,color-mix(in srgb,var(--tc) 70%,#000) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
   filter:drop-shadow(0 2px 0 rgba(0,0,0,.45)) drop-shadow(0 0 16px color-mix(in srgb,var(--tc) 40%,transparent))}
-.it-v small{display:block;font-size:.58rem;letter-spacing:.16em;font-weight:800;-webkit-text-fill-color:var(--soft);color:var(--soft);filter:none;margin-bottom:2px}
+.it-top{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--tc) 75%,#fff);margin-top:3px}
 .it-n{font-weight:800;font-size:.9rem;color:#fff;margin-top:4px}
 .it-meta{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}.it-meta i{font-style:normal;font-family:'IBM Plex Mono',monospace;font-size:.6rem;font-weight:700;color:#fff;background:rgba(5,11,26,.7);border:1px solid color-mix(in srgb,var(--tc) 35%,#1C3463);border-radius:6px;padding:3px 6px}
 .it-s{font-size:.62rem;color:var(--soft);margin-top:8px;line-height:1.35}
@@ -269,7 +269,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
       return '<div class="isec"><div class="ihk" style="--tc:'+T.col+'"><span class="ihic">'+ART[T.art].replace(/\{c\}/g,'#07122A')+'</span><b>'+tier+' Ticket</b><span class="ihs">win '+gbp(top)+' · '+rows.length+' price'+(rows.length>1?'s':'')+'</span></div><div class="igrid">'
         +rows.map(t=>{const nP=t.tiers.reduce((a,x)=>a+x[1],0); const left=t.sold!=null?t.cap-t.sold:null;
           return '<a class="itile" style="--tc:'+T.col+';--td:'+T.dark+'" href="reveal.html?t='+t.tag+'"><span class="it-art">'+ART[T.art].replace(/\{c\}/g,T.col)+'</span>'
-            +'<span class="it-k">'+pl(t.price_p)+' a ticket · instant</span><span class="it-v"><small>WIN UP TO</small>'+gbp(t.tiers[0][0])+'</span><span class="it-n">'+t.name+' · '+pl(t.price_p)+'</span>'
+            +'<span class="it-k">'+pl(t.price_p)+' a ticket · instant</span><span class="it-v">WIN '+gbp(t.tiers[0][0])+'</span><span class="it-top">top prize · '+nP+' prizes to be won</span><span class="it-n">'+t.name+' · '+pl(t.price_p)+'</span>'
             +'<span class="it-meta"><i>'+t.cap.toLocaleString()+' tickets</i><i>'+nP+' prizes</i><i>1 in '+(t.cap/nP).toFixed(1)+'</i></span>'
             +'<span class="it-s">'+(left!=null?('<b style="color:#fff">'+left.toLocaleString()+' left</b> in round #'+String(t.round).padStart(4,'0')+' · '):'')+'prize fixed before you buy · every prize paid</span>'
             +'<span class="it-btn">PLAY FOR '+pl(t.price_p)+' &rarr;</span></a>';}).join('')+'</div></div>';}).join('');
