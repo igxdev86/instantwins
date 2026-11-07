@@ -354,13 +354,6 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
     <div style="text-align:right"><div id="modeBadge" style="font-size:.58rem;font-weight:800;letter-spacing:.12em;color:var(--soft);margin-top:3px">CONNECTING…</div></div>
   </div>
 
-  <div class="rulebar">
-    <span><b>One price per draw</b> — 50p to £50, the same for everyone</span>
-    <span><b>Every draw open 7 days</b> — pick any draw, today or next week</span>
-    <span><b>Free by post</b> — same numbers, same draw, same odds</span>
-    <span><b>Every prize paid</b> — the winner is drawn from the numbers entered</span>
-  </div>
-
   <div id="hub"></div>
   <a class="hub-back" id="hubBack" href="card.html" style="display:none">&larr; All draws</a>
 
@@ -655,7 +648,8 @@ function applyButtons(){
   $('tLater').disabled=!LIVE;
 }
 function applyState(){
-  if(S.kinds&&S.kinds.length){KINDS=S.kinds;indexKinds(); if(VIEW&&SPEC[VIEW]&&SINGLE!==VIEW){SINGLE=VIEW;setupSingle();}}
+  if(S.kinds&&S.kinds.length){KINDS=S.kinds;indexKinds(); if(VIEW&&SPEC[VIEW]&&SINGLE!==VIEW){SINGLE=VIEW;setupSingle();}
+    if(VIEW&&!SPEC[VIEW]){ SINGLE=null; $('single').innerHTML='<div class="nextdraw" style="text-align:center;padding:26px 16px"><div class="ndnote" style="font-size:.9rem;color:#fff">This draw isn’t running right now.</div><a class="hub-back" href="card.html" style="margin-top:10px">&larr; See the draws that are</a></div>'; $('single').style.display=''; $('hub').style.display='none'; $('hubBack').style.display='none'; $('pageH1').textContent='Draws'; return; }}
   if(SINGLE){const d=S.open&&S.open[SINGLE]; if(d){$('tId').textContent=SPEC[SINGLE].code||SINGLE.toUpperCase(); $('tGameNo').textContent=d.game_no||gameNo(SINGLE,d.off_at); $('tAt').textContent=(SPEC[SINGLE].daily_hour!=null?dayLabel(d.off_at)+' ':'')+hm(d.off_at); $('tSold').textContent=d.sold.toLocaleString(); $('fiveHash').textContent=d.seed_hash; $('tOdds').textContent=oddsLine(SINGLE,d); $('tOdds').classList.toggle('empty',d.sold===0);
       const m=mine[d.id]||[]; $('tMine').textContent=SINGLE==='free'?(m.length?'You’re in — good luck!':''):(m.length?('You’re in ×'+m.length+' (number '+m.join(', ')+')'):'');}}
   applyButtons(); renderUpcoming(); if(!SINGLE)renderHub();
