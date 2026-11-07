@@ -213,11 +213,19 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 
 <div class="wrap"><div class="herowrap"><div class="herotrack"><div class="heroslide hs-spins" style="min-height:150px;padding:20px 22px"><div class="hs-art"><svg viewBox="0 0 520 240" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g transform="rotate(-10 400 120)" fill="none" stroke="#fff" stroke-width="4"><rect x="290" y="70" width="230" height="100" rx="12" stroke-dasharray="10 7"/><rect x="305" y="85" width="200" height="70" rx="6"/></g><g transform="rotate(-10 400 120)" font-family="Barlow Condensed,Arial Black,sans-serif" font-weight="900" fill="#fff" text-anchor="middle"><text x="405" y="134" font-size="40" letter-spacing="3">TICKET</text></g><g fill="#fff"><path d="M120 50l9 20 22 2-16 15 5 22-20-11-20 11 5-22-16-15 22-2z"/><path d="M60 170l6 13 14 1-10 10 3 14-13-7-13 7 3-14-10-10 14-1z"/><circle cx="200" cy="80" r="16" fill="none" stroke="#fff" stroke-width="4"/></g></svg></div><div class="hs-tag">Instant Wins</div><div class="hs-h" style="font-size:2.4rem">FROM 10p · UP TO £2,500</div><div class="hs-p">Tickets from 10p to £10 — pick your prize, then pick your price. The prize table is fixed and published before the first one sells; buy a ticket and see what it holds &mdash; instantly. Free entry by post on every round.</div></div></div></div>
   <div class="pagehead">
-    <h1>Instant Wins</h1>
-    <p>Each round is a numbered set of tickets with a fixed, published prize table &mdash; every prize in the table is in the round, and
+    <div class="ph-row"><h1>Instant Wins</h1><button class="ph-more" id="phMore" aria-expanded="false" aria-controls="phText"><span>How it works</span><i>+</i></button></div>
+    <p id="phText" class="ph-text">Each round is a numbered set of tickets with a fixed, published prize table &mdash; every prize in the table is in the round, and
        the round stays open until every ticket is sold, so every prize is paid. One price per ticket, the same for everyone. Your ticket
        shows its number and the prize attached to it the moment you buy. Same free postal route as every draw on the site.</p>
   </div>
+<style>
+.ph-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ph-more{display:inline-flex;align-items:center;gap:8px;background:#0A1730;border:1px solid var(--line);border-radius:999px;padding:6px 6px 6px 12px;color:var(--soft);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.ph-more i{font-style:normal;width:22px;height:22px;border-radius:50%;background:linear-gradient(180deg,#9BEFFF,#36E0FF 48%,#1796B0);color:#07122A;display:inline-flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;line-height:1;transition:transform .2s}
+.ph-more[aria-expanded="true"] i{transform:rotate(45deg)}
+.ph-text{display:none;margin-top:10px}.ph-text.open{display:block}
+</style>
+<script>(function(){var b=document.getElementById('phMore'),t=document.getElementById('phText');b.onclick=function(){var o=t.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false');};})();</script>
   <div id="ihub"><div class="igrid"><p class="lead">Loading tickets…</p></div></div>
   <div class="how">
     <h2>How Instant Wins work</h2>
