@@ -286,6 +286,18 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .mtab a.on{color:#36E0FF}.mtab a.on svg{filter:drop-shadow(0 0 6px rgba(54,224,255,.6))}
 .mtab a.iw.on{color:#FF5FA2}.mtab a.iw.on svg{filter:drop-shadow(0 0 6px rgba(255,95,162,.6))}
 @media(max-width:899px){.mtab{display:flex}body{padding-bottom:64px}#iwMute{bottom:150px!important}}
+#rvCard{background:radial-gradient(120% 90% at 100% 0%,color-mix(in srgb,var(--bookcol,#36E0FF) 26%,transparent),transparent 55%),linear-gradient(180deg,color-mix(in srgb,var(--bookcol,#36E0FF) 14%,#0F1F42),#0A1528 62%);border-color:color-mix(in srgb,var(--bookcol,#36E0FF) 32%,#1C3463);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 10px 28px rgba(0,0,0,.45)}
+#rvCard::before{content:"";position:absolute;left:0;right:0;top:0;height:46%;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,0));pointer-events:none;z-index:0}
+#rvCard .nd-art svg{opacity:.16;max-width:56%;height:130%}
+#rvCard .nd-clock{background:linear-gradient(180deg,#fff 0%,color-mix(in srgb,var(--bookcol,#36E0FF) 35%,#fff) 40%,var(--bookcol,#36E0FF) 58%,color-mix(in srgb,var(--bookcol,#36E0FF) 70%,#000) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 rgba(0,0,0,.45)) drop-shadow(0 0 16px color-mix(in srgb,var(--bookcol,#36E0FF) 40%,transparent))}
+#rvCard .nd-prize b{background:linear-gradient(180deg,#fff,var(--bookcol,#36E0FF) 60%,color-mix(in srgb,var(--bookcol,#36E0FF) 70%,#000));-webkit-background-clip:text;background-clip:text;color:transparent}
+#rvCard .ndtag.key{color:var(--bookcol,#36E0FF);border-color:color-mix(in srgb,var(--bookcol,#36E0FF) 45%,#1C3463);background:color-mix(in srgb,var(--bookcol,#36E0FF) 12%,#0A1730)}
+#rvCard .ndchip{background:rgba(5,11,26,.65);border-color:color-mix(in srgb,var(--bookcol,#36E0FF) 30%,#1C3463)}
+#rvCard .enterbtn{background:linear-gradient(180deg,color-mix(in srgb,var(--bookcol,#36E0FF) 55%,#fff),var(--bookcol,#36E0FF) 48%,color-mix(in srgb,var(--bookcol,#36E0FF) 70%,#000));color:#07122A;box-shadow:0 5px 18px color-mix(in srgb,var(--bookcol,#36E0FF) 45%,transparent),inset 0 1px 0 rgba(255,255,255,.6),inset 0 -1px 0 rgba(0,0,0,.25);position:relative;overflow:hidden}
+#rvCard .enterbtn::after{content:"";position:absolute;left:0;right:0;top:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.38),rgba(255,255,255,0));pointer-events:none}
+#rvCard .freebtn{border-color:color-mix(in srgb,var(--bookcol,#36E0FF) 55%,#1C3463);color:color-mix(in srgb,var(--bookcol,#36E0FF) 80%,#fff)}
+.rvtabs a.on{background:linear-gradient(180deg,color-mix(in srgb,var(--bookcol,#36E0FF) 30%,#0A1730),#0A1730)}
+.ticket{background:radial-gradient(100% 80% at 50% 0%,color-mix(in srgb,var(--bookcol,#36E0FF) 22%,transparent),transparent 60%),linear-gradient(180deg,#0F1F42,#0A1528)}
 </style>
 </head>
 <body class="ebh">
@@ -447,14 +459,14 @@ function renderTable(){
 }
 function buttons(){
   const soldOut=pool&&pool.left<=0;
-  $('rvBuy').textContent=!LIVE?'CONNECTING…':soldOut?'ROUND SOLD OUT':TOKEN?('BUY A TICKET · £'+B.price):'SIGN IN TO BUY';
+  $('rvBuy').textContent=!LIVE?'CONNECTING…':soldOut?'ROUND SOLD OUT':TOKEN?('BUY A TICKET · '+(B.price<1?Math.round(B.price*100)+'p':'£'+B.price)):'SIGN IN TO BUY';
   $('rvBuy').disabled=!LIVE||soldOut||busy||(TOKEN&&balance<B.price);
 }
 function apply(s){
   pool={id:s.pool,left:s.cap-s.sold,hash:s.seed_hash};
   (s.tiers||[]).forEach(x=>{left[x.prize_p/100]=x.left;});
   $('rvRound').textContent='#'+(s.pool.split('-P')[1]||s.pool); $('tkRound').textContent='ROUND '+$('rvRound').textContent;
-  $('rvLeft').textContent=pool.left.toLocaleString(); $('rvHash').textContent=s.seed_hash;
+  $('rvLeft').textContent=pool.left.toLocaleString(); $('rvCap').textContent=(s.cap||B.cap).toLocaleString(); $('rvHash').textContent=s.seed_hash;
   renderTable(); buttons();
 }
 async function sync(){
