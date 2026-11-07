@@ -215,7 +215,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
   <div class="pagehead">
     <div class="ph-row"><h1>Instant Wins</h1><button class="ph-more" id="phMore" aria-expanded="false" aria-controls="phText"><span>How it works</span><i>+</i></button></div>
     <p id="phText" class="ph-text">Each round is a numbered set of tickets with a fixed, published prize table &mdash; every prize in the table is in the round, and
-       the round stays open until every ticket is sold, so every prize is paid. One price per ticket, the same for everyone. Your ticket
+       the round stays open until every ticket is sold, so every prize is paid. One entry fee per ticket, the same for everyone. Your ticket
        shows its number and the prize attached to it the moment you buy. Same free postal route as every draw on the site.</p>
   </div>
 <style>
@@ -274,7 +274,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
   function render(list){
     const tiers=[...new Set(list.map(t=>t.tier))];
     document.getElementById('ihub').innerHTML=tiers.map(tier=>{const T=TIERS[tier]||TIERS.Golden; const rows=list.filter(t=>t.tier===tier).sort((a,b)=>a.price_p-b.price_p); const top=Math.max(...rows.map(t=>t.tiers[0][0]));
-      return '<div class="isec"><div class="ihk" style="--tc:'+T.col+'"><span class="ihic">'+ART[T.art].replace(/\{c\}/g,'#07122A')+'</span><b>'+tier+' Ticket</b><span class="ihs">win '+gbp(top)+' · '+rows.length+' price'+(rows.length>1?'s':'')+'</span></div><div class="igrid">'
+      return '<div class="isec"><div class="ihk" style="--tc:'+T.col+'"><span class="ihic">'+ART[T.art].replace(/\{c\}/g,'#07122A')+'</span><b>'+tier+' Ticket</b><span class="ihs">win '+gbp(top)+' · from '+pl(Math.min(...rows.map(t=>t.price_p)))+' a ticket</span></div><div class="igrid">'
         +rows.map(t=>{const nP=t.tiers.reduce((a,x)=>a+x[1],0); const left=t.sold!=null?t.cap-t.sold:null;
           return '<a class="itile" style="--tc:'+T.col+';--td:'+T.dark+'" href="reveal.html?t='+t.tag+'"><span class="it-art">'+ART[T.art].replace(/\{c\}/g,T.col)+'</span>'
             +'<span class="it-k">'+pl(t.price_p)+' a ticket · instant</span><span class="it-v">WIN '+gbp(t.tiers[0][0])+'</span><span class="it-top">top prize · '+nP+' prizes to be won</span><span class="it-n">'+t.name+' · '+pl(t.price_p)+'</span>'
