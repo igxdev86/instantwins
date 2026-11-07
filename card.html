@@ -555,7 +555,8 @@ async function fetchMe(){ if(!TOKEN)return; try{const r=await fetch('/api/auth',
 async function fetchMine(){ if(!TOKEN||!LIVE)return; try{const r=await fetch('/api/card',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'mine',token:TOKEN})});
   const m=await r.json(); if(Array.isArray(m)){MINE=m; mine={}; m.forEach(e=>{(mine[e.draw_id]=mine[e.draw_id]||[]).push(e.entry_no);}); saveAll(); renderMine();}}catch(e){} }
 
-const ART={60:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="{c}" stroke-width="5" stroke-linecap="round"><circle cx="230" cy="100" r="62"/><path d="M230 100V58M230 100l28 16"/><path d="M190 40l-14-14M270 40l14-14"/></g><text x="100" y="178" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="22" fill="{c}" text-anchor="middle">60s</text></svg>',
+const ART={30:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="{c}" stroke-width="5" stroke-linecap="round"><circle cx="230" cy="100" r="62"/><path d="M230 100V58M230 100l-20 24"/><path d="M190 40l-14-14M270 40l14-14"/></g><text x="100" y="178" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="22" fill="{c}" text-anchor="middle">30s</text></svg>',
+ 60:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="{c}" stroke-width="5" stroke-linecap="round"><circle cx="230" cy="100" r="62"/><path d="M230 100V58M230 100l28 16"/><path d="M190 40l-14-14M270 40l14-14"/></g><text x="100" y="178" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="22" fill="{c}" text-anchor="middle">60s</text></svg>',
  300:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="{c}" stroke-width="5" stroke-linecap="round"><circle cx="220" cy="100" r="70"/><path d="M220 100V52M220 100l34 20"/></g><g font-family="IBM Plex Mono,monospace" font-weight="700" fill="{c}" text-anchor="middle"><circle cx="70" cy="60" r="30" fill="none" stroke="{c}" stroke-width="5"/><text x="70" y="70" font-size="26">5</text></g></svg>',
  900:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="{c}" stroke-width="5"><rect x="150" y="50" width="130" height="100" rx="12"/><path d="M150 85h130"/></g><text x="215" y="130" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="30" fill="{c}" text-anchor="middle">15</text></svg>',
  3600:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="{c}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M160 40h100v22a50 50 0 0 1-100 0z"/><path d="M260 48q30 0 30 24 0 26-38 30"/><path d="M160 48q-30 0-30 24 0 26 38 30"/><path d="M200 112h20v26h-20zM182 138h56v12h-56z"/></g></svg>',
@@ -567,7 +568,7 @@ function setupSingle(){
   $('hub').style.display='none'; $('hubBack').style.display=''; $('single').style.display='';
   document.title=sp.label+' — Draws — InstantWins.co.uk'; const h1=$('pageH1'); h1.className='glossy'; h1.style.setProperty('--tc',g.col); h1.innerHTML='<span class="hic">'+ICONS[sp.step_s]+'</span><span class="gt">'+sp.label+'</span>';
   const tile=$('tile'); tile.className='nextdraw '+g.cls; tile.style.setProperty('--tc',g.col); $('tOff').style.setProperty('--tc',g.col);
-  $('tArt').innerHTML=ART[sp.step_s].replace(/\{c\}/g,g.col);
+  $('tArt').innerHTML=(ART[sp.step_s]||ART[g.step]||ART[60]).replace(/\{c\}/g,g.col);
   $('tLabel').innerHTML='<span class="tic">'+ICONS[sp.step_s]+'</span>'+sp.label; $('tCad').textContent=cadence(SINGLE);
   $('tPrize').textContent=gbp(sp.prize_p); $('tPrize2').textContent=gbp(sp.prize_p); $('tPrice').textContent=priceLabel(sp.price_p);
   $('tCap').textContent=sp.cap?'/'+sp.cap.toLocaleString():'';
@@ -721,7 +722,7 @@ $('tEnter').addEventListener('click',()=>{const o=$('tEnter').dataset.off; enter
 $('freeBtn').addEventListener('click',()=>$('freeModal').classList.add('open'));
 $('freeClose').addEventListener('click',()=>$('freeModal').classList.remove('open'));
 $('freeModal').addEventListener('click',e=>{if(e.target.id==='freeModal')$('freeModal').classList.remove('open');});
-if(SINGLE)setupSingle(); else setupHub();
+try{ if(SINGLE)setupSingle(); else setupHub(); }catch(e){ console.error(e); setupHub(); SINGLE=null; }
 applyButtons(); if(!SINGLE)$('hub').innerHTML='<div class="hub-k"><span class="hub-sub" style="margin:0">Loading draws…</span></div>'; syncLive();
 setInterval(syncLive,5000); setInterval(liveClockTick,500); setInterval(hubClockTick,500);
 </script>
