@@ -427,7 +427,7 @@ let B=toBook(CAT.find(t=>t.tag===T)||CAT[0]);
 
 document.title=B.name+' · '+(B.price<1?Math.round(B.price*100)+'p':'£'+B.price)+' — InstantWins.co.uk';
 function renderTabs(){const sib=CAT.filter(t=>t.tier===B.tier).sort((a,b)=>a.price_p-b.price_p);const pl=p=>p<100?p+'p':'£'+(p/100);
-  document.querySelector('.rvtabs').innerHTML='<span style="font-family:Barlow Condensed,sans-serif;font-weight:800;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);align-self:center">Same prize, pick a price:</span>'+sib.map(t=>'<a href="reveal.html?t='+t.tag+'" data-t="'+t.tag+'" class="'+(t.tag===B.tag?'on':'')+'">'+pl(t.price_p)+' · '+t.cap.toLocaleString()+' tickets</a>').join('');}
+  document.querySelector('.rvtabs').innerHTML='<span style="font-family:Barlow Condensed,sans-serif;font-weight:800;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);align-self:center">Same prize · play for:</span>'+sib.map(t=>'<a href="reveal.html?t='+t.tag+'" data-t="'+t.tag+'" class="'+(t.tag===B.tag?'on':'')+'">'+pl(t.price_p)+' · '+t.cap.toLocaleString()+' tickets</a>').join('');}
 renderTabs();
 fetch('/api/tickets',{cache:'no-store'}).then(r=>r.json()).then(l=>{if(Array.isArray(l)&&l.length){CAT=l;try{sessionStorage.setItem('iw_tickets',JSON.stringify(l));}catch(e){} const want=l.find(t=>t.tag===T); if(want&&(want.tag!==B.tag||want.cap!==B.cap||want.price_p/100!==B.price)){location.reload();return;} renderTabs();}}).catch(()=>{});
 $('rvName').textContent=B.name+' · '+(B.price<1?Math.round(B.price*100)+'p':'£'+B.price); $('rvBook').textContent=B.book; $('tkBook').textContent=B.book.toUpperCase();
