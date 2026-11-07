@@ -137,7 +137,7 @@ textarea{min-height:90px;resize:vertical}
 
 <div class="wrap">
   <h1>Terms &amp; Conditions</h1>
-  <p class="lead">Plain-English draft, revised 30 October 2026 following legal review. These terms apply to test mode and will be re-issued, and re-accepted by you, before any real-money operation. Subject to written solicitor sign-off.</p>
+  <p class="lead">Plain-English draft, revised 30 October 2026 following legal review. <span class="testmode">These terms apply to test mode and will be re-issued, and re-accepted by you, before any real-money operation.</span> Subject to written solicitor sign-off.</p>
 
   <div class="panel"><h2>1. Who we are</h2>
     <p class="lead">InstantWins.co.uk is operated by <b>IGX Ltd</b>, a company registered in England and Wales, company number 13057559, registered office 20-22 Wenlock Road, London N1 7GU. Director: Ryan Hughes. Email: support@instantwins.co.uk. IGX Ltd is the promoter of every competition on this site.</p>
@@ -148,7 +148,7 @@ textarea{min-height:90px;resize:vertical}
     <p class="lead">There are no games of chance on this site. Ticket Reveals show you the prize attached to a numbered ticket that was fixed before the round opened; nothing you do affects it and there is no spin, drop, wheel or reel. Card draws are draws. Puzzles are skill competitions with a committed tiebreak.</p>
   </div>
 
-  <div class="panel"><h2>3. Test mode</h2>
+  <div class="panel testmode"><h2>3. Test mode</h2>
     <p class="lead">The site currently operates in test mode. All credit is play-money with no cash value; no payments are taken and no cash prizes are paid. The postal address shown is a placeholder until launch.</p>
   </div>
 
@@ -194,8 +194,9 @@ textarea{min-height:90px;resize:vertical}
 </div>
 
 <nav class="mtab" aria-label="Quick navigation"><a class="home" href="index.html"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></a><a class="draws" href="card.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Draws</span></a><a class="iw" href="instantwins.html"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><span>Instant</span></a><a class="free" href="free-entry.html"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 8l9 6 9-6"/></svg><span>Free Entry</span></a><a class="acct" href="account.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Account</span></a></nav>
+<script id="iwSiteMode">(function(){fetch('/api/site',{cache:'no-store'}).then(r=>r.json()).then(d=>{if(d&&d.live){document.documentElement.classList.add('live');document.querySelectorAll('.testmode').forEach(e=>e.remove());}}).catch(()=>{});})();</script>
 <footer class="sf"><div class="sf-in">
-  <div class="sf-legal"><b>InstantWins.co.uk is operated by IGX Ltd</b>, registered in England and Wales, company no. 13057559. Registered office: 20-22 Wenlock Road, London N1 7GU. Director: Ryan Hughes. Email: <a href="mailto:support@instantwins.co.uk" style="color:#B9C9E8">support@instantwins.co.uk</a>. Every draw and Instant Win ticket on this site is a prize competition with a free postal entry route, run under Schedule 2 of the Gambling Act 2005; postal and paid entries go into the same draw with the same chance of every prize, and every advertised prize is awarded. Open to residents of Great Britain aged 18 or over. <b>Test mode:</b> no payments are taken and all credit is play-money until launch; the mechanics described here are subject to written solicitor sign-off before any real-money operation.</div>
+  <div class="sf-legal"><b>InstantWins.co.uk is operated by IGX Ltd</b>, registered in England and Wales, company no. 13057559. Registered office: 20-22 Wenlock Road, London N1 7GU. Director: Ryan Hughes. Email: <a href="mailto:support@instantwins.co.uk" style="color:#B9C9E8">support@instantwins.co.uk</a>. Every draw and Instant Win ticket on this site is a prize competition with a free postal entry route, run under Schedule 2 of the Gambling Act 2005; postal and paid entries go into the same draw with the same chance of every prize, and every advertised prize is awarded. Open to residents of Great Britain aged 18 or over. <span class="testmode"><b>Test mode:</b> no payments are taken and all credit is play-money until launch; the mechanics described here are subject to written solicitor sign-off before any real-money operation.</span></div>
   <div class="sf-grid">
     <div class="sf-brand"><svg viewBox="0 0 250 40" role="img" aria-label="InstantWins" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sfbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#36E0FF"/><stop offset=".5" stop-color="#0FA8FF"/><stop offset="1" stop-color="#0551B5"/></linearGradient></defs><rect x="1" y="1" width="38" height="38" rx="10" fill="url(#sfbg)"/><path d="M23 5 L11 22 H19 L16.5 35 L30 17 H21.5 Z" fill="#fff"/><text x="48" y="30" font-family="Barlow Condensed,Archivo,sans-serif" font-weight="800" font-size="30" letter-spacing="-0.5" fill="#F2F7FF">INSTANT<tspan fill="#36E0FF">WINS</tspan></text></svg><p>Provably fair prize games, puzzles and draws. Every outcome is committed before you play and verifiable after.</p></div>
     <div><div class="sf-h">Play</div><div class="sf-links"><a href="card.html">Draws</a><a href="instantwins.html">Instant Wins</a><a href="results.html">Results</a></div></div>
