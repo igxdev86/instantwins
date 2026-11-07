@@ -278,8 +278,9 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .hub-k{display:flex;align-items:baseline;gap:10px;margin:0 0 8px;border-left:3px solid var(--tc,#36E0FF);padding-left:10px}
 .hub-k b{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.15rem;letter-spacing:.04em;text-transform:uppercase;color:#fff}
 .hub-k span{font-size:.66rem;color:var(--soft)}
-.hub-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-@media(min-width:720px){.hub-grid{grid-template-columns:repeat(4,1fr)}}
+.hub-grid{display:flex;flex-wrap:wrap;gap:10px}
+.hub-grid .htile{flex:1 1 calc(50% - 5px);min-width:0}
+@media(min-width:720px){.hub-grid .htile{flex:1 1 calc(25% - 8px)}}
 .htile{position:relative;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;border:1px solid var(--line);border-top:3px solid var(--tc,#36E0FF);border-radius:12px;padding:12px 12px 12px;background:linear-gradient(180deg,#0F1F42,#0A1528);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
 .htile .hv{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(1.15rem,5.4vw,1.8rem);white-space:nowrap;line-height:1;color:var(--tc,#36E0FF);text-shadow:0 0 18px color-mix(in srgb,var(--tc,#36E0FF) 40%,transparent)}
 .htile .hp{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.78rem;color:#fff;margin-top:5px}
@@ -311,9 +312,10 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .hub-sub{margin-left:auto;text-align:right}@media(max-width:480px){.hub-sub{display:none}}
 .htile{background:linear-gradient(180deg,color-mix(in srgb,var(--tc,#36E0FF) 14%,#0F1F42) 0%,#0A1528 55%);border-color:color-mix(in srgb,var(--tc,#36E0FF) 28%,#1C3463);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 8px 24px rgba(0,0,0,.35)}
 .htile::after{content:"";position:absolute;left:0;right:0;top:0;height:46%;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,0));pointer-events:none;border-radius:12px 12px 0 0}
+.hart{position:absolute;right:-14px;bottom:-14px;width:96px;height:96px;opacity:.12;transform:rotate(-10deg);pointer-events:none;z-index:0}.hart svg{width:100%;height:100%;fill:none;stroke:var(--tc,#36E0FF);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .hic{position:absolute;right:10px;top:10px;width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(180deg,color-mix(in srgb,var(--tc,#36E0FF) 60%,#fff),var(--tc,#36E0FF) 55%,color-mix(in srgb,var(--tc,#36E0FF) 65%,#000));box-shadow:0 3px 10px color-mix(in srgb,var(--tc,#36E0FF) 40%,transparent),inset 0 1px 0 rgba(255,255,255,.55)}
 .hic svg{width:16px;height:16px}
-.htile .hv{padding-right:34px}
+.htile .hv{padding-right:34px}.htile>div,.htile>.hbtn{position:relative;z-index:1}
 .tic{display:inline-flex;vertical-align:middle;margin-right:5px}.tic svg{width:12px;height:12px;stroke:currentColor}
 .hbtn{position:relative;overflow:hidden}.hbtn::after{content:"";position:absolute;left:0;right:0;top:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0));pointer-events:none}
 .head h1.glossy{display:flex;align-items:center;gap:10px}
@@ -570,7 +572,7 @@ function renderHub(){
   $('hub').innerHTML=GROUPS.map(g=>{const ks=KINDS.filter(k=>k.step_s===g.step).sort((a,b)=>a.prize_p-b.prize_p); if(!ks.length)return '';
     return '<div class="hub-sec"><div class="hub-k" style="--tc:'+g.col+'"><span class="hub-ic">'+ICONS[g.step]+'</span><b>'+g.name+'</b><span class="hub-sub">'+g.sub+'</span></div><div class="hub-grid">'
       +ks.map(k=>{const d=S&&S.open&&S.open[k.kind]; const off=d?new Date(d.off_at):nextOff(k.kind);
-        return '<a class="htile" style="--tc:'+g.col+'" href="card.html?draw='+k.kind+'"><span class="hic">'+ICONS[g.step]+'</span>'
+        return '<a class="htile" style="--tc:'+g.col+'" href="card.html?draw='+k.kind+'"><span class="hart">'+ICONS[g.step]+'</span><span class="hic">'+ICONS[g.step]+'</span>'
           +'<div class="hv">'+(k.price_p===0?'£5 FREE':'WIN '+gbp(k.prize_p))+'</div>'
           +'<div class="hp">'+(k.price_p===0?'FREE <i>entry</i>':priceLabel(k.price_p)+' <i>entry</i>')+'</div>'
           +'<div class="hn"><span>closes</span><b data-hub-clock="'+k.kind+'">'+clockStr(off,now)+'</b></div>'
@@ -606,7 +608,7 @@ function renderUpcoming(){
   const now=Date.now()+skewMs; const rows=[];
   (SINGLE?[SINGLE]:KINDS.map(k=>k.kind)).forEach(k=>{let t=nextOff(k,now+1);for(let i=0;i<(SINGLE?12:1);i++){rows.push({k,t});t=nextOff(k,t.getTime()+1);}});
   rows.sort((a,b)=>a.t-b.t);
-  ((S&&S.ahead)||[]).forEach(x=>{if(SINGLE&&x.kind!==SINGLE)return;const t=new Date(x.off_at);if(!rows.some(r=>r.k===x.kind&&r.t.getTime()===t.getTime()))rows.push({k:x.kind,t});});
+  ((S&&S.ahead)||[]).forEach(x=>{if(!SPEC[x.kind])return;if(SINGLE&&x.kind!==SINGLE)return;const t=new Date(x.off_at);if(!rows.some(r=>r.k===x.kind&&r.t.getTime()===t.getTime()))rows.push({k:x.kind,t});});
   rows.sort((a,b)=>a.t-b.t);
   $('upcoming').innerHTML=rows.slice(0,SINGLE?14:16).map((r,i)=>{const sold=aheadSold(r.k,r.t);const sp=SPEC[r.k];
     return '<a class="brow '+group(r.k).cls+(i===0?' next':'')+'" href="card.html?draw='+r.k+'" style="text-decoration:none;color:inherit">'
@@ -614,14 +616,14 @@ function renderUpcoming(){
       +'<span class="pz">'+(r.k==='free'?'£5 FREE':gbp(sp.prize_p))+'</span><span class="st">'+(i===0?'NEXT':'OPEN')+'</span></a>';}).join('');
 }
 function renderResults(){
-  const rs=results.filter(r=>!SINGLE||r.kind===SINGLE).slice(0,10);
+  const rs=results.filter(r=>SPEC[r.kind]&&(!SINGLE||r.kind===SINGLE)).slice(0,10);
   $('results').innerHTML=rs.map(r=>'<div class="brow '+(SPEC[r.kind]?group(r.kind).cls:'')+(r.me?' me':'')+'"><span class="t">'+when(r.off_at)+'</span>'
     +'<span class="nm">'+drawLabel(r.kind)+' <span class="who">'+(r.entry?('number <b>#'+r.entry+'</b> · '+r.who):'no entries')+'</span></span>'
     +'<span class="pz">'+(r.entry?('£'+r.prize.toLocaleString()):'—')+'</span></div>').join('')||'<div class="brow"><span class="nm" style="color:var(--soft)">No draws settled yet.</span></div>';
 }
 function renderMine(){
   const show=TOKEN&&MINE.length; $('mineHead').style.display=show?'':'none'; $('mineList').style.display=show?'':'none'; if(!show)return;
-  $('mineList').innerHTML=MINE.slice(0,20).map(e=>'<div class="brow '+(SPEC[e.kind]?group(e.kind).cls:'')+'"><span class="t">'+when(e.off_at)+'</span><span class="nm">'+drawLabel(e.kind)+' <span class="who">'+gameNo(e.kind,e.off_at)+' · number <b>#'+e.entry_no+'</b>'+(e.via==='post'?' · by post':'')+'</span></span><span class="st">IN</span></div>').join('');
+  $('mineList').innerHTML=MINE.filter(e=>SPEC[e.kind]).slice(0,20).map(e=>'<div class="brow '+(SPEC[e.kind]?group(e.kind).cls:'')+'"><span class="t">'+when(e.off_at)+'</span><span class="nm">'+drawLabel(e.kind)+' <span class="who">'+gameNo(e.kind,e.off_at)+' · number <b>#'+e.entry_no+'</b>'+(e.via==='post'?' · by post':'')+'</span></span><span class="st">IN</span></div>').join('');
 }
 function nextOpenSlot(k,d){ // first future slot after d with room
   const sp=SPEC[k]; let t=nextOff(k,new Date(d.off_at).getTime()+1); for(let i=0;i<500;i++){ const a=(S&&S.ahead||[]).find(x=>x.kind===k&&new Date(x.off_at).getTime()===t.getTime()); if(!a||!sp.cap||a.sold<sp.cap)return t; t=nextOff(k,t.getTime()+1);} return t; }
