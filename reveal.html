@@ -272,8 +272,9 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .ticket.show{display:block;animation:tkin .45s ease-out forwards}
 @keyframes tkin{to{opacity:1;transform:none}}
 .tk-top{display:flex;justify-content:space-between;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.66rem;letter-spacing:.14em;color:var(--soft)}
-.tk-no{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#fff;margin-top:10px;letter-spacing:.08em}
-.tk-no b{font-size:1.6rem;color:var(--bookcol,#36E0FF)}
+.tk-k{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.62rem;letter-spacing:.16em;color:var(--soft);margin-top:10px}
+.tk-no{margin-top:4px}
+.tk-no b{display:inline-block;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:clamp(1.3rem,6.5vw,1.9rem);letter-spacing:.06em;color:#fff;background:#050B1A;border:1.5px dashed var(--bookcol,#36E0FF);border-radius:8px;padding:8px 14px;box-shadow:0 0 18px color-mix(in srgb,var(--bookcol,#36E0FF) 30%,transparent)}
 .tk-prize{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:2.6rem;color:var(--soft);margin-top:6px;line-height:1}
 .ticket.win .tk-prize{color:var(--match);text-shadow:0 0 22px rgba(25,230,160,.45)}
 .tk-sub{font-size:.72rem;color:var(--soft);margin-top:6px}
@@ -345,7 +346,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 
   <div class="ticket" id="ticket" aria-live="polite">
     <div class="tk-top"><span id="tkBook">GOLDEN ROUND</span><span id="tkRound">—</span></div>
-    <div class="tk-no">TICKET <b id="tkNo">#—</b></div>
+    <div class="tk-k">YOUR TICKET</div><div class="tk-no"><b id="tkNo">—</b></div>
     <div class="tk-prize" id="tkPrize">—</div>
     <div class="tk-sub" id="tkSub"></div>
   </div>
@@ -359,7 +360,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
   <div class="fairline">
     <b>Printed before it opened.</b> This round’s seed was fixed and its SHA-256 commitment published before the first ticket sold:
     <span class="hash" id="rvHash">—</span>
-    Ticket <i>i</i> holds the prize at position <b>md5(seed:i)</b> in the shuffled table. When the last ticket sells the seed is revealed so anyone can rebuild the round and check every prize went where the commitment said. Postal entries take the next ticket in the same sequence. Full detail on the <a href="fairness.html" style="color:var(--buy)">Fairness page</a>.
+    Your ticket ID is ticket-code, round, number (e.g. GLD-0007-0214). Ticket <i>i</i> holds the prize at position <b>md5(seed:i)</b> in the shuffled table. When the last ticket sells the seed is revealed so anyone can rebuild the round and check every prize went where the commitment said. Postal entries take the next ticket in the same sequence. Full detail on the <a href="fairness.html" style="color:var(--buy)">Fairness page</a>.
   </div>
   <div class="fairline" style="margin-top:10px">
     <b>Last round:</b> <span id="prevLine">—</span>
@@ -416,14 +417,14 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 <script>
 const $=id=>document.getElementById(id);
 const BOOKS={
-  penny:   {tag:'LD',name:'Penny Ticket',   book:'Penny round',   price:.1,cap:200, col:'#C77A3A',tiers:[[5,1],[1,2],[.5,3],[.2,5],[.1,10]]},
-  bronze:  {tag:'CL',name:'Bronze Ticket',  book:'Bronze round',  price:.2,cap:250, col:'#D98C4A',tiers:[[10,1],[2,3],[1,5],[.5,8],[.2,15]]},
-  silver:  {tag:'PR',name:'Silver Ticket',  book:'Silver round',  price:.5,cap:300, col:'#B8C4D6',tiers:[[25,1],[5,3],[2,6],[1,10],[.5,25]]},
-  lucky:   {tag:'PF',name:'Lucky Ticket',   book:'Lucky round',   price:1,cap:400,  col:'#8BE9A8',tiers:[[50,1],[10,3],[5,8],[2,20],[1,30]]},
-  gold:    {tag:'PL',name:'Golden Ticket',  book:'Golden round',    price:2,cap:500, col:'#FFC53D',tiers:[[100,1],[20,5],[10,10],[5,20],[2,50]]},
-  platinum:{tag:'SC',name:'Platinum Ticket',book:'Platinum round',price:5,cap:500, col:'#C9D6F2',tiers:[[250,1],[50,1],[25,4],[10,5],[5,10]]},
-  mega:    {tag:'SP',name:'Mega Ticket',    book:'Mega round',    price:2,cap:5000,col:'#FF5FA2',tiers:[[1000,1],[100,5],[50,10],[25,20],[10,50],[5,200],[2,500]]},
-  diamond: {tag:'DD',name:'Diamond Ticket', book:'Diamond round', price:10,cap:1000,col:'#6FD3FF',tiers:[[2500,1],[500,1],[200,5],[50,10],[20,20],[10,40]]}
+  penny:   {tag:'LD',code:'PEN',name:'Penny Ticket',   book:'Penny round',   price:.1,cap:200, col:'#C77A3A',tiers:[[5,1],[1,2],[.5,3],[.2,5],[.1,10]]},
+  bronze:  {tag:'CL',code:'BRZ',name:'Bronze Ticket',  book:'Bronze round',  price:.2,cap:250, col:'#D98C4A',tiers:[[10,1],[2,3],[1,5],[.5,8],[.2,15]]},
+  silver:  {tag:'PR',code:'SLV',name:'Silver Ticket',  book:'Silver round',  price:.5,cap:300, col:'#B8C4D6',tiers:[[25,1],[5,3],[2,6],[1,10],[.5,25]]},
+  lucky:   {tag:'PF',code:'LKY',name:'Lucky Ticket',   book:'Lucky round',   price:1,cap:400,  col:'#8BE9A8',tiers:[[50,1],[10,3],[5,8],[2,20],[1,30]]},
+  gold:    {tag:'PL',code:'GLD',name:'Golden Ticket',  book:'Golden round',    price:2,cap:500, col:'#FFC53D',tiers:[[100,1],[20,5],[10,10],[5,20],[2,50]]},
+  platinum:{tag:'SC',code:'PLT',name:'Platinum Ticket',book:'Platinum round',price:5,cap:500, col:'#C9D6F2',tiers:[[250,1],[50,1],[25,4],[10,5],[5,10]]},
+  mega:    {tag:'SP',code:'MEG',name:'Mega Ticket',    book:'Mega round',    price:2,cap:5000,col:'#FF5FA2',tiers:[[1000,1],[100,5],[50,10],[25,20],[10,50],[5,200],[2,500]]},
+  diamond: {tag:'DD',code:'DIA',name:'Diamond Ticket', book:'Diamond round', price:10,cap:1000,col:'#6FD3FF',tiers:[[2500,1],[500,1],[200,5],[50,10],[20,20],[10,40]]}
 };
 const T=(new URLSearchParams(location.search).get('t')||'gold').toLowerCase(); const B=BOOKS[T]||BOOKS.gold;
 document.title=B.name+' — InstantWins.co.uk';
@@ -444,7 +445,8 @@ $('rvArt').innerHTML=(ARTS[T]||(T==='silver'?ARTS.platinum:T==='lucky'?ARTS.mega
 
 
 let TOKEN=null;try{const _s=JSON.parse(localStorage.getItem('iw_session'));TOKEN=_s&&_s.token;}catch(e){}
-let LIVE=false, balance=0, pool=null, left={}, MINE=[], busy=false;
+let LIVE=false, balance=0, pool=null, left={}, MINE=[], busy=false, ROUND='0';
+function ticketId(no,poolId){const r=((poolId||'').split('-P')[1]||ROUND).replace(/^0+/,'')||'0';return (B.code||B.tag)+'-'+r.padStart(4,'0')+'-'+String(no).padStart(4,'0');}
 function store(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function syncCredit(){try{if(TOKEN&&LIVE&&window.__hdrBalance)window.__hdrBalance(Math.round(balance*100));}catch(e){}}
@@ -465,7 +467,7 @@ function buttons(){
 function apply(s){
   pool={id:s.pool,left:s.cap-s.sold,hash:s.seed_hash};
   (s.tiers||[]).forEach(x=>{left[x.prize_p/100]=x.left;});
-  $('rvRound').textContent='#'+(s.pool.split('-P')[1]||s.pool); $('tkRound').textContent='ROUND '+$('rvRound').textContent;
+  ROUND=(s.pool.split('-P')[1]||s.pool).replace(/^0+/,'')||'0'; $('rvRound').textContent='#'+ROUND.padStart(4,'0'); $('tkRound').textContent='ROUND '+$('rvRound').textContent;
   $('rvLeft').textContent=pool.left.toLocaleString(); $('rvCap').textContent=(s.cap||B.cap).toLocaleString(); $('rvHash').textContent=s.seed_hash;
   renderTable(); buttons();
 }
@@ -481,7 +483,7 @@ function renderMine(){
 }
 function showTicket(no,prize){
   const tk=$('ticket'); tk.classList.remove('show','win'); void tk.offsetWidth;
-  $('tkNo').textContent='#'+String(no).padStart(4,'0');
+  $('tkNo').textContent=ticketId(no);
   if(prize){tk.classList.add('win');$('tkPrize').textContent=gb(prize);$('tkSub').textContent='This ticket holds a '+gb(prize)+' prize — credited to your account.';try{prize>=100?IWS.jackpot():IWS.coin(0,.25);}catch(e){}}
   else{$('tkPrize').textContent='NO PRIZE';$('tkSub').textContent='No prize is attached to this ticket.';try{IWS.land(false);}catch(e){}}
   tk.classList.add('show');
