@@ -143,6 +143,31 @@ textarea{min-height:90px;resize:vertical}
     </div>
   </div>
   <div class="panel"><h2>Your entries</h2><div id="entries"><div class="row"><span class="m">Loading…</span></div></div></div>
+  <div class="panel" id="payPanel"><h2>Money</h2>
+    <div class="row"><span>Balance</span><span class="mono" id="payBal">—</span></div>
+    <div id="payOff"><p class="lead">Deposits and withdrawals open at launch. Until then, credit is play-money.</p></div>
+    <div id="payOn" style="display:none">
+      <h3 style="margin:12px 0 4px;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase">Add money by bank transfer</h3>
+      <label>Amount (£5 – £500)</label>
+      <div style="display:flex;gap:8px;align-items:center"><input id="depAmt" inputmode="decimal" placeholder="20"><button class="btn" id="depGo" style="margin-top:0;white-space:nowrap">GET BANK DETAILS</button></div>
+      <div id="depBox" style="display:none;margin-top:10px;border:1px dashed var(--cyan);border-radius:10px;padding:12px;background:#050B1A">
+        <p class="lead" style="margin:0 0 8px">Send <b id="depShowAmt">£20.00</b> by bank transfer (Faster Payments) to:</p>
+        <div class="row"><span>Payee</span><span class="mono" id="bkName">—</span></div>
+        <div class="row"><span>Sort code</span><span class="mono" id="bkSort">—</span></div>
+        <div class="row"><span>Account number</span><span class="mono" id="bkAcct">—</span></div>
+        <div class="row"><span>Reference</span><span class="mono" id="bkRef" style="color:var(--cyan);font-weight:800">—</span></div>
+        <p class="lead" style="margin:8px 0 0;font-size:.7rem">Use the reference exactly — it’s how we match your payment. Credited the same working day it arrives (usually within the hour). No credit cards; debit card and Apple/Google Pay are coming.</p>
+      </div>
+      <h3 style="margin:16px 0 4px;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase">Withdraw to your bank</h3>
+      <label>Amount (£)</label><input id="wdAmt" inputmode="decimal" placeholder="25">
+      <label>Account holder name</label><input id="wdName" placeholder="as it appears on your bank account">
+      <div style="display:flex;gap:8px"><div style="flex:1"><label>Sort code</label><input id="wdSort" inputmode="numeric" placeholder="12-34-56"></div><div style="flex:1"><label>Account number</label><input id="wdAcct" inputmode="numeric" placeholder="12345678"></div></div>
+      <button class="btn" id="wdGo">REQUEST WITHDRAWAL</button>
+      <p class="lead" style="margin-top:6px;font-size:.7rem">Paid by bank transfer within 5 working days, usually sooner. Identity and age are verified before a first withdrawal. The amount is held from your balance while it’s processed.</p>
+    </div>
+    <div class="err" id="payErr"></div>
+    <div id="payHist" style="margin-top:10px"></div>
+  </div>
   <div class="panel" id="rpPanel"><h2>Responsible play</h2>
     <div class="row"><span>Spent today</span><span class="mono" id="rpSpent">—</span></div>
     <div class="row"><span>Daily spending limit</span><span class="mono" id="rpLimit">none set</span></div>
@@ -205,6 +230,19 @@ $('balGo').onclick=async()=>{
   $('balGo').disabled=false;
 };
 
+
+// money
+function fmtP(p){return '£'+(p/100).toLocaleString('en-GB',{minimumFractionDigits:2});}
+function paintPay(m){
+  $('payBal').textContent=fmtP(m.balance_p||0);
+  $('payOff').style.display=m.live?'none':''; $('payOn').style.display=m.live?'':'none';
+  if(m.bank){$('bkName').textContent=m.bank.name+(m.bank.bank?' · '+m.bank.bank:'');$('bkSort').textContent=m.bank.sort;$('bkAcct').textContent=m.bank.acct;$('bkRef').textContent=m.reference;}
+  const rows=[].concat((m.deposits||[]).map(d=>({t:d.created_at,k:'Deposit',a:d.amount_p,s:d.status})),(m.withdrawals||[]).map(w=>({t:w.created_at,k:'Withdrawal ····'+w.last4,a:-w.amount_p,s:w.status}))).sort((a,b)=>new Date(b.t)-new Date(a.t)).slice(0,12);
+  $('payHist').innerHTML=rows.length?rows.map(r=>'<div class="row"><span>'+r.k+' <small style="color:var(--soft)">'+new Date(r.t).toLocaleDateString('en-GB')+' · '+r.s+'</small></span><span class="mono">'+fmtP(Math.abs(r.a))+'</span></div>').join(''):'';
+}
+api('/api/pay',{action:'mine',token:s.token}).then(paintPay).catch(()=>{});
+$('depGo').onclick=async()=>{$('payErr').textContent='';try{const d=await api('/api/pay',{action:'deposit',token:s.token,amount:$('depAmt').value});$('depShowAmt').textContent=fmtP(d.amount_p);$('bkName').textContent=d.bank.name+(d.bank.bank?' · '+d.bank.bank:'');$('bkSort').textContent=d.bank.sort;$('bkAcct').textContent=d.bank.acct;$('bkRef').textContent=d.reference;$('depBox').style.display='';api('/api/pay',{action:'mine',token:s.token}).then(paintPay);}catch(e){$('payErr').textContent=e.message;}};
+$('wdGo').onclick=async()=>{$('payErr').textContent='';try{await api('/api/pay',{action:'withdraw',token:s.token,amount:$('wdAmt').value,name:$('wdName').value,sort:$('wdSort').value,acct:$('wdAcct').value});$('wdAmt').value='';api('/api/pay',{action:'mine',token:s.token}).then(paintPay);location.reload();}catch(e){$('payErr').textContent=e.message;}};
 // responsible play
 function paintLimits(l){
   $('rpSpent').textContent=fmtp(l.spent_today_p||0);
