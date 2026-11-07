@@ -416,24 +416,25 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 
 <script>
 const $=id=>document.getElementById(id);
-const BOOKS={
-  penny:   {tag:'LD',code:'PEN',name:'Penny Ticket',   book:'Penny round',   price:.1,cap:200, col:'#C77A3A',tiers:[[5,1],[1,2],[.5,3],[.2,5],[.1,10]]},
-  bronze:  {tag:'CL',code:'BRZ',name:'Bronze Ticket',  book:'Bronze round',  price:.2,cap:250, col:'#D98C4A',tiers:[[10,1],[2,3],[1,5],[.5,8],[.2,15]]},
-  silver:  {tag:'PR',code:'SLV',name:'Silver Ticket',  book:'Silver round',  price:.5,cap:300, col:'#B8C4D6',tiers:[[25,1],[5,3],[2,6],[1,10],[.5,25]]},
-  lucky:   {tag:'PF',code:'LKY',name:'Lucky Ticket',   book:'Lucky round',   price:1,cap:400,  col:'#8BE9A8',tiers:[[50,1],[10,3],[5,8],[2,20],[1,30]]},
-  gold:    {tag:'PL',code:'GLD',name:'Golden Ticket',  book:'Golden round',    price:2,cap:500, col:'#FFC53D',tiers:[[100,1],[20,5],[10,10],[5,20],[2,50]]},
-  platinum:{tag:'SC',code:'PLT',name:'Platinum Ticket',book:'Platinum round',price:5,cap:500, col:'#C9D6F2',tiers:[[250,1],[50,1],[25,4],[10,5],[5,10]]},
-  mega:    {tag:'SP',code:'MEG',name:'Mega Ticket',    book:'Mega round',    price:2,cap:5000,col:'#FF5FA2',tiers:[[1000,1],[100,5],[50,10],[25,20],[10,50],[5,200],[2,500]]},
-  diamond: {tag:'DD',code:'DIA',name:'Diamond Ticket', book:'Diamond round', price:10,cap:1000,col:'#6FD3FF',tiers:[[2500,1],[500,1],[200,5],[50,10],[20,20],[10,40]]}
-};
-const T=(new URLSearchParams(location.search).get('t')||'gold').toLowerCase(); const B=BOOKS[T]||BOOKS.gold;
-document.title=B.name+' — InstantWins.co.uk';
-$('rvName').textContent=B.name; $('rvBook').textContent=B.book; $('tkBook').textContent=B.book.toUpperCase();
+const TIERS={Penny:{col:'#C77A3A',art:'gold'},Bronze:{col:'#D98C4A',art:'gold'},Silver:{col:'#B8C4D6',art:'platinum'},Lucky:{col:'#8BE9A8',art:'mega'},Golden:{col:'#FFC53D',art:'gold'},Platinum:{col:'#DDE6F7',art:'platinum'},Mega:{col:'#FF5FA2',art:'mega'},Diamond:{col:'#6FD3FF',art:'diamond'}};
+const LEGACY={penny:'LD',bronze:'CL',silver:'PR',lucky:'PF',gold:'PL',platinum:'SC',mega:'SP',diamond:'DD'};
+let CAT=[]; try{CAT=JSON.parse(sessionStorage.getItem('iw_tickets')||'[]');}catch(e){}
+const FALLBACK=[{tag:'PL',name:'Golden Ticket',tier:'Golden',code:'GLD',price_p:200,cap:500,tiers:[[10000,1],[2000,5],[1000,10],[500,20],[200,50]]}];
+if(!CAT.length)CAT=FALLBACK;
+let T=(new URLSearchParams(location.search).get('t')||'PL'); T=LEGACY[T.toLowerCase()]||T.toUpperCase();
+function toBook(t){const tr=TIERS[t.tier]||TIERS.Golden;return {tag:t.tag,name:t.name,book:t.tier+' round',price:t.price_p/100,cap:t.cap,col:tr.col,art:tr.art,code:t.code,tier:t.tier,tiers:t.tiers.map(x=>[x[0]/100,x[1]])};}
+let B=toBook(CAT.find(t=>t.tag===T)||CAT[0]);
+
+document.title=B.name+' · '+(B.price<1?Math.round(B.price*100)+'p':'£'+B.price)+' — InstantWins.co.uk';
+function renderTabs(){const sib=CAT.filter(t=>t.tier===B.tier).sort((a,b)=>a.price_p-b.price_p);const pl=p=>p<100?p+'p':'£'+(p/100);
+  document.querySelector('.rvtabs').innerHTML='<span style="font-family:Barlow Condensed,sans-serif;font-weight:800;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);align-self:center">Same prize, pick a price:</span>'+sib.map(t=>'<a href="reveal.html?t='+t.tag+'" data-t="'+t.tag+'" class="'+(t.tag===B.tag?'on':'')+'">'+pl(t.price_p)+' · '+t.cap.toLocaleString()+' tickets</a>').join('');}
+renderTabs();
+fetch('/api/tickets',{cache:'no-store'}).then(r=>r.json()).then(l=>{if(Array.isArray(l)&&l.length){CAT=l;try{sessionStorage.setItem('iw_tickets',JSON.stringify(l));}catch(e){} const want=l.find(t=>t.tag===T); if(want&&(want.tag!==B.tag||want.cap!==B.cap||want.price_p/100!==B.price)){location.reload();return;} renderTabs();}}).catch(()=>{});
+$('rvName').textContent=B.name+' · '+(B.price<1?Math.round(B.price*100)+'p':'£'+B.price); $('rvBook').textContent=B.book; $('tkBook').textContent=B.book.toUpperCase();
 $('rvCap').textContent=B.cap.toLocaleString(); const PL=B.price<1?Math.round(B.price*100)+'p':'£'+B.price; $('rvPrice').textContent=PL; $('rvBuy').textContent='BUY A TICKET · '+PL;
 const nPrizes=B.tiers.reduce((a,t)=>a+t[1],0); $('rvTop').textContent='£'+B.tiers[0][0].toLocaleString();
 const gb=v=>v<1?Math.round(v*100)+'p':'£'+v.toLocaleString();
 $('rvSub').textContent=B.cap.toLocaleString()+' tickets · '+nPrizes+' prizes · £'+B.tiers[0][0].toLocaleString()+' top · 1 in '+(B.cap/nPrizes).toFixed(1)+' wins';
-document.querySelectorAll('.rvtabs a').forEach(a=>a.classList.toggle('on',a.dataset.t===T));
 $('rvIcon').innerHTML='<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><g transform="rotate(-10 32 32)"><rect x="8" y="18" width="48" height="28" rx="4" fill="none" stroke="'+B.col+'" stroke-width="3" stroke-dasharray="4 3"/><rect x="13" y="23" width="38" height="18" rx="2" fill="'+B.col+'" fill-opacity=".18"/><circle cx="32" cy="32" r="3" fill="'+B.col+'"/></g></svg>';
 document.documentElement.style.setProperty('--bookcol',B.col);
 const ARTS={
@@ -441,7 +442,7 @@ const ARTS={
  platinum:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g transform="rotate(-12 200 100)" fill="none" stroke="{c}" stroke-width="5"><rect x="110" y="60" width="180" height="80" rx="10" stroke-dasharray="10 7"/><path d="M124 100h152"/></g><g fill="none" stroke="{c}" stroke-width="5"><circle cx="60" cy="60" r="24"/><circle cx="60" cy="60" r="12"/><path d="M40 160l20-24 20 24z"/></g></svg>',
  mega:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g transform="rotate(-12 200 100)" fill="none" stroke="{c}" stroke-width="5"><rect x="110" y="60" width="180" height="80" rx="10" stroke-dasharray="10 7"/></g><g fill="none" stroke="{c}" stroke-width="5" stroke-linecap="round"><path d="M50 50l-12-12M70 42v-16M90 50l12-12M50 150l-12 12M70 158v16M90 150l12 12"/><circle cx="70" cy="100" r="22"/></g><text x="200" y="110" font-family="Barlow Condensed,sans-serif" font-weight="900" font-size="34" fill="{c}" text-anchor="middle" transform="rotate(-12 200 100)">MEGA</text></svg>',
  diamond:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="{c}" stroke-width="5" stroke-linejoin="round"><path d="M215 36l60 50-60 78-60-78z"/><path d="M155 86h120M215 36l-24 50 24 78 24-78z"/></g><g fill="none" stroke="{c}" stroke-width="4" stroke-linejoin="round"><path d="M60 120l26 22-26 34-26-34z"/><path d="M34 142h52"/></g><g fill="{c}"><circle cx="90" cy="50" r="4"/><circle cx="120" cy="30" r="3"/></g></svg>'};
-$('rvArt').innerHTML=(ARTS[T]||(T==='silver'?ARTS.platinum:T==='lucky'?ARTS.mega:ARTS.gold)).replace(/\{c\}/g,B.col);
+$('rvArt').innerHTML=(ARTS[B.art]||ARTS.gold).replace(/\{c\}/g,B.col);
 
 
 let TOKEN=null;try{const _s=JSON.parse(localStorage.getItem('iw_session'));TOKEN=_s&&_s.token;}catch(e){}
@@ -477,7 +478,7 @@ async function sync(){
   }catch(e){ if(!LIVE){$('modeBadge').textContent='BACKEND NOT CONNECTED';$('modeBadge').style.color='var(--gold)';renderTable();buttons();} }
 }
 function renderMine(){
-  MINE=load('iw_tickets_'+B.tag,[]).filter(t=>pool&&t.pool===pool.id);
+  MINE=load('iw_tk_'+B.tag,[]).filter(t=>pool&&t.pool===pool.id);
   $('mineHead').style.display=MINE.length?'':'none'; $('mineList').style.display=MINE.length?'':'none';
   $('mineList').innerHTML=MINE.slice().reverse().map(t=>'<div class="brow'+(t.prize?' me':'')+'"><span class="t">#'+String(t.no).padStart(4,'0')+'</span><span class="nm">'+B.name+' <span class="who">'+t.pool+'</span></span><span class="pz">'+(t.prize?'£'+t.prize.toLocaleString():'—')+'</span></div>').join('');
 }
@@ -495,7 +496,7 @@ async function buy(){
     const r=await fetch('/api/play',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:TOKEN,game:B.tag})});
     const d=await r.json(); if(!r.ok||d.error)throw new Error((d&&d.error)||'failed');
     const prize=d.prize_p?d.prize_p/100:0; if(d.balance_p!=null){balance=d.balance_p/100;syncCredit();}
-    const all=load('iw_tickets_'+B.tag,[]); all.push({pool:d.pool||(pool&&pool.id),no:d.entry_no,prize}); store('iw_tickets_'+B.tag,all.slice(-200));
+    const all=load('iw_tk_'+B.tag,[]); all.push({pool:d.pool||(pool&&pool.id),no:d.entry_no,prize}); store('iw_tk_'+B.tag,all.slice(-200));
     showTicket(d.entry_no,prize);
     if(d.sold_out){$('prevLine').textContent='Round '+d.pool+' sold out — seed revealed: '+d.seed;}
     await sync(); renderMine();

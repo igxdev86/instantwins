@@ -149,6 +149,10 @@ textarea{min-height:90px;resize:vertical}
     <div id="kindsBox"><p class="lead">Loading…</p></div>
     <div class="err" id="kErr"></div>
   </div>
+  <div class="panel"><h2>Instant Win tickets on and off</h2>
+    <p class="lead">Switch a whole tier (every price) or one price. Off = not listed and not purchasable; an open round keeps its sold tickets and resumes when switched back on.</p>
+    <div id="tixBox"><p class="lead">Loading…</p></div>
+  </div>
 <style>
 .krow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
 .krow.head{border-bottom:2px solid var(--line);margin-top:14px}
@@ -218,7 +222,16 @@ function paint(ks){
       +rows.map(k=>'<div class="krow"><span class="nm">'+k.label+'<small>'+k.code+' · '+money(k.price_p)+' → '+money(k.prize_p)+(k.cap?' · '+k.cap+' numbers':'')+' · '+k.open_entries+' entries in open draws</small></span><button class="sw'+(k.active?' on':'')+'" data-kind="'+k.kind+'" data-on="'+(!k.active)+'"></button></div>').join('');}).join('');
   document.querySelectorAll('.sw').forEach(b=>b.onclick=async()=>{try{const d=await api('/api/admin',{action:'kindset',token:s.token,kind:b.dataset.kind||null,step:b.dataset.step||null,active:b.dataset.on==='true'});paint(d);}catch(e){$('kErr').textContent=e.message;}});
 }
-(async()=>{ if(await guard()){ try{paint(await api('/api/admin',{action:'kinds',token:s.token}));}catch(e){$('kErr').textContent=e.message;} } })();
+
+function money2(p){return p<100?p+'p':'£'+(p/100).toLocaleString();}
+function paintTix(ts){
+  const tiers=[...new Set(ts.map(t=>t.tier))];
+  $('tixBox').innerHTML=tiers.map(tier=>{const rows=ts.filter(t=>t.tier===tier).sort((a,b)=>a.price_p-b.price_p);const allOn=rows.every(t=>t.active);
+    return '<div class="krow head"><span class="nm">'+tier+' Ticket<small>'+rows.length+' prices · whole tier</small></span><button class="sw'+(allOn?' on':'')+'" data-tier="'+tier+'" data-on="'+(!allOn)+'"></button></div>'
+      +rows.map(t=>'<div class="krow"><span class="nm">'+money2(t.price_p)+' · '+t.cap.toLocaleString()+' tickets<small>'+t.tag+' · '+(t.sold!=null?t.sold+' sold in open round':'no open round')+'</small></span><button class="sw'+(t.active?' on':'')+'" data-tag="'+t.tag+'" data-on="'+(!t.active)+'"></button></div>').join('');}).join('');
+  document.querySelectorAll('#tixBox .sw').forEach(b=>b.onclick=async()=>{try{const d=await api('/api/admin',{action:'ticketset',token:s.token,tag:b.dataset.tag||null,tier:b.dataset.tier||null,active:b.dataset.on==='true'});paintTix(d);}catch(e){$('kErr').textContent=e.message;}});
+}
+(async()=>{ if(await guard()){ try{paint(await api('/api/admin',{action:'kinds',token:s.token}));}catch(e){$('kErr').textContent=e.message;} try{paintTix(await api('/api/admin',{action:'tickets',token:s.token}));}catch(e){$('kErr').textContent=e.message;} } })();
 </script>
 <script>
 function ebOpen(){document.getElementById('ebside').classList.add('open');document.getElementById('ebscrim').classList.add('open');}

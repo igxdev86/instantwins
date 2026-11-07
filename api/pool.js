@@ -1,11 +1,10 @@
 // api/pool.js — the read-only serving hatch.
 // Asks Supabase for the current pool's counter for one game.
 // Zero dependencies. Keys come from the Supabase<->Vercel integration.
-const TAGS = ['PL','RC','DD','CL','SC','PR','PF','BB','PP','HL','CG','RW','SG','PT','DC','RR','MB','DT','GG','SP'];
 
 export default async function handler(req, res) {
   const game = String(req.query.game || '').toUpperCase();
-  if (!TAGS.includes(game)) {
+  if (!/^[A-Z0-9]{2,4}$/.test(game)) {
     return res.status(400).json({ error: 'unknown game' });
   }
   const mult = 1; // flat price — stake multipliers withdrawn

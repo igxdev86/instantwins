@@ -1,6 +1,5 @@
 // api/play.js — authenticated play. {token, game} buys a pool entry;
 // {token, kind} enters a Card draw. Wallet is debited/credited server-side.
-const TAGS = ['PL','RC','DD','CL','SC','PR','PF','BB','PP','HL','CG','RW','SG','PT','DC','RR','MB','DT','GG','SP'];
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
   const KEY = process.env.SUPABASE_SERVICE_ROLE_KEY, URL = process.env.SUPABASE_URL;
@@ -11,7 +10,11 @@ export default async function handler(req, res) {
   let fn, args;
   if (b.game) {
     const game = String(b.game).toUpperCase();
-    if (!TAGS.includes(game)) return res.status(400).json({ error: 'unknown game' });
+    if (!/^[A-Z0-9]{2,4}$/.test(game)) return res.status(400).json({ error: 'unknown ticket' });
+    // only active tickets can be bought
+    const cat = await fetch(URL + '/rest/v1/rpc/iw_tickets', { method: 'POST', headers: { 'Content-Type': 'application/json', apikey: KEY, Authorization: 'Bearer ' + KEY }, body: '{}' });
+    const list = cat.ok ? await cat.json() : [];
+    if (!Array.isArray(list) || !list.some(t => t.tag === game)) return res.status(400).json({ error: 'that ticket is not on sale' });
     // one flat price per ticket — no multipliers (legal review, Oct 2026)
     fn = 'buy_entry3'; args = { p_game: game, p_token: token, p_mult: 1 };
   } else if (/^[a-z0-9_]{2,24}$/.test(String(b.kind||''))) {
