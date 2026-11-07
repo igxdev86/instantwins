@@ -274,7 +274,7 @@ setInterval(()=>{
   const d=new Date(); const e=new Date(d); e.setSeconds(0,0);
   e.setMinutes(e.getMinutes()-(e.getMinutes()%5)+5);
   const s=Math.floor((e-d)/1000);
-  document.getElementById('clock').textContent=pad(Math.floor(s/60))+':'+pad(s%60);
+  const _c=document.getElementById('clock'); if(_c)_c.textContent=pad(Math.floor(s/60))+':'+pad(s%60);
 },250);
 </script>
 <script>

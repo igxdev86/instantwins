@@ -171,6 +171,29 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .mtab a.on{color:#36E0FF}.mtab a.on svg{filter:drop-shadow(0 0 6px rgba(54,224,255,.6))}
 .mtab a.iw.on{color:#FF5FA2}.mtab a.iw.on svg{filter:drop-shadow(0 0 6px rgba(255,95,162,.6))}
 @media(max-width:899px){.mtab{display:flex}body{padding-bottom:64px}#iwMute{bottom:150px!important}}
+
+.igrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:16px 0 8px}
+@media(min-width:760px){.igrid{grid-template-columns:repeat(4,1fr)}}
+.itile{position:relative;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;min-height:230px;border-radius:14px;padding:14px 14px 14px;
+  border:1px solid color-mix(in srgb,var(--tc) 32%,#1C3463);border-top:3px solid var(--tc);
+  background:radial-gradient(120% 90% at 100% 0%,color-mix(in srgb,var(--tc) 28%,transparent),transparent 55%),linear-gradient(180deg,color-mix(in srgb,var(--tc) 16%,#0F1F42),#0A1528 62%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 10px 28px rgba(0,0,0,.45),0 0 0 0 transparent;transition:transform .15s,box-shadow .15s}
+.itile::before{content:"";position:absolute;left:0;right:0;top:0;height:48%;background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,0));pointer-events:none}
+.itile:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 14px 34px rgba(0,0,0,.5),0 0 24px color-mix(in srgb,var(--tc) 30%,transparent)}
+.itile>span{position:relative;z-index:1}
+.it-art{position:absolute!important;right:-18px;bottom:-16px;width:140px;height:140px;opacity:.14;z-index:0!important;pointer-events:none}.it-art svg{width:100%;height:100%}
+.it-k{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.it-v{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(1.35rem,6.2vw,2.3rem);line-height:1;margin-top:4px;white-space:nowrap;
+  background:linear-gradient(180deg,#fff 0%,color-mix(in srgb,var(--tc) 35%,#fff) 40%,var(--tc) 58%,color-mix(in srgb,var(--tc) 70%,#000) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 0 rgba(0,0,0,.45)) drop-shadow(0 0 16px color-mix(in srgb,var(--tc) 40%,transparent))}
+.it-n{font-weight:800;font-size:.9rem;color:#fff;margin-top:4px}
+.it-meta{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}.it-meta i{font-style:normal;font-family:'IBM Plex Mono',monospace;font-size:.6rem;font-weight:700;color:#fff;background:rgba(5,11,26,.7);border:1px solid color-mix(in srgb,var(--tc) 35%,#1C3463);border-radius:6px;padding:3px 6px}
+.it-s{font-size:.62rem;color:var(--soft);margin-top:8px;line-height:1.35}
+.it-btn{margin-top:auto;padding-top:10px}
+.it-btn{display:block;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;color:var(--td);padding:11px 8px;border-radius:9px;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 55%,#fff),var(--tc) 48%,color-mix(in srgb,var(--tc) 70%,#000));box-shadow:0 5px 16px color-mix(in srgb,var(--tc) 45%,transparent),inset 0 1px 0 rgba(255,255,255,.6),inset 0 -1px 0 rgba(0,0,0,.25)}
+.it-btn::after{content:"";position:absolute;left:0;right:0;top:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.38),rgba(255,255,255,0))}
+.itile:active .it-btn{transform:translateY(1px)}
 </style>
 </head>
 <body class="ebh">
@@ -184,34 +207,42 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
        the round stays open until every ticket is sold, so every prize is paid. One price per ticket, the same for everyone. Your ticket
        shows its number and the prize attached to it the moment you buy. Same free postal route as every draw on the site.</p>
   </div>
-  <div class="grid">
-  <a class="gcard" href="reveal.html?t=gold">
-    <div class="gart"><svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg" role="img"><rect width="200" height="80" fill="#10152E"/><g transform="rotate(-8 100 40)"><rect x="30" y="18" width="140" height="44" rx="6" fill="none" stroke="#FFC53D" stroke-width="3" stroke-dasharray="6 4"/><rect x="36" y="24" width="128" height="32" rx="3" fill="#FFC53D" fill-opacity=".12"/><text x="100" y="45" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="900" font-size="13" fill="#FFC53D" letter-spacing="2">GOLDEN TICKET</text><text x="100" y="56" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="7" fill="#FFC53D">TOP PRIZE £100</text></g></svg></div>
-    <div class="gname">GOLDEN TICKET</div>
-    <div class="gsub">500 tickets · 86 prizes · £100 top</div>
-    <div class="gmeta"><span>£2 a ticket</span><span>Top £100</span><span>1 in 5.8 wins</span></div>
-    <div class="gcta" style="display:block;text-align:center;background:linear-gradient(180deg,color-mix(in srgb,#FFC53D 55%,#fff),#FFC53D 48%,color-mix(in srgb,#FFC53D 65%,#000));color:#241B06;border-radius:8px;padding:11px;font-weight:900;letter-spacing:.06em;box-shadow:0 4px 14px color-mix(in srgb,#FFC53D 40%,transparent),inset 0 1px 0 rgba(255,255,255,.55)">PLAY FOR £2 &rarr;</div>
+  <div class="igrid">
+  <a class="itile" style="--tc:#FFC53D;--td:#241B06" href="reveal.html?t=gold">
+    <span class="it-art"><svg viewBox="0 0 120 120" fill="none" stroke="#FFC53D" stroke-width="3.5" stroke-linejoin="round"><g transform="rotate(-14 60 60)"><rect x="12" y="34" width="96" height="52" rx="8" stroke-dasharray="8 5"/><rect x="22" y="44" width="76" height="32" rx="4"/><circle cx="60" cy="60" r="5" fill="#FFC53D"/></g></svg></span>
+    <span class="it-k">£2 a ticket · instant</span>
+    <span class="it-v">WIN £100</span>
+    <span class="it-n">Golden Ticket</span>
+    <span class="it-meta"><i>500 tickets</i><i>86 prizes</i><i>1 in 5.8 wins</i></span>
+    <span class="it-s">Prize fixed before you buy · revealed the moment you do · every prize paid</span>
+    <span class="it-btn">PLAY FOR £2 &rarr;</span>
   </a>
-  <a class="gcard" href="reveal.html?t=platinum">
-    <div class="gart"><svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg" role="img"><rect width="200" height="80" fill="#10152E"/><g transform="rotate(-8 100 40)"><rect x="30" y="18" width="140" height="44" rx="6" fill="none" stroke="#C9D6F2" stroke-width="3" stroke-dasharray="6 4"/><rect x="36" y="24" width="128" height="32" rx="3" fill="#C9D6F2" fill-opacity=".12"/><text x="100" y="45" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="900" font-size="13" fill="#C9D6F2" letter-spacing="2">PLATINUM TICKET</text><text x="100" y="56" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="7" fill="#C9D6F2">TOP PRIZE £250</text></g></svg></div>
-    <div class="gname">PLATINUM TICKET</div>
-    <div class="gsub">500 tickets · 21 prizes · £250 top</div>
-    <div class="gmeta"><span>£5 a ticket</span><span>Top £250</span><span>1 in 24 wins</span></div>
-    <div class="gcta" style="display:block;text-align:center;background:linear-gradient(180deg,color-mix(in srgb,#C9D6F2 55%,#fff),#C9D6F2 48%,color-mix(in srgb,#C9D6F2 65%,#000));color:#101A30;border-radius:8px;padding:11px;font-weight:900;letter-spacing:.06em;box-shadow:0 4px 14px color-mix(in srgb,#C9D6F2 40%,transparent),inset 0 1px 0 rgba(255,255,255,.55)">PLAY FOR £5 &rarr;</div>
+  <a class="itile" style="--tc:#DDE6F7;--td:#101A30" href="reveal.html?t=platinum">
+    <span class="it-art"><svg viewBox="0 0 120 120" fill="none" stroke="#DDE6F7" stroke-width="3.5"><circle cx="60" cy="60" r="40"/><circle cx="60" cy="60" r="26"/><circle cx="60" cy="60" r="12"/><path d="M60 8v14M60 98v14M8 60h14M98 60h14"/></svg></span>
+    <span class="it-k">£5 a ticket · instant</span>
+    <span class="it-v">WIN £250</span>
+    <span class="it-n">Platinum Ticket</span>
+    <span class="it-meta"><i>500 tickets</i><i>21 prizes</i><i>1 in 24 wins</i></span>
+    <span class="it-s">Prize fixed before you buy · revealed the moment you do · every prize paid</span>
+    <span class="it-btn">PLAY FOR £5 &rarr;</span>
   </a>
-  <a class="gcard" href="reveal.html?t=mega">
-    <div class="gart"><svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg" role="img"><rect width="200" height="80" fill="#10152E"/><g transform="rotate(-8 100 40)"><rect x="30" y="18" width="140" height="44" rx="6" fill="none" stroke="#FF5FA2" stroke-width="3" stroke-dasharray="6 4"/><rect x="36" y="24" width="128" height="32" rx="3" fill="#FF5FA2" fill-opacity=".12"/><text x="100" y="45" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="900" font-size="13" fill="#FF5FA2" letter-spacing="2">MEGA TICKET</text><text x="100" y="56" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="7" fill="#FF5FA2">TOP PRIZE £1,000</text></g></svg></div>
-    <div class="gname">MEGA TICKET</div>
-    <div class="gsub">5,000 tickets · 786 prizes · £1,000 top</div>
-    <div class="gmeta"><span>£2 a ticket</span><span>Top £1,000</span><span>1 in 6.4 wins</span></div>
-    <div class="gcta" style="display:block;text-align:center;background:linear-gradient(180deg,color-mix(in srgb,#FF5FA2 55%,#fff),#FF5FA2 48%,color-mix(in srgb,#FF5FA2 65%,#000));color:#2A0E22;border-radius:8px;padding:11px;font-weight:900;letter-spacing:.06em;box-shadow:0 4px 14px color-mix(in srgb,#FF5FA2 40%,transparent),inset 0 1px 0 rgba(255,255,255,.55)">PLAY FOR £2 &rarr;</div>
+  <a class="itile" style="--tc:#FF5FA2;--td:#2A0E22" href="reveal.html?t=mega">
+    <span class="it-art"><svg viewBox="0 0 120 120" fill="none" stroke="#FF5FA2" stroke-width="3.5" stroke-linecap="round"><circle cx="60" cy="60" r="18"/><path d="M60 10v18M60 92v18M10 60h18M92 60h18M25 25l13 13M82 82l13 13M95 25L82 38M38 82L25 95"/></svg></span>
+    <span class="it-k">£2 a ticket · instant</span>
+    <span class="it-v">WIN £1,000</span>
+    <span class="it-n">Mega Ticket</span>
+    <span class="it-meta"><i>5,000 tickets</i><i>786 prizes</i><i>1 in 6.4 wins</i></span>
+    <span class="it-s">Prize fixed before you buy · revealed the moment you do · every prize paid</span>
+    <span class="it-btn">PLAY FOR £2 &rarr;</span>
   </a>
-  <a class="gcard" href="reveal.html?t=diamond">
-    <div class="gart"><svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg" role="img"><rect width="200" height="80" fill="#10152E"/><g transform="rotate(-8 100 40)"><rect x="30" y="18" width="140" height="44" rx="6" fill="none" stroke="#6FD3FF" stroke-width="3" stroke-dasharray="6 4"/><rect x="36" y="24" width="128" height="32" rx="3" fill="#6FD3FF" fill-opacity=".12"/><text x="100" y="45" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="900" font-size="13" fill="#6FD3FF" letter-spacing="2">DIAMOND TICKET</text><text x="100" y="56" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="7" fill="#6FD3FF">TOP PRIZE £2,500</text></g></svg></div>
-    <div class="gname">DIAMOND TICKET</div>
-    <div class="gsub">1,000 tickets · 77 prizes · £2,500 top</div>
-    <div class="gmeta"><span>£10 a ticket</span><span>Top £2,500</span><span>1 in 13 wins</span></div>
-    <div class="gcta" style="display:block;text-align:center;background:linear-gradient(180deg,color-mix(in srgb,#6FD3FF 55%,#fff),#6FD3FF 48%,color-mix(in srgb,#6FD3FF 65%,#000));color:#07122A;border-radius:8px;padding:11px;font-weight:900;letter-spacing:.06em;box-shadow:0 4px 14px color-mix(in srgb,#6FD3FF 40%,transparent),inset 0 1px 0 rgba(255,255,255,.55)">PLAY FOR £10 &rarr;</div>
+  <a class="itile" style="--tc:#6FD3FF;--td:#07122A" href="reveal.html?t=diamond">
+    <span class="it-art"><svg viewBox="0 0 120 120" fill="none" stroke="#6FD3FF" stroke-width="3.5" stroke-linejoin="round"><path d="M60 14l40 34-40 58-40-58z"/><path d="M20 48h80M60 14l-16 34 16 58 16-58z"/></svg></span>
+    <span class="it-k">£10 a ticket · instant</span>
+    <span class="it-v">WIN £2,500</span>
+    <span class="it-n">Diamond Ticket</span>
+    <span class="it-meta"><i>1,000 tickets</i><i>77 prizes</i><i>1 in 13 wins</i></span>
+    <span class="it-s">Prize fixed before you buy · revealed the moment you do · every prize paid</span>
+    <span class="it-btn">PLAY FOR £10 &rarr;</span>
   </a>
   </div>
   <div class="how">
@@ -268,7 +299,7 @@ setInterval(()=>{
   const d=new Date(); const e=new Date(d); e.setSeconds(0,0);
   e.setMinutes(e.getMinutes()-(e.getMinutes()%5)+5);
   const s=Math.floor((e-d)/1000);
-  document.getElementById('clock').textContent=pad(Math.floor(s/60))+':'+pad(s%60);
+  const _c=document.getElementById('clock'); if(_c)_c.textContent=pad(Math.floor(s/60))+':'+pad(s%60);
 },250);
 </script>
 <script>
