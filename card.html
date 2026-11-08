@@ -609,7 +609,7 @@ function setupSingle(){ try{heroFor(group(SINGLE));}catch(e){}
     priceLabel(sp.price_p)+' a number, '+gbp(sp.prize_p)+' to one of the numbers entered — always paid, no rollover. Enter this draw or any '+sp.label+' draw in the next 7 days.';
   $('upSub').textContent='the next '+sp.label+' draws — enter any of them';
   const sibs=KINDS.filter(k=>k.step_s===sp.step_s&&k.kind!==SINGLE);
-  $('siblings').innerHTML=sibs.length?'<div class="sib-k">Other '+(g.name||'draws').replace(/ draws?$/i,'')+' draws &mdash; same timer, bigger or smaller prize</div><div class="sib-row">'+sibs.sort((a,b)=>a.prize_p-b.prize_p).map(k=>'<a class="sib" style="--tc:'+g.col+'" href="card.html?draw='+k.kind+'"><span class="sib-v">Win '+gbp(k.prize_p)+'</span><span class="sib-p">'+priceLabel(k.price_p)+' a go</span></a>').join('')+'</div>':'';
+  $('siblings').innerHTML=sibs.length?'<div class="sib-k">Other '+(g.name||'draws').replace(/ draws?$/i,'')+' draws &mdash; same timer, bigger or smaller prize</div><div class="sib-row">'+sibs.sort((a,b)=>a.prize_p-b.prize_p).map(k=>'<a class="sib" style="--tc:'+g.col+'" href="card.html?draw='+k.kind+'"><span class="sib-v">Win '+gbp(k.prize_p)+'</span><span class="sib-p">'+priceLabel(k.price_p)+' online entry</span></a>').join('')+'</div>':'';
 }
 function setupHub(){ $('single').style.display='none'; $('hubBack').style.display='none'; $('hub').style.display=''; $('hashLine').style.display='none'; const h1=$('pageH1'); h1.className='glossy'; h1.style.setProperty('--tc','#36E0FF'); h1.innerHTML='<span class="hic">'+ICONS[300]+'</span><span class="gt">Draws</span>'; }
 
