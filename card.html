@@ -586,7 +586,7 @@ const ART={30:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" pre
  86400:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="{c}" stroke-width="5" stroke-linejoin="round"><path d="M215 36l60 50-60 78-60-78z"/><path d="M155 86h120M215 36l-24 50 24 78 24-78z"/></g></svg>',
  600:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="{c}" stroke-width="5" stroke-linejoin="round"><rect x="110" y="50" width="180" height="110" rx="10"/><path d="M110 60l90 66 90-66"/></g></svg>'};
 
-function setupSingle(){
+function setupSingle(){ try{document.querySelector('.herowrap').style.display='none';}catch(e){}
   const sp=SPEC[SINGLE], g=group(SINGLE);
   $('hub').style.display='none'; $('hubBack').style.display=''; $('single').style.display='';
   document.title=sp.label+' — Draws — InstantWins.co.uk'; const h1=$('pageH1'); h1.className='glossy'; h1.style.setProperty('--tc',g.col); h1.innerHTML='<span class="hic">'+ICONS[sp.step_s]+'</span><span class="gt">'+sp.label+'</span>';
