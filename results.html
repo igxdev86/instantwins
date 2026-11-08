@@ -157,7 +157,7 @@ function seedCut(s){return s?('seed '+String(s).slice(0,28)+'…'):'';}
 function renderCard(rows){
   if(!rows.length){$('cardBoard').innerHTML='<div class="empty">No settled Card draws yet.</div>';return;}
   $('cardBoard').innerHTML=rows.map(function(r){
-    var k=r.kind,lbl=r.label||(k==='grand'?'Hourly Grand':k==='free'?'Free Draw':'Five-Minute Draw');
+    var k=r.kind,lbl=r.label||(k==='grand'?'Hourly Grand':k==='free'?'Free Draw':'Five Minute Draw');
     var won=r.winner_entry;
     return '<div class="row '+(k==='grand'?'grand':k==='free'?'free':'')+'">'
       +'<span class="t">'+dmy(r.off_at)+'</span>'

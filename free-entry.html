@@ -170,13 +170,13 @@ textarea{min-height:90px;resize:vertical}
       &bull; <span id="competitions">a <b>Competition</b> by its <b>code and your answer</b> &mdash; e.g. <i>"C001 &mdash; A"</i>. The code, question and answers are on the <a href="competitions.html" style="color:var(--buy)">Competitions page</a>. Only correct answers go into the draw, exactly as online. Your card must reach us before the competition closes.</span><br>
       &bull; an Instant Win round by name &mdash; <i>"Gold Ticket"</i>, <i>"Platinum Ticket"</i> or <i>"Mega Ticket"</i> &mdash; and you take the next ticket in that ticket's open round.<br>
       &bull; <i>"Pick a Piece"</i> and, if you like, a piece number.<br>
-      &bull; or <b>nothing at all</b> &mdash; your card enters the next Five-Minute Draw after it is processed <b>and every Five-Minute Draw for the rest of that day</b>.</div></div>
+      &bull; or <b>nothing at all</b> &mdash; your card enters the next Five Minute Draw after it is processed <b>and every Five Minute Draw for the rest of that day</b>.</div></div>
     <div class="step"><div class="n">4</div><div>Post it to:
       <div class="code" style="margin-top:8px">InstantWins Free Entry<br>IGX Ltd<br>PO Box (confirmed at launch)<br>United Kingdom</div></div></div>
   </div>
 
   <div class="panel" id="gnf"><h2>Game number finder</h2>
-    <p class="lead">Every draw has a game number: <b>draw code – date – time</b>, e.g. <b>F100-041126-1905</b> is the £1 Five-Minute draw on 4 November at 19:05. Pick the draw you want below and copy the number onto your postcard. Any draw in the next 7 days is open.</p>
+    <p class="lead">Every draw has a game number: <b>draw code – date – time</b>, e.g. <b>F100-041126-1905</b> is the £1 Five Minute draw on 4 November at 19:05. Pick the draw you want below and copy the number onto your postcard. Any draw in the next 7 days is open.</p>
     <div class="gnf-row"><label>Draw</label><select id="gnKind"></select></div>
     <div class="gnf-row"><label>Day</label><select id="gnDay"></select></div>
     <div class="gnf-row"><label>Time</label><select id="gnTime"></select></div>
@@ -195,14 +195,14 @@ textarea{min-height:90px;resize:vertical}
 (function(){
   const $=id=>document.getElementById(id); const pad=n=>String(n).padStart(2,'0');
   let KINDS=[
-   {kind:'t_1',code:'T1',label:'30-Second £1 (10p)',step_s:30,offset_s:0,daily_hour:null,prize_p:100},{kind:'t_2',code:'T2',label:'30-Second £2 (20p)',step_s:30,offset_s:0,daily_hour:null,prize_p:200},
-   {kind:'t_5',code:'T5',label:'30-Second £5 (50p)',step_s:30,offset_s:0,daily_hour:null,prize_p:500},{kind:'t_8',code:'T8',label:'30-Second £8 (£1)',step_s:30,offset_s:0,daily_hour:null,prize_p:800},
-   {kind:'minute',code:'S10',label:'60-Second £10 (50p)',step_s:60,offset_s:0,daily_hour:null,prize_p:1000},{kind:'s60_20',code:'S20',label:'60-Second £20 (£1)',step_s:60,offset_s:0,daily_hour:null,prize_p:2000},
-   {kind:'s60_50',code:'S50',label:'60-Second £50 (£2)',step_s:60,offset_s:0,daily_hour:null,prize_p:5000},{kind:'s60_100',code:'S100',label:'60-Second £100 (£5)',step_s:60,offset_s:0,daily_hour:null,prize_p:10000},
-   {kind:'m5_20',code:'F20',label:'Five-Minute £20 (£1)',step_s:300,offset_s:0,daily_hour:null,prize_p:2000},{kind:'five',code:'F100',label:'Five-Minute £100 (£1)',step_s:300,offset_s:0,daily_hour:null,prize_p:10000},{kind:'m5_200',code:'F200',label:'Five-Minute £200 (£2)',step_s:300,offset_s:0,daily_hour:null,prize_p:20000},
-   {kind:'m5_500',code:'F500',label:'Five-Minute £500 (£5)',step_s:300,offset_s:0,daily_hour:null,prize_p:50000},{kind:'m5_1000',code:'F1K',label:'Five-Minute £1,000 (£10)',step_s:300,offset_s:0,daily_hour:null,prize_p:100000},
-   {kind:'m15_150',code:'Q150',label:'15-Minute £150 (£2)',step_s:900,offset_s:0,daily_hour:null,prize_p:15000},{kind:'silver',code:'Q400',label:'15-Minute £400 (£5)',step_s:900,offset_s:0,daily_hour:null,prize_p:40000},
-   {kind:'m15_1000',code:'Q1K',label:'15-Minute £1,000 (£10)',step_s:900,offset_s:0,daily_hour:null,prize_p:100000},{kind:'m15_2000',code:'Q2K',label:'15-Minute £2,000 (£20)',step_s:900,offset_s:0,daily_hour:null,prize_p:200000},
+   {kind:'t_1',code:'T1',label:'30 Second £1 (10p)',step_s:30,offset_s:0,daily_hour:null,prize_p:100},{kind:'t_2',code:'T2',label:'30 Second £2 (20p)',step_s:30,offset_s:0,daily_hour:null,prize_p:200},
+   {kind:'t_5',code:'T5',label:'30 Second £5 (50p)',step_s:30,offset_s:0,daily_hour:null,prize_p:500},{kind:'t_8',code:'T8',label:'30 Second £8 (£1)',step_s:30,offset_s:0,daily_hour:null,prize_p:800},
+   {kind:'minute',code:'S10',label:'60 Second £10 (50p)',step_s:60,offset_s:0,daily_hour:null,prize_p:1000},{kind:'s60_20',code:'S20',label:'60 Second £20 (£1)',step_s:60,offset_s:0,daily_hour:null,prize_p:2000},
+   {kind:'s60_50',code:'S50',label:'60 Second £50 (£2)',step_s:60,offset_s:0,daily_hour:null,prize_p:5000},{kind:'s60_100',code:'S100',label:'60 Second £100 (£5)',step_s:60,offset_s:0,daily_hour:null,prize_p:10000},
+   {kind:'m5_20',code:'F20',label:'Five Minute £20 (£1)',step_s:300,offset_s:0,daily_hour:null,prize_p:2000},{kind:'five',code:'F100',label:'Five Minute £100 (£1)',step_s:300,offset_s:0,daily_hour:null,prize_p:10000},{kind:'m5_200',code:'F200',label:'Five Minute £200 (£2)',step_s:300,offset_s:0,daily_hour:null,prize_p:20000},
+   {kind:'m5_500',code:'F500',label:'Five Minute £500 (£5)',step_s:300,offset_s:0,daily_hour:null,prize_p:50000},{kind:'m5_1000',code:'F1K',label:'Five Minute £1,000 (£10)',step_s:300,offset_s:0,daily_hour:null,prize_p:100000},
+   {kind:'m15_150',code:'Q150',label:'15 Minute £150 (£2)',step_s:900,offset_s:0,daily_hour:null,prize_p:15000},{kind:'silver',code:'Q400',label:'15 Minute £400 (£5)',step_s:900,offset_s:0,daily_hour:null,prize_p:40000},
+   {kind:'m15_1000',code:'Q1K',label:'15 Minute £1,000 (£10)',step_s:900,offset_s:0,daily_hour:null,prize_p:100000},{kind:'m15_2000',code:'Q2K',label:'15 Minute £2,000 (£20)',step_s:900,offset_s:0,daily_hour:null,prize_p:200000},
    {kind:'h_250',code:'H250',label:'Hourly £250 (£2)',step_s:3600,offset_s:0,daily_hour:null,prize_p:25000},{kind:'gold',code:'H750',label:'Hourly £750 (£10, :30)',step_s:3600,offset_s:1800,daily_hour:null,prize_p:75000},{kind:'grand',code:'H1K',label:'Hourly Grand £1,000 (£2)',step_s:3600,offset_s:0,daily_hour:null,prize_p:100000},
    {kind:'h_2000',code:'H2K',label:'Hourly £2,000 (£20, :30)',step_s:3600,offset_s:1800,daily_hour:null,prize_p:200000},{kind:'h_5000',code:'H5K',label:'Hourly £5,000 (£50, :30)',step_s:3600,offset_s:1800,daily_hour:null,prize_p:500000},
    {kind:'d_400',code:'D400',label:'Daily £400 (£5)',step_s:86400,offset_s:0,daily_hour:21,prize_p:40000},{kind:'d_1000',code:'D1K',label:'Daily £1,000 (£10)',step_s:86400,offset_s:0,daily_hour:21,prize_p:100000},

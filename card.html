@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 /*
-  THE CARD — a Five-Minute Draw all day, a free draw every ten minutes,
+  THE CARD — a Five Minute Draw all day, a free draw every ten minutes,
   the £1,000 Hourly Grand on the hour. Every draw is open for entry seven
   days ahead (online or by postcard naming the draw); one flat price; the
   winner is always drawn from the numbers entered. Backend: card-legal.sql.
@@ -481,7 +481,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
     <h3>ENTER FREE BY POST</h3>
     <p>Send an unenclosed postcard with your <b>full name</b>, your <b>account number</b> (starts IW — see your Account page), your address and date of birth to:</p>
     <div class="addr">InstantWins Free Entry<br>IGX Ltd, PO Box (confirmed at launch)<br>United Kingdom</div>
-    <p class="small"><b>Write the game number of the draw you want</b> — it’s shown on every draw, e.g. <b>F100-031126-1905</b> (that’s the £1 Five-Minute draw on 3 Nov at 19:05). Any draw in the next 7 days is open; allow 3 working days for second-class post. If you name no draw, your card enters the next draw after it is processed <b>and every Five-Minute Draw for the rest of that day</b>.</p>
+    <p class="small"><b>Write the game number of the draw you want</b> — it’s shown on every draw, e.g. <b>F100-031126-1905</b> (that’s the £1 Five Minute draw on 3 Nov at 19:05). Any draw in the next 7 days is open; allow 3 working days for second-class post. If you name no draw, your card enters the next draw after it is processed <b>and every Five Minute Draw for the rest of that day</b>.</p>
     <p class="small">Postal entries take the next number in the same sequence as paid entries — same draw, same odds, same prize. One entry per postcard; send as many as you like. Postcards are processed the working day they arrive. No purchase necessary.</p>
     <button class="mclose" id="freeClose">GOT IT</button>
   </div>
@@ -514,23 +514,23 @@ function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;
 
 /* ================= draw catalogue (server-driven; fallback until connected) ================= */
 let KINDS=[
- {kind:'t_1',code:'T1',label:'30-Second £1',price_p:10,prize_p:100,cap:20,step_s:30,offset_s:0,daily_hour:null},
- {kind:'t_2',code:'T2',label:'30-Second £2',price_p:20,prize_p:200,cap:20,step_s:30,offset_s:0,daily_hour:null},
- {kind:'t_5',code:'T5',label:'30-Second £5',price_p:50,prize_p:500,cap:20,step_s:30,offset_s:0,daily_hour:null},
- {kind:'t_8',code:'T8',label:'30-Second £8',price_p:100,prize_p:800,cap:16,step_s:30,offset_s:0,daily_hour:null},
- {kind:'minute',code:'S10',label:'60-Second £10',price_p:50,prize_p:1000,cap:50,step_s:60,offset_s:0,daily_hour:null},
- {kind:'s60_20',code:'S20',label:'60-Second £20',price_p:100,prize_p:2000,cap:40,step_s:60,offset_s:0,daily_hour:null},
- {kind:'s60_50',code:'S50',label:'60-Second £50',price_p:200,prize_p:5000,cap:50,step_s:60,offset_s:0,daily_hour:null},
- {kind:'s60_100',code:'S100',label:'60-Second £100',price_p:500,prize_p:10000,cap:40,step_s:60,offset_s:0,daily_hour:null},
- {kind:'m5_20',code:'F20',label:'Five-Minute £20',price_p:100,prize_p:2000,cap:40,step_s:300,offset_s:0,daily_hour:null},
- {kind:'five',code:'F100',label:'Five-Minute £100',price_p:100,prize_p:10000,cap:200,step_s:300,offset_s:0,daily_hour:null},
- {kind:'m5_200',code:'F200',label:'Five-Minute £200',price_p:200,prize_p:20000,cap:200,step_s:300,offset_s:0,daily_hour:null},
- {kind:'m5_500',code:'F500',label:'Five-Minute £500',price_p:500,prize_p:50000,cap:200,step_s:300,offset_s:0,daily_hour:null},
- {kind:'m5_1000',code:'F1K',label:'Five-Minute £1,000',price_p:1000,prize_p:100000,cap:200,step_s:300,offset_s:0,daily_hour:null},
- {kind:'m15_150',code:'Q150',label:'15-Minute £150',price_p:200,prize_p:15000,cap:150,step_s:900,offset_s:0,daily_hour:null},
- {kind:'silver',code:'Q400',label:'15-Minute £400',price_p:500,prize_p:40000,cap:160,step_s:900,offset_s:0,daily_hour:null},
- {kind:'m15_1000',code:'Q1K',label:'15-Minute £1,000',price_p:1000,prize_p:100000,cap:200,step_s:900,offset_s:0,daily_hour:null},
- {kind:'m15_2000',code:'Q2K',label:'15-Minute £2,000',price_p:2000,prize_p:200000,cap:200,step_s:900,offset_s:0,daily_hour:null},
+ {kind:'t_1',code:'T1',label:'30 Second £1',price_p:10,prize_p:100,cap:20,step_s:30,offset_s:0,daily_hour:null},
+ {kind:'t_2',code:'T2',label:'30 Second £2',price_p:20,prize_p:200,cap:20,step_s:30,offset_s:0,daily_hour:null},
+ {kind:'t_5',code:'T5',label:'30 Second £5',price_p:50,prize_p:500,cap:20,step_s:30,offset_s:0,daily_hour:null},
+ {kind:'t_8',code:'T8',label:'30 Second £8',price_p:100,prize_p:800,cap:16,step_s:30,offset_s:0,daily_hour:null},
+ {kind:'minute',code:'S10',label:'60 Second £10',price_p:50,prize_p:1000,cap:50,step_s:60,offset_s:0,daily_hour:null},
+ {kind:'s60_20',code:'S20',label:'60 Second £20',price_p:100,prize_p:2000,cap:40,step_s:60,offset_s:0,daily_hour:null},
+ {kind:'s60_50',code:'S50',label:'60 Second £50',price_p:200,prize_p:5000,cap:50,step_s:60,offset_s:0,daily_hour:null},
+ {kind:'s60_100',code:'S100',label:'60 Second £100',price_p:500,prize_p:10000,cap:40,step_s:60,offset_s:0,daily_hour:null},
+ {kind:'m5_20',code:'F20',label:'Five Minute £20',price_p:100,prize_p:2000,cap:40,step_s:300,offset_s:0,daily_hour:null},
+ {kind:'five',code:'F100',label:'Five Minute £100',price_p:100,prize_p:10000,cap:200,step_s:300,offset_s:0,daily_hour:null},
+ {kind:'m5_200',code:'F200',label:'Five Minute £200',price_p:200,prize_p:20000,cap:200,step_s:300,offset_s:0,daily_hour:null},
+ {kind:'m5_500',code:'F500',label:'Five Minute £500',price_p:500,prize_p:50000,cap:200,step_s:300,offset_s:0,daily_hour:null},
+ {kind:'m5_1000',code:'F1K',label:'Five Minute £1,000',price_p:1000,prize_p:100000,cap:200,step_s:300,offset_s:0,daily_hour:null},
+ {kind:'m15_150',code:'Q150',label:'15 Minute £150',price_p:200,prize_p:15000,cap:150,step_s:900,offset_s:0,daily_hour:null},
+ {kind:'silver',code:'Q400',label:'15 Minute £400',price_p:500,prize_p:40000,cap:160,step_s:900,offset_s:0,daily_hour:null},
+ {kind:'m15_1000',code:'Q1K',label:'15 Minute £1,000',price_p:1000,prize_p:100000,cap:200,step_s:900,offset_s:0,daily_hour:null},
+ {kind:'m15_2000',code:'Q2K',label:'15 Minute £2,000',price_p:2000,prize_p:200000,cap:200,step_s:900,offset_s:0,daily_hour:null},
  {kind:'h_250',code:'H250',label:'Hourly £250',price_p:200,prize_p:25000,cap:250,step_s:3600,offset_s:0,daily_hour:null},
  {kind:'gold',code:'H750',label:'Hourly £750',price_p:1000,prize_p:75000,cap:150,step_s:3600,offset_s:1800,daily_hour:null},
  {kind:'grand',code:'H1K',label:'Hourly Grand £1,000',price_p:200,prize_p:100000,cap:1000,step_s:3600,offset_s:0,daily_hour:null},
@@ -549,10 +549,10 @@ const ICONS={30:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d
  3600:'<svg viewBox="0 0 24 24"><path d="M8 4h8v3a4 4 0 0 1-8 0z"/><path d="M16 5h2a2 2 0 0 1 0 4h-2M8 5H6a2 2 0 0 0 0 4h2M12 11v4M9 19h6M10 15h4v4h-4z"/></svg>',
  86400:'<svg viewBox="0 0 24 24"><path d="M12 3l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L3 10l6-1z"/></svg>',
  600:'<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 8l9 6 9-6"/></svg>'};
-const GROUPS=[{step:30,name:'30-Second Draws',sub:'small prizes from 10p',col:'#8BE9A8',cls:'mini'},
-              {step:60,name:'60-Second Draws',sub:'a winner every minute',col:'#FF5FA2',cls:'mins'},
-              {step:300,name:'Five-Minute Draws',sub:'every five minutes, all day',col:'#36E0FF',cls:''},
-              {step:900,name:'Quarter-Hour Draws',sub:'on the quarter hour',col:'#DDE6F7',cls:'silver'},
+const GROUPS=[{step:30,name:'30 Second Draws',sub:'small prizes from 10p',col:'#8BE9A8',cls:'mini'},
+              {step:60,name:'60 Second Draws',sub:'a winner every minute',col:'#FF5FA2',cls:'mins'},
+              {step:300,name:'Five Minute Draws',sub:'every five minutes, all day',col:'#36E0FF',cls:''},
+              {step:900,name:'Quarter Hour Draws',sub:'on the quarter hour',col:'#DDE6F7',cls:'silver'},
               {step:3600,name:'Hourly Draws',sub:'on the hour and the half hour',col:'#FFC53D',cls:'grand'},
               {step:86400,name:'Daily Draws',sub:'every evening at 21:00',col:'#C9A6FF',cls:'plat'},
               {step:600,name:'Free Draw',sub:'100% free, every ten minutes',col:'#19E6A0',cls:'freed'}];
