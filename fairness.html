@@ -142,6 +142,57 @@ textarea{min-height:90px;resize:vertical}
      Where this page and any other page disagree, this page is wrong and will be corrected &mdash; tell us via the
      <a href="support.html" style="color:var(--buy)">Support centre</a>.</p>
 
+  <div class="sechead" style="margin-top:14px"><h2>Prize money on the site right now</h2><span id="pmAt">live</span></div>
+  <div class="pm-grid">
+    <div class="pm"><i>On offer in open draws</i><b id="pmOpen">—</b><s>draws with at least one entry — each will pay its full prize</s></div>
+    <div class="pm"><i>Unclaimed in Instant Win rounds</i><b id="pmTix">—</b><s>prizes still sitting in open rounds, waiting on tickets</s></div>
+    <div class="pm"><i>Draw prizes per day, full schedule</i><b id="pmDay">—</b><s>if every scheduled draw had an entry</s></div>
+    <div class="pm"><i>Paid out today</i><b id="pmPaid">—</b><s id="pmWin">—</s></div>
+  </div>
+  <div class="panel"><h2>Draws</h2>
+    <p class="lead">Every draw pays its full prize to one of the numbers entered. The last column is what a day costs if every draw runs with at least one entry.</p>
+    <table class="pmt"><thead><tr><th>Draw</th><th>Entry</th><th>Prize</th><th>Draws / day</th><th>Max / day</th></tr></thead><tbody id="pmDraws"><tr><td colspan="5">Loading…</td></tr></tbody></table>
+  </div>
+  <div class="panel"><h2>Instant Win rounds</h2>
+    <p class="lead">Every prize in a round's table is paid as its tickets sell. "Left" is the prize money still unclaimed in the open round.</p>
+    <table class="pmt"><thead><tr><th>Ticket</th><th>Entry</th><th>Tickets</th><th>Prizes in round</th><th>Left</th></tr></thead><tbody id="pmTickets"><tr><td colspan="5">Loading…</td></tr></tbody></table>
+  </div>
+<style>
+.pm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}@media(min-width:720px){.pm-grid{grid-template-columns:repeat(4,1fr)}}
+.pm{background:radial-gradient(120% 90% at 100% 0%,rgba(54,224,255,.14),transparent 55%),linear-gradient(180deg,#0F1F42,#0A1528);border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.pm i{display:block;font-style:normal;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.pm b{display:block;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1.35rem;color:#fff;margin:4px 0 2px;text-shadow:0 0 12px rgba(54,224,255,.3)}
+.pm s{display:block;text-decoration:none;font-size:.62rem;color:var(--soft);line-height:1.3}
+.pmt{width:100%;border-collapse:collapse;font-size:.74rem;margin-top:8px}.pmt th{text-align:left;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);padding:6px 6px;border-bottom:1px solid var(--line)}
+.pmt td{padding:7px 6px;border-bottom:1px solid #152650;font-family:'IBM Plex Mono',monospace;color:#fff}.pmt td:first-child{font-family:inherit;font-weight:700}.pmt tr.tot td{color:var(--match);border-top:2px solid var(--line)}
+.pmt td.r,.pmt th.r{text-align:right}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id); const gbp=p=>'£'+Math.round(p/100).toLocaleString(); const pl=p=>p===0?'free':p<100?p+'p':'£'+(p/100).toLocaleString();
+  let openP=0, dayP=0, tixLeft=0;
+  fetch('/api/card',{cache:'no-store'}).then(r=>r.json()).then(d=>{
+    const kinds=d.kinds||[]; const ahead=d.ahead||[]; const withEntries=new Set(ahead.filter(a=>a.sold>0).map(a=>a.kind+'|'+a.off_at));
+    const open=d.open||{};
+    // draws open with entries: ahead holds every open draw with sold>0
+    const prizeOf={}; kinds.forEach(k=>prizeOf[k.kind]=k.prize_p);
+    openP=ahead.filter(a=>a.sold>0&&prizeOf[a.kind]).reduce((s,a)=>s+prizeOf[a.kind],0);
+    let rows='';
+    kinds.forEach(k=>{const perDay=k.daily_hour!=null?1:Math.round(86400/k.step_s); const mx=perDay*k.prize_p; dayP+=mx;
+      rows+='<tr><td>'+k.label+'</td><td>'+pl(k.price_p)+'</td><td>'+gbp(k.prize_p)+'</td><td class="r">'+perDay.toLocaleString()+'</td><td class="r">'+gbp(mx)+'</td></tr>';});
+    rows+='<tr class="tot"><td>Total</td><td></td><td></td><td></td><td class="r">'+gbp(dayP)+'</td></tr>';
+    $('pmDraws').innerHTML=rows; $('pmOpen').textContent=gbp(openP); $('pmDay').textContent=gbp(dayP);
+  }).catch(()=>{$('pmDraws').innerHTML='<tr><td colspan="5">Backend not connected.</td></tr>';});
+  fetch('/api/tickets',{cache:'no-store'}).then(r=>r.json()).then(l=>{
+    let rows='', tot=0; (l||[]).forEach(t=>{const total=t.prize_total_p!=null?t.prize_total_p:t.tiers.reduce((s,x)=>s+x[0]*x[1],0); const left=t.prize_left_p!=null?t.prize_left_p:total; tixLeft+=left; tot+=total;
+      rows+='<tr><td>'+t.name+' · '+pl(t.price_p)+'</td><td>'+pl(t.price_p)+'</td><td class="r">'+t.cap.toLocaleString()+'</td><td class="r">'+gbp(total)+'</td><td class="r">'+gbp(left)+'</td></tr>';});
+    rows+='<tr class="tot"><td>Total</td><td></td><td></td><td class="r">'+gbp(tot)+'</td><td class="r">'+gbp(tixLeft)+'</td></tr>';
+    $('pmTickets').innerHTML=rows; $('pmTix').textContent=gbp(tixLeft);
+  }).catch(()=>{$('pmTickets').innerHTML='<tr><td colspan="5">Backend not connected.</td></tr>';});
+  fetch('/api/stats',{cache:'no-store'}).then(r=>r.json()).then(d=>{$('pmPaid').textContent=gbp(d.paid_today_p||0);$('pmWin').textContent=(d.winners_today||0)+' winner'+(d.winners_today===1?'':'s')+' so far today';}).catch(()=>{});
+  $('pmAt').textContent='live · '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+})();
+</script>
   <div class="panel"><h2>Card draws</h2>
     <div class="step"><div class="n">1</div><div><b>Before the first number is sold</b> the draw's secret seed is generated and its
       <b>SHA-256 fingerprint</b> is published on the Card. Draws exist up to seven days ahead, so the commitment is in place however
