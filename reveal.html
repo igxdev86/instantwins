@@ -336,7 +336,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
       <div class="ndchip"><i>Ticket</i><b id="rvPrice">£2</b></div>
       <div class="ndchip"><i>Prizes left</i><b id="rvPrizesLeft">—</b></div>
       <div class="ndchip"><i>Prize value left</i><b id="rvValueLeft">—</b></div>
-      <div class="ndchip"><i>By post</i><b>Say the ticket name</b></div>
+      <div class="ndchip"><i>By post</i><b>Write “<span class="postName">Golden Ticket</span>”</b></div>
     </div>
     <div class="ndnote">Every prize in the table below is in this round. The round stays open until every ticket is sold, so every prize is paid. One price for everyone.</div>
     <div class="nd-actions">
@@ -415,7 +415,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
     <h3>ENTER FREE BY POST</h3>
     <p>Send an unenclosed postcard with your <b>full name</b>, your <b>account number</b> (starts IW — see your Account page), your address and date of birth to:</p>
     <div class="addr">InstantWins Free Entry<br>IGX Ltd, PO Box (confirmed at launch)<br>United Kingdom</div>
-    <p class="small"><b>Write the ticket name</b> — “Penny Ticket”, “Bronze Ticket”, “Silver Ticket”, “Lucky Ticket”, “Golden Ticket”, “Platinum Ticket”, “Mega Ticket” or “Diamond Ticket” — plus your full name and your IW account number. Your entry takes the next ticket in the open round of that ticket, in the same sequence as paid tickets, with the same chance of every prize. Any prize is credited to your account and can be withdrawn.</p>
+    <p class="small"><b>Write exactly this on the card:</b> <span class="addr" style="display:inline-block;margin:4px 0">“<span class="postName">Golden Ticket</span>”</span> — plus your full name and your IW account number. Your entry takes the next ticket in the open round of that ticket, in the same sequence as paid tickets, with the same chance of every prize. Any prize is credited to your account and can be withdrawn.</p>
     <p class="small">One ticket per postcard; send as many as you like. Postcards are processed the working day they arrive. No purchase necessary.</p>
     <button class="mclose" id="freeClose">GOT IT</button>
   </div>
@@ -437,7 +437,7 @@ function renderTabs(){const sib=CAT.filter(t=>t.tier===B.tier).sort((a,b)=>a.pri
   document.querySelector('.rvtabs').innerHTML='<span style="font-family:Barlow Condensed,sans-serif;font-weight:800;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);align-self:center">Same prize · play for:</span>'+sib.map(t=>'<a href="reveal.html?t='+t.tag+'" data-t="'+t.tag+'" class="'+(t.tag===B.tag?'on':'')+'">'+pl(t.price_p)+' · '+t.cap.toLocaleString()+' tickets</a>').join('');}
 renderTabs();
 fetch('/api/tickets',{cache:'no-store'}).then(r=>r.json()).then(l=>{if(Array.isArray(l)&&l.length){CAT=l;try{sessionStorage.setItem('iw_tickets',JSON.stringify(l));}catch(e){} const want=l.find(t=>t.tag===T); if(want&&(want.tag!==B.tag||want.cap!==B.cap||want.price_p/100!==B.price)){location.reload();return;} renderTabs();}}).catch(()=>{});
-$('rvName').textContent=B.name+' · '+(B.price<1?Math.round(B.price*100)+'p':'£'+B.price); $('rvBook').textContent=B.book; $('tkBook').textContent=B.book.toUpperCase();
+$('rvName').textContent=B.name+' · '+(B.price<1?Math.round(B.price*100)+'p':'£'+B.price); document.querySelectorAll('.postName').forEach(e=>e.textContent=B.name+' '+(B.price<1?Math.round(B.price*100)+'p':'£'+B.price)); $('rvBook').textContent=B.book; $('tkBook').textContent=B.book.toUpperCase();
 $('rvCap').textContent=B.cap.toLocaleString(); const PL=B.price<1?Math.round(B.price*100)+'p':'£'+B.price; $('rvPrice').textContent=PL; $('rvBuy').textContent='BUY A TICKET · '+PL;
 const nPrizes=B.tiers.reduce((a,t)=>a+t[1],0); $('rvTop').textContent='£'+B.tiers[0][0].toLocaleString();
 const gb=v=>v<1?Math.round(v*100)+'p':'£'+v.toLocaleString();
