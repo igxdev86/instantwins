@@ -310,7 +310,13 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .hub-ic{width:30px;height:30px;border-radius:8px;flex:none;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(180deg,color-mix(in srgb,var(--tc,#36E0FF) 60%,#fff),var(--tc,#36E0FF) 55%,color-mix(in srgb,var(--tc,#36E0FF) 65%,#000));box-shadow:0 3px 10px color-mix(in srgb,var(--tc,#36E0FF) 45%,transparent),inset 0 1px 0 rgba(255,255,255,.55)}
 .hub-ic svg,.hic svg,.tic svg{width:18px;height:18px;fill:none;stroke:#07122A;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .hub-k b{text-shadow:0 1px 0 rgba(0,0,0,.4)}
-.hub-sub{margin-left:auto;text-align:right}@media(max-width:480px){.hub-sub{display:none}}
+.hub-sub{margin-left:auto;text-align:right}@media(max-width:480px){.hub-sub{display:none}
+.livenow{display:inline-flex;align-items:center;gap:6px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#19E6A0;white-space:nowrap}
+.livenow::before{content:"";width:8px;height:8px;border-radius:50%;background:#19E6A0;box-shadow:0 0 8px #19E6A0;animation:lnBlink 1.2s ease-in-out infinite}
+@keyframes lnBlink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.25;transform:scale(.7)}}
+.hub-k .livenow{margin-left:auto}
+#modeBadge.live{color:#19E6A0}
+}
 .htile{background:linear-gradient(180deg,color-mix(in srgb,var(--tc,#36E0FF) 14%,#0F1F42) 0%,#0A1528 55%);border-color:color-mix(in srgb,var(--tc,#36E0FF) 28%,#1C3463);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 8px 24px rgba(0,0,0,.35)}
 .htile::after{content:"";position:absolute;left:0;right:0;top:0;height:46%;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,0));pointer-events:none;border-radius:12px 12px 0 0}
 .hart{position:absolute;right:-14px;bottom:-14px;width:96px;height:96px;opacity:.12;transform:rotate(-10deg);pointer-events:none;z-index:0}.hart svg{width:100%;height:100%;fill:none;stroke:var(--tc,#36E0FF);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
@@ -604,7 +610,7 @@ function clockStr(off,now){const sec=Math.max(Math.floor((off-now)/1000),0);retu
 function renderHub(){
   const now=Date.now()+skewMs;
   $('hub').innerHTML=GROUPS.map(g=>{const ks=KINDS.filter(k=>k.step_s===g.step).sort((a,b)=>a.prize_p-b.prize_p); if(!ks.length)return '';
-    return '<div class="hub-sec"><div class="hub-k" style="--tc:'+g.col+'"><span class="hub-ic">'+ICONS[g.step]+'</span><b>'+g.name+'</b><span class="hub-sub">'+g.sub+'</span></div><div class="hub-grid">'
+    return '<div class="hub-sec"><div class="hub-k" style="--tc:'+g.col+'"><span class="hub-ic">'+ICONS[g.step]+'</span><b>'+g.name+'</b><span class="hub-sub">'+g.sub+'</span>'+(LIVE?'<span class="livenow">Live now</span>':'')+'</div><div class="hub-grid">'
       +ks.map(k=>{const d=S&&S.open&&S.open[k.kind]; const off=d?new Date(d.off_at):nextOff(k.kind);
         return '<a class="htile" style="--tc:'+g.col+'" href="card.html?draw='+k.kind+'"><span class="hart">'+ICONS[g.step]+'</span><span class="hic">'+ICONS[g.step]+'</span>'
           +'<div class="hv">'+(k.price_p===0?'£5 FREE':'WIN '+gbp(k.prize_p))+'</div>'
@@ -690,7 +696,7 @@ function applyState(){
 async function syncLive(){
   try{ const r=await fetch('/api/card',{cache:'no-store'}); if(!r.ok)throw 0; S=await r.json(); if(S.error)throw 0;
     skewMs=new Date(S.server_now)-new Date();
-    if(!LIVE){LIVE=true;$('modeBadge').textContent='LIVE';$('modeBadge').style.color='var(--match)';fetchMe();fetchMine();}
+    if(!LIVE){LIVE=true;$('modeBadge').innerHTML='<span class="livenow">Live now</span>';$('modeBadge').style.color='';fetchMe();fetchMine();}
     applyState();
   }catch(e){ if(!LIVE){$('modeBadge').textContent='BACKEND NOT CONNECTED';$('modeBadge').style.color='var(--gold)';
       if(SINGLE){const t=nextOff(SINGLE);$('tId').textContent=SPEC[SINGLE].code||SINGLE.toUpperCase();$('tGameNo').textContent=gameNo(SINGLE,t);$('tAt').textContent=hm(t);}
