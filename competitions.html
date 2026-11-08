@@ -224,10 +224,10 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .ph-more[aria-expanded="true"] i{transform:rotate(45deg)}
 .ph-text{display:none;margin-top:10px}.ph-text.open{display:block}
 .hs-comp{background:linear-gradient(115deg,#05101F 0%,#0B2A6B 40%,#1A6FE0 80%,#7FC4FF 128%)}
-.comp{--tc:#FFC53D;--td:#2A2008;position:relative;overflow:hidden;border:1px solid color-mix(in srgb,var(--tc) 45%,#0A1528);border-top-color:var(--tc);border-radius:12px;margin:14px 0;
+.cmp{--tc:#FFC53D;--td:#2A2008;position:relative;overflow:hidden;border:1px solid color-mix(in srgb,var(--tc) 45%,#0A1528);border-top-color:var(--tc);border-radius:12px;margin:14px 0;
   background:radial-gradient(120% 90% at 0% 0%,color-mix(in srgb,var(--tc) 22%,transparent),transparent 60%),linear-gradient(180deg,var(--td),#0A1528);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 10px 30px rgba(0,0,0,.35)}
-.comp::after{content:"";position:absolute;inset:0 0 60% 0;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,0));pointer-events:none}
-.comp>*{position:relative;z-index:1}
+.cmp::after{content:"";position:absolute;inset:0 0 60% 0;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,0));pointer-events:none}
+.cmp>*{position:relative;z-index:1}
 .c-art{position:absolute!important;right:-10px;top:-10px;width:220px;height:220px;opacity:.1;z-index:0!important;pointer-events:none}.c-art svg{width:100%;height:100%}
 .c-head{display:grid;grid-template-columns:1fr auto;gap:10px;padding:18px 18px 0}
 .c-k{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--tc) 70%,#8FA6CC)}
@@ -310,7 +310,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
     else{
       const h=document.getElementById('heroH'); if(h)h.textContent=d.open[0].title.toUpperCase();
       hub.innerHTML=d.open.map(c=>{const mine=MINE.filter(m=>m.code===c.code);
-        return '<section class="comp" id="c-'+c.code+'"><span class="c-art">'+ART+'</span>'
+        return '<section class="cmp" id="c-'+c.code+'"><span class="c-art">'+ART+'</span>'
         +'<div class="c-head"><div><div class="c-k">Competition · closes '+when(c.closes_at)+'</div><div class="c-v">'+c.title.toUpperCase()+'</div></div><div class="c-code">Code<b>'+c.code+'</b></div></div>'
         +(c.blurb?'<p class="c-blurb">'+c.blurb+'</p>':'')
         +'<div class="c-meta"><span>Entry <b>'+gbp(c.price_p)+'</b> or free by post</span><span>Entries so far <b>'+c.sold.toLocaleString()+'</b>'+(c.sold===0?' — nobody in yet, be the first':'')+'</span><span>Closes in <b data-close="'+c.closes_at+'">'+left(c.closes_at)+'</b></span></div>'
