@@ -586,6 +586,7 @@ const ART={30:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" pre
  86400:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="{c}" stroke-width="5" stroke-linejoin="round"><path d="M215 36l60 50-60 78-60-78z"/><path d="M155 86h120M215 36l-24 50 24 78 24-78z"/></g></svg>',
  600:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="{c}" stroke-width="5" stroke-linejoin="round"><rect x="110" y="50" width="180" height="110" rx="10"/><path d="M110 60l90 66 90-66"/></g></svg>'};
 
+function lbl(t){return /^\d+s /.test(t)?t.replace(/^(\d+s) (.*)$/,(m,a,b)=>a+' '+b.toUpperCase()):t.toUpperCase();}
 function heroFor(g){
   const sl=document.querySelector('.herowrap .heroslide'); if(!sl)return;
   const H={30:'A WINNER EVERY 30 SECONDS!',60:'A WINNER EVERY MINUTE!',300:'A WINNER EVERY 5 MINUTES!',900:'A WINNER EVERY 15 MINUTES!',3600:'A WINNER EVERY HOUR!',86400:'A WINNER EVERY DAY!',600:'FREE DRAW EVERY 10 MINUTES!'};
@@ -599,10 +600,10 @@ function heroFor(g){
 function setupSingle(){ try{heroFor(group(SINGLE));}catch(e){}
   const sp=SPEC[SINGLE], g=group(SINGLE);
   $('hub').style.display='none'; $('hubBack').style.display=''; $('single').style.display='';
-  document.title=sp.label+' — Draws — InstantWins.co.uk'; const h1=$('pageH1'); h1.className='glossy'; h1.style.setProperty('--tc',g.col); h1.innerHTML='<span class="hic">'+ICONS[sp.step_s]+'</span><span class="gt">'+sp.label+'</span>';
+  document.title=sp.label+' — Draws — InstantWins.co.uk'; const h1=$('pageH1'); h1.className='glossy'; h1.style.setProperty('--tc',g.col); h1.style.textTransform='none'; h1.innerHTML='<span class="hic">'+ICONS[sp.step_s]+'</span><span class="gt">'+lbl(sp.label)+'</span>';
   const tile=$('tile'); tile.className='nextdraw '+g.cls; tile.style.setProperty('--tc',g.col); $('tOff').style.setProperty('--tc',g.col);
   $('tArt').innerHTML=(ART[sp.step_s]||ART[g.step]||ART[60]).replace(/\{c\}/g,g.col);
-  $('tLabel').innerHTML='<span class="tic">'+ICONS[sp.step_s]+'</span>'+sp.label; $('tCad').textContent=cadence(SINGLE);
+  $('tLabel').style.textTransform='none'; $('tLabel').innerHTML='<span class="tic">'+ICONS[sp.step_s]+'</span>'+lbl(sp.label); $('tCad').textContent=cadence(SINGLE);
   $('tPrize').textContent=gbp(sp.prize_p); $('tPrize2').textContent=gbp(sp.prize_p); $('tPrice').textContent=priceLabel(sp.price_p);
   $('tCap').textContent=sp.cap?'/'+sp.cap.toLocaleString():'';
   $('tNote').textContent=SINGLE==='free'?'One free entry per account per draw · prize paid as £5 cash to your account, withdrawable at any time.':
