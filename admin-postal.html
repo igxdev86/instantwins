@@ -157,9 +157,15 @@ textarea{min-height:90px;resize:vertical}
     <button class="btn" id="poGo">ENTER POSTCARD</button>
     <div class="err" id="poErr"></div>
   </div>
-  <div class="panel"><h2>Instant Win rounds and Pick a Piece</h2>
-    <p class="lead">Cards naming a Instant Win round or Pick a Piece are entered from the ticket or board page while signed in as the admin, using the "Enter postal card" control there (coming with launch tooling). Until then, record them here and enter them through the player&rsquo;s account.</p>
+  <div class="panel"><h2>Instant Win postcard</h2>
+    <p class="lead">The card names the ticket exactly as the ticket page tells them to write it — e.g. <b>“Diamond Ticket £1”</b>. Pick that line below. The entry takes the next ticket in that ticket's open round, same sequence as paid, and any prize is credited at once.</p>
+    <label>Account number or email</label><input id="ptRef" placeholder="IW1234 or name@example.com">
+    <label>Ticket named on the card</label>
+    <select id="ptTag" style="width:100%;border:1.5px solid var(--line);border-radius:7px;padding:12px;background:#050B1A;color:var(--ink);font-family:inherit"><option>loading…</option></select>
+    <button class="btn" id="ptGo">Enter postcard</button><div class="err" id="ptErr"></div>
   </div>
+  <div class="panel"><h2>Competition postcard</h2><p class="lead">Cards with a competition code and answer are keyed in on the <a href="admin-competitions.html" style="color:var(--cyan)">Competitions admin</a> page.</p></div>
+
 </div>
 </div>
 </div></div><nav class="mtab" aria-label="Quick navigation"><a class="home" href="index.html"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></a><a class="iw" href="instantwins.html"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><span>Instant</span></a><a class="draws" href="card.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Draws</span></a><a class="comp" href="competitions.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 2.5 2.5v1.5"/><path d="M12 17v.01"/></svg><span>Comps</span></a><a class="free" href="free-entry.html"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 8l9 6 9-6"/></svg><span>Free Entry</span></a><a class="acct" href="account.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Account</span></a></nav>
@@ -227,7 +233,10 @@ $('poGo').onclick=async()=>{
     $('poErr').textContent='Entered into '+d.entered+' draw'+(d.entered===1?'':'s')+' — first number #'+(d.first&&d.first.entry_no)+'.';$('poErr').className='err ok';$('poEmail').value='';$('poAt').value='';}
   catch(e){$('poErr').textContent=e.message;$('poErr').className='err';}
 };
-(async()=>{ if(await guard()){ try{const st=await (await fetch('/api/card',{cache:'no-store'})).json(); if(st.kinds){$('poKind').innerHTML=st.kinds.map(k=>'<option value="'+k.kind+'"'+(k.kind==='five'?' selected':'')+'>'+k.label+' ('+(k.price_p?'£'+(k.price_p/100):'free')+')</option>').join('');} }catch(e){} } })();
+function pl(p){return p<100?p+'p':'£'+(p/100).toLocaleString();}
+async function loadTix(){try{const t=await (await fetch('/api/tickets',{cache:'no-store'})).json();$('ptTag').innerHTML=t.map(x=>'<option value="'+x.tag+'">'+esc(x.name+' '+pl(x.price_p))+(x.sold!=null?' — '+(x.cap-x.sold)+' left':'')+'</option>').join('');}catch(e){$('ptTag').innerHTML='<option>tickets not loaded</option>';}}
+$('ptGo').onclick=async()=>{$('ptErr').className='err';$('ptErr').textContent='';try{const d=await api('/api/admin',{action:'postal_ticket',token:s.token,ref:$('ptRef').value.trim(),tag:$('ptTag').value});$('ptErr').className='err ok';$('ptErr').textContent='Entered: '+d.ticket+' — ticket #'+d.entry_no+' of '+d.cap+(d.prize_p?' — WON '+fmtp(d.prize_p):' — no prize on that ticket');$('ptRef').value='';loadTix();}catch(e){$('ptErr').textContent=e.message;}};
+(async()=>{ if(await guard()){ loadTix(); try{const st=await (await fetch('/api/card',{cache:'no-store'})).json(); if(st.kinds){$('poKind').innerHTML=st.kinds.map(k=>'<option value="'+k.kind+'"'+(k.kind==='five'?' selected':'')+'>'+k.label+' ('+(k.price_p?'£'+(k.price_p/100):'free')+')</option>').join('');} }catch(e){} } })();
 </script>
 <script>
 function ebOpen(){document.getElementById('ebside').classList.add('open');document.getElementById('ebscrim').classList.add('open');}

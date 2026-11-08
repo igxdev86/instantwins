@@ -4,7 +4,7 @@ const MAP = { stats:'iw_admin_stats', users:'iw_admin_users', threads:'iw_admin_
               aff_list:'iw_admin_aff_list', aff_create:'iw_admin_aff_create', aff_update:'iw_admin_aff_update',
               setbal:'iw_admin_my_balance', postal:'iw_admin_postal_enter', postal_no:'iw_admin_postal_enter_no', kinds:'iw_admin_kinds', kindset:'iw_admin_kind_active',
               payments:'iw_admin_payments', depdecide:'iw_admin_deposit_decide', wddecide:'iw_admin_withdraw_decide', setting:'iw_admin_setting', golive:'iw_go_live', tickets:'iw_admin_tickets', ticketset:'iw_admin_ticket_active',
-              comps:'iw_admin_comps', compcreate:'iw_admin_comp_create', comppostal:'iw_admin_comp_postal' };
+              comps:'iw_admin_comps', compcreate:'iw_admin_comp_create', comppostal:'iw_admin_comp_postal', postal_ticket:'iw_admin_postal_ticket' };
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
   const KEY = process.env.SUPABASE_SERVICE_ROLE_KEY, URL = process.env.SUPABASE_URL;
@@ -27,6 +27,7 @@ export default async function handler(req, res) {
   if (b.action === 'postal_no') { args.p_email=String(b.email||''); args.p_game_no=String(b.game_no||''); }
   if (b.action === 'postal') { args.p_email=String(b.email||''); args.p_kind=String(b.kind||'five'); args.p_off_at=b.off_at?new Date(b.off_at).toISOString():null; }
   if (b.action === 'compcreate') { args.p_title=String(b.title||''); args.p_blurb=b.blurb?String(b.blurb):null; args.p_prize_p=parseInt(b.prize_p,10)||0; args.p_price_p=parseInt(b.price_p,10)||0; args.p_question=String(b.question||''); args.p_options=Array.isArray(b.options)?b.options.map(String).slice(0,6):[]; args.p_correct=parseInt(b.correct,10)||0; args.p_days=parseInt(b.days,10)||7; args.p_cap=b.cap?parseInt(b.cap,10):null; }
+  if (b.action === 'postal_ticket') { args.p_ref=String(b.ref||''); args.p_tag=String(b.tag||'').toUpperCase().slice(0,4); }
   if (b.action === 'comppostal') { args.p_ref=String(b.ref||''); args.p_code=String(b.code||''); args.p_answer=parseInt(b.answer,10)||0; }
   if (b.action === 'setbal') { args.p_target_p = parseInt(b.amount_p,10)||0; }
   const r = await fetch(URL + '/rest/v1/rpc/' + fn, {
