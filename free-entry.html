@@ -207,7 +207,8 @@ textarea{min-height:90px;resize:vertical}
    {kind:'h_2000',code:'H2K',label:'Hourly £2,000 (£20, :30)',step_s:3600,offset_s:1800,daily_hour:null,prize_p:200000},{kind:'h_5000',code:'H5K',label:'Hourly £5,000 (£50, :30)',step_s:3600,offset_s:1800,daily_hour:null,prize_p:500000},
    {kind:'d_400',code:'D400',label:'Daily £400 (£5)',step_s:86400,offset_s:0,daily_hour:21,prize_p:40000},{kind:'d_1000',code:'D1K',label:'Daily £1,000 (£10)',step_s:86400,offset_s:0,daily_hour:21,prize_p:100000},
    {kind:'platinum',code:'D1500',label:'Daily £1,500 (£20)',step_s:86400,offset_s:0,daily_hour:21,prize_p:150000},{kind:'d_5000',code:'D5K',label:'Daily £5,000 (£50)',step_s:86400,offset_s:0,daily_hour:21,prize_p:500000},
-   {kind:'free',code:'FREE',label:'Free Draw £5',step_s:600,offset_s:0,daily_hour:null,prize_p:500}];
+   {kind:'free_1',code:'FR1',label:'Free Draw £1 (every 5 min)',step_s:300,offset_s:150,daily_hour:null,prize_p:100},{kind:'free',code:'FREE',label:'Free Draw £5 (every 10 min)',step_s:600,offset_s:0,daily_hour:null,prize_p:500},
+   {kind:'free_20',code:'FR20',label:'Free Draw £20 (hourly :45)',step_s:3600,offset_s:2700,daily_hour:null,prize_p:2000},{kind:'free_100',code:'FR100',label:'Free Draw £100 (daily 20:00)',step_s:86400,offset_s:0,daily_hour:20,prize_p:10000}];
   const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function sp(){return KINDS.find(k=>k.kind===$('gnKind').value)||KINDS[4];}
   function nextOff(k,from){const t=from;if(k.daily_hour!=null){const d=new Date(t);d.setHours(k.daily_hour,0,0,0);if(d.getTime()<=t)d.setDate(d.getDate()+1);return d;}const s=k.step_s*1000,o=(k.offset_s||0)*1000;return new Date(Math.ceil((t-o)/s)*s+o);}

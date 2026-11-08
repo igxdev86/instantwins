@@ -540,7 +540,10 @@ let KINDS=[
  {kind:'d_1000',code:'D1K',label:'Daily £1,000',price_p:1000,prize_p:100000,cap:200,step_s:86400,offset_s:0,daily_hour:21},
  {kind:'platinum',code:'D1500',label:'Daily £1,500',price_p:2000,prize_p:150000,cap:150,step_s:86400,offset_s:0,daily_hour:21},
  {kind:'d_5000',code:'D5K',label:'Daily £5,000',price_p:5000,prize_p:500000,cap:200,step_s:86400,offset_s:0,daily_hour:21},
- {kind:'free',code:'FREE',label:'Free Draw £5',price_p:0,prize_p:500,cap:null,step_s:600,offset_s:0,daily_hour:null}];
+ {kind:'free_1',code:'FR1',label:'Free Draw £1',price_p:0,prize_p:100,cap:null,step_s:300,offset_s:150,daily_hour:null},
+ {kind:'free',code:'FREE',label:'Free Draw £5',price_p:0,prize_p:500,cap:null,step_s:600,offset_s:0,daily_hour:null},
+ {kind:'free_20',code:'FR20',label:'Free Draw £20',price_p:0,prize_p:2000,cap:null,step_s:3600,offset_s:2700,daily_hour:null},
+ {kind:'free_100',code:'FR100',label:'Free Draw £100',price_p:0,prize_p:10000,cap:null,step_s:86400,offset_s:0,daily_hour:20}];
 let SPEC={}; function indexKinds(){SPEC={};KINDS.forEach(k=>SPEC[k.kind]=k);} indexKinds();
 const ICONS={30:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 10.5h5M9.5 13.5h5"/></svg>',
  60:'<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 1.5M9 2h6M12 2v3"/></svg>',
@@ -555,10 +558,12 @@ const GROUPS=[{step:30,name:'30 Second Draws',sub:'small prizes from 10p',col:'#
               {step:900,name:'Quarter Hour Draws',sub:'on the quarter hour',col:'#DDE6F7',cls:'silver'},
               {step:3600,name:'Hourly Draws',sub:'on the hour and the half hour',col:'#FFC53D',cls:'grand'},
               {step:86400,name:'Daily Draws',sub:'every evening at 21:00',col:'#C9A6FF',cls:'plat'},
-              {step:600,name:'Free Draw',sub:'100% free, every ten minutes',col:'#19E6A0',cls:'freed'}];
-function group(k){const sp=SPEC[k];return GROUPS.find(g=>g.step===sp.step_s)||GROUPS[1];}
+              {step:0,name:'Free Draws',sub:'100% free — one entry each, every draw',col:'#19E6A0',cls:'freed'}];
+function isFree(k){return !!(SPEC[k]&&SPEC[k].price_p===0);}
+function inGroup(k,g){return g.step===0?k.price_p===0:(k.price_p>0&&k.step_s===g.step);}
+function group(k){const sp=SPEC[k];return GROUPS.find(g=>inGroup(sp,g))||GROUPS[1];}
 function drawLabel(k){return SPEC[k]?SPEC[k].label:k;}
-function cadence(k){const sp=SPEC[k];if(sp.daily_hour!=null)return 'daily '+pad(sp.daily_hour)+':00';return {30:'every 30 sec',60:'every minute',300:'every 5 min',600:'every 10 min',900:'every 15 min',3600:sp.offset_s?'hourly at :30':'on the hour'}[sp.step_s]||'';}
+function cadence(k){const sp=SPEC[k];if(sp.daily_hour!=null)return 'daily '+pad(sp.daily_hour)+':00';return {30:'every 30 sec',60:'every minute',300:'every 5 min',600:'every 10 min',900:'every 15 min',3600:sp.offset_s?'hourly at :'+pad(Math.round(sp.offset_s/60)):'on the hour'}[sp.step_s]||'';}
 function nextOff(k,from){const sp=SPEC[k];const t=from||Date.now();
   if(sp.daily_hour!=null){const d=new Date(t);d.setHours(sp.daily_hour,0,0,0);if(d.getTime()<=t)d.setDate(d.getDate()+1);return d;}
   const s=sp.step_s*1000,o=(sp.offset_s||0)*1000;return new Date(Math.ceil((t-o)/s)*s+o);}
@@ -585,13 +590,14 @@ const ART={30:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" pre
  3600:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="{c}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M160 40h100v22a50 50 0 0 1-100 0z"/><path d="M260 48q30 0 30 24 0 26-38 30"/><path d="M160 48q-30 0-30 24 0 26 38 30"/><path d="M200 112h20v26h-20zM182 138h56v12h-56z"/></g></svg>',
  86400:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="{c}" stroke-width="5" stroke-linejoin="round"><path d="M215 36l60 50-60 78-60-78z"/><path d="M155 86h120M215 36l-24 50 24 78 24-78z"/></g></svg>',
  600:'<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet"><g fill="none" stroke="{c}" stroke-width="5" stroke-linejoin="round"><rect x="110" y="50" width="180" height="110" rx="10"/><path d="M110 60l90 66 90-66"/></g></svg>'};
+ICONS[0]=ICONS[600]; ART[0]=ART[600];
 
 function lbl(t){return /^\d+s /.test(t)?t.replace(/^(\d+s) (.*)$/,(m,a,b)=>a+' '+b.toUpperCase()):t.toUpperCase();}
 function heroFor(g){
   const sl=document.querySelector('.herowrap .heroslide'); if(!sl)return;
-  const H={30:'A WINNER EVERY 30 SECONDS!',60:'A WINNER EVERY MINUTE!',300:'A WINNER EVERY 5 MINUTES!',900:'A WINNER EVERY 15 MINUTES!',3600:'A WINNER EVERY HOUR!',86400:'A WINNER EVERY DAY!',600:'FREE DRAW EVERY 10 MINUTES!'};
-  const P={30:'Quick draws from 10p a number, every half minute. Pick your prize, grab a number, watch it draw.',60:'A fresh draw every minute, all day, from 50p a number.',300:'Our flagship cadence — every five minutes from £1 a number, up to £1,000 a draw.',900:'Bigger prizes four times an hour, from £2 a number.',3600:'The big ones: the £1,000 Grand on the hour, up to £5,000 at half past.',86400:'One draw a day at 21:00 with the largest prizes on the site.',600:'One free entry per account every ten minutes. £5 to the winner, no purchase ever.'};
-  const ks=KINDS.filter(k=>k.step_s===g.step); const names=ks.length?ks.map(k=>gbp(k.prize_p)).join(' · '):'';
+  const H={30:'A WINNER EVERY 30 SECONDS!',60:'A WINNER EVERY MINUTE!',300:'A WINNER EVERY 5 MINUTES!',900:'A WINNER EVERY 15 MINUTES!',3600:'A WINNER EVERY HOUR!',86400:'A WINNER EVERY DAY!',0:'FREE DRAWS — NO PURCHASE, EVER!'};
+  const P={30:'Quick draws from 10p a number, every half minute. Pick your prize, grab a number, watch it draw.',60:'A fresh draw every minute, all day, from 50p a number.',300:'Our flagship cadence — every five minutes from £1 a number, up to £1,000 a draw.',900:'Bigger prizes four times an hour, from £2 a number.',3600:'The big ones: the £1,000 Grand on the hour, up to £5,000 at half past.',86400:'One draw a day at 21:00 with the largest prizes on the site.',0:'£1 every five minutes, £5 every ten, £20 every hour and £100 every evening — one free entry per account in each. Enter online or by post.'};
+  const ks=KINDS.filter(k=>inGroup(k,g)); const names=ks.length?ks.map(k=>gbp(k.prize_p)).join(' · '):'';
   sl.className='heroslide hs-card'; sl.style.background='linear-gradient(115deg,#03091A 0%,color-mix(in srgb,'+g.col+' 22%,#0A2650) 36%,color-mix(in srgb,'+g.col+' 55%,#0F5FB5) 72%,'+g.col+' 125%)';
   sl.querySelector('.hs-tag').textContent=g.name; sl.querySelector('.hs-h').textContent=H[g.step]||'A WINNER EVERY DRAW!';
   const pp=sl.querySelector('.hs-p'); pp.removeAttribute('data-dyn-tpl'); pp.textContent=(P[g.step]||'')+(names?' Prizes: '+names+'.':'');
@@ -600,16 +606,16 @@ function heroFor(g){
 function setupSingle(){ try{heroFor(group(SINGLE));}catch(e){}
   const sp=SPEC[SINGLE], g=group(SINGLE);
   $('hub').style.display='none'; $('hubBack').style.display=''; $('single').style.display='';
-  document.title=sp.label+' — Draws — InstantWins.co.uk'; const h1=$('pageH1'); h1.className='glossy'; h1.style.setProperty('--tc',g.col); h1.style.textTransform='none'; h1.innerHTML='<span class="hic">'+ICONS[sp.step_s]+'</span><span class="gt">'+lbl(sp.label)+'</span>';
+  document.title=sp.label+' — Draws — InstantWins.co.uk'; const h1=$('pageH1'); h1.className='glossy'; h1.style.setProperty('--tc',g.col); h1.style.textTransform='none'; h1.innerHTML='<span class="hic">'+ICONS[g.step]+'</span><span class="gt">'+lbl(sp.label)+'</span>';
   const tile=$('tile'); tile.className='nextdraw '+g.cls; tile.style.setProperty('--tc',g.col); $('tOff').style.setProperty('--tc',g.col);
-  $('tArt').innerHTML=(ART[sp.step_s]||ART[g.step]||ART[60]).replace(/\{c\}/g,g.col);
-  $('tLabel').style.textTransform='none'; $('tLabel').innerHTML='<span class="tic">'+ICONS[sp.step_s]+'</span>'+lbl(sp.label); $('tCad').textContent=cadence(SINGLE);
+  $('tArt').innerHTML=(ART[g.step]||ART[sp.step_s]||ART[60]).replace(/\{c\}/g,g.col);
+  $('tLabel').style.textTransform='none'; $('tLabel').innerHTML='<span class="tic">'+ICONS[g.step]+'</span>'+lbl(sp.label); $('tCad').textContent=cadence(SINGLE);
   $('tPrize').textContent=gbp(sp.prize_p); $('tPrize2').textContent=gbp(sp.prize_p); $('tPrice').textContent=priceLabel(sp.price_p);
   $('tCap').textContent=sp.cap?'/'+sp.cap.toLocaleString():'';
-  $('tNote').textContent=SINGLE==='free'?'One free entry per account per draw · prize paid as £5 cash to your account, withdrawable at any time.':
+  $('tNote').textContent=isFree(SINGLE)?'One free entry per account per draw · prize paid as '+gbp(sp.prize_p)+' cash to your account, withdrawable at any time.':
     priceLabel(sp.price_p)+' a number, '+gbp(sp.prize_p)+' to one of the numbers entered — always paid, no rollover. Enter this draw or any '+sp.label+' draw in the next 7 days.';
   $('upSub').textContent='the next '+sp.label+' draws — enter any of them';
-  const sibs=KINDS.filter(k=>k.step_s===sp.step_s&&k.kind!==SINGLE);
+  const sibs=KINDS.filter(k=>inGroup(k,g)&&k.kind!==SINGLE);
   $('siblings').innerHTML=sibs.length?'<div class="sib-k">Other '+(g.name||'draws').replace(/ draws?$/i,'')+' draws &mdash; same timer, bigger or smaller prize</div><div class="sib-row">'+sibs.sort((a,b)=>a.prize_p-b.prize_p).map(k=>'<a class="sib" style="--tc:'+g.col+'" href="card.html?draw='+k.kind+'"><span class="sib-v">Win '+gbp(k.prize_p)+'</span><span class="sib-p">'+priceLabel(k.price_p)+' online entry</span></a>').join('')+'</div>':'';
 }
 function setupHub(){ $('single').style.display='none'; $('hubBack').style.display='none'; $('hub').style.display=''; $('hashLine').style.display='none'; const h1=$('pageH1'); h1.className='glossy'; h1.style.setProperty('--tc','#36E0FF'); h1.innerHTML='<span class="hic">'+ICONS[300]+'</span><span class="gt">Draws</span>'; }
@@ -618,7 +624,7 @@ function setupHub(){ $('single').style.display='none'; $('hubBack').style.displa
 function oddsLine(k,d){ // honest, live: winner is always drawn from the numbers entered
   if(!d) return '';
   const sold=d.sold||0, prize=gbp(d.prize_p);
-  if(k==='free') return sold===0?'Nobody in yet — be the first!':sold===1?'1 in so far — join and it’s 1 in 2':sold+' in — your odds: 1 in '+(sold+1);
+  if(isFree(k)) return sold===0?'Nobody in yet — be the first!':sold===1?'1 in so far — join and it’s 1 in 2':sold+' in — your odds: 1 in '+(sold+1);
   if(sold===0) return 'Nobody in yet — enter now and '+prize+' is yours';
   if(sold===1) return 'Just 1 in — enter and it’s a coin flip for '+prize;
   if(sold<10) return 'Only '+sold+' in — your odds: 1 in '+(sold+1);
@@ -629,11 +635,11 @@ function oddsLine(k,d){ // honest, live: winner is always drawn from the numbers
 function clockStr(off,now){const sec=Math.max(Math.floor((off-now)/1000),0);return (sec>=3600?pad(Math.floor(sec/3600))+':':'')+pad(Math.floor(sec/60)%60)+':'+pad(sec%60);}
 function renderHub(){
   const now=Date.now()+skewMs;
-  $('hub').innerHTML=GROUPS.map(g=>{const ks=KINDS.filter(k=>k.step_s===g.step).sort((a,b)=>a.prize_p-b.prize_p); if(!ks.length)return '';
+  $('hub').innerHTML=GROUPS.map(g=>{const ks=KINDS.filter(k=>inGroup(k,g)).sort((a,b)=>a.prize_p-b.prize_p); if(!ks.length)return '';
     return '<div class="hub-sec"><div class="hub-k" style="--tc:'+g.col+'"><span class="hub-ic">'+ICONS[g.step]+'</span><b>'+g.name+'</b><span class="hub-sub">'+g.sub+'</span>'+(LIVE?'<span class="livenow">Live now</span>':'')+'</div><div class="hub-grid">'
       +ks.map(k=>{const d=S&&S.open&&S.open[k.kind]; const off=d?new Date(d.off_at):nextOff(k.kind);
         return '<a class="htile" style="--tc:'+g.col+'" href="card.html?draw='+k.kind+'"><span class="hart">'+ICONS[g.step]+'</span><span class="hic">'+ICONS[g.step]+'</span>'
-          +'<div class="hv">'+(k.price_p===0?'£5 FREE':'WIN '+gbp(k.prize_p))+'</div>'
+          +'<div class="hv">'+(k.price_p===0?gbp(k.prize_p)+' FREE':'WIN '+gbp(k.prize_p))+'</div>'
           +'<div class="hp">'+(k.price_p===0?'FREE <i>entry</i>':priceLabel(k.price_p)+' <i>entry</i>')+'</div>'
           +'<div class="hn"><span>closes</span><b data-hub-clock="'+k.kind+'">'+clockStr(off,now)+'</b></div>'
           +'<div class="hn"><span>entries</span><span>'+(d?d.sold.toLocaleString()+(k.cap?'/'+k.cap.toLocaleString():''):'—')+'</span></div>'
@@ -673,7 +679,7 @@ function renderUpcoming(){
   $('upcoming').innerHTML=rows.slice(0,SINGLE?14:16).map((r,i)=>{const sold=aheadSold(r.k,r.t);const sp=SPEC[r.k];
     return '<a class="brow '+group(r.k).cls+(i===0?' next':'')+'" href="card.html?draw='+r.k+'" style="text-decoration:none;color:inherit">'
       +'<span class="t">'+when(r.t)+'</span><span class="nm">'+drawLabel(r.k)+' <span class="who">'+gameNo(r.k,r.t)+'</span>'+(sold?' <span class="who">'+sold+(sp.cap?'/'+sp.cap:'')+' in</span>':'')+'</span>'
-      +'<span class="pz">'+(r.k==='free'?'£5 FREE':gbp(sp.prize_p))+'</span><span class="st">'+(i===0?'NEXT':'OPEN')+'</span></a>';}).join('');
+      +'<span class="pz">'+(isFree(r.k)?gbp(sp.prize_p)+' FREE':gbp(sp.prize_p))+'</span><span class="st">'+(i===0?'NEXT':'OPEN')+'</span></a>';}).join('');
 }
 function renderResults(){
   const rs=results.filter(r=>SPEC[r.kind]&&(!SINGLE||r.kind===SINGLE)).slice(0,10);
@@ -689,7 +695,7 @@ function nextOpenSlot(k,d){ // first future slot after d with room
   const sp=SPEC[k]; let t=nextOff(k,new Date(d.off_at).getTime()+1); for(let i=0;i<500;i++){ const a=(S&&S.ahead||[]).find(x=>x.kind===k&&new Date(x.off_at).getTime()===t.getTime()); if(!a||!sp.cap||a.sold<sp.cap)return t; t=nextOff(k,t.getTime()+1);} return t; }
 function applyButtons(){
   if(!SINGLE)return; const d=S&&S.open&&S.open[SINGLE]; const sp=SPEC[SINGLE]; const btn=$('tEnter'); const full=d&&d.cap&&d.sold>=d.cap;
-  if(SINGLE==='free'){const entered=d&&(mine[d.id]||[]).length>0; btn.textContent=!LIVE?'CONNECTING…':!TOKEN?'SIGN IN TO ENTER':(entered?'ENTERED ✓':'ENTER FREE'); btn.disabled=!LIVE||(TOKEN&&entered);}
+  if(isFree(SINGLE)){const entered=d&&(mine[d.id]||[]).length>0; btn.textContent=!LIVE?'CONNECTING…':!TOKEN?'SIGN IN TO ENTER':(entered?'ENTERED ✓':'ENTER FREE'); btn.disabled=!LIVE||(TOKEN&&entered);}
   else { const nx=full?nextOpenSlot(SINGLE,d):null; btn.dataset.off=nx?nx.getTime():'';
     btn.textContent=!LIVE?'CONNECTING…':full?(TOKEN?('FULL — ENTER '+hm(nx)+' · '+priceLabel(sp.price_p)):'SIGN IN TO ENTER'):TOKEN?('ENTER NEXT · '+priceLabel(sp.price_p)):'SIGN IN TO ENTER';
     btn.disabled=!LIVE||(TOKEN&&balance<sp.price_p/100); }
@@ -699,7 +705,7 @@ function applyState(){
   if(S.kinds&&S.kinds.length){KINDS=S.kinds;indexKinds(); if(VIEW&&SPEC[VIEW]&&SINGLE!==VIEW){SINGLE=VIEW;setupSingle();}
     if(VIEW&&!SPEC[VIEW]){ SINGLE=null; $('single').innerHTML='<div class="nextdraw" style="text-align:center;padding:26px 16px"><div class="ndnote" style="font-size:.9rem;color:#fff">This draw isn’t running right now.</div><a class="hub-back" href="card.html" style="margin-top:10px">&larr; See the draws that are</a></div>'; $('single').style.display=''; $('hub').style.display='none'; $('hubBack').style.display='none'; $('pageH1').textContent='Draws'; return; }}
   if(SINGLE){const d=S.open&&S.open[SINGLE]; if(d){$('tId').textContent=SPEC[SINGLE].code||SINGLE.toUpperCase(); $('tGameNo').textContent=d.game_no||gameNo(SINGLE,d.off_at); $('tAt').textContent=(SPEC[SINGLE].daily_hour!=null?dayLabel(d.off_at)+' ':'')+hm(d.off_at); $('tSold').textContent=d.sold.toLocaleString(); $('fiveHash').textContent=d.seed_hash; $('tOdds').textContent=oddsLine(SINGLE,d); $('tOdds').classList.toggle('empty',d.sold===0);
-      const m=mine[d.id]||[]; $('tMine').textContent=SINGLE==='free'?(m.length?'You’re in — good luck!':''):(m.length?('You’re in ×'+m.length+' (number '+m.join(', ')+')'):'');}}
+      const m=mine[d.id]||[]; $('tMine').textContent=isFree(SINGLE)?(m.length?'You’re in — good luck!':''):(m.length?('You’re in ×'+m.length+' (number '+m.join(', ')+')'):'');}}
   applyButtons(); renderUpcoming(); if(!SINGLE)renderHub();
   let changed=false;
   for(const r of (S.results||[])){
