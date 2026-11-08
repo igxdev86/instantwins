@@ -514,14 +514,14 @@ function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;
 
 /* ================= draw catalogue (server-driven; fallback until connected) ================= */
 let KINDS=[
- {kind:'t_1',code:'T1',label:'30 Second £1',price_p:10,prize_p:100,cap:20,step_s:30,offset_s:0,daily_hour:null},
- {kind:'t_2',code:'T2',label:'30 Second £2',price_p:20,prize_p:200,cap:20,step_s:30,offset_s:0,daily_hour:null},
- {kind:'t_5',code:'T5',label:'30 Second £5',price_p:50,prize_p:500,cap:20,step_s:30,offset_s:0,daily_hour:null},
- {kind:'t_8',code:'T8',label:'30 Second £8',price_p:100,prize_p:800,cap:16,step_s:30,offset_s:0,daily_hour:null},
- {kind:'minute',code:'S10',label:'60 Second £10',price_p:50,prize_p:1000,cap:50,step_s:60,offset_s:0,daily_hour:null},
- {kind:'s60_20',code:'S20',label:'60 Second £20',price_p:100,prize_p:2000,cap:40,step_s:60,offset_s:0,daily_hour:null},
- {kind:'s60_50',code:'S50',label:'60 Second £50',price_p:200,prize_p:5000,cap:50,step_s:60,offset_s:0,daily_hour:null},
- {kind:'s60_100',code:'S100',label:'60 Second £100',price_p:500,prize_p:10000,cap:40,step_s:60,offset_s:0,daily_hour:null},
+ {kind:'t_1',code:'T1',label:'30s Draw £1',price_p:10,prize_p:100,cap:20,step_s:30,offset_s:0,daily_hour:null},
+ {kind:'t_2',code:'T2',label:'30s Draw £2',price_p:20,prize_p:200,cap:20,step_s:30,offset_s:0,daily_hour:null},
+ {kind:'t_5',code:'T5',label:'30s Draw £5',price_p:50,prize_p:500,cap:20,step_s:30,offset_s:0,daily_hour:null},
+ {kind:'t_8',code:'T8',label:'30s Draw £8',price_p:100,prize_p:800,cap:16,step_s:30,offset_s:0,daily_hour:null},
+ {kind:'minute',code:'S10',label:'60s Draw £10',price_p:50,prize_p:1000,cap:50,step_s:60,offset_s:0,daily_hour:null},
+ {kind:'s60_20',code:'S20',label:'60s Draw £20',price_p:100,prize_p:2000,cap:40,step_s:60,offset_s:0,daily_hour:null},
+ {kind:'s60_50',code:'S50',label:'60s Draw £50',price_p:200,prize_p:5000,cap:50,step_s:60,offset_s:0,daily_hour:null},
+ {kind:'s60_100',code:'S100',label:'60s Draw £100',price_p:500,prize_p:10000,cap:40,step_s:60,offset_s:0,daily_hour:null},
  {kind:'m5_20',code:'F20',label:'Five Minute £20',price_p:100,prize_p:2000,cap:40,step_s:300,offset_s:0,daily_hour:null},
  {kind:'five',code:'F100',label:'Five Minute £100',price_p:100,prize_p:10000,cap:200,step_s:300,offset_s:0,daily_hour:null},
  {kind:'m5_200',code:'F200',label:'Five Minute £200',price_p:200,prize_p:20000,cap:200,step_s:300,offset_s:0,daily_hour:null},
