@@ -298,6 +298,15 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 #tile .nd-art svg{position:absolute;right:-2%;top:50%;transform:translateY(-50%);height:118%;width:auto;max-width:46%;opacity:.11;pointer-events:none;z-index:0}
 #tile .nd-art{position:absolute;inset:0;pointer-events:none}
 .tierbar{margin-top:10px}
+.tierbar{display:block}
+.sib-k{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin:0 0 8px}
+.sib-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.sib{--tc:#36E0FF;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:2px;text-decoration:none;border-radius:10px;padding:10px 12px;border:1px solid color-mix(in srgb,var(--tc) 40%,#0A1528);border-top-color:color-mix(in srgb,var(--tc) 75%,#fff);
+  background:radial-gradient(120% 80% at 0% 0%,color-mix(in srgb,var(--tc) 28%,transparent),transparent 60%),linear-gradient(180deg,color-mix(in srgb,var(--tc) 12%,#0E1B38),#0A1528);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 6px 16px rgba(0,0,0,.35)}
+.sib::after{content:"";position:absolute;inset:0 0 55% 0;background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,0));pointer-events:none}
+.sib-v{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.3rem;line-height:1;background:linear-gradient(180deg,#fff,var(--tc) 60%,color-mix(in srgb,var(--tc) 60%,#000));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 rgba(0,0,0,.5))}
+.sib-p{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:#C9D6EE}
+
 .drawpanel{display:none;margin-top:12px;border:1px solid var(--line);border-top:3px solid var(--tc,#36E0FF);border-radius:12px;padding:16px 14px 14px;background:linear-gradient(180deg,#0E1B38,#0A1528);text-align:center}
 .drawpanel.show{display:block;animation:dpin .35s ease-out}
 @keyframes dpin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
@@ -590,7 +599,7 @@ function setupSingle(){
     priceLabel(sp.price_p)+' a number, '+gbp(sp.prize_p)+' to one of the numbers entered — always paid, no rollover. Enter this draw or any '+sp.label+' draw in the next 7 days.';
   $('upSub').textContent='the next '+sp.label+' draws — enter any of them';
   const sibs=KINDS.filter(k=>k.step_s===sp.step_s&&k.kind!==SINGLE);
-  $('siblings').innerHTML=sibs.length?'<span style="font-family:Barlow Condensed,sans-serif;font-weight:800;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);align-self:center">Same cadence:</span>'+sibs.map(k=>'<a href="card.html?draw='+k.kind+'">'+priceLabel(k.price_p)+' &rarr; '+gbp(k.prize_p)+'</a>').join(''):'';
+  $('siblings').innerHTML=sibs.length?'<div class="sib-k">Other '+(g.name||'draws').replace(/ draws?$/i,'')+' draws &mdash; same timer, bigger or smaller prize</div><div class="sib-row">'+sibs.sort((a,b)=>a.prize_p-b.prize_p).map(k=>'<a class="sib" style="--tc:'+g.col+'" href="card.html?draw='+k.kind+'"><span class="sib-v">Win '+gbp(k.prize_p)+'</span><span class="sib-p">'+priceLabel(k.price_p)+' a go</span></a>').join('')+'</div>':'';
 }
 function setupHub(){ $('single').style.display='none'; $('hubBack').style.display='none'; $('hub').style.display=''; $('hashLine').style.display='none'; const h1=$('pageH1'); h1.className='glossy'; h1.style.setProperty('--tc','#36E0FF'); h1.innerHTML='<span class="hic">'+ICONS[300]+'</span><span class="gt">Draws</span>'; }
 
