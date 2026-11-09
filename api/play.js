@@ -17,6 +17,8 @@ export default async function handler(req, res) {
     if (!Array.isArray(list) || !list.some(t => t.tag === game)) return res.status(400).json({ error: 'that ticket is not on sale' });
     // one flat price per ticket — no multipliers (legal review, Oct 2026)
     fn = 'buy_entry3'; args = { p_game: game, p_token: token, p_mult: 1 };
+  } else if (b.bundle && /^[a-z0-9_]{2,24}$/.test(String(b.kind||''))) {
+    fn = 'card_enter_bundle'; args = { p_token: token, p_kind: b.kind };
   } else if (/^[a-z0-9_]{2,24}$/.test(String(b.kind||''))) {
     // optional off_at = a named draw up to 7 days ahead (ISO timestamp)
     fn = 'card_enter3'; args = { p_kind: b.kind, p_token: token };

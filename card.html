@@ -268,6 +268,9 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
 .nd-actions{gap:6px;margin-top:10px}
 .nd-actions .enterbtn{flex:1 1 auto;font-size:.92rem;padding:11px 12px}
 .nd-actions .freebtn{flex:0 1 auto;font-size:.72rem;padding:10px 10px}
+.bundlebtn{flex:1 1 100%;border:0;border-radius:9px;padding:13px 16px;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;color:#1A1200;cursor:pointer;background:linear-gradient(180deg,#FFF1B8,#FFC53D 45%,#B8831A);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 6px 16px rgba(0,0,0,.4)}
+.bundlebtn small{display:block;font-weight:700;font-size:.72rem;letter-spacing:.08em;opacity:.8}
+.bundlebtn:disabled{opacity:.55;cursor:not-allowed}
 .nd-actions .myentries{width:100%;font-size:.64rem}
 .nd-art{opacity:.10}
 .nextdraw.silver{border-top-color:#C9D6F2;background:linear-gradient(180deg,#1A2236,#0A1528)}.nextdraw.silver .nd-clock,.nextdraw.silver .nd-prize b,.nextdraw.silver .nd-at b{color:#DDE6F7;text-shadow:none}.nextdraw.silver .ndtag.key{color:#E6EEFF;border-color:#5B6B8C}.nextdraw.silver .enterbtn{background:linear-gradient(180deg,#F2F6FF,#C9D6F2,#8E9DBF);color:#101A30}
@@ -410,6 +413,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
       <div class="ndnote" id="tNote"></div>
       <div class="nd-actions">
         <button class="enterbtn" id="tEnter">CONNECTING…</button>
+        <button class="bundlebtn" id="tBundle" style="display:none"></button>
         <button class="freebtn" id="tLater">Later draw / game number</button>
         <button class="freebtn" id="freeBtn">Free by post</button>
         <span class="myentries" id="tMine"></span>
@@ -696,6 +700,7 @@ function nextOpenSlot(k,d){ // first future slot after d with room
   const sp=SPEC[k]; let t=nextOff(k,new Date(d.off_at).getTime()+1); for(let i=0;i<500;i++){ const a=(S&&S.ahead||[]).find(x=>x.kind===k&&new Date(x.off_at).getTime()===t.getTime()); if(!a||!sp.cap||a.sold<sp.cap)return t; t=nextOff(k,t.getTime()+1);} return t; }
 function applyButtons(){
   if(!SINGLE)return; const d=S&&S.open&&S.open[SINGLE]; const sp=SPEC[SINGLE]; const btn=$('tEnter'); const full=d&&d.cap&&d.sold>=d.cap;
+  const bb=$('tBundle'); if(bb){const sp0=SPEC[SINGLE]; if(sp0&&sp0.bundle_n&&sp0.bundle_price_p&&LIVE){bb.style.display='';bb.innerHTML='Next '+sp0.bundle_n+' draws for '+priceLabel(sp0.bundle_price_p)+'<small>one number in each · save '+gbp(sp0.price_p*sp0.bundle_n-sp0.bundle_price_p)+' on '+gbp(sp0.price_p*sp0.bundle_n)+'</small>';bb.disabled=false;}else bb.style.display='none';}
   if(isFree(SINGLE)){const entered=d&&(mine[d.id]||[]).length>0; btn.textContent=!LIVE?'CONNECTING…':!TOKEN?'SIGN IN TO ENTER':(entered?'ENTERED ✓':'ENTER FREE'); btn.disabled=!LIVE||(TOKEN&&entered);}
   else { const nx=full?nextOpenSlot(SINGLE,d):null; btn.dataset.off=nx?nx.getTime():'';
     btn.textContent=!LIVE?'CONNECTING…':full?(TOKEN?('FULL — ENTER '+hm(nx)+' · '+priceLabel(sp.price_p)):'SIGN IN TO ENTER'):TOKEN?('ENTER NEXT · '+priceLabel(sp.price_p)):'SIGN IN TO ENTER';
@@ -753,6 +758,11 @@ function fillTimes(){ const k=SINGLE, day=+$('pickDay').value, now=Date.now()+sk
 function pickInfo(){const t=+$('pickTime').value; if(!t){$('pickInfo').textContent='';return;} const sold=aheadSold(SINGLE,new Date(t)); const sp=SPEC[SINGLE];
   $('pickInfo').innerHTML='<div class="gameno" style="margin:0 0 6px">Game number <b>'+gameNo(SINGLE,new Date(t))+'</b> <i>write this, your name and your IW account number on a postcard</i></div>'+drawLabel(SINGLE)+' · '+when(new Date(t))+' · '+sold+(sp.cap?'/'+sp.cap:'')+' numbers in · '+gbp(sp.prize_p)+' to the winner';}
 $('tLater').addEventListener('click',()=>openPick());
+$('tBundle').addEventListener('click',async()=>{ if(!TOKEN){location.href='signup.html';return;} const bb=$('tBundle'); bb.disabled=true; try{IWS.start();}catch(e){}
+  try{ const r=await fetch('/api/play',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({kind:SINGLE,token:TOKEN,bundle:1})}); const d=await r.json(); if(!r.ok||d.error)throw new Error(d.error||'failed');
+    if(d.balance_p!=null)balance=d.balance_p/100; (d.entries||[]).forEach(e=>{mine[e.draw_id]=(mine[e.draw_id]||[]).concat([e.entry_no]);}); saveAll(); syncCredit(); try{IWS.coin&&IWS.coin(0,.3);}catch(e){}
+    $('tMine').textContent='In! You have a number in the next '+d.entered+' draws, '+hm(new Date(d.first_off))+' to '+hm(new Date(d.last_off))+'.'; await syncLive(); fetchMine();
+  }catch(e){ $('tMine').textContent=/credit/.test(e.message)?'Not enough credit':e.message; } bb.disabled=false; });
 $('pickDay').addEventListener('change',fillTimes); $('pickTime').addEventListener('change',pickInfo);
 $('pickGo').addEventListener('click',()=>{if(!TOKEN){location.href='signup.html';return;}const t=+$('pickTime').value;if(t)enterLive(SINGLE,t);});
 $('pickClose').addEventListener('click',()=>$('pickModal').classList.remove('open'));
