@@ -46,6 +46,7 @@ textarea{min-height:90px;resize:vertical}
 .ebside{position:fixed;left:0;top:0;bottom:0;width:240px;z-index:70;display:flex;flex-direction:column;
   background:linear-gradient(180deg,#0B1733,#060E22);border-right:1px solid #1C3463;transform:translateX(-100%);transition:transform .25s ease;overflow-y:auto}
 .ebside.open{transform:none}
+.ebside{overflow-y:auto;overscroll-behavior:contain}.ebside>*{flex:none}.ebbrand svg{height:30px;width:100%;max-width:215px}
 .ebscrim{position:fixed;inset:0;background:rgba(2,6,16,.6);backdrop-filter:blur(2px);z-index:65;display:none}
 .ebscrim.open{display:block}
 .ebbrand{padding:16px 16px 10px;border-bottom:1px solid #12264D}
