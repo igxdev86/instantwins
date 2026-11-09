@@ -135,8 +135,6 @@ textarea{min-height:90px;resize:vertical}
     <div class="row"><span>Account number</span><span class="mono" id="acctNo" style="font-weight:700">—</span></div>
     <div class="row"><span>Play credit</span><span class="mono" id="bal" style="font-weight:700">—</span></div>
     <p class="lead" style="margin-top:8px">Test mode: credit is play-money. At launch, prizes are paid in cash and can be withdrawn at any time (identity and age verified before the first withdrawal).</p>
-      <div class="err" id="balErr"></div>
-    </div>
   </div>
   <div class="panel"><h2>Your entries</h2><div id="entries"><div class="row"><span class="m">Loading…</span></div></div></div>
   <div class="panel" id="payPanel"><h2>Money</h2>
@@ -255,19 +253,6 @@ const fmtp=p=>'£'+(p/100).toLocaleString('en-GB',{minimumFractionDigits:2});
 
 const s=sess(); if(!s){location.href='signup.html';}
 $('out').onclick=async()=>{try{await api('/api/auth',{action:'logout',token:s.token});}catch(e){} clearSess();location.href='signup.html';};
-$('balGo').onclick=async()=>{
-  $('balErr').textContent='';$('balErr').className='err';
-  const p=Math.round(parseFloat($('balAmt').value||'0')*100);
-  if(!isFinite(p)){$('balErr').textContent='Enter an amount.';return;}
-  $('balGo').disabled=true;
-  try{
-    const d=await api('/api/admin',{action:'setbal',token:s.token,amount_p:p});
-    $('bal').textContent=fmtp(d.balance_p);
-    $('balErr').textContent='Balance set to '+fmtp(d.balance_p);$('balErr').className='err ok';
-    $('balAmt').value='';
-  }catch(e){$('balErr').textContent=e.message;}
-  $('balGo').disabled=false;
-};
 
 
 // money
