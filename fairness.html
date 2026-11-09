@@ -147,18 +147,18 @@ textarea{min-height:90px;resize:vertical}
 
   <div class="sechead" style="margin-top:14px"><h2>Prize money on the site right now</h2><span id="pmAt">live</span></div>
   <div class="pm-grid">
-    <div class="pm"><i>On offer in open draws</i><b id="pmOpen">—</b><s>draws with at least one entry — each will pay its full prize</s></div>
+    <div class="pm"><i>On offer in open draws</i><b id="pmOpen">—</b><s id="pmOpenSub">draws with at least one entry — each will pay its full prize</s></div>
     <div class="pm"><i>Unclaimed in Instant Win rounds</i><b id="pmTix">—</b><s>prizes still sitting in open rounds, waiting on tickets</s></div>
     <div class="pm"><i>Draw prizes per day, full schedule</i><b id="pmDay">—</b><s>if every scheduled draw had an entry</s></div>
     <div class="pm"><i>Paid out today</i><b id="pmPaid">—</b><s id="pmWin">—</s></div>
   </div>
   <div class="panel"><h2>Draws</h2>
     <p class="lead">Every draw pays its full prize to one of the numbers entered. The last column is what a day costs if every draw runs with at least one entry.</p>
-    <table class="pmt"><thead><tr><th>Draw</th><th>Entry</th><th>Prize</th><th>Draws / day</th><th>Max / day</th></tr></thead><tbody id="pmDraws"><tr><td colspan="5">Loading…</td></tr></tbody></table>
+    <table class="pmt"><thead><tr><th>Draw</th><th>Entry</th><th>Prize</th><th>Draws / day</th><th>Max / day</th><th class="r">Open with entries</th></tr></thead><tbody id="pmDraws"><tr><td colspan="6">Loading…</td></tr></tbody></table>
   </div>
   <div class="panel"><h2>Instant Win rounds</h2>
     <p class="lead">Every prize in a round's table is paid as its tickets sell. "Left" is the prize money still unclaimed in the open round.</p>
-    <table class="pmt"><thead><tr><th>Ticket</th><th>Entry</th><th>Tickets</th><th>Prizes in round</th><th>Left</th></tr></thead><tbody id="pmTickets"><tr><td colspan="5">Loading…</td></tr></tbody></table>
+    <table class="pmt"><thead><tr><th>Ticket</th><th>Entry</th><th class="r">Tickets left</th><th>Prizes in round</th><th class="r">Prize money left</th></tr></thead><tbody id="pmTickets"><tr><td colspan="5">Loading…</td></tr></tbody></table>
   </div>
 <style>
 .pm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}@media(min-width:720px){.pm-grid{grid-template-columns:repeat(4,1fr)}}
@@ -169,31 +169,34 @@ textarea{min-height:90px;resize:vertical}
 .pmt{width:100%;border-collapse:collapse;font-size:.74rem;margin-top:8px}.pmt th{text-align:left;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);padding:6px 6px;border-bottom:1px solid var(--line)}
 .pmt td{padding:7px 6px;border-bottom:1px solid #152650;font-family:'IBM Plex Mono',monospace;color:#fff}.pmt td:first-child{font-family:inherit;font-weight:700}.pmt tr.tot td{color:var(--match);border-top:2px solid var(--line)}
 .pmt td.r,.pmt th.r{text-align:right}
+.pmflash{animation:pmflashk 1.2s ease-out}@keyframes pmflashk{0%{color:#FFE9A8;text-shadow:0 0 14px #FFC53D}100%{}}
 </style>
 <script>
 (function(){
   const $=id=>document.getElementById(id); const gbp=p=>'£'+Math.round(p/100).toLocaleString(); const pl=p=>p===0?'free':p<100?p+'p':'£'+(p/100).toLocaleString();
-  let openP=0, dayP=0, tixLeft=0;
-  fetch('/api/card',{cache:'no-store'}).then(r=>r.json()).then(d=>{
-    const kinds=d.kinds||[]; const ahead=d.ahead||[]; const withEntries=new Set(ahead.filter(a=>a.sold>0).map(a=>a.kind+'|'+a.off_at));
-    const open=d.open||{};
-    // draws open with entries: ahead holds every open draw with sold>0
-    const prizeOf={}; kinds.forEach(k=>prizeOf[k.kind]=k.prize_p);
-    openP=ahead.filter(a=>a.sold>0&&prizeOf[a.kind]).reduce((s,a)=>s+prizeOf[a.kind],0);
-    let rows='';
-    kinds.forEach(k=>{const perDay=k.daily_hour!=null?1:Math.round(86400/k.step_s); const mx=perDay*k.prize_p; dayP+=mx;
-      rows+='<tr><td>'+k.label+'</td><td>'+pl(k.price_p)+'</td><td>'+gbp(k.prize_p)+'</td><td class="r">'+perDay.toLocaleString()+'</td><td class="r">'+gbp(mx)+'</td></tr>';});
-    rows+='<tr class="tot"><td>Total</td><td></td><td></td><td></td><td class="r">'+gbp(dayP)+'</td></tr>';
-    $('pmDraws').innerHTML=rows; $('pmOpen').textContent=gbp(openP); $('pmDay').textContent=gbp(dayP);
-  }).catch(()=>{$('pmDraws').innerHTML='<tr><td colspan="5">Backend not connected.</td></tr>';});
-  fetch('/api/tickets',{cache:'no-store'}).then(r=>r.json()).then(l=>{
-    let rows='', tot=0; (l||[]).forEach(t=>{const total=t.prize_total_p!=null?t.prize_total_p:t.tiers.reduce((s,x)=>s+x[0]*x[1],0); const left=t.prize_left_p!=null?t.prize_left_p:total; tixLeft+=left; tot+=total;
-      rows+='<tr><td>'+t.name+' · '+pl(t.price_p)+'</td><td>'+pl(t.price_p)+'</td><td class="r">'+t.cap.toLocaleString()+'</td><td class="r">'+gbp(total)+'</td><td class="r">'+gbp(left)+'</td></tr>';});
-    rows+='<tr class="tot"><td>Total</td><td></td><td></td><td class="r">'+gbp(tot)+'</td><td class="r">'+gbp(tixLeft)+'</td></tr>';
-    $('pmTickets').innerHTML=rows; $('pmTix').textContent=gbp(tixLeft);
-  }).catch(()=>{$('pmTickets').innerHTML='<tr><td colspan="5">Backend not connected.</td></tr>';});
-  fetch('/api/stats',{cache:'no-store'}).then(r=>r.json()).then(d=>{$('pmPaid').textContent=gbp(d.paid_today_p||0);$('pmWin').textContent=(d.winners_today||0)+' winner'+(d.winners_today===1?'':'s')+' so far today';}).catch(()=>{});
-  $('pmAt').textContent='live · '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  const prev={};
+  function setv(id,txt){const el=$(id); if(!el)return; if(el.textContent!==txt){el.textContent=txt; if(prev[id]!==undefined){el.classList.remove('pmflash'); void el.offsetWidth; el.classList.add('pmflash');}} prev[id]=txt;}
+  function draws(){ return fetch('/api/card',{cache:'no-store'}).then(r=>r.json()).then(d=>{
+    const kinds=d.kinds||[]; const ahead=d.ahead||[]; const prizeOf={}; kinds.forEach(k=>prizeOf[k.kind]=k.prize_p);
+    const openP=ahead.filter(a=>a.sold>0&&prizeOf[a.kind]).reduce((s,a)=>s+prizeOf[a.kind],0); const openN=ahead.filter(a=>a.sold>0).length;
+    let rows='', dayP=0;
+    kinds.forEach(k=>{const perDay=k.daily_hour!=null?1:Math.round(86400/k.step_s); const mx=perDay*k.prize_p; dayP+=mx; const live=ahead.filter(a=>a.kind===k.kind&&a.sold>0); const ent=live.reduce((s,a)=>s+a.sold,0);
+      rows+='<tr><td>'+k.label+'</td><td>'+pl(k.price_p)+'</td><td>'+gbp(k.prize_p)+'</td><td class="r">'+perDay.toLocaleString()+'</td><td class="r">'+gbp(mx)+'</td><td class="r">'+live.length+' <span style="color:var(--soft)">('+ent+' entries)</span></td></tr>';});
+    rows+='<tr class="tot"><td>Total</td><td></td><td></td><td></td><td class="r">'+gbp(dayP)+'</td><td class="r">'+openN+'</td></tr>';
+    $('pmDraws').innerHTML=rows; setv('pmOpen',gbp(openP)); setv('pmDay',gbp(dayP)); setv('pmOpenSub',openN+' draw'+(openN===1?'':'s')+' with at least one entry — each will pay its full prize');
+  }).catch(()=>{$('pmDraws').innerHTML='<tr><td colspan="6">Backend not connected.</td></tr>';}); }
+  function tickets(){ return fetch('/api/tickets',{cache:'no-store'}).then(r=>r.json()).then(l=>{
+    let rows='', tot=0, tixLeft=0, cnt=0; (l||[]).forEach(t=>{const total=t.prize_total_p!=null?t.prize_total_p:t.tiers.reduce((s,x)=>s+x[0]*x[1],0); const left=t.prize_left_p!=null?t.prize_left_p:total; const sold=t.sold||0, rem=Math.max(0,t.cap-sold); tixLeft+=left; tot+=total; cnt+=rem;
+      rows+='<tr><td>'+t.name+' · '+pl(t.price_p)+'</td><td>'+pl(t.price_p)+'</td><td class="r"><b id="tl-'+t.tag+'">'+rem.toLocaleString()+'</b> <span style="color:var(--soft)">of '+t.cap.toLocaleString()+'</span></td><td class="r">'+gbp(total)+'</td><td class="r"><b id="pl-'+t.tag+'">'+gbp(left)+'</b></td></tr>';});
+    rows+='<tr class="tot"><td>Total</td><td></td><td class="r">'+cnt.toLocaleString()+'</td><td class="r">'+gbp(tot)+'</td><td class="r">'+gbp(tixLeft)+'</td></tr>';
+    // flash changed cells
+    const old={}; document.querySelectorAll('#pmTickets b[id]').forEach(b=>old[b.id]=b.textContent);
+    $('pmTickets').innerHTML=rows; document.querySelectorAll('#pmTickets b[id]').forEach(b=>{if(old[b.id]!==undefined&&old[b.id]!==b.textContent){b.classList.add('pmflash');}});
+    setv('pmTix',gbp(tixLeft));
+  }).catch(()=>{$('pmTickets').innerHTML='<tr><td colspan="5">Backend not connected.</td></tr>';}); }
+  function stats(){ return fetch('/api/stats',{cache:'no-store'}).then(r=>r.json()).then(d=>{setv('pmPaid',gbp(d.paid_today_p||0));setv('pmWin',(d.winners_today||0)+' winner'+(d.winners_today===1?'':'s')+' so far today');}).catch(()=>{}); }
+  function tick(){ Promise.all([draws(),tickets(),stats()]).then(()=>{$('pmAt').textContent='live · updates every 10 s · '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}); }
+  tick(); setInterval(tick,10000); document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick();});
 })();
 </script>
   <div class="panel"><h2>Card draws</h2>
