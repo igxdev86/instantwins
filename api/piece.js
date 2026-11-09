@@ -21,6 +21,8 @@ export default async function handler(req, res) {
     body: JSON.stringify(args) });
   const data = await r.json();
   res.setHeader('Cache-Control', 'no-store');
-  if (!r.ok) return res.status(400).json({ error: (data && data.message) || 'failed' });
+  if (!r.ok) return res.status(400).json({ error: friendly(data && data.message) });
   return res.status(200).json(data);
 }
+
+function friendly(m){ m=String(m||''); if(!m||/schema cache|does not exist|relation|column|syntax|permission denied|function .* in the schema/i.test(m)) return 'service temporarily unavailable'; return m; }
