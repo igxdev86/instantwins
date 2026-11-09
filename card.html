@@ -542,7 +542,7 @@ let KINDS=[
  {kind:'platinum',code:'D1500',label:'Daily £1,500',price_p:2000,prize_p:150000,cap:150,step_s:86400,offset_s:0,daily_hour:21},
  {kind:'d_5000',code:'D5K',label:'Daily £5,000',price_p:5000,prize_p:500000,cap:200,step_s:86400,offset_s:0,daily_hour:21},
  {kind:'free_1',code:'FR1',label:'Free Draw £1',price_p:0,prize_p:100,cap:null,step_s:300,offset_s:150,daily_hour:null},
- {kind:'free',code:'FREE',label:'Free Draw £5',price_p:0,prize_p:500,cap:null,step_s:600,offset_s:0,daily_hour:null},
+ {kind:'free',code:'FREE',label:'Free Draw £5',price_p:0,prize_p:500,cap:null,step_s:3600,offset_s:0,daily_hour:null},
  {kind:'free_20',code:'FR20',label:'Free Draw £20',price_p:0,prize_p:2000,cap:null,step_s:3600,offset_s:2700,daily_hour:null},
  {kind:'free_100',code:'FR100',label:'Free Draw £100',price_p:0,prize_p:10000,cap:null,step_s:86400,offset_s:0,daily_hour:20}];
 let SPEC={}; function indexKinds(){SPEC={};KINDS.forEach(k=>SPEC[k.kind]=k);} indexKinds();
@@ -597,7 +597,7 @@ function lbl(t){return /^\d+s /.test(t)?t.replace(/^(\d+s) (.*)$/,(m,a,b)=>a+' '
 function heroFor(g){
   const sl=document.querySelector('.herowrap .heroslide'); if(!sl)return;
   const H={30:'A WINNER EVERY 30 SECONDS!',60:'A WINNER EVERY MINUTE!',300:'A WINNER EVERY 5 MINUTES!',900:'A WINNER EVERY 15 MINUTES!',3600:'A WINNER EVERY HOUR!',86400:'A WINNER EVERY DAY!',0:'FREE DRAWS — NO PURCHASE, EVER!'};
-  const P={30:'Quick draws from 10p a number, every half minute. Pick your prize, grab a number, watch it draw.',60:'A fresh draw every minute, all day, from 50p a number.',300:'Our flagship cadence — every five minutes from £1 a number, up to £1,000 a draw.',900:'Bigger prizes four times an hour, from £2 a number.',3600:'The big ones: the £1,000 Grand on the hour, up to £5,000 at half past.',86400:'One draw a day at 21:00 with the largest prizes on the site.',0:'£1 every five minutes, £5 every ten, £20 every hour and £100 every evening — one free entry per account in each. Enter online or by post.'};
+  const P={30:'Quick draws from 10p a number, every half minute. Pick your prize, grab a number, watch it draw.',60:'A fresh draw every minute, all day, from 50p a number.',300:'Our flagship cadence — every five minutes from £1 a number, up to £1,000 a draw.',900:'Bigger prizes four times an hour, from £2 a number.',3600:'The big ones: the £1,000 Grand on the hour, up to £5,000 at half past.',86400:'One draw a day at 21:00 with the largest prizes on the site.',0:'Free draws all day, every day — one free entry per account in each, no purchase ever. Enter online or by post.'};
   const ks=KINDS.filter(k=>inGroup(k,g)); const names=ks.length?ks.map(k=>gbp(k.prize_p)).join(' · '):'';
   sl.className='heroslide hs-card'; sl.style.background='linear-gradient(115deg,#03091A 0%,color-mix(in srgb,'+g.col+' 22%,#0A2650) 36%,color-mix(in srgb,'+g.col+' 55%,#0F5FB5) 72%,'+g.col+' 125%)';
   sl.querySelector('.hs-tag').textContent=g.name; sl.querySelector('.hs-h').textContent=H[g.step]||'A WINNER EVERY DRAW!';
