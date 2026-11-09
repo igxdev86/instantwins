@@ -280,7 +280,11 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
     const F={max:'£'+(maxPrize/100).toLocaleString(),maxLabel:top.label,count:String(kinds.length),minPrice:pl(minPrice),maxPrice:pl(maxPrice),fast:cad(fastest),slow:cad(slowest),
       topLine:'£'+(top.prize_p/100).toLocaleString()+' '+top.label.replace(/\s*£[\d,]+$/,'').toUpperCase()};
     document.querySelectorAll('[data-dyn]').forEach(el=>{const k=el.dataset.dyn;if(F[k]!=null)el.textContent=F[k];});
-    document.querySelectorAll('[data-dyn-tpl]').forEach(el=>{el.textContent=el.dataset.dynTpl.replace(/\{(\w+)\}/g,(m,k)=>F[k]!=null?F[k]:m);});
+    document.querySelectorAll('[data-dyn-tpl]').forEach(el=>{let t=el.dataset.dynTpl;
+      if(minPrice===maxPrice)t=t.replace(/from \{minPrice\} to \{maxPrice\} a number/g,'{minPrice} a number');
+      if(fastest===slowest)t=t.replace(/every \{fast\} to every \{slow\}/g,'every {fast}');
+      if(kinds.length===1)t=t.replace(/^\{count\} draws, /,'One draw, ').replace(/^\{count\} draws from/,'One draw from').replace(/Every draw is open/,'It is open').replace(/enter any of them/,'enter any one');
+      el.textContent=t.replace(/\{(\w+)\}/g,(m,k)=>F[k]!=null?F[k]:m);});
     const on=new Set(kinds.map(k=>k.kind));
     document.querySelectorAll('[data-kind]').forEach(el=>{if(!on.has(el.dataset.kind))el.style.display='none';});
     try{sessionStorage.setItem('iw_kinds',JSON.stringify(kinds));}catch(e){}
