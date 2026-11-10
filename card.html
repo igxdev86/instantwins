@@ -533,13 +533,14 @@ const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 function dayLabel(t){t=new Date(t);const n=new Date();const d0=new Date(n.getFullYear(),n.getMonth(),n.getDate());const d=Math.round((new Date(t.getFullYear(),t.getMonth(),t.getDate())-d0)/864e5);
   return d===0?'Today':d===1?'Tomorrow':DAYS[t.getDay()]+' '+t.getDate();}
 function when(t){const d=dayLabel(t);return (d==='Today'?'':d+' ')+hm(t);}
-function gbp(p){return '£'+(p/100).toLocaleString('en-GB',{maximumFractionDigits:2});}
+function gbp(p){if(p<100)return p+'p';return '£'+(p/100).toLocaleString('en-GB',{maximumFractionDigits:2});}
 function priceLabel(p){return p===0?'FREE':p<100?p+'p':'£'+(p/100).toLocaleString();}
 function store(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 
 /* ================= draw catalogue (server-driven; fallback until connected) ================= */
 let KINDS=[
+ {kind:'t_50p',code:'T50',label:'30s Draw 50p',price_p:5,prize_p:50,cap:20,step_s:30,offset_s:0,daily_hour:null},
  {kind:'t_1',code:'T1',label:'30s Draw £1',price_p:10,prize_p:100,cap:20,step_s:30,offset_s:0,daily_hour:null},
  {kind:'t_2',code:'T2',label:'30s Draw £2',price_p:20,prize_p:200,cap:20,step_s:30,offset_s:0,daily_hour:null},
  {kind:'t_5',code:'T5',label:'30s Draw £5',price_p:50,prize_p:500,cap:20,step_s:30,offset_s:0,daily_hour:null},
