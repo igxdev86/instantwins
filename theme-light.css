@@ -1,0 +1,23 @@
+/* theme-light.css — white content area, blue header/sidebar kept. Enabled by <html data-theme="light"> (?theme=light to try). */
+html[data-theme="light"]{--ink:#0B1630;--soft:#4A5B7A;--line:#D6DEEC;--wash:#F3F6FB;--buy-ink:#0668C9}
+html[data-theme="light"] body{background:#F5F7FB!important;color:var(--ink)}
+html[data-theme="light"] .wrap h1,html[data-theme="light"] .wrap h2,html[data-theme="light"] .wrap h3{color:var(--ink)}
+html[data-theme="light"] .lead,html[data-theme="light"] .ph-text,html[data-theme="light"] .small{color:var(--soft)}
+html[data-theme="light"] .how,html[data-theme="light"] .pp-sec,html[data-theme="light"] .panel,html[data-theme="light"] .pp-buy,html[data-theme="light"] .c-q,html[data-theme="light"] .pm-tile,html[data-theme="light"] .trust,html[data-theme="light"] .livestrip,html[data-theme="light"] .guidesbar,html[data-theme="light"] .brow,html[data-theme="light"] .board,html[data-theme="light"] .hub-k{background:#fff!important;border-color:var(--line)!important;color:var(--ink);box-shadow:0 1px 2px rgba(11,22,48,.06),0 8px 24px rgba(11,22,48,.06)}
+html[data-theme="light"] .how p,html[data-theme="light"] .pp-sec p,html[data-theme="light"] .pp-sec li,html[data-theme="light"] .panel p,html[data-theme="light"] .how li{color:#2B3A58}
+html[data-theme="light"] .how h2,html[data-theme="light"] .pp-sec h2,html[data-theme="light"] .panel h2,html[data-theme="light"] .hub-k b,html[data-theme="light"] .c-q h3{color:var(--ink)}
+html[data-theme="light"] .pp-facts div,html[data-theme="light"] .qty button,html[data-theme="light"] .c-opt,html[data-theme="light"] .pp-iw,html[data-theme="light"] .bar,html[data-theme="light"] .livestrip > div{background:#F3F6FB!important;border-color:var(--line)!important;color:var(--ink)}
+html[data-theme="light"] .pp-facts b,html[data-theme="light"] .c-opt,html[data-theme="light"] .qty button{color:var(--ink)}
+html[data-theme="light"] .c-opt i{background:#fff;border-color:var(--line);color:var(--ink)}
+html[data-theme="light"] .pp-k,html[data-theme="light"] .bar-k,html[data-theme="light"] .pp-facts i,html[data-theme="light"] .c-meta{color:var(--soft)}
+html[data-theme="light"] .pp-tbl td{border-color:var(--line);color:var(--ink)}
+html[data-theme="light"] .faq summary{color:var(--ink)}
+html[data-theme="light"] .sf{background:#0A1730;border-top-color:#1C3463}
+html[data-theme="light"] .pagehead h1,html[data-theme="light"] h1.glossy{filter:none}
+html[data-theme="light"] .pm-tile b{color:var(--ink)}
+html[data-theme="light"] .sib-k,html[data-theme="light"] .hub-sub{color:var(--soft)}
+html[data-theme="light"] .ph-more{background:#fff;border-color:var(--line);color:var(--soft)}
+html[data-theme="light"] .mtab{background:#071027}
+html[data-theme="light"] .hero h1,html[data-theme="light"] .pagehead h1,html[data-theme="light"] .pagehead h1 .gt,html[data-theme="light"] #pageH1 .gt{background:linear-gradient(180deg,#0B1630 0%,#0E3A7A 55%,#0668C9 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:none}
+html[data-theme="light"] .hero p,html[data-theme="light"] .hero .lead{color:#2B3A58}
+html[data-theme="light"] .pp-h1{filter:none}
