@@ -230,7 +230,8 @@ function paint(ks){
   const steps=[...new Set(ks.map(k=>k.step_s))];
   $('kindsBox').innerHTML=steps.map(st=>{const rows=ks.filter(k=>k.step_s===st);const allOn=rows.every(k=>k.active);
     return '<div class="krow head"><span class="nm">'+(GN[st]||st+'s')+'<small>'+rows.length+' draws · whole row</small></span><button class="sw'+(allOn?' on':'')+'" data-step="'+st+'" data-on="'+(!allOn)+'"></button></div>'
-      +rows.map(k=>'<div class="krow"><span class="nm">'+k.label+'<small>'+k.code+' · '+money(k.price_p)+' → '+money(k.prize_p)+(k.cap?' · '+k.cap+' numbers':'')+' · '+k.open_entries+' entries in open draws</small></span><button class="sw'+(k.active?' on':'')+'" data-kind="'+k.kind+'" data-on="'+(!k.active)+'"></button></div>').join('');}).join('');
+      +rows.map(k=>'<div class="krow"><span class="nm">'+k.label+'<small>'+k.code+' · '+money(k.price_p)+' → '+money(k.prize_p)+(k.cap?' · '+k.cap+' numbers':'')+' · '+k.open_entries+' entries in open draws'+(k.price_p>0&&k.cap?' · <a href="#" class="rl" data-kind="'+k.kind+'" data-on="'+(!k.rollover)+'" style="color:'+(k.rollover?'var(--gold)':'var(--soft)')+'">'+(k.rollover?'ROLLOVER ON':'rollover off')+'</a>':'')+'</small></span><button class="sw'+(k.active?' on':'')+'" data-kind="'+k.kind+'" data-on="'+(!k.active)+'"></button></div>').join('');}).join('');
+  document.querySelectorAll('.rl').forEach(a=>a.onclick=async(ev)=>{ev.preventDefault();try{await api('/api/admin',{action:'kindroll',token:s.token,kind:a.dataset.kind,on:a.dataset.on==='true'});paint(await api('/api/admin',{action:'kinds',token:s.token}));}catch(e){$('kErr').textContent=e.message;}});
   document.querySelectorAll('.sw').forEach(b=>b.onclick=async()=>{try{const d=await api('/api/admin',{action:'kindset',token:s.token,kind:b.dataset.kind||null,step:b.dataset.step||null,active:b.dataset.on==='true'});paint(d);}catch(e){$('kErr').textContent=e.message;}});
 }
 

@@ -238,9 +238,11 @@ async function check(g){
   $('vSeed').textContent=d.seed; $('vHash').textContent=d.seed_hash;
   const h=await sha256(d.seed); $('vHash2').textContent=h;
   const ok1=h===d.seed_hash; $('vV1').textContent=ok1?'✓ Match — the seed was fixed before the draw and not changed':'✗ Does not match — report this to us'; $('vV1').className='verdict '+(ok1?'ok':'bad');
-  const m=md5(d.seed+':'+d.sold); const first8=m.slice(0,8); const n=parseInt(first8,16)&0x7fffffff; const win=(n%d.sold)+1;
-  $('vCalc').innerHTML='MD5( "'+d.seed+':'+d.sold+'" )<br>= '+m+'<br>first 8 characters: '+first8+' → as a number: '+parseInt(first8,16).toLocaleString()+' → kept positive: '+n.toLocaleString()+'<br>'+n.toLocaleString()+' ÷ '+d.sold+' leaves remainder '+(n%d.sold)+' → + 1 = <b>'+win+'</b>';
-  const ok2=win===d.winner_entry; $('vV2').textContent=ok2?'✓ Match — number #'+win+' is the winner, exactly as published':'✗ Does not match — report this to us'; $('vV2').className='verdict '+(ok2?'ok':'bad');
+  const range=d.drawn_range||d.sold; const m=md5(d.seed+':'+range); const first8=m.slice(0,8); const n=parseInt(first8,16)&0x7fffffff; const win=(n%range)+1; const rolled=!d.winner_entry&&d.drawn_no;
+  if(rolled){$('vWin').textContent='#'+d.drawn_no+' (not taken)'; $('vWho').textContent='Rollover — nobody held number #'+d.drawn_no+', so £'+((d.prize_p+(d.rollover_p||0))/100).toLocaleString()+' carried into the next '+d.label+'.';}
+  else if(d.rollover_p){$('vWho').textContent=(d.winner_name||'Number #'+d.winner_entry)+' — paid £'+((d.prize_p+d.rollover_p)/100).toLocaleString()+' (£'+(d.prize_p/100).toLocaleString()+' prize + £'+(d.rollover_p/100).toLocaleString()+' rollover)';}
+  $('vCalc').innerHTML='MD5( "'+d.seed+':'+range+'" )<br>= '+m+'<br>first 8 characters: '+first8+' → as a number: '+parseInt(first8,16).toLocaleString()+' → kept positive: '+n.toLocaleString()+'<br>'+n.toLocaleString()+' ÷ '+range+' leaves remainder '+(n%range)+' → + 1 = <b>'+win+'</b>'+(range>d.sold?'<br><span style="color:var(--soft)">This draw picks from all '+range+' numbers; '+d.sold+' were taken, so numbers above '+d.sold+' mean a rollover.</span>':'');
+  const ok2=win===(d.drawn_no||d.winner_entry); $('vV2').textContent=ok2?'✓ Match — number #'+win+' was drawn, exactly as published':'✗ Does not match — report this to us'; $('vV2').className='verdict '+(ok2?'ok':'bad');
 }
 $('vGo').onclick=()=>check($('vNo').value.trim());
 $('vNo').addEventListener('keydown',e=>{if(e.key==='Enter')check($('vNo').value.trim());});

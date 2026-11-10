@@ -297,6 +297,7 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
   background:linear-gradient(180deg,color-mix(in srgb,var(--tc,#36E0FF) 55%,#fff) 0%,var(--tc,#36E0FF) 48%,color-mix(in srgb,var(--tc,#36E0FF) 70%,#000) 100%);
   box-shadow:0 4px 14px color-mix(in srgb,var(--tc,#36E0FF) 45%,transparent),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(0,0,0,.25)}
 .htile:active .hbtn{transform:translateY(1px)}
+.roll{display:inline-block;vertical-align:middle;margin-left:6px;padding:2px 7px;border-radius:999px;background:linear-gradient(180deg,#FFF1B8,#FFC53D 50%,#B8831A);color:#1A1200;font-size:.58rem;letter-spacing:.12em;font-weight:900;animation:rollp 1.4s ease-in-out infinite}@keyframes rollp{50%{box-shadow:0 0 12px #FFC53D}}
 .hfree{display:block;text-align:center;margin-top:7px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#19E6A0}
 .hub-back{display:inline-block;margin:12px 0 2px;color:var(--cyan);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}
 #tile{border-top-color:var(--tc,#36E0FF)} #tile .nd-clock,#tile .nd-prize b,#tile .nd-at b{color:var(--tc,#36E0FF);text-shadow:none} #tile .ndtag.key{color:var(--tc,#36E0FF);border-color:color-mix(in srgb,var(--tc,#36E0FF) 40%,#0A1730)}
@@ -587,6 +588,8 @@ const GROUPS=[{step:30,name:'30 Second Draws',sub:'small prizes from 10p',col:'#
               {step:3600,name:'Hourly Draws',sub:'every hour',col:'#FFC53D',cls:'grand'},
               {step:86400,name:'Daily Draws',sub:'every evening at 21:00',col:'#C9A6FF',cls:'plat'},
               {step:0,name:'Free Draws',sub:'100% free — one entry each, every draw',col:'#19E6A0',cls:'freed'}];
+function isRoll(k){return !!(SPEC[k]&&SPEC[k].rollover);}
+function potOf(k,d){const sp=SPEC[k]||{};return (d&&d.prize_p!=null?d.prize_p:sp.prize_p||0)+((d&&d.rollover_p)||0);}
 function isFree(k){return !!(SPEC[k]&&SPEC[k].price_p===0);}
 function inGroup(k,g){return g.step===0?k.price_p===0:(k.price_p>0&&k.step_s===g.step);}
 function group(k){const sp=SPEC[k];return GROUPS.find(g=>inGroup(sp,g))||GROUPS[1];}
@@ -638,7 +641,7 @@ function setupSingle(){ try{heroFor(group(SINGLE));}catch(e){}
   const tile=$('tile'); tile.className='nextdraw '+g.cls; tile.style.setProperty('--tc',g.col); $('tOff').style.setProperty('--tc',g.col);
   $('tArt').innerHTML=(ART[g.step]||ART[sp.step_s]||ART[60]).replace(/\{c\}/g,g.col);
   $('tLabel').style.textTransform='none'; $('tLabel').innerHTML='<span class="tic">'+ICONS[g.step]+'</span>'+lbl(sp.label); $('tCad').textContent=cadence(SINGLE);
-  $('tPrize').textContent=gbp(sp.prize_p); $('tPrize2').textContent=gbp(sp.prize_p); $('tPrice').textContent=priceLabel(sp.price_p);
+  const d0=S&&S.open&&S.open[SINGLE]; const pot0=potOf(SINGLE,d0); $('tPrize').textContent=gbp(pot0)+(d0&&d0.rollover_p>0?' (incl. '+gbp(d0.rollover_p)+' rollover)':''); $('tPrize2').textContent=gbp(pot0); $('tPrice').textContent=priceLabel(sp.price_p);
   $('tCap').textContent=sp.cap?'/'+sp.cap.toLocaleString():'';
   $('tNote').textContent=isFree(SINGLE)?'One free entry per account per draw · prize paid as '+gbp(sp.prize_p)+' cash to your account, withdrawable at any time.':
     priceLabel(sp.price_p)+' a number, '+gbp(sp.prize_p)+' to one of the numbers entered — always paid, no rollover. Enter this draw or any '+sp.label+' draw in the next 7 days.';
@@ -653,6 +656,7 @@ function oddsLine(k,d){ // honest, live: winner is always drawn from the numbers
   if(!d) return '';
   const sold=d.sold||0, prize=gbp(d.prize_p);
   if(isFree(k)) return sold===0?'0 entries so far — be the first!':sold===1?'1 in so far — join and it’s 1 in 2':sold+' in — your odds: 1 in '+(sold+1);
+  if(isRoll(k)&&d.cap){const pot=gbp(potOf(k,d)); if(sold===0) return '0 of '+d.cap+' in — be the first'; const pc=Math.round(100*sold/d.cap); return sold+' of '+d.cap+' numbers taken — '+pc+'% chance a winner this draw, else '+pot+' rolls over'; }
   if(sold===0) return 'Nobody in yet — enter now and '+prize+' is yours';
   if(sold===1) return 'Just 1 in — enter and it’s a coin flip for '+prize;
   if(sold<10) return 'Only '+sold+' in — your odds: 1 in '+(sold+1);
@@ -667,7 +671,7 @@ function renderHub(){
     return '<div class="hub-sec"><div class="hub-k" style="--tc:'+g.col+'"><span class="hub-ic">'+ICONS[g.step]+'</span><b>'+g.name+'</b><span class="hub-sub">'+g.sub+'</span>'+(LIVE?'<span class="livenow">Live now</span>':'')+'</div><div class="hub-grid">'
       +ks.map(k=>{const d=S&&S.open&&S.open[k.kind]; const off=d?new Date(d.off_at):nextOff(k.kind);
         return '<a class="htile" style="--tc:'+g.col+'" href="card.html?draw='+k.kind+'"><span class="hart">'+ICONS[g.step]+'</span><span class="hic">'+ICONS[g.step]+'</span>'
-          +'<div class="hv">'+(k.price_p===0?gbp(k.prize_p)+' FREE':'WIN '+gbp(k.prize_p))+'</div>'
+          +'<div class="hv">'+(k.price_p===0?gbp(k.prize_p)+' FREE':'WIN '+gbp(potOf(k.kind,d)))+(d&&d.rollover_p>0?' <span class="roll">ROLLOVER</span>':'')+'</div>'
           +'<div class="hp">'+(k.price_p===0?'FREE <i>entry</i>':priceLabel(k.price_p)+' <i>entry</i>')+'</div>'
           +'<div class="hn"><span>closes</span><b data-hub-clock="'+k.kind+'">'+clockStr(off,now)+'</b></div>'
           +'<div class="hn"><span>entries</span><span>'+(d?d.sold.toLocaleString()+(k.cap?'/'+k.cap.toLocaleString():''):'—')+'</span></div>'
@@ -679,13 +683,14 @@ function hubClockTick(){ if(SINGLE)return; const now=Date.now()+skewMs; document
 
 /* ================= draw-close reveal ================= */
 function pad2(n){return String(n).padStart(2,'0');}
-function banner(el,kindLabel,winner,iWon,prize,who,sold){
-  const b=$(el); if(!b)return; const range=sold||0;
+function banner(el,kindLabel,winner,iWon,prize,who,sold,r){
+  const b=$(el); if(!b)return; const range=(r&&r.drawn_range)||sold||0; const rolled=!!(r&&r.drawn_no&&!r.winner_entry&&r.sold>0);
   b.innerHTML='<div class="dm-k">'+kindLabel+' — DRAWING…</div><div class="dm-wrap"><div class="dm-ball">'+(range?pad2(1+Math.floor(Math.random()*range)):'—')+'</div></div>'
     +'<div class="dm-range">'+(range?('one number from the '+range.toLocaleString()+' entered'):'')+'</div><div class="dm-res"></div><div class="dm-sub"></div>';
   b.classList.add('show');
   const ball=b.querySelector('.dm-ball'), res=b.querySelector('.dm-res'), sub=b.querySelector('.dm-sub'), wrap=b.querySelector('.dm-wrap');
   requestAnimationFrame(()=>wrap.classList.add('in'));
+  if(rolled){ ball.classList.add('spin'); let t=0, steps=18; const tick=()=>{ t++; try{IWS.drawTick();}catch(e){} ball.textContent=pad2(1+Math.floor(Math.random()*range)); if(t<steps){ setTimeout(tick, 45 + Math.pow(t/steps,2.2)*260); } else { ball.classList.remove('spin'); ball.classList.add('land','grey'); ball.textContent='#'+r.drawn_no; b.querySelector('.dm-k').textContent=kindLabel+' — NUMBER DRAWN'; res.textContent='#'+r.drawn_no+' NOT TAKEN — ROLLOVER'; res.className='dm-res miss in'; sub.textContent='£'+prize.toLocaleString()+' carries into the next draw'; sub.classList.add('in'); setTimeout(()=>b.classList.remove('show'),5200);} }; setTimeout(tick,500); return; }
   if(!winner){ ball.classList.add('grey'); ball.textContent='—'; res.textContent='NO ENTRIES'; res.className='dm-res miss in'; sub.textContent='nothing to draw this time'; sub.classList.add('in'); setTimeout(()=>b.classList.remove('show'),4200); return; }
   ball.classList.add('spin'); let t=0, steps=18;
   const tick=()=>{ t++; try{IWS.drawTick();}catch(e){} ball.textContent=pad2(1+Math.floor(Math.random()*range)); if(t<steps){ setTimeout(tick, 45 + Math.pow(t/steps,2.2)*260); } else { land(); } };
@@ -713,7 +718,7 @@ function renderResults(){
   const rs=results.filter(r=>SPEC[r.kind]&&(!SINGLE||r.kind===SINGLE)).slice(0,10);
   $('results').innerHTML=rs.map(r=>'<div class="brow '+(SPEC[r.kind]?group(r.kind).cls:'')+(r.me?' me':'')+'"><span class="t">'+when(r.off_at)+'</span>'
     +'<span class="nm">'+drawLabel(r.kind)+' <span class="who">'+(r.entry?('number <b>#'+r.entry+'</b> · '+r.who):'no entries')+'</span></span>'
-    +'<span class="pz">'+(r.entry?('£'+r.prize.toLocaleString()):'—')+'</span></div>').join('')||'<div class="brow"><span class="nm" style="color:var(--soft)">No draws settled yet.</span></div>';
+    +'<span class="pz">'+(r.rolled?('£'+r.prize.toLocaleString()+' &rarr;'):r.entry?('£'+r.prize.toLocaleString()):'—')+'</span></div>').join('')||'<div class="brow"><span class="nm" style="color:var(--soft)">No draws settled yet.</span></div>';
 }
 function renderMine(){
   const show=TOKEN&&MINE.length; $('mineHead').style.display=show?'':'none'; $('mineList').style.display=show?'':'none'; if(!show)return;
@@ -742,10 +747,10 @@ function applyState(){
     const m=mine[r.draw_id]||[]; const iWon=!!(r.winner_entry&&m.includes(r.winner_entry));
     if(iWon&&TOKEN)setTimeout(fetchMe,300);
     const age=(new Date(S.server_now)-new Date(r.off_at))/1000;
-    if(age<600&&SINGLE===r.kind) banner('tOff',drawLabel(r.kind).toUpperCase(),r.winner_entry,iWon,r.prize_p/100,r.winner_name?r.winner_name:'Number #'+r.winner_entry,r.sold);
+    if(age<600&&SINGLE===r.kind) banner('tOff',drawLabel(r.kind).toUpperCase(),r.winner_entry,iWon,(r.prize_p+(r.rollover_p||0))/100,r.winner_name?r.winner_name:'Number #'+r.winner_entry,r.sold,r);
   }
   results=(S.results||[]).map(r=>{const won=(mine[r.draw_id]||[]).includes(r.winner_entry);
-    return {off_at:r.off_at,kind:r.kind,prize:r.prize_p/100,entry:r.winner_entry,who:won?'YOU':(r.winner_name||'')+' · of '+r.sold+' entered',me:won};});
+    const rolled=!!(r.drawn_no&&!r.winner_entry&&r.sold>0); return {off_at:r.off_at,kind:r.kind,prize:(r.prize_p+(r.rollover_p||0))/100,entry:rolled?r.drawn_no:r.winner_entry,who:rolled?'not taken · rolled over':won?'YOU':(r.winner_name||'')+' · of '+r.sold+' entered',me:won,rolled};});
   renderResults(); if(changed)fetchMine(); saveAll();
 }
 async function syncLive(){

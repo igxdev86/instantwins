@@ -199,6 +199,7 @@ textarea{min-height:90px;resize:vertical}
   tick(); setInterval(tick,10000); document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick();});
 })();
 </script>
+  <div class="panel"><h2>Rollover draws</h2><p class="lead">Most paid draws are rollover draws. The number is drawn from <b>every</b> number in the draw, not just the ones taken. Taken number &rarr; that entrant wins the prize plus any rollover. Number not taken &rarr; nobody wins and the whole pot moves to the next draw of that type, shown as ROLLOVER on its tile, until somebody holding the drawn number wins it. So the prize money is always paid, just not always in the draw you entered; the tile tells you the chance of a winner this draw. Free draws are different: the winner is drawn from the entries only, so every free draw with an entry has a winner. The check below works for both: the draw range is shown with each result.</p></div>
   <div class="panel"><h2>Card draws</h2>
     <div class="step"><div class="n">1</div><div><b>Before the first number is sold</b> the draw's secret seed is generated and its
       <b>SHA-256 fingerprint</b> is published on the Card. Draws exist up to seven days ahead, so the commitment is in place however
