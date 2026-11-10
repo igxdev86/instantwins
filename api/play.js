@@ -16,7 +16,9 @@ export default async function handler(req, res) {
     const list = cat.ok ? await cat.json() : [];
     if (!Array.isArray(list) || !list.some(t => t.tag === game)) return res.status(400).json({ error: 'that ticket is not on sale' });
     // one flat price per ticket — no multipliers (legal review, Oct 2026)
-    fn = 'buy_entry3'; args = { p_game: game, p_token: token, p_mult: 1 };
+    const n = Math.min(50, Math.max(1, parseInt(b.qty, 10) || 1));
+    if (n > 1) { fn = 'buy_entries'; args = { p_game: game, p_token: token, p_n: n }; }
+    else { fn = 'buy_entry3'; args = { p_game: game, p_token: token, p_mult: 1 }; }
   } else if (b.bundle && /^[a-z0-9_]{2,24}$/.test(String(b.kind||''))) {
     fn = 'card_enter_bundle'; args = { p_token: token, p_kind: b.kind };
   } else if (/^[a-z0-9_]{2,24}$/.test(String(b.kind||''))) {

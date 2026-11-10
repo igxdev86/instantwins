@@ -176,5 +176,11 @@
    "destination": "/instantwins.html",
    "permanent": true
   }
+ ],
+ "rewrites": [
+  {
+   "source": "/win-:slug",
+   "destination": "/prize.html"
+  }
  ]
 }
