@@ -350,6 +350,45 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
     </div>
   </div>
 
+  <div class="rvstyle"><span>Reveal style</span><button id="stPlain" class="on">Plain</button><button id="stStriker">High Striker</button><i id="stNote">Your ticket's prize is fixed before you buy. The hammer only shows it — tapping, timing and strength change nothing.</i></div>
+  <div class="striker" id="striker" aria-hidden="true">
+    <svg viewBox="0 0 320 420" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="skTower" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1A2D5C"/><stop offset=".5" stop-color="#2E4A8F"/><stop offset="1" stop-color="#14264F"/></linearGradient>
+        <linearGradient id="skRail" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF5FA2"/><stop offset=".35" stop-color="#FFC53D"/><stop offset=".7" stop-color="#36E0FF"/><stop offset="1" stop-color="#19E6A0"/></linearGradient>
+        <linearGradient id="skBell" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF1B8"/><stop offset=".5" stop-color="#FFC53D"/><stop offset="1" stop-color="#9A6A10"/></linearGradient>
+        <linearGradient id="skBallG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".4" stop-color="#FF5FA2"/><stop offset="1" stop-color="#8A1F55"/></linearGradient>
+        <linearGradient id="skWood" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8A5A2B"/><stop offset=".5" stop-color="#C98B4B"/><stop offset="1" stop-color="#6B4019"/></linearGradient>
+        <linearGradient id="skHead" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9D6EE"/><stop offset=".5" stop-color="#5B6B8C"/><stop offset="1" stop-color="#1B2640"/></linearGradient>
+        <radialGradient id="skGlowG" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFC53D" stop-opacity=".9"/><stop offset="1" stop-color="#FFC53D" stop-opacity="0"/></radialGradient>
+        <filter id="skShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity=".5"/></filter>
+      </defs>
+      <!-- base -->
+      <rect x="20" y="380" width="280" height="26" rx="8" fill="url(#skTower)" filter="url(#skShadow)"/>
+      <text x="160" y="398" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="900" font-size="15" letter-spacing="3" fill="#FFC53D">HIGH STRIKER</text>
+      <!-- tower -->
+      <rect x="140" y="40" width="40" height="340" rx="6" fill="url(#skTower)" filter="url(#skShadow)"/>
+      <rect x="156" y="52" width="8" height="320" rx="4" fill="url(#skRail)" opacity=".9"/>
+      <g id="skMarks" font-family="IBM Plex Mono,monospace" font-size="9" fill="#9DB4DB" text-anchor="end"></g>
+      <!-- bell -->
+      <circle id="skGlow" cx="160" cy="34" r="46" fill="url(#skGlowG)" opacity="0"/>
+      <path id="skBellP" d="M136 40c0-18 10-28 24-28s24 10 24 28l6 6h-60z" fill="url(#skBell)" stroke="#6B4A10" stroke-width="1.5"/>
+      <ellipse cx="160" cy="48" rx="6" ry="4" fill="#6B4A10"/>
+      <!-- ball -->
+      <circle id="skBall" cx="160" cy="368" r="11" fill="url(#skBallG)" filter="url(#skShadow)"/>
+      <!-- pad -->
+      <g id="skPad" transform="translate(0,0)"><rect x="196" y="352" width="60" height="14" rx="4" fill="url(#skWood)"/><rect x="186" y="366" width="80" height="12" rx="4" fill="#2E4A8F"/></g>
+      <!-- hammer -->
+      <g id="skHammer" transform="rotate(38 300 390)">
+        <rect x="296" y="200" width="9" height="190" rx="4" fill="url(#skWood)"/>
+        <rect x="266" y="178" width="70" height="40" rx="8" fill="url(#skHead)" stroke="#0B1630" stroke-width="1.5"/>
+        <rect x="272" y="184" width="58" height="8" rx="4" fill="#fff" opacity=".25"/>
+      </g>
+      <text id="skText" x="160" y="238" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="900" font-size="30" fill="#fff" opacity="0" style="paint-order:stroke;stroke:#07122A;stroke-width:6px"></text>
+    </svg>
+    <button class="enterbtn" id="skSwing">SWING THE HAMMER</button>
+    <div class="sk-note">The prize on your ticket is already fixed. The hammer just shows it.</div>
+  </div>
   <div class="ticket" id="ticket" aria-live="polite">
     <div class="tk-top"><span id="tkBook">GOLDEN ROUND</span><span id="tkRound">—</span></div>
     <div class="tk-k">YOUR TICKET</div><div class="tk-no"><b id="tkNo">—</b></div>
@@ -515,6 +554,36 @@ function renderMine(){
   $('mineHead').style.display=MINE.length?'':'none'; $('mineList').style.display=MINE.length?'':'none';
   $('mineList').innerHTML=MINE.slice().reverse().map(t=>'<div class="brow'+(t.prize?' me':'')+'"><span class="t">#'+String(t.no).padStart(4,'0')+'</span><span class="nm">'+B.name+' <span class="who">'+t.pool+'</span></span><span class="pz">'+(t.prize?'£'+t.prize.toLocaleString():'—')+'</span></div>').join('');
 }
+/* ===== High Striker reveal (theatre only: prize fixed at purchase; height is an honest map of the prize tier) ===== */
+let SKRUN=0;
+let STYLE=(function(){try{return localStorage.getItem('iw_reveal')||'plain';}catch(e){return 'plain';}})();
+function setStyle(v){STYLE=v;try{localStorage.setItem('iw_reveal',v);}catch(e){} $('stPlain').classList.toggle('on',v==='plain');$('stStriker').classList.toggle('on',v==='striker');}
+$('stPlain').onclick=()=>setStyle('plain'); $('stStriker').onclick=()=>setStyle('striker'); setStyle(STYLE);
+function skHeightFor(prize){ // 0..1 of tower. losing ticket: low band only. winning tiers: distinct bands, top prize = bell. never a near-miss.
+  const tiers=(B&&B.tiers||[]).map(t=>t[0]/100).sort((a,b)=>a-b); if(!prize) return 0.12+Math.random()*0.16;
+  const i=tiers.indexOf(prize); const n=tiers.length; if(i<0||n===0) return 0.5; if(i===n-1) return 1;
+  const lo=0.42, hi=0.86; return n===1?1:lo+(hi-lo)*(i/(n-1));
+}
+function skReset(){ const b=document.getElementById('skBall'); b.setAttribute('cy',368); document.getElementById('skHammer').setAttribute('transform','rotate(38 300 390)'); document.getElementById('skGlow').setAttribute('opacity',0); const t=document.getElementById('skText'); t.setAttribute('opacity',0); t.textContent=''; $('striker').classList.remove('bell'); }
+function skMarks(){ const g=document.getElementById('skMarks'); const tiers=(B&&B.tiers||[]).map(t=>t[0]/100).sort((a,b)=>a-b); g.innerHTML=tiers.map((p,i)=>{const h=i===tiers.length-1?1:0.42+(0.86-0.42)*(tiers.length===1?1:i/(tiers.length-1)); const y=368-h*(368-52); return '<text x="134" y="'+(y+3)+'">'+gb(p)+'</text><rect x="137" y="'+(y-1)+'" width="46" height="2" fill="#9DB4DB" opacity=".5"/>';}).join(''); }
+function skPlay(no,prize){ return new Promise(res=>{
+  const st=$('striker'); st.classList.add('show'); st.setAttribute('aria-hidden','false'); skReset(); skMarks(); $('ticket').classList.remove('show');
+  const btn=$('skSwing'); btn.disabled=false; btn.textContent='SWING THE HAMMER';
+  const run=++SKRUN;
+  btn.onclick=()=>{ btn.disabled=true; btn.textContent='…';
+    const H=document.getElementById('skHammer'), ball=document.getElementById('skBall'), txt=document.getElementById('skText');
+    const target=skHeightFor(prize), top=52, bottom=368, yT=bottom-target*(bottom-top);
+    let t0=null; const swing=450, rise=900, fall=700;
+    function frame(ts){ if(run!==SKRUN)return; if(!t0)t0=ts; const t=ts-t0;
+      if(t<swing){ const k=t/swing; const a=k<0.5? 38+14*(k/0.5) : 52-(k-0.5)/0.5*130; H.setAttribute('transform','rotate('+a+' 300 390)'); requestAnimationFrame(frame); return; }
+      if(t<swing+rise){ const k=(t-swing)/rise; const e=1-Math.pow(1-k,2.2); ball.setAttribute('cy',bottom-(bottom-yT)*e); if(target>=1&&k>0.97){ document.getElementById('skGlow').setAttribute('opacity',1); st.classList.add('bell'); try{IWS.jackpot&&IWS.jackpot();}catch(err){} } requestAnimationFrame(frame); return; }
+      if(t<swing+rise+300){ txt.textContent=prize?'£'+prize.toLocaleString():'NO PRIZE'; txt.setAttribute('opacity',1); requestAnimationFrame(frame); return; }
+      if(t<swing+rise+300+fall){ const k=(t-swing-rise-300)/fall; ball.setAttribute('cy',yT+(bottom-yT)*k*k); requestAnimationFrame(frame); return; }
+      ball.setAttribute('cy',bottom); btn.textContent=prize?'YOU WON '+gb(prize)+' — SHOW TICKET':'NO PRIZE ON THIS TICKET — SHOW TICKET'; btn.disabled=false; btn.onclick=()=>{st.classList.remove('show'); res();};
+    }
+    requestAnimationFrame(frame);
+  };
+});}
 function showTicket(no,prize){
   const tk=$('ticket'); tk.classList.remove('show','win'); void tk.offsetWidth;
   $('tkNo').textContent=ticketId(no);
@@ -529,7 +598,7 @@ async function buy(){
     const d=await r.json(); if(!r.ok||d.error)throw new Error((d&&d.error)||'failed');
     const prize=d.prize_p?d.prize_p/100:0; if(d.balance_p!=null){balance=d.balance_p/100;syncCredit();} try{window.__iwAfterSpend&&window.__iwAfterSpend();}catch(e){}
     const all=load('iw_tk_'+B.tag,[]); all.push({pool:d.pool||(pool&&pool.id),no:d.entry_no,prize}); store('iw_tk_'+B.tag,all.slice(-200));
-    showTicket(d.entry_no,prize);
+    if(STYLE==='striker'){await skPlay(d.entry_no,prize);} showTicket(d.entry_no,prize);
     if(d.sold_out){$('prevLine').textContent='Round '+d.pool+' sold out — seed revealed: '+d.seed;}
     await sync(); renderMine();
   }catch(e){ if(/signed in/.test(e.message)){TOKEN=null;location.href='signup.html';return;} $('rvMsg').textContent=/credit/.test(e.message)?'Not enough credit':e.message; }
