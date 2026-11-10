@@ -297,7 +297,8 @@ body{font-family:'Space Grotesk',sans-serif;color:var(--ink);min-height:100vh;ba
   background:linear-gradient(180deg,color-mix(in srgb,var(--tc,#36E0FF) 55%,#fff) 0%,var(--tc,#36E0FF) 48%,color-mix(in srgb,var(--tc,#36E0FF) 70%,#000) 100%);
   box-shadow:0 4px 14px color-mix(in srgb,var(--tc,#36E0FF) 45%,transparent),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(0,0,0,.25)}
 .htile:active .hbtn{transform:translateY(1px)}
-.roll{display:inline-block;vertical-align:middle;margin-left:6px;padding:2px 7px;border-radius:999px;background:linear-gradient(180deg,#FFF1B8,#FFC53D 50%,#B8831A);color:#1A1200;font-size:.58rem;letter-spacing:.12em;font-weight:900;animation:rollp 1.4s ease-in-out infinite}@keyframes rollp{50%{box-shadow:0 0 12px #FFC53D}}
+.roll{display:block;width:max-content;margin:4px 0 0;padding:2px 7px;border-radius:999px;background:linear-gradient(180deg,#FFF1B8,#FFC53D 50%,#B8831A);color:#1A1200;font-size:.58rem;letter-spacing:.12em;font-weight:900;animation:rollp 1.4s ease-in-out infinite}@keyframes rollp{50%{box-shadow:0 0 12px #FFC53D}}
+.hpack{display:block;text-align:center;margin-top:7px;padding:5px 8px;border-radius:7px;background:linear-gradient(180deg,#FFF1B8,#FFC53D 50%,#B8831A);color:#1A1200;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase}
 .hfree{display:block;text-align:center;margin-top:7px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#19E6A0}
 .hub-back{display:inline-block;margin:12px 0 2px;color:var(--cyan);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}
 #tile{border-top-color:var(--tc,#36E0FF)} #tile .nd-clock,#tile .nd-prize b,#tile .nd-at b{color:var(--tc,#36E0FF);text-shadow:none} #tile .ndtag.key{color:var(--tc,#36E0FF);border-color:color-mix(in srgb,var(--tc,#36E0FF) 40%,#0A1730)}
@@ -534,13 +535,17 @@ const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 function dayLabel(t){t=new Date(t);const n=new Date();const d0=new Date(n.getFullYear(),n.getMonth(),n.getDate());const d=Math.round((new Date(t.getFullYear(),t.getMonth(),t.getDate())-d0)/864e5);
   return d===0?'Today':d===1?'Tomorrow':DAYS[t.getDay()]+' '+t.getDate();}
 function when(t){const d=dayLabel(t);return (d==='Today'?'':d+' ')+hm(t);}
-function gbp(p){if(p<100)return p+'p';return '£'+(p/100).toLocaleString('en-GB',{maximumFractionDigits:2});}
+function gbp(p){if(p<100)return p+'p';return '£'+(p/100).toLocaleString('en-GB',{minimumFractionDigits:p%100?2:0,maximumFractionDigits:2});}
 function priceLabel(p){return p===0?'FREE':p<100?p+'p':'£'+(p/100).toLocaleString();}
 function store(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 
 /* ================= draw catalogue (server-driven; fallback until connected) ================= */
 let KINDS=[
+ {kind:'pk_20',code:'P20',label:'30s Pack Draw 20p',price_p:2,prize_p:20,cap:20,step_s:30,offset_s:0,daily_hour:null,bundle_n:20,bundle_price_p:40,rollover:true},
+ {kind:'pk_50',code:'P50',label:'30s Pack Draw 50p',price_p:5,prize_p:50,cap:20,step_s:30,offset_s:0,daily_hour:null,bundle_n:20,bundle_price_p:100,rollover:true},
+ {kind:'pk_100',code:'P100',label:'60s Pack Draw £1',price_p:10,prize_p:100,cap:20,step_s:60,offset_s:0,daily_hour:null,bundle_n:20,bundle_price_p:200,rollover:true},
+ {kind:'pk_500',code:'P500',label:'60s Pack Draw £5',price_p:50,prize_p:500,cap:20,step_s:60,offset_s:0,daily_hour:null,bundle_n:20,bundle_price_p:1000,rollover:true},
  {kind:'t_50p',code:'T50',label:'30s Draw 50p',price_p:5,prize_p:50,cap:20,step_s:30,offset_s:0,daily_hour:null},
  {kind:'t_1',code:'T1',label:'30s Draw £1',price_p:10,prize_p:100,cap:20,step_s:30,offset_s:0,daily_hour:null},
  {kind:'t_2',code:'T2',label:'30s Draw £2',price_p:20,prize_p:200,cap:20,step_s:30,offset_s:0,daily_hour:null},
@@ -676,7 +681,7 @@ function renderHub(){
           +'<div class="hn"><span>closes</span><b data-hub-clock="'+k.kind+'">'+clockStr(off,now)+'</b></div>'
           +'<div class="hn"><span>entries</span><span>'+(d?d.sold.toLocaleString()+(k.cap?'/'+k.cap.toLocaleString():''):'—')+'</span></div>'
           +'<div class="hodds'+(d&&d.sold===0?' empty':'')+'">'+(d?oddsLine(k.kind,d):'')+'</div>'
-          +'<span class="hbtn">'+(k.price_p===0?'ENTER FREE':'PLAY FOR '+priceLabel(k.price_p))+' &rarr;</span>'+(k.price_p===0?'<span class="hfree">no purchase · one entry each</span>':'<span class="hfree">or enter free by post</span>')+'</a>';}).join('')
+          +'<span class="hbtn">'+(k.price_p===0?'ENTER FREE':'PLAY FOR '+priceLabel(k.price_p))+' &rarr;</span>'+(k.bundle_n&&k.bundle_price_p?'<span class="hpack">PACK · '+k.bundle_n+' draws for '+priceLabel(k.bundle_price_p)+' · '+Math.round(k.bundle_n*k.step_s/60)+' min of play</span>':'')+(k.price_p===0?'<span class="hfree">no purchase · one entry each</span>':'<span class="hfree">or enter free by post</span>')+'</a>';}).join('')
       +'</div></div>';}).join('');
 }
 function hubClockTick(){ if(SINGLE)return; const now=Date.now()+skewMs; document.querySelectorAll('[data-hub-clock]').forEach(el=>{const k=el.dataset.hubClock; const d=S&&S.open&&S.open[k]; const off=d?new Date(d.off_at):nextOff(k); el.textContent=clockStr(off,now); if(off-now<=0&&LIVE)syncLive();}); }
@@ -728,7 +733,7 @@ function nextOpenSlot(k,d){ // first future slot after d with room
   const sp=SPEC[k]; let t=nextOff(k,new Date(d.off_at).getTime()+1); for(let i=0;i<500;i++){ const a=(S&&S.ahead||[]).find(x=>x.kind===k&&new Date(x.off_at).getTime()===t.getTime()); if(!a||!sp.cap||a.sold<sp.cap)return t; t=nextOff(k,t.getTime()+1);} return t; }
 function applyButtons(){
   if(!SINGLE)return; const d=S&&S.open&&S.open[SINGLE]; const sp=SPEC[SINGLE]; const btn=$('tEnter'); const full=d&&d.cap&&d.sold>=d.cap;
-  const bb=$('tBundle'); if(bb){const sp0=SPEC[SINGLE]; if(sp0&&sp0.bundle_n&&sp0.bundle_price_p&&LIVE){bb.style.display='';bb.innerHTML='Next '+sp0.bundle_n+' draws for '+priceLabel(sp0.bundle_price_p)+'<small>one number in each · save '+gbp(sp0.price_p*sp0.bundle_n-sp0.bundle_price_p)+' on '+gbp(sp0.price_p*sp0.bundle_n)+'</small>';bb.disabled=false;}else bb.style.display='none';}
+  const bb=$('tBundle'); if(bb){const sp0=SPEC[SINGLE]; if(sp0&&sp0.bundle_n&&sp0.bundle_price_p&&LIVE){bb.style.display='';const sv=sp0.price_p*sp0.bundle_n-sp0.bundle_price_p; bb.innerHTML='Pack: next '+sp0.bundle_n+' draws for '+priceLabel(sp0.bundle_price_p)+'<small>one number in each · '+Math.round(sp0.bundle_n*sp0.step_s/60)+' minutes of play'+(sv>0?' · save '+gbp(sv):'')+'</small>';bb.disabled=false;}else bb.style.display='none';}
   if(isFree(SINGLE)){const entered=d&&(mine[d.id]||[]).length>0; btn.textContent=!LIVE?'CONNECTING…':!TOKEN?'SIGN IN TO ENTER':(entered?'ENTERED ✓':'ENTER FREE'); btn.disabled=!LIVE||(TOKEN&&entered);}
   else { const nx=full?nextOpenSlot(SINGLE,d):null; btn.dataset.off=nx?nx.getTime():'';
     btn.textContent=!LIVE?'CONNECTING…':full?(TOKEN?('FULL — ENTER '+hm(nx)+' · '+priceLabel(sp.price_p)):'SIGN IN TO ENTER'):TOKEN?('ENTER NEXT · '+priceLabel(sp.price_p)):'SIGN IN TO ENTER';
