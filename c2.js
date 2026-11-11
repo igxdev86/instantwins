@@ -15,7 +15,7 @@ const C2=(()=>{
     document.body.classList.toggle('signed',!!TOKEN);
     if(!TOKEN){ box.innerHTML='<a class="cta" href="signin.html">Sign in</a>'; return; }
     if(!m){ try{m=JSON.parse(localStorage.getItem('iw_c2hdr'));}catch(e){} } else { try{localStorage.setItem('iw_c2hdr',JSON.stringify({bank:m.bank,balance_p:m.balance_p}));}catch(e){} }
-    const bank=m&&m.bank!=null?m.bank:'–', bal=m&&m.balance_p!=null?gbp(m.balance_p):'–';
+    const bank=m&&m.bank!=null?m.bank:'–', bal=m&&m.balance_p!=null?(window.innerWidth<=430&&m.balance_p>=10000?'£'+Math.floor(m.balance_p/100).toLocaleString():gbp(m.balance_p)):'–';
     box.innerHTML='<a class="bk" href="account.html" title="My tickets"><svg viewBox="0 0 24 24"><path d="M3 9a2 2 0 0 0 2-2V5h14v2a2 2 0 0 0 0 4v2a2 2 0 0 0 0 4v2H5v-2a2 2 0 0 0-2-2z"/><path d="M12 5v14" stroke-dasharray="2 2"/></svg><b id="bankN">'+bank+'</b><small>tickets</small></a><a class="bal" id="balN" href="account.html">'+bal+'</a><a class="cta" href="index.html#buy">Buy</a>'; }
   const acceptTerms=()=>post({action:'accept_terms'});
   const profile=(county,publish)=>post({action:'profile',county,publish});
