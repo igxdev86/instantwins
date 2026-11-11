@@ -181,7 +181,7 @@
    "permanent": true
   },
   {
-   "source": "/:page((?!index|game|prizes)[a-z0-9-]+).html",
+   "source": "/:page((?!index|game|prizes|signin|account|free|fair|terms|privacy|responsible-play|complaints)[a-z0-9-]+).html",
    "destination": "/v1/:page.html",
    "permanent": false
   }
