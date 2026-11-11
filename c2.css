@@ -126,3 +126,5 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--lime)}
 .wheelwrap svg{width:100%;height:auto;display:block}
 #wheel{transform-origin:150px 150px;transition:transform 4.2s cubic-bezier(.12,.8,.12,1)}
 .pointer{position:absolute;left:50%;top:-6px;transform:translateX(-50%);width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-top:26px solid var(--pink);filter:drop-shadow(0 4px 6px rgba(0,0,0,.5))}
+
+.steps3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}.steps3>div{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 10px;display:flex;flex-direction:column;gap:3px}.steps3 b{width:28px;height:28px;border-radius:50%;background:var(--lime);color:#0B0B10;display:grid;place-items:center;font-size:.9rem;margin-bottom:4px}.steps3 span{font-weight:800;font-size:.95rem}.steps3 small{color:var(--muted,#9aa0ad);font-size:.78rem;line-height:1.25}@media(max-width:420px){.steps3{gap:6px}.steps3>div{padding:10px 8px}.steps3 span{font-size:.85rem}.steps3 small{font-size:.7rem}}
