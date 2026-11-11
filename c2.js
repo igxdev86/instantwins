@@ -12,6 +12,7 @@ const C2=(()=>{
   const reveal=()=>post({action:'reveal'});
   const revealAll=()=>post({action:'revealall'});
   function header(m){ const box=document.getElementById('bankBox'); if(!box)return;
+    document.body.classList.toggle('signed',!!TOKEN);
     if(!TOKEN){ box.innerHTML='<a class="cta" href="signin.html">Sign in</a>'; return; }
     if(!m){ try{m=JSON.parse(localStorage.getItem('iw_c2hdr'));}catch(e){} } else { try{localStorage.setItem('iw_c2hdr',JSON.stringify({bank:m.bank,balance_p:m.balance_p}));}catch(e){} }
     const bank=m&&m.bank!=null?m.bank:'–', bal=m&&m.balance_p!=null?gbp(m.balance_p):'–';
