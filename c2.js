@@ -13,7 +13,8 @@ const C2=(()=>{
   const revealAll=()=>post({action:'revealall'});
   function header(m){ const el=document.getElementById('bankN'), b=document.getElementById('balN'), a=document.getElementById('hdrAct');
     if(!TOKEN){ if(el)el.textContent='0'; if(b)b.textContent='Sign in'; if(a){a.textContent='Sign in';a.href='signin.html';} return; }
-    if(m){ if(el)el.textContent=m.bank; if(b)b.textContent=gbp(m.balance_p); } if(a){a.textContent='Buy';a.href='index.html#buy';} }
+    if(!m){ try{m=JSON.parse(localStorage.getItem('iw_c2hdr'));}catch(e){} } else { try{localStorage.setItem('iw_c2hdr',JSON.stringify({bank:m.bank,balance_p:m.balance_p}));}catch(e){} }
+    if(m&&m.bank!=null){ if(el)el.textContent=m.bank; if(b)b.textContent=gbp(m.balance_p); } if(a){a.textContent='Buy';a.href='index.html#buy';} }
   return {TABLE,CAP,PACKS,gbp,TOKEN,state,mine,buy,reveal,revealAll,header};
 })();
 document.addEventListener('DOMContentLoaded',()=>{C2.header(); C2.mine().then(m=>C2.header(m)).catch(()=>{});});
