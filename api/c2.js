@@ -10,6 +10,7 @@ export default async function handler(req, res) {
     const token = String((b && b.token) || ''); if (!token) return res.status(401).json({ error: 'sign in first' });
     if (b.action === 'buy') { const n = parseInt(b.n, 10); if (![1,5,10,25,50,100].includes(n)) return res.status(400).json({ error: 'pick a pack' }); r = await rpc('c2_buy', { p_token: token, p_n: n }); }
     else if (b.action === 'reveal') r = await rpc('c2_reveal', { p_token: token });
+    else if (b.action === 'revealall') r = await rpc('c2_reveal_all', { p_token: token });
     else if (b.action === 'mine') r = await rpc('c2_mine', { p_token: token });
     else return res.status(400).json({ error: 'bad request' });
   } else r = await rpc('c2_state', {});

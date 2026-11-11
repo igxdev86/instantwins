@@ -10,10 +10,11 @@ const C2=(()=>{
   const mine=()=>TOKEN?post({action:'mine'}):Promise.resolve(null);
   const buy=n=>post({action:'buy',n});
   const reveal=()=>post({action:'reveal'});
+  const revealAll=()=>post({action:'revealall'});
   function header(m){ const el=document.getElementById('bankN'), b=document.getElementById('balN'), a=document.getElementById('hdrAct');
     if(!TOKEN){ if(el)el.textContent='0'; if(b)b.textContent='Sign in'; if(a){a.textContent='Sign in';a.href='signin.html';} return; }
     if(m){ if(el)el.textContent=m.bank; if(b)b.textContent=gbp(m.balance_p); } if(a){a.textContent='Buy';a.href='index.html#buy';} }
-  return {TABLE,CAP,PACKS,gbp,TOKEN,state,mine,buy,reveal,header};
+  return {TABLE,CAP,PACKS,gbp,TOKEN,state,mine,buy,reveal,revealAll,header};
 })();
 document.addEventListener('DOMContentLoaded',()=>{C2.header(); C2.mine().then(m=>C2.header(m)).catch(()=>{});});
 

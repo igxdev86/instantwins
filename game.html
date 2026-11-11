@@ -23,7 +23,7 @@
 <g id="chLid" style="transform-origin:160px 130px"><path d="M60 130v-26c0-28 22-50 50-50h100c28 0 50 22 50 50v26z" fill="url(#chWood)" stroke="#2A1506" stroke-width="2"/><path d="M60 118h200v12H60z" fill="url(#chBand)"/><rect x="100" y="54" width="12" height="76" fill="url(#chBand)"/><rect x="208" y="54" width="12" height="76" fill="url(#chBand)"/></g>
 <text id="chText" x="160" y="112" text-anchor="middle" font-family="Unbounded,sans-serif" font-weight="900" font-size="30" fill="#fff" opacity="0" style="paint-order:stroke;stroke:#0B0B10;stroke-width:6px"></text></svg></div><div id="scratch" style="display:none"><div class="sc-card"><div class="sc-under"><div class="sc-prize" id="scPrize">—</div></div><canvas id="scCanvas" width="600" height="340"></canvas></div></div><div id="bingo" style="display:none"><div class="balls" id="balls"></div><div class="bingo" id="bingoCard"></div><div id="bingoTxt" style="margin-top:10px;font-family:Unbounded,sans-serif;font-weight:900;font-size:1.4rem;min-height:1.6em"></div></div><div id="wheel_" style="display:none"><div class="wheelwrap"><div class="pointer"></div><svg viewBox="0 0 300 300"><g id="wheel"></g><circle cx="150" cy="150" r="22" fill="#0B0B10" stroke="#fff" stroke-width="4"/></svg></div><div id="wheelTxt" style="margin-top:10px;font-family:Unbounded,sans-serif;font-weight:900;font-size:1.4rem;min-height:1.6em"></div></div><div id="dip" style="display:none"><div class="sc-card" style="border-color:var(--lime)"><div class="sc-under" style="place-items:center"><div><div style="font-size:.7rem;letter-spacing:.2em;color:var(--soft)" id="dipNo">TICKET</div><div class="sc-prize" id="dipPrize" style="color:var(--lime)">—</div></div></div></div></div>
     <div class="counter"><div><b id="left">0</b><i>tickets left</i></div><div><b id="wins">0</b><i>wins this go</i></div><div><b id="won">£0</b><i>won this go</i></div></div>
-    <div class="ctrl"><button class="btn" id="play">Play one</button><button class="btn lime" id="playAll">Play all</button></div>
+    <div class="ctrl"><button class="btn" id="play">Play one</button><button class="btn lime" id="playAll">Play all</button><button class="btn" id="finish" style="display:none">Finish now</button></div>
     <div class="toast" id="toast"></div>
     <div class="honest">Each ticket&rsquo;s prize was fixed when you bought it. The game only shows it &mdash; tapping, timing, scratching and strength change nothing. The same ticket shows the same prize in every game.</div>
   </div>
@@ -41,7 +41,7 @@
   const TIERS=C2.TABLE.map(x=>x[0]).sort((a,b)=>a-b); // pence ascending
   let busy=false, all=false, session=[], bank=0;
   function paint(){ const s={bank:{length:bank}}; $('left').textContent=s.bank.length; $('wins').textContent=session.filter(t=>t.prize).length; $('won').textContent=gbp(session.reduce((a,t)=>a+t.prize,0));
-    $('play').textContent=g.btn+' one'; $('play').disabled=busy||!s.bank.length; $('playAll').disabled=busy||s.bank.length<2; $('playAll').textContent='Play all '+s.bank.length;
+    $('play').textContent=g.btn+' one'; $('play').disabled=busy||!s.bank.length; $('playAll').disabled=busy||s.bank.length<2; $('playAll').textContent='Play all '+s.bank.length; $('finish').style.display=(busy&&all&&bank>1)?'':'none';
     $('empty').style.display=(C2.TOKEN&&(s.bank.length||session.length))?'none':'';
     $('grid').innerHTML=session.slice().reverse().map(t=>'<div class="coin'+(t.prize>=1000?' big':t.prize?' w':'')+'">'+(t.prize?gbp(t.prize):'—')+'<small>#'+t.no.toLocaleString()+'</small></div>').join(''); C2.header(); }
   // ---- Coin Drop (board drawn once; path lands on the slot for the prize) ----
@@ -104,7 +104,12 @@
     if(GK==='drop')await dropPlay(p); else if(GK==='striker')await skPlay(p); else if(GK==='chest')await chPlay(p); else if(GK==='scratch')await scPlay(p); else if(GK==='bingo')await bingoPlay(p); else if(GK==='wheel')await wheelPlay(p); else await dipPlay(t);
     session.push(t); const tt=$('toast'); tt.className='toast show '+(p?'win':'none'); tt.textContent=p?'Ticket #'+t.no.toLocaleString()+' — you won '+gbp(p)+'!':'Ticket #'+t.no.toLocaleString()+' — no prize'; paint(); return true; }
   $('play').onclick=async()=>{ if(busy)return; busy=true; all=false; paint(); await one(); busy=false; paint(); };
-  $('playAll').onclick=async()=>{ if(busy)return; busy=true; all=true; paint(); while(bank>0&&await one()){} busy=false; all=false; paint(); };
+  let stop=false;
+  $('playAll').onclick=async()=>{ if(busy)return; busy=true; all=true; stop=false; paint(); while(bank>0&&!stop&&await one()){} if(stop)await finishNow(); busy=false; all=false; paint(); };
+  $('finish').onclick=()=>{ stop=true; $('finish').textContent='Finishing…'; $('finish').disabled=true; };
+  async function finishNow(){ let d; try{ d=await C2.revealAll(); }catch(e){ const tt=$('toast'); tt.className='toast show none'; tt.textContent=e.message; return; }
+    bank=0; (d.tickets||[]).forEach(t=>session.push({no:t.no,prize:t.prize_p})); C2.header({bank:0,balance_p:d.balance_p});
+    const tt=$('toast'); tt.className='toast show '+(d.won_p?'win':'none'); tt.textContent='Opened '+d.n+' ticket'+(d.n===1?'':'s')+' — '+(d.won_p?'you won '+gbp(d.won_p)+'!':'no prizes'); $('finish').textContent='Finish now'; $('finish').disabled=false; }
   if(GK==='drop')dropInit(); if(GK==='striker')skMarks(); if(GK==='bingo')bingoInit(); if(GK==='wheel')wheelInit(); paint();
   if(!C2.TOKEN){ $('empty').innerHTML='<p style="margin:0 0 10px;font-weight:800">Sign in to play.</p><a class="btn" href="signin.html">Sign in / create account</a>'; }
   C2.mine().then(m=>{ if(m){bank=m.bank; C2.header(m); paint();} }).catch(()=>{});
