@@ -1,7 +1,7 @@
 /* InstantWins sound: synthesised in-browser with Web Audio (no audio files). SND.mode: 'all' | 'sfx' | 'off' */
 const SND=(()=>{
   let ctx=null, master=null, sfxBus=null, musBus=null, musicOn=false, musTimer=null, duck=null;
-  let mode='all'; try{ mode=localStorage.getItem('iw_snd')||'all'; }catch(e){}
+  let mode='all'; try{ mode=localStorage.getItem('iw_snd')||'all'; }catch(e){} if(mode!=='off')mode='all';
   const now=()=>ctx.currentTime;
   function init(){ if(ctx)return true; const AC=window.AudioContext||window.webkitAudioContext; if(!AC)return false; ctx=new AC();
     master=ctx.createGain(); master.gain.value=0.9; const comp=ctx.createDynamicsCompressor(); comp.threshold.value=-14; comp.ratio.value=4; master.connect(comp); comp.connect(ctx.destination);
@@ -88,12 +88,12 @@ const SND=(()=>{
   S.music=musicStart; S.musicStop=musicStop;
   S.setMode=m=>{ mode=m; try{localStorage.setItem('iw_snd',m);}catch(e){} if(m==='all'){musicStart();} else {musicStop();} paintBtn(); };
   function note(msg,ms){ let t=document.getElementById('sndNote'); if(!t){ t=document.createElement('div'); t.id='sndNote'; t.className='sndnote'; document.body.appendChild(t); } t.textContent=msg; t.classList.add('show'); clearTimeout(note.tm); note.tm=setTimeout(()=>t.classList.remove('show'),ms||2200); }
-  S.cycle=()=>{ S.setMode(mode==='all'?'sfx':mode==='sfx'?'off':'all'); if(mode!=='off')S.click();
-    setTimeout(()=>{ const st=ctx?ctx.state:'no audio engine'; note(mode==='off'?'Sound muted':(mode==='all'?'Music + effects on':'Effects only')+(st!=='running'?' — browser is blocking audio ('+st+'). Check the tab isn\'t muted.':''),2600); },350); };
+  S.cycle=()=>{ S.setMode(mode==='off'?'all':'off'); if(mode!=='off')S.click();
+    setTimeout(()=>{ const st=ctx?ctx.state:'no audio engine'; note(mode==='off'?'Sound off':'Sound on'+(st!=='running'?' — browser is blocking audio ('+st+'). Check the tab isn\'t muted.':''),2600); },350); };
   let warned=false; function checkRunning(){ if(warned||mode==='off'||!ctx)return; setTimeout(()=>{ if(ctx.state!=='running'&&!warned){ warned=true; note('Sound is blocked by your browser — tap the speaker, or unmute this tab.',4000); } },1500); }
   S.getMode=()=>mode;
   // ---- UI ----
-  function paintBtn(){ document.querySelectorAll('.sndbtn').forEach(b=>{ b.dataset.m=mode; b.classList.toggle('nomusic',!theme); b.innerHTML=(mode==='off'?'<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M19 9l-4 6M15 9l4 6"/></svg>':'<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 0 1 0 6"/>'+(mode==='all'?'<path d="M18.5 6.5a8 8 0 0 1 0 11"/>':'')+'</svg>')+'<span>'+(mode==='all'?'Music':mode==='sfx'?'SFX':'Muted')+'</span>'; b.title=mode==='all'?'Music + sound on. Tap: sound effects only':mode==='sfx'?'Sound effects only. Tap: mute':'Muted. Tap: music + sound'; }); }
+  function paintBtn(){ document.querySelectorAll('.sndbtn').forEach(b=>{ b.dataset.m=mode; b.classList.toggle('nomusic',!theme); b.innerHTML=(mode==='off'?'<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M19 9l-4 6M15 9l4 6"/></svg>':'<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 0 1 0 6"/>'+(mode==='all'?'<path d="M18.5 6.5a8 8 0 0 1 0 11"/>':'')+'</svg>')+'<span>'+(mode==='off'?'Sound off':'Sound on')+'</span>'; b.title=mode==='off'?'Sound is off. Tap to turn on':'Sound is on. Tap to mute'; }); }
   function mount(){ const hr=document.querySelector('.top .hr'); if(hr&&!document.querySelector('.sndbtn')){ const b=document.createElement('button'); b.className='sndbtn'; b.type='button'; b.onclick=e=>{e.preventDefault();S.cycle();}; hr.insertBefore(b,hr.firstChild); } paintBtn();
     document.addEventListener('click',e=>{ const t=e.target.closest('.btn,.pack,.game,.atabs a,.tabs button,.mbar a,.pill,.sw'); if(t&&!t.classList.contains('sndbtn'))S.click(); },true);
     const unlock=()=>{ if(mode==='off'||!init())return; const go=()=>{ if(mode==='all')musicStart(); }; if(ctx.state!=='running'){ const p=ctx.resume(); if(p&&p.then)p.then(go).catch(()=>{}); else go(); checkRunning(); } else go(); }; ['pointerdown','mousedown','touchend','click','keydown'].forEach(ev=>document.addEventListener(ev,unlock,{once:false,passive:true,capture:true}));
