@@ -337,3 +337,11 @@ body[data-g] main{padding-bottom:120px}
 .qk-hopper{transition:box-shadow .2s}.qk-hop-balls.mixing+.qk-hop-n{color:#fff}
 .sndnote{position:fixed;left:50%;top:70px;transform:translateX(-50%) translateY(-10px);background:#15151E;border:1px solid var(--line);color:var(--ink);padding:10px 14px;border-radius:12px;font:700 .8rem Inter,sans-serif;opacity:0;pointer-events:none;transition:all .2s;z-index:80;max-width:calc(100% - 32px);text-align:center}.sndnote.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .qk-ball.out{transition:transform .3s ease-in,opacity .3s;transform:translateY(60px) scale(.6);opacity:0}
+
+/* results grid on Reveal: same balls as the tray */
+body[data-g="quick"] .grid{grid-template-columns:repeat(5,1fr);gap:8px}@media(min-width:700px){body[data-g="quick"] .grid{grid-template-columns:repeat(10,1fr)}}
+body[data-g="quick"] .coin{border:0;font-size:.62rem;letter-spacing:-.03em;box-shadow:inset -4px -6px 10px rgba(0,0,0,.45),inset 3px 4px 8px rgba(255,255,255,.25),0 6px 12px rgba(0,0,0,.5);background:radial-gradient(circle at 35% 30%,#3a3a48,#1c1c26);color:#555}
+body[data-g="quick"] .coin small{display:block;font:600 .52rem Inter,sans-serif;letter-spacing:0;color:rgba(255,255,255,.45);margin-top:1px}
+body[data-g="quick"] .coin.w{background:radial-gradient(circle at 35% 30%,#e4ff8a,#8fc400);color:#0B0B10}body[data-g="quick"] .coin.w small{color:rgba(11,11,16,.6)}
+body[data-g="quick"] .coin.big{background:radial-gradient(circle at 35% 30%,#ffe08a,#ff8a1a);color:#1A0A00;box-shadow:0 0 18px rgba(255,197,61,.6),inset -4px -6px 10px rgba(0,0,0,.35)}body[data-g="quick"] .coin.big small{color:rgba(26,10,0,.6)}
+body[data-g="quick"] .coin.huge{background:radial-gradient(circle at 35% 30%,#ff9ac6,#ff2f7f);color:#fff;box-shadow:0 0 26px rgba(255,61,138,.8)}body[data-g="quick"] .coin.huge small{color:rgba(255,255,255,.7)}
