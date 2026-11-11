@@ -180,3 +180,26 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--lime)}
 .sndbtn{display:inline-flex;align-items:center;justify-content:center;gap:5px;width:34px;height:34px;padding:0;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--soft);font:800 .7rem Inter,sans-serif;cursor:pointer}.sndbtn span{display:none}
 .sndbtn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .sndbtn[data-m="all"]{color:var(--lime);border-color:rgba(198,255,61,.35)}.sndbtn[data-m="off"]{opacity:.7}
+
+/* live round */
+.livedot{display:inline-flex;align-items:center;gap:5px;font:800 .62rem Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);vertical-align:middle;margin-left:8px}
+.livedot i{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(198,255,61,.6);animation:livep 1.6s ease-out infinite}
+@keyframes livep{0%{box-shadow:0 0 0 0 rgba(198,255,61,.7)}70%{box-shadow:0 0 0 8px rgba(198,255,61,0)}100%{box-shadow:0 0 0 0 rgba(198,255,61,0)}}
+.roundbar{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 10px}
+.roundbar div{background:linear-gradient(180deg,#1b1b26,#121219);border:1px solid var(--line);border-radius:12px;padding:10px 8px;text-align:center}
+.roundbar b{display:block;font-family:Unbounded,sans-serif;font-size:1rem;color:var(--ink)}.roundbar div:first-child b{color:var(--lime)}.roundbar div:nth-child(2) b{color:var(--gold)}.roundbar i{font-style:normal;font-size:.66rem;color:var(--soft);letter-spacing:.06em;text-transform:uppercase}
+.ptable.live .pt{position:relative;overflow:hidden;text-align:left;padding:12px 12px 14px;background:linear-gradient(160deg,#1c1c27 0%,#111118 100%);border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 6px 20px rgba(0,0,0,.35);transition:transform .2s}
+.ptable.live .pt b{font-size:1.15rem;margin-bottom:2px}
+.ptable.live .pt em{display:block;font:900 1.35rem Unbounded,sans-serif;font-style:normal;color:var(--lime);letter-spacing:-.02em;line-height:1.1}
+.ptable.live .pt i{display:block;margin-top:2px}
+.ptable.live .pt .bar{display:block;height:5px;border-radius:3px;background:rgba(255,255,255,.08);margin-top:8px;overflow:hidden}.ptable.live .pt .bar span{display:block;height:100%;background:linear-gradient(90deg,var(--lime),var(--cyan));border-radius:3px;transition:width 1s ease}
+.ptable.live .pt .shine{position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.07) 45%,transparent 60%);transform:translateX(-120%);animation:shine 7s ease-in-out infinite}
+@keyframes shine{0%,60%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+.ptable.live .pt.top{background:linear-gradient(135deg,#3a1a05,#1a1420 60%,#15151d);border-color:rgba(255,197,61,.5);box-shadow:0 0 40px rgba(255,106,26,.18),inset 0 1px 0 rgba(255,255,255,.1);display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:12px}
+.ptable.live .pt.top b{font-size:2.2rem;color:var(--gold);grid-row:1/3}.ptable.live .pt.top em{color:var(--gold);font-size:1.6rem;text-align:right}.ptable.live .pt.top i{text-align:right}.ptable.live .pt.top .bar{grid-column:1/-1}
+.ptable.live .pt.gone{opacity:.45}.ptable.live .pt.gone em{color:var(--soft)}
+.ptable.live .pt.bump{animation:bump .6s ease}@keyframes bump{0%{transform:scale(1)}30%{transform:scale(1.04);box-shadow:0 0 30px rgba(198,255,61,.25)}100%{transform:scale(1)}}
+.ticker{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:4px;scrollbar-width:none}.ticker::-webkit-scrollbar{display:none}
+.tk{flex:none;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:.78rem;color:var(--soft);white-space:nowrap}.tk b{color:var(--ink)}.tk b.g{color:var(--lime)}
+@media(prefers-reduced-motion:reduce){.livedot i,.ptable.live .pt .shine,.ptable.live .pt.bump{animation:none}}
+.ptable.live .pt:last-child:nth-child(even){grid-column:1/-1}@media(min-width:700px){.ptable.live .pt:last-child:nth-child(even){grid-column:auto}}.roundbar i{font-size:.58rem;letter-spacing:.04em}.roundbar b{font-size:.92rem}
