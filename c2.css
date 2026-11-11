@@ -404,3 +404,26 @@ body[data-g="quick"] .coin.huge{background:radial-gradient(circle at 35% 30%,#ff
 .fd-stub.out{transition:transform .3s ease-in,opacity .3s;transform:translateY(40px) scale(.8);opacity:0}
 @keyframes stubout{0%{transform:translateY(-24px) scale(.7);opacity:0}100%{transform:none;opacity:1}}
 @media(max-width:420px){.fd-led{font-size:1rem;min-height:52px}.fd-stack{width:84px;height:52px}}
+
+/* feeder gloss + ticket snake */
+.fd-body{background:linear-gradient(180deg,#39404d 0%,#232833 18%,#161a22 45%,#0e1117 100%);border:1px solid rgba(255,255,255,.2);box-shadow:inset 0 2px 0 rgba(255,255,255,.28),inset 0 -4px 0 rgba(0,0,0,.7),0 0 0 1px #05070a,0 22px 46px rgba(0,0,0,.65),0 0 60px rgba(61,242,255,.12)}
+.fd-body::after{content:"";position:absolute;left:8%;right:8%;top:0;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);pointer-events:none}
+.fd-led{background:radial-gradient(120% 100% at 50% 0%,#0d1419,#05080b 60%);border-color:#2b3440;box-shadow:inset 0 0 28px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.08),0 0 0 3px #0a0d12,0 0 0 4px #39424f,0 6px 16px rgba(0,0,0,.6)}
+.fd-led::before{content:"";position:absolute;left:0;right:0;top:0;height:45%;background:linear-gradient(180deg,rgba(255,255,255,.07),transparent);pointer-events:none}
+.fd-mouth{background:linear-gradient(180deg,#000,#070a0f);box-shadow:inset 0 8px 16px rgba(0,0,0,1),inset 0 -1px 0 rgba(255,255,255,.08),0 0 0 2px #434c5a,0 1px 0 3px #0b0e13,0 0 18px rgba(61,242,255,.18)}
+.fd-feed{display:none}
+.fd-snakewrap{position:absolute;left:50%;right:-14px;top:-8px;height:44px;overflow:hidden;pointer-events:none;z-index:2}
+.fd-snake{position:absolute;left:0;top:2px;height:40px;opacity:0;display:flex;align-items:center;gap:0;transform:translateX(100%)}
+.fd-snake i{flex:none;width:72px;height:26px;border-radius:4px;background:linear-gradient(180deg,#f0ff9e 0%,#C6FF3D 45%,#9fd81c 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 4px 10px rgba(0,0,0,.5);position:relative;animation:snakebob .5s ease-in-out infinite;animation-delay:calc(var(--j,0) * -.08s)}
+.fd-snake i::before{content:"";position:absolute;left:-6px;top:50%;width:12px;height:12px;border-radius:50%;background:#161a22;transform:translateY(-50%);box-shadow:inset 0 1px 2px rgba(0,0,0,.6)}
+.fd-snake i::after{content:"";position:absolute;right:0;top:4px;bottom:4px;width:0;border-right:2px dashed rgba(11,11,16,.45)}
+.fd-snake i:nth-child(1){--j:0}.fd-snake i:nth-child(2){--j:1}.fd-snake i:nth-child(3){--j:2}.fd-snake i:nth-child(4){--j:3}.fd-snake i:nth-child(5){--j:4}.fd-snake i:nth-child(6){--j:5}.fd-snake i:nth-child(7){--j:6}
+@keyframes snakebob{0%,100%{transform:translateY(-4px) rotate(-3deg)}50%{transform:translateY(4px) rotate(3deg)}}
+.fd-snake.go{animation:snakein 1.1s linear forwards}
+@keyframes snakein{0%{opacity:0;transform:translateX(100%)}10%{opacity:1}100%{opacity:1;transform:translateX(-100%)}}
+.fd-snake.stream{opacity:1;animation:snakestream .32s linear infinite}
+@keyframes snakestream{0%{transform:translateX(14.3%)}100%{transform:translateX(0%)}}
+.fd-stack .fd-t{background:linear-gradient(90deg,#f0ff9e,#C6FF3D 40%,#9fd81c);box-shadow:0 1px 0 rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.6)}
+.fd-stub{box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 6px 12px rgba(0,0,0,.5)}.fd-stub.win,.fd-stub.big,.fd-stub.huge{box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 8px 16px rgba(0,0,0,.5)}.fd-stub.big{box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 0 18px rgba(255,197,61,.55)}.fd-stub.huge{box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 0 26px rgba(255,61,138,.8)}
+@media(max-width:420px){.fd-snake i{width:60px;height:22px}}
+.fd-mouth::after{content:"";position:absolute;left:50%;top:-6px;width:70px;height:12px;margin-left:-35px;border-radius:50%;background:radial-gradient(ellipse,rgba(61,242,255,.7),transparent 70%);opacity:0;transition:opacity .2s}.fd-mouth.eat::after{opacity:1}
