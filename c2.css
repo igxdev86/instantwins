@@ -21,7 +21,7 @@ a{color:inherit;text-decoration:none}
 .hero{padding:34px 0 16px;text-align:center}
 .hero .k{font-weight:800;letter-spacing:.2em;text-transform:uppercase;font-size:.72rem;color:var(--lime)}
 .hero h1{font-family:Unbounded,sans-serif;font-weight:900;font-size:clamp(2.6rem,10vw,5.6rem);line-height:.95;margin:8px 0 10px;letter-spacing:-.03em}
-.hero h1 span{display:block;color:transparent;-webkit-text-stroke:2px var(--ink);margin-top:.12em;line-height:1.1}
+.hero h1 span{display:block;color:var(--orange);-webkit-text-stroke:0;margin-top:.12em;line-height:1.1}
 .hero p{color:var(--soft);max-width:560px;margin:0 auto;font-size:1.02rem;line-height:1.5}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:620px;margin:18px auto 0}
 .stats div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 8px}
