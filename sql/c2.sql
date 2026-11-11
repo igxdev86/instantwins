@@ -8,24 +8,26 @@ insert into games (tag,name,cap,price_p,tiers,tier,code,sort,active,blurb) value
   'One round for the whole site: 2,000,000 tickets, £1,020,000 in prizes, every prize on a ticket before the round opens.')
 on conflict (tag) do update set name=excluded.name,cap=excluded.cap,price_p=excluded.price_p,tiers=excluded.tiers,tier=excluded.tier,active=true,blurb=excluded.blurb;
 
--- fast allocator for very large rounds: rank tickets by md5(seed:n), hand prizes out down the ranking
+-- allocator for very large rounds: only WINNING tickets get a row (a missing row = no prize).
+-- Winning positions = the first 361,128 ticket numbers when ranked by md5(seed:n); prizes handed down that ranking.
 create or replace function open_pool_big(p_game text) returns uuid
 language plpgsql security definer set search_path = public, extensions as $$
-declare g games%rowtype; v_no int; v_seed text; v_id uuid;
+declare g games%rowtype; v_no int; v_seed text; v_id uuid; v_wins int;
 begin
   select * into g from games where tag=p_game; if not found then raise exception 'unknown game %', p_game; end if;
   select coalesce(max(pool_no),0)+1 into v_no from pools where game=p_game;
   v_seed := p_game||'-P'||lpad(v_no::text,4,'0')||'-S1|'||gen_random_uuid();
   insert into pools (game,pool_no,cap,price_p,seed,seed_hash,mult) values (p_game,v_no,g.cap,g.price_p,v_seed,encode(digest(v_seed,'sha256'),'hex'),1) returning id into v_id;
+  select sum((x->>1)::int) into v_wins from jsonb_array_elements(g.tiers) x;
+  create temp table if not exists c2_tiers (prize_p int, upto bigint) on commit drop;
+  delete from c2_tiers;
+  insert into c2_tiers select (x->>0)::int, sum((x->>1)::int) over (order by (x->>0)::int desc) from jsonb_array_elements(g.tiers) x;
   insert into allocation (pool_id, entry_no, prize_p)
-  select v_id, r.entry_no, coalesce((select t.prize_p from (
-           select (x->>0)::int as prize_p, sum((x->>1)::int) over (order by (x->>0)::int desc) as upto
-           from jsonb_array_elements(g.tiers) x) t where r.rn <= t.upto order by t.upto limit 1),0)
-  from (select gs as entry_no, row_number() over (order by md5(v_seed||':'||gs)) rn from generate_series(1,g.cap) gs) r;
+  select v_id, r.entry_no, (select t.prize_p from c2_tiers t where r.rn <= t.upto order by t.upto limit 1)
+  from (select gs as entry_no, row_number() over (order by md5(v_seed||':'||gs)) rn from generate_series(1,g.cap) gs) r
+  where r.rn <= v_wins;
   return v_id;
 end $$;
-do $$ begin if not exists (select 1 from pools where game='MIL' and status='open') then perform open_pool_big('MIL'); end if; end $$;
-
 -- packs: n tickets -> price (pence)
 create or replace function c2_pack_price(n int) returns int language sql immutable as $$
   select case n when 1 then 100 when 5 then 450 when 10 then 800 when 25 then 1800 when 50 then 3200 when 100 then 6000 else null end $$;
@@ -42,6 +44,7 @@ begin
   if iw_balance(u.id) < v_price then raise exception 'insufficient credit'; end if;
   insert into ledger (user_id, delta_p, reason) values (u.id, -v_price, 'Million Round: '||p_n||' tickets #'||(p.sold+1)||'-#'||(p.sold+p_n));
   v_from := p.sold+1; v_to := p.sold+p_n;
+  insert into allocation (pool_id, entry_no, prize_p) select p.id, gs, 0 from generate_series(v_from, v_to) gs on conflict (pool_id, entry_no) do nothing;
   update allocation set claimed_by=u.id::text, claimed_at=now(), bought_at=now(), revealed=false where pool_id=p.id and entry_no between v_from and v_to;
   update pools set sold=v_to where id=p.id;
   if v_to >= p.cap then update pools set status='settled', settled_at=now() where id=p.id; perform open_pool_big('MIL'); end if;
@@ -84,3 +87,5 @@ language sql stable security definer set search_path = public, extensions as $$
   from pools p where p.game='MIL' and p.status='open' order by p.pool_no desc limit 1 $$;
 grant execute on function c2_buy(uuid,int), c2_reveal(uuid), c2_mine(uuid), c2_state(), c2_pack_price(int), open_pool_big(text) to service_role;
 notify pgrst, 'reload schema';
+-- open the round (≈361k rows; run this statement on its own if the editor times out):
+select open_pool_big('MIL') where not exists (select 1 from pools where game='MIL' and status='open');
