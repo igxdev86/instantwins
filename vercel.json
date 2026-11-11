@@ -181,7 +181,7 @@
    "permanent": true
   },
   {
-   "source": "/:page((?!(?:index|game|prizes|signin|account|free|fair|terms|privacy|responsible-play|complaints|admin|affiliate|support|winners)\\.html)[a-z0-9-]+).html",
+   "source": "/:page((?!(?:index|game|prizes|signin|account|free|fair|terms|privacy|responsible-play|complaints|admin|affiliate|support|winners|how-it-works)\\.html)[a-z0-9-]+).html",
    "destination": "/",
    "permanent": false
   }
