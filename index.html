@@ -20,7 +20,7 @@
 </main>
 <footer class="foot"><div class="wrap">
  <div class="fcols">
-  <div><div class="fh">Play</div><a href="index.html#buy">Buy tickets</a><a href="index.html#games">Games</a><a href="prizes.html">Prize table</a><a href="free.html">Free entry by post</a></div>
+  <div><div class="fh">Play</div><a href="index.html#buy">Buy tickets</a><a href="index.html#games">Games</a><a href="prizes.html">Prize table</a><a href="winners.html">Winners</a><a href="free.html">Free entry by post</a></div>
   <div><div class="fh">Help</div><a href="support.html">Support</a><a href="fair.html">Fairness &amp; verification</a><a href="account.html">My account</a><a href="complaints.html">Complaints</a><a href="affiliate.html">Affiliates</a></div>
   <div><div class="fh">Legal</div><a href="terms.html">Terms &amp; conditions</a><a href="privacy.html">Privacy</a><a href="responsible-play.html">Responsible play</a></div>
  </div>
@@ -44,7 +44,7 @@
     t.innerHTML=r.map(x=>'<span class="tk"><b>'+(x.name||'A player')+'</b> won <b class="g">'+gbp(x.prize_p)+'</b></span>').join(''); }
   function live(){ C2.state().then(d=>{ if(!d||!d.cap)return; table(d); ticker(d); tween(document.getElementById('rbSold'),d.sold||0,x=>x.toLocaleString()); tween(document.getElementById('rbLeft'),Math.round((d.prize_left_p||102000000)/100),x=>'£'+x.toLocaleString()); tween(document.getElementById('rbWon'),Math.round((d.won_p||0)/100),x=>'£'+x.toLocaleString()); document.getElementById('leftN').textContent=(d.cap-d.sold).toLocaleString(); document.getElementById('prizesN').textContent=Number(d.prizes_left).toLocaleString(); const l=document.getElementById('lastWin'); if(l&&d.last){l.textContent=(d.last.name||'A player')+' just won '+gbp(d.last.prize_p);} }).catch(()=>{}); }
   document.getElementById('buyBtn').onclick=async()=>{ if(!C2.TOKEN){location.href='signin.html';return;} const [n,p]=C2.PACKS[sel]; const b=document.getElementById('buyBtn'); b.disabled=true; b.textContent='Buying…';
-    try{ const d=await C2.buy(n); SND.buy(); C2.header({bank:d.bank,balance_p:d.balance_p}); b.textContent='Added '+n+' — pick a game ↓'; live(); document.getElementById('games').scrollIntoView({behavior:'smooth'}); setTimeout(()=>{b.textContent='Buy tickets';b.disabled=false;},2500); }
+    try{ const d=await C2.buy(n); SND.buy(); C2.header({bank:d.bank,balance_p:d.balance_p}); C2.checkin(); b.textContent='Added '+n+' — pick a game ↓'; live(); document.getElementById('games').scrollIntoView({behavior:'smooth'}); setTimeout(()=>{b.textContent='Buy tickets';b.disabled=false;},2500); }
     catch(e){ b.textContent=/credit/.test(e.message)?'Not enough credit — top up':e.message; b.disabled=false; setTimeout(packs,3000); } };
   packs(); live(); setInterval(live,10000); })();
 </script></body></html>

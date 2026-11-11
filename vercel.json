@@ -181,10 +181,16 @@
    "permanent": true
   },
   {
-   "source": "/:page((?!(?:index|game|prizes|signin|account|free|fair|terms|privacy|responsible-play|complaints|admin|affiliate|support)\\.html)[a-z0-9-]+).html",
+   "source": "/:page((?!(?:index|game|prizes|signin|account|free|fair|terms|privacy|responsible-play|complaints|admin|affiliate|support|winners)\\.html)[a-z0-9-]+).html",
    "destination": "/",
    "permanent": false
   }
  ],
- "rewrites": []
+ "rewrites": [],
+ "crons": [
+  {
+   "path": "/api/cron",
+   "schedule": "0 4 * * *"
+  }
+ ]
 }

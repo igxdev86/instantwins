@@ -17,8 +17,19 @@ const C2=(()=>{
     if(!m){ try{m=JSON.parse(localStorage.getItem('iw_c2hdr'));}catch(e){} } else { try{localStorage.setItem('iw_c2hdr',JSON.stringify({bank:m.bank,balance_p:m.balance_p}));}catch(e){} }
     const bank=m&&m.bank!=null?m.bank:'–', bal=m&&m.balance_p!=null?gbp(m.balance_p):'–';
     box.innerHTML='<a class="bk" href="account.html" title="My tickets"><svg viewBox="0 0 24 24"><path d="M3 9a2 2 0 0 0 2-2V5h14v2a2 2 0 0 0 0 4v2a2 2 0 0 0 0 4v2H5v-2a2 2 0 0 0-2-2z"/><path d="M12 5v14" stroke-dasharray="2 2"/></svg><b id="bankN">'+bank+'</b><small>tickets</small></a><a class="bal" id="balN" href="account.html">'+bal+'</a><a class="cta" href="index.html#buy">Buy</a>'; }
-  return {TABLE,CAP,PACKS,gbp,TOKEN,state,mine,buy,reveal,revealAll,header};
+  const acceptTerms=()=>post({action:'accept_terms'});
+  const profile=(county,publish)=>post({action:'profile',county,publish});
+  function termsModal(){ if(document.getElementById('iwTerms'))return; const d=document.createElement('div'); d.id='iwTerms'; d.className='ldm'; d.style.zIndex=70;
+    d.innerHTML='<div class="modal"><h2>Updated terms</h2><p>Our <a href="terms.html" target="_blank">terms &amp; conditions</a> have changed. Please read them and accept to carry on playing.</p><div class="mrow"><button class="btn lime" id="iwTermsOk">I accept</button><a class="btn ghost" href="account.html#close">Close my account</a></div></div>';
+    document.body.appendChild(d); document.getElementById('iwTermsOk').onclick=async()=>{ try{ await acceptTerms(); d.remove(); checkin(); }catch(e){} }; }
+  // £50+/day check-in (responsible play) — once per day per device, after a spend
+  function checkin(){ if(!TOKEN)return; const KEY='iw_checkin_day', today=new Date().toLocaleDateString('en-GB'); try{ if(localStorage.getItem(KEY)===today)return; }catch(e){}
+    fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'limits',token:TOKEN})}).then(r=>r.json()).then(l=>{ if(!l||!(l.spent_today_p>=5000)||document.getElementById('iwChk')||document.getElementById('iwTerms'))return;
+      const d=document.createElement('div'); d.id='iwChk'; d.className='ldm'; d.style.zIndex=70;
+      d.innerHTML='<div class="modal"><h2>Quick check-in</h2><p>You have spent <b>'+gbp(l.spent_today_p)+'</b> on tickets today'+(l.daily_limit_p!=null?' against a limit of '+gbp(l.daily_limit_p):' and have no daily limit set')+'. Prizes are a matter of luck and most tickets win nothing. Happy to carry on?</p><div class="mrow"><button class="btn lime" id="iwChkGo">Carry on</button><a class="btn ghost" href="account.html#limits">Set a limit / take a break</a></div><p class="m" style="margin:12px 0 0">Support: GamCare 0808 8020 133 · <a href="responsible-play.html">Responsible play</a></p></div>';
+      document.body.appendChild(d); document.getElementById('iwChkGo').onclick=()=>{ try{localStorage.setItem(KEY,today);}catch(e){} d.remove(); }; }).catch(()=>{}); }
+  return {TABLE,CAP,PACKS,gbp,TOKEN,state,mine,buy,reveal,revealAll,header,acceptTerms,profile,termsModal,checkin};
 })();
-document.addEventListener('DOMContentLoaded',()=>{C2.header(); C2.mine().then(m=>C2.header(m)).catch(()=>{});});
+document.addEventListener('DOMContentLoaded',()=>{C2.header(); C2.mine().then(m=>{C2.header(m); if(m&&m.terms_due)C2.termsModal();}).catch(()=>{});});
 
 fetch('/api/site',{cache:'no-store'}).then(r=>r.json()).then(d=>{if(d&&d.live)document.querySelectorAll('.testmode').forEach(e=>e.remove());}).catch(()=>{});

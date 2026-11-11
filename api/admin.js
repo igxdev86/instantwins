@@ -5,6 +5,7 @@ const MAP = { stats:'iw_admin_stats', users:'iw_admin_users', threads:'iw_admin_
               setbal:'iw_admin_my_balance', postal:'iw_admin_postal_enter', postal_no:'iw_admin_postal_enter_no', kinds:'iw_admin_kinds', kindset:'iw_admin_kind_active',
               payments:'iw_admin_payments', depdecide:'iw_admin_deposit_decide', wddecide:'iw_admin_withdraw_decide', setting:'iw_admin_setting', golive:'iw_go_live', tickets:'iw_admin_tickets', ticketset:'iw_admin_ticket_active',
               comps:'iw_admin_comps', compcreate:'iw_admin_comp_create', comppostal:'iw_admin_comp_postal', postal_ticket:'iw_admin_postal_ticket', kindroll:'iw_admin_kind_rollover', itemcreate:'iw_admin_item_create', itemclaims:'iw_admin_item_claims', itemclaimset:'iw_admin_item_claim_set', postal_mil:'iw_admin_postal_mil', postal_reject:'iw_admin_postal_reject', postal_log:'iw_admin_postal_log', milstats:'iw_admin_mil_stats' };
+import { flushMail } from './_lib.js';
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
   const KEY = process.env.SUPABASE_SERVICE_ROLE_KEY, URL = process.env.SUPABASE_URL;
@@ -42,6 +43,7 @@ export default async function handler(req, res) {
   const data = await r.json();
   res.setHeader('Cache-Control', 'no-store');
   if (!r.ok) return res.status(400).json({ error: friendly(data && data.message) });
+  if (['depdecide','wddecide','postal_mil','announce'].includes(b.action)) flushMail({ KEY, URL }, 10).catch(() => {});
   return res.status(200).json(data);
 }
 
