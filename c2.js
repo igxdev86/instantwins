@@ -11,10 +11,11 @@ const C2=(()=>{
   const buy=n=>post({action:'buy',n});
   const reveal=()=>post({action:'reveal'});
   const revealAll=()=>post({action:'revealall'});
-  function header(m){ const el=document.getElementById('bankN'), b=document.getElementById('balN'), a=document.getElementById('hdrAct');
-    if(!TOKEN){ if(el)el.textContent='0'; if(b)b.textContent='Sign in'; if(a){a.textContent='Sign in';a.href='signin.html';} return; }
+  function header(m){ const box=document.getElementById('bankBox'); if(!box)return;
+    if(!TOKEN){ box.innerHTML='<a class="cta" href="signin.html">Sign in</a>'; return; }
     if(!m){ try{m=JSON.parse(localStorage.getItem('iw_c2hdr'));}catch(e){} } else { try{localStorage.setItem('iw_c2hdr',JSON.stringify({bank:m.bank,balance_p:m.balance_p}));}catch(e){} }
-    if(m&&m.bank!=null){ if(el)el.textContent=m.bank; if(b)b.textContent=gbp(m.balance_p); } if(a){a.textContent='Buy';a.href='index.html#buy';} }
+    const bank=m&&m.bank!=null?m.bank:'–', bal=m&&m.balance_p!=null?gbp(m.balance_p):'–';
+    box.innerHTML='<a class="bk" href="account.html" title="My tickets"><svg viewBox="0 0 24 24"><path d="M3 9a2 2 0 0 0 2-2V5h14v2a2 2 0 0 0 0 4v2a2 2 0 0 0 0 4v2H5v-2a2 2 0 0 0-2-2z"/><path d="M12 5v14" stroke-dasharray="2 2"/></svg><b id="bankN">'+bank+'</b><small>tickets</small></a><a class="bal" id="balN" href="account.html">'+bal+'</a><a class="cta" href="index.html#buy">Buy</a>'; }
   return {TABLE,CAP,PACKS,gbp,TOKEN,state,mine,buy,reveal,revealAll,header};
 })();
 document.addEventListener('DOMContentLoaded',()=>{C2.header(); C2.mine().then(m=>C2.header(m)).catch(()=>{});});

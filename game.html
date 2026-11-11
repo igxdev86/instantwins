@@ -1,7 +1,6 @@
 <!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Play — InstantWins.co.uk</title><link rel="stylesheet" href="c2.css"></head><body>
-<div class="concept testmode">Launch soon &middot; play credit only until payments open</div>
 <header class="top"><div class="wrap"><a class="brand" href="index.html"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1A0A00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></i><span class="bt" data-t="INSTANTWINS">INSTANTWINS</span></a>
-<div class="bank"><span>Tickets <b id="bankN">0</b></span><span style="color:var(--soft)">&middot;</span><span id="balN">—</span><a id="hdrAct" href="index.html#buy">Buy</a></div></div></header>
+<div class="hr"><div class="bank" id="bankBox"></div></div></div></header>
 <main class="wrap">
   <div class="stage" id="stage"><div class="k" id="stK"></div><h1 id="stH"></h1>
     <div id="drop" style="display:none"><svg class="board" id="dropSvg" viewBox="0 0 320 420"><defs><linearGradient id="dg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE38A"/><stop offset="1" stop-color="#B8831A"/></linearGradient></defs>
@@ -41,7 +40,7 @@
  <p class="fsmall">InstantWins.co.uk is operated by IGX Ltd, registered in England and Wales, company no. 13057559. Registered office: 20-22 Wenlock Road, London N1 7GU. Every competition on this site is a prize competition with a free postal entry route under Schedule 2 of the Gambling Act 2005; every ticket&rsquo;s prize is allocated before the round opens and before you buy, and the games are reveals only. Open to residents of Great Britain aged 18 or over. Debit cards, Apple Pay and Google Pay accepted; no credit cards. Prizes are a matter of luck and most tickets win nothing &mdash; please play within your means. <span class="testmode"><b>Launch soon:</b> play credit only until payments open.</span></p>
 </div></footer>
 <nav class="mbar"><a href="index.html" class=""><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10H3z"/></svg>Home</a><a href="index.html#buy" class=""><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="10" rx="3"/><path d="M3 12h18"/></svg>Buy</a><a href="index.html#games" class="on"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="12" rx="4"/><path d="M7 11v4M5 13h4M15 12h.01M18 14h.01"/></svg>Games</a><a href="prizes.html" class=""><svg viewBox="0 0 24 24"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2-5.5-2.9L6.5 20l1-6.2L3 9.6l6.2-.9z"/></svg>Prizes</a><a href="account.html" class=""><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>Account</a></nav>
-<script src="c2.js"></script><script>
+<script src="c2.js"></script><script src="sfx.js"></script><script>
 (function(){
   const $=id=>document.getElementById(id); const gbp=C2.gbp;
   const G={drop:{h:'COIN DROP',k:'Drop a coin',c:'#3DF2FF',btn:'Drop'},striker:{h:'HIGH STRIKER',k:'Test your strength',c:'#FF6A1A',btn:'Swing'},scratch:{h:'SCRATCHCARD',k:'Classic',c:'#FFC53D',btn:'Next card'},chest:{h:'TREASURE CHEST',k:'Open it up',c:'#F0C98A',btn:'Open'},dip:{h:'LUCKY DIP',k:'No theatre',c:'#C6FF3D',btn:'Reveal'},bingo:{h:'BINGO',k:'Eyes down',c:'#FF3D8A',btn:'Play',el:'bingo'},wheel:{h:'PRIZE WHEEL',k:'Round and round',c:'#FFC53D',btn:'Spin',el:'wheel_'}};
@@ -54,39 +53,39 @@
     $('empty').style.display=(C2.TOKEN&&(s.bank.length||session.length))?'none':'';
     $('grid').innerHTML=session.slice().reverse().map(t=>'<div class="coin'+(t.prize>=1000?' big':t.prize?' w':'')+'">'+(t.prize?gbp(t.prize):'—')+'<small>#'+t.no.toLocaleString()+'</small></div>').join(''); C2.header(); }
   // ---- Coin Drop (board drawn once; path lands on the slot for the prize) ----
-  const SLOTS=[0,100,500,0,1000,25000,500000,5000,200,0,100,0]; const BIG=500000; // slot values in pence, centre = big
+  const SLOTS=[0,100,500,0,1000,25000,500000,5000,200,0,100000,0]; const BIG=500000; // slot values in pence, centre = big
   function dropInit(){ const pegs=$('pegs'); let s=''; for(let r=0;r<9;r++){const n=4+r, y=70+r*30, w=60+r*22; for(let i=0;i<n;i++){s+='<circle cx="'+(160-w/2+i*(w/(n-1)))+'" cy="'+y+'" r="3"/>';}} pegs.innerHTML=s;
     $('slots').innerHTML=SLOTS.map((v,i)=>{const x=26+i*(268/SLOTS.length); return '<rect x="'+(x+2)+'" y="320" width="'+(268/SLOTS.length-4)+'" height="36" rx="4" fill="'+(v?v>=10000?'#FF3D8A':v>=1000?'#FF6A1A':'#2A2A38':'#15151D')+'" stroke="#3DF2FF" stroke-opacity=".4"/><text x="'+(x+268/SLOTS.length/2)+'" y="343" text-anchor="middle" font-family="Inter,sans-serif" font-weight="800" font-size="7.5" fill="#fff">'+(v>=BIG?'£5K+':v?gbp(v):'NO')+'</text>';}).join(''); }
   function slotFor(prize){ // honest: a prize lands only in a slot of that value; no prize lands in a NO slot. Values not on the board use the nearest lower slot label? -> show exact prize text anyway
-    const want=prize>=BIG?BIG:prize; const cands=SLOTS.map((v,i)=>[v,i]).filter(([v])=>v===want); return cands[Math.floor(Math.random()*cands.length)][1]; }
+    let want=prize>=BIG?BIG:prize; let cands=SLOTS.map((v,i)=>[v,i]).filter(([v])=>v===want); if(!cands.length){ const lower=SLOTS.filter(v=>v&&v<=prize).sort((x,y)=>y-x)[0]||SLOTS.find(v=>v>0); cands=SLOTS.map((v,i)=>[v,i]).filter(([v])=>v===lower); } return cands[Math.floor(Math.random()*cands.length)][1]; }
   function dropPlay(prize){ return new Promise(res=>{ const coin=$('coin'), txt=$('dropTxt'); txt.setAttribute('opacity',0); const slot=slotFor(prize); const xEnd=26+slot*(268/SLOTS.length)+268/SLOTS.length/2;
     const pts=[[160,30]]; for(let r=0;r<9;r++){const y=70+r*30+14; const prog=(r+1)/10; const x=160+(xEnd-160)*prog+(Math.random()*24-12)*(1-prog); pts.push([x,y]);} pts.push([xEnd,336]);
-    let i=0; function step(){ if(i>=pts.length-1){ txt.textContent=prize?gbp(prize):'NO PRIZE'; txt.setAttribute('opacity',1); setTimeout(()=>{coin.setAttribute('cx',160);coin.setAttribute('cy',30);res();},700); return; }
-      const [x0,y0]=pts[i],[x1,y1]=pts[i+1]; const t0=performance.now(), d=150; (function f(now){const k=Math.min(1,(now-t0)/d); const e=k*k; coin.setAttribute('cx',x0+(x1-x0)*k); coin.setAttribute('cy',y0+(y1-y0)*e); if(k<1)requestAnimationFrame(f); else {i++;step();}})(t0); }
+    let i=0; function step(){ if(i>=pts.length-1){ SND.land(); txt.textContent=prize?gbp(prize):'NO PRIZE'; txt.setAttribute('opacity',1); prize?SND.win(prize):SND.none(); setTimeout(()=>{coin.setAttribute('cx',160);coin.setAttribute('cy',30);res();},700); return; }
+      const [x0,y0]=pts[i],[x1,y1]=pts[i+1]; const t0=performance.now(), d=150; (function f(now){const k=Math.min(1,(now-t0)/d); const e=k*k; coin.setAttribute('cx',x0+(x1-x0)*k); coin.setAttribute('cy',y0+(y1-y0)*e); if(k<1)requestAnimationFrame(f); else {i++; if(i<pts.length-1)SND.peg(); step();}})(t0); }
     step(); }); }
   // ---- Striker ----
   function skH(prize){ if(!prize) return 0.12+Math.random()*0.16; const i=TIERS.indexOf(prize), n=TIERS.length; if(i<0)return .5; if(i===n-1)return 1; return 0.42+(0.86-0.42)*(i/(n-1)); }
   function skMarks(){ $('skMarks').innerHTML=TIERS.map((p,i)=>{const h=i===TIERS.length-1?1:0.42+(0.86-0.42)*(i/(TIERS.length-1)); const y=368-h*(368-52); return '<text x="134" y="'+(y+3)+'">'+gbp(p)+'</text><rect x="137" y="'+(y-1)+'" width="46" height="2" fill="#A7A7B8" opacity=".5"/>';}).join(''); }
   function skPlay(prize){ return new Promise(res=>{ skMarks(); const H=$('skHammer'), ball=$('skBall'), txt=$('skText'); $('skGlow').setAttribute('opacity',0); txt.setAttribute('opacity',0); $('striker').classList.remove('bell');
-    const target=skH(prize), top=52, bottom=368, yT=bottom-target*(bottom-top); let t0=null; const swing=400, rise=800, fall=600;
+    const target=skH(prize), top=52, bottom=368, yT=bottom-target*(bottom-top); let t0=null; const swing=400, rise=800, fall=600; let hit=false, rang=false; SND.whoosh(0.4);
     function frame(ts){ if(!t0)t0=ts; const t=ts-t0;
       if(t<swing){ const k=t/swing; const a=k<0.5? 38+14*(k/0.5) : 52-(k-0.5)/0.5*130; H.setAttribute('transform','rotate('+a+' 300 390)'); requestAnimationFrame(frame); return; }
-      if(t<swing+rise){ const k=(t-swing)/rise; const e=1-Math.pow(1-k,2.2); ball.setAttribute('cy',bottom-(bottom-yT)*e); if(target>=1&&k>0.97){$('skGlow').setAttribute('opacity',1);} requestAnimationFrame(frame); return; }
-      if(t<swing+rise+300){ txt.textContent=prize?gbp(prize):'NO PRIZE'; txt.setAttribute('opacity',1); requestAnimationFrame(frame); return; }
+      if(t<swing+rise){ if(!hit){hit=true;SND.thud();SND.riser(target*0.8);} const k=(t-swing)/rise; const e=1-Math.pow(1-k,2.2); ball.setAttribute('cy',bottom-(bottom-yT)*e); if(target>=1&&k>0.97){$('skGlow').setAttribute('opacity',1); if(!rang){rang=true;SND.bell(true);}} requestAnimationFrame(frame); return; }
+      if(t<swing+rise+300){ if(!txt.getAttribute('opacity')||txt.getAttribute('opacity')==='0'){ if(prize&&!rang)SND.bell(false); prize?SND.win(prize):SND.none(); } txt.textContent=prize?gbp(prize):'NO PRIZE'; txt.setAttribute('opacity',1); requestAnimationFrame(frame); return; }
       if(t<swing+rise+300+fall){ const k=(t-swing-rise-300)/fall; ball.setAttribute('cy',yT+(bottom-yT)*k*k); requestAnimationFrame(frame); return; }
       ball.setAttribute('cy',bottom); H.setAttribute('transform','rotate(38 300 390)'); res(); }
     requestAnimationFrame(frame); }); }
   // ---- Chest ----
   function chPlay(prize){ return new Promise(res=>{ const box=$('chest'); box.classList.remove('open'); const t=$('chText'); t.setAttribute('opacity',0); $('chLightG').setAttribute('opacity',0);
-    setTimeout(()=>box.classList.add('open'),120); setTimeout(()=>{ if(prize)$('chLightG').setAttribute('opacity',1); t.textContent=prize?gbp(prize):'EMPTY'; t.setAttribute('opacity',1); },800); setTimeout(()=>{box.classList.remove('open'); res();},1700); }); }
+    setTimeout(()=>{box.classList.add('open');SND.creak();},120); setTimeout(()=>{ if(prize){$('chLightG').setAttribute('opacity',1);SND.sparkle();SND.win(prize);} else SND.none(); t.textContent=prize?gbp(prize):'EMPTY'; t.setAttribute('opacity',1); },800); setTimeout(()=>{box.classList.remove('open'); res();},1700); }); }
   // ---- Scratch ----
   function scPlay(prize){ return new Promise(res=>{ const pz=$('scPrize'); pz.className='sc-prize'+(prize?'':' none'); pz.textContent=prize?gbp(prize):'NO PRIZE';
     const c=$('scCanvas'), ctx=c.getContext('2d'); c.width=600; c.height=340; ctx.globalCompositeOperation='source-over'; const gr=ctx.createLinearGradient(0,0,600,340); gr.addColorStop(0,'#C9D6EE'); gr.addColorStop(.5,'#8FA6CC'); gr.addColorStop(1,'#5B6B8C'); ctx.fillStyle=gr; ctx.fillRect(0,0,600,340);
     ctx.fillStyle='#0B0B10'; ctx.font='900 40px Unbounded, sans-serif'; ctx.textAlign='center'; ctx.fillText('SCRATCH',300,185); ctx.globalCompositeOperation='destination-out'; let down=false, done=false, n=0;
     const pos=e=>{const r=c.getBoundingClientRect(); return {x:(e.clientX-r.left)*600/r.width,y:(e.clientY-r.top)*340/r.height};};
-    const scr=e=>{ if(done)return; const p=pos(e); ctx.beginPath(); ctx.arc(p.x,p.y,36,0,7); ctx.fill(); e.preventDefault(); if(++n%10===0){const d=ctx.getImageData(0,0,600,340).data; let k=0; for(let i=3;i<d.length;i+=64){if(d[i]===0)k++;} if(k/(d.length/64)>0.5){done=true; ctx.clearRect(0,0,600,340); setTimeout(res,500);}} };
-    c.onpointerdown=e=>{down=true;scr(e);}; c.onpointermove=e=>{if(down)scr(e);}; c.onpointerup=c.onpointerleave=()=>{down=false;};
-    if(all){ setTimeout(()=>{done=true; ctx.clearRect(0,0,600,340); res();},500); } }); }
+    const scr=e=>{ if(done)return; SND.scratchMove(); const p=pos(e); ctx.beginPath(); ctx.arc(p.x,p.y,36,0,7); ctx.fill(); e.preventDefault(); if(++n%10===0){const d=ctx.getImageData(0,0,600,340).data; let k=0; for(let i=3;i<d.length;i+=64){if(d[i]===0)k++;} if(k/(d.length/64)>0.5){done=true; ctx.clearRect(0,0,600,340); SND.scratchStop(); prize?SND.win(prize):SND.none(); setTimeout(res,500);}} };
+    c.onpointerdown=e=>{down=true;SND.scratchStart();scr(e);}; c.onpointermove=e=>{if(down)scr(e);}; c.onpointerup=c.onpointerleave=()=>{down=false;SND.scratchStop();};
+    if(all){ SND.scratchStart(); setTimeout(()=>{done=true; ctx.clearRect(0,0,600,340); SND.scratchStop(); prize?SND.win(prize):SND.none(); res();},500); } }); }
 
   // ---- Bingo: 5x5 card; balls called; a prize = a line (small) or full house (big); blank = no line. Honest: pattern is decided by the ticket.
   let CARD=[]; function bingoInit(){ const nums=[]; while(nums.length<25){const n=1+Math.floor(Math.random()*75); if(!nums.includes(n))nums.push(n);} CARD=nums; $('bingoCard').innerHTML=nums.map(n=>'<div>'+n+'</div>').join(''); $('balls').innerHTML=''; $('bingoTxt').textContent=''; }
@@ -95,8 +94,8 @@
     let target=[]; if(want==='house')target=[...Array(25).keys()]; else if(want==='line')target=line; else { target=[]; const pool=[...Array(25).keys()].sort(()=>Math.random()-.5); // at most 3 in any row/col: no line
       const cnt={}; for(const i of pool){const r=Math.floor(i/5),c=i%5; if((cnt['r'+r]||0)<3&&(cnt['c'+c]||0)<3){target.push(i);cnt['r'+r]=(cnt['r'+r]||0)+1;cnt['c'+c]=(cnt['c'+c]||0)+1;} if(target.length>=11)break;} }
     const seq=target.slice().sort(()=>Math.random()-.5); let i=0; const ms=all?90:260;
-    const tick=()=>{ if(i<seq.length){ const n=CARD[seq[i]]; cells[seq[i]].classList.add('hit'); const b=document.createElement('span'); b.textContent=n; $('balls').prepend(b); if($('balls').children.length>8)$('balls').lastChild.remove(); i++; setTimeout(tick,ms); return; }
-      if(want!=='none'){ (want==='house'?[...Array(25).keys()]:line).forEach(k=>cells[k].classList.add('line')); $('bingoTxt').textContent=(want==='house'?'FULL HOUSE! ':'LINE! ')+gbp(prize); } else { $('bingoTxt').textContent='No line this card'; }
+    const tick=()=>{ if(i<seq.length){ const n=CARD[seq[i]]; cells[seq[i]].classList.add('hit'); SND.pop(); const b=document.createElement('span'); b.textContent=n; $('balls').prepend(b); if($('balls').children.length>8)$('balls').lastChild.remove(); i++; setTimeout(tick,ms); return; }
+      if(want!=='none'){ (want==='house'?[...Array(25).keys()]:line).forEach(k=>cells[k].classList.add('line')); $('bingoTxt').textContent=(want==='house'?'FULL HOUSE! ':'LINE! ')+gbp(prize); SND.win(prize); } else { $('bingoTxt').textContent='No line this card'; SND.none(); }
       setTimeout(res,all?300:900); };
     tick(); }); }
   // ---- Prize Wheel: 12 pockets; a prize lands only on its value pocket, a blank only on a blank pocket.
@@ -106,9 +105,9 @@
     g.innerHTML=s; g.style.transition='none'; g.style.transform='rotate(0deg)'; }
   let wheelTurn=0;
   function wheelPlay(prize){ return new Promise(res=>{ const want=prize>=POCKBIG?POCKBIG:prize; const cands=POCK.map((v,i)=>[v,i]).filter(([v])=>v===want); const idx=cands[Math.floor(Math.random()*cands.length)][1];
-    const n=POCK.length; const pocketAngle=360/n; const target=-(idx*pocketAngle+pocketAngle/2); wheelTurn+=360*5+((target-wheelTurn)%360+360)%360; const w=$('wheel'); w.style.transition='transform '+(all?1.6:4.2)+'s cubic-bezier(.12,.8,.12,1)'; w.style.transform='rotate('+wheelTurn+'deg)'; $('wheelTxt').textContent='';
-    setTimeout(()=>{ $('wheelTxt').textContent=prize?gbp(prize)+'!':'No prize'; setTimeout(res,all?300:800); },(all?1.6:4.2)*1000+100); }); }
-  function dipPlay(t){ return new Promise(res=>{ $('dipNo').textContent='TICKET #'+t.no.toLocaleString(); const pz=$('dipPrize'); pz.className='sc-prize'+(t.prize?'':' none'); pz.style.color=t.prize?'var(--lime)':''; pz.textContent=t.prize?gbp(t.prize):'NO PRIZE'; setTimeout(res,all?350:900); }); }
+    const n=POCK.length; const pocketAngle=360/n; const target=-(idx*pocketAngle+pocketAngle/2); wheelTurn+=360*5+((target-wheelTurn)%360+360)%360; const w=$('wheel'); w.style.transition='transform '+(all?1.6:4.2)+'s cubic-bezier(.12,.8,.12,1)'; SND.wheel(all?1.6:4.2); w.style.transform='rotate('+wheelTurn+'deg)'; $('wheelTxt').textContent='';
+    setTimeout(()=>{ prize?SND.win(prize):SND.none(); $('wheelTxt').textContent=prize?gbp(prize)+'!':'No prize'; setTimeout(res,all?300:800); },(all?1.6:4.2)*1000+100); }); }
+  function dipPlay(t){ return new Promise(res=>{ SND.flip(); t.prize?SND.win(t.prize):SND.none(); $('dipNo').textContent='TICKET #'+t.no.toLocaleString(); const pz=$('dipPrize'); pz.className='sc-prize'+(t.prize?'':' none'); pz.style.color=t.prize?'var(--lime)':''; pz.textContent=t.prize?gbp(t.prize):'NO PRIZE'; setTimeout(res,all?350:900); }); }
   async function one(){ let d, err; for(let i=0;i<4&&!d;i++){ try{ d=await C2.reveal(); }catch(e){ err=e; if(/credit|sign in|session/i.test(e.message))break; await new Promise(r=>setTimeout(r,600*(i+1))); } } if(!d){ const tt=$('toast'); tt.className='toast show none'; tt.textContent=(err&&err.message)||'Connection lost — tap Play all to continue'; return false; } if(d.empty){bank=0;return false;} bank=d.bank; const t={no:d.no,prize:d.prize_p}; const p=t.prize; C2.header({bank:d.bank,balance_p:d.balance_p});
     if(GK==='drop')await dropPlay(p); else if(GK==='striker')await skPlay(p); else if(GK==='chest')await chPlay(p); else if(GK==='scratch')await scPlay(p); else if(GK==='bingo')await bingoPlay(p); else if(GK==='wheel')await wheelPlay(p); else await dipPlay(t);
     session.push(t); const tt=$('toast'); tt.className='toast show '+(p?'win':'none'); tt.textContent=p?'Ticket #'+t.no.toLocaleString()+' — you won '+gbp(p)+'!':'Ticket #'+t.no.toLocaleString()+' — no prize'; paint(); return true; }
@@ -117,7 +116,7 @@
   $('playAll').onclick=async()=>{ if(busy)return; busy=true; all=true; stop=false; paint(); while(bank>0&&!stop&&await one()){} if(stop)await finishNow(); busy=false; all=false; paint(); };
   $('finish').onclick=()=>{ stop=true; $('finish').textContent='Finishing…'; $('finish').disabled=true; };
   async function finishNow(){ let d; try{ d=await C2.revealAll(); }catch(e){ const tt=$('toast'); tt.className='toast show none'; tt.textContent=e.message; return; }
-    bank=0; (d.tickets||[]).forEach(t=>session.push({no:t.no,prize:t.prize_p})); C2.header({bank:0,balance_p:d.balance_p});
+    bank=0; d.won_p?SND.win(d.won_p):SND.none(); (d.tickets||[]).forEach(t=>session.push({no:t.no,prize:t.prize_p})); C2.header({bank:0,balance_p:d.balance_p});
     const tt=$('toast'); tt.className='toast show '+(d.won_p?'win':'none'); tt.textContent='Opened '+d.n+' ticket'+(d.n===1?'':'s')+' — '+(d.won_p?'you won '+gbp(d.won_p)+'!':'no prizes'); $('finish').textContent='Finish now'; $('finish').disabled=false; }
   if(GK==='drop')dropInit(); if(GK==='striker')skMarks(); if(GK==='bingo')bingoInit(); if(GK==='wheel')wheelInit(); paint();
   if(!C2.TOKEN){ $('empty').innerHTML='<p style="margin:0 0 10px;font-weight:800">Sign in to play.</p><a class="btn" href="signin.html">Sign in / create account</a>'; }
