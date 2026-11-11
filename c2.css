@@ -320,3 +320,13 @@ body[data-g] main{padding-bottom:120px}
 .qk-fall{position:absolute;left:50%;top:70px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#8fe8ff,#1aa7c4);box-shadow:0 0 14px rgba(61,242,255,.7),inset -3px -3px 5px rgba(0,0,0,.4);animation:qkfall .5s cubic-bezier(.4,0,.6,1) infinite alternate;z-index:3}
 @keyframes qkfall{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(34px) rotate(180deg)}}
 .qk{position:relative}
+
+.modal.buy{position:relative;text-align:left;max-width:460px}
+.modal .x{position:absolute;right:10px;top:8px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--soft);font-size:1.3rem;line-height:1;cursor:pointer}
+.modal.buy h2{margin:2px 0 12px}
+.packs.mini{grid-template-columns:repeat(3,1fr);gap:8px}
+.packs.mini .pack{padding:12px 8px 10px;border-radius:14px;text-align:center}.packs.mini .pack .t{font-size:1.4rem}.packs.mini .pack .t small{display:block;margin:2px 0 0;font-size:.62rem}.packs.mini .pack .p{font-size:.86rem;margin-top:4px}.packs.mini .pack .save{position:static;display:inline-block;font-size:.56rem;padding:2px 7px;margin-bottom:5px}.packs.mini .pack{padding-top:9px}
+.buyrow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.buyrow b{display:block;font:900 1rem Unbounded,sans-serif}.buyrow span{font-weight:800;color:var(--lime)}.buyrow small{display:block;color:var(--soft);font-size:.72rem}
+.buyrow .btn{padding:13px 18px;font-size:.9rem;white-space:nowrap}
+@media(max-width:420px){.packs.mini{gap:6px}.packs.mini .pack{padding:10px 4px 8px}.packs.mini .pack .t{font-size:1.2rem}}

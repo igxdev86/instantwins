@@ -28,7 +28,21 @@ const C2=(()=>{
       const d=document.createElement('div'); d.id='iwChk'; d.className='ldm'; d.style.zIndex=70;
       d.innerHTML='<div class="modal"><h2>Quick check-in</h2><p>You have spent <b>'+gbp(l.spent_today_p)+'</b> on tickets today'+(l.daily_limit_p!=null?' against a limit of '+gbp(l.daily_limit_p):' and have no daily limit set')+'. Prizes are a matter of luck and most tickets win nothing. Happy to carry on?</p><div class="mrow"><button class="btn lime" id="iwChkGo">Carry on</button><a class="btn ghost" href="account.html#limits">Set a limit / take a break</a></div><p class="m" style="margin:12px 0 0">Support: GamCare 0808 8020 133 · <a href="responsible-play.html">Responsible play</a></p></div>';
       document.body.appendChild(d); document.getElementById('iwChkGo').onclick=()=>{ try{localStorage.setItem(KEY,today);}catch(e){} d.remove(); }; }).catch(()=>{}); }
-  return {TABLE,CAP,PACKS,gbp,TOKEN,state,mine,buy,reveal,revealAll,header,acceptTerms,profile,termsModal,checkin};
+  // in-page buy sheet: pick a pack, buy, stay where you are. onDone(d) gets the buy result.
+  function buySheet(onDone){ if(!TOKEN){ location.href='signin.html'; return; } if(document.getElementById('iwBuy'))return; let sel=1;
+    const d=document.createElement('div'); d.id='iwBuy'; d.className='ldm'; d.style.zIndex=66;
+    d.innerHTML='<div class="modal buy"><button type="button" class="x" id="iwBuyX" aria-label="close">&times;</button><div class="done-k">Buy tickets</div><h2>Pick a pack</h2><div class="packs mini" id="iwPacks"></div><div class="buyrow"><div><b id="iwSelT"></b><span id="iwSelP"></span><small id="iwSelE"></small></div><button class="btn lime" id="iwBuyGo">Buy</button></div><div class="err" id="iwBuyErr"></div><p class="m" style="margin:12px 0 0">Balance <b id="iwBuyBal">–</b> · <a href="account.html#money">add credit</a> · Free entry by post, same odds &mdash; <a href="free.html">how</a></p></div>';
+    document.body.appendChild(d);
+    const $=id=>document.getElementById(id);
+    function paint(){ $('iwPacks').innerHTML=PACKS.map(([n,p],i)=>{const full=n*100, sv=full-p; return '<div class="pack'+(i===sel?' sel':'')+'" data-i="'+i+'">'+(sv?'<span class="save">SAVE '+gbp(sv)+'</span>':'')+'<div class="t">'+n+'<small>ticket'+(n>1?'s':'')+'</small></div><div class="p">'+gbp(p)+'</div></div>';}).join('');
+      const [n,p]=PACKS[sel]; $('iwSelT').textContent=n+' ticket'+(n>1?'s':''); $('iwSelP').textContent=gbp(p); $('iwSelE').textContent=gbp(Math.round(p/n))+' each'; $('iwBuyGo').textContent='Buy for '+gbp(p);
+      d.querySelectorAll('.pack').forEach(el=>el.onclick=()=>{sel=+el.dataset.i;paint();}); }
+    paint(); try{ const h=JSON.parse(localStorage.getItem('iw_c2hdr')); if(h&&h.balance_p!=null)$('iwBuyBal').textContent=gbp(h.balance_p); }catch(e){}
+    const close=()=>d.remove(); $('iwBuyX').onclick=close; d.addEventListener('click',e=>{ if(e.target===d)close(); });
+    $('iwBuyGo').onclick=async()=>{ const [n]=PACKS[sel]; const b=$('iwBuyGo'); b.disabled=true; b.textContent='Buying…'; $('iwBuyErr').textContent='';
+      try{ const r=await buy(n); if(window.SND)SND.buy(); header({bank:r.bank,balance_p:r.balance_p}); close(); checkin(); if(onDone)onDone(r); }
+      catch(e){ $('iwBuyErr').textContent=e.message; b.disabled=false; b.textContent='Buy'; paint(); } }; }
+  return {TABLE,CAP,PACKS,gbp,TOKEN,state,mine,buy,reveal,revealAll,header,acceptTerms,profile,termsModal,checkin,buySheet};
 })();
 document.addEventListener('DOMContentLoaded',()=>{C2.header(); C2.mine().then(m=>{C2.header(m); if(m&&m.terms_due)C2.termsModal();}).catch(()=>{});});
 
