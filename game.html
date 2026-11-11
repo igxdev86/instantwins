@@ -49,7 +49,7 @@
   const TIERS=C2.TABLE.map(x=>x[0]).sort((a,b)=>a-b); // pence ascending
   let busy=false, all=false, session=[], bank=0;
   function paint(){ const s={bank:{length:bank}}; $('left').textContent=s.bank.length; $('wins').textContent=session.filter(t=>t.prize).length; $('won').textContent=gbp(session.reduce((a,t)=>a+t.prize,0));
-    $('play').textContent=g.btn+' one'; $('play').disabled=busy||!s.bank.length; $('playAll').disabled=busy||s.bank.length<2; $('playAll').textContent=(GK==='quick'?'Drop all ':'Play all ')+s.bank.length; if(GK==='quick')qkPaint(); $('finish').style.display=(busy&&all&&bank>1)?'':'none';
+    $('play').textContent=g.btn+' one'; $('play').disabled=busy||!s.bank.length; $('playAll').disabled=busy||s.bank.length<2; $('playAll').textContent=(GK==='quick'?'Drop all ':'Play all ')+s.bank.length; if(GK==='quick')qkPaint(); $('finish').style.display=(busy&&all&&bank>1&&GK!=='quick')?'':'none';
     const emp=!(C2.TOKEN&&(s.bank.length||session.length)); $('empty').style.display=emp?'':'none'; $('ctrl').style.display=emp?'none':'';
     $('grid').innerHTML=session.slice().reverse().map(t=>'<div class="coin'+(t.prize>=1000?' big':t.prize?' w':'')+'">'+(t.prize?gbp(t.prize):'—')+'<small>#'+t.no.toLocaleString()+'</small></div>').join(''); C2.header(); }
   // ---- Coin Drop (board drawn once; path lands on the slot for the prize) ----
