@@ -18,7 +18,7 @@ a{color:inherit;text-decoration:none}
 @media(max-width:420px){.brand{font-size:.92rem;gap:7px}.brand i{width:30px;height:30px}.brand i svg{width:17px;height:17px}.bank .bk small{display:none}.bank .bk{padding:7px 9px}.bank .bal{padding:7px 9px;font-size:.78rem}.bank .cta{padding:8px 11px;font-size:.76rem}.top .wrap{gap:6px}}
 .concept{background:var(--gold);color:#1A0A00;text-align:center;font-weight:800;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;padding:6px}
 /* hero */
-.hero{padding:34px 0 16px;text-align:center}
+.hero{position:relative;padding:34px 0 16px;text-align:center}.hero>*:not(.rain){position:relative;z-index:1}
 .hero .k{font-weight:800;letter-spacing:.2em;text-transform:uppercase;font-size:.72rem;color:var(--lime)}
 .hero h1{font-family:Unbounded,sans-serif;font-weight:900;font-size:clamp(2.6rem,10vw,5.6rem);line-height:.95;margin:8px 0 10px;letter-spacing:-.03em}
 .hero h1 span{display:block;color:var(--orange);-webkit-text-stroke:0;margin-top:.12em;line-height:1.1}
@@ -345,3 +345,10 @@ body[data-g="quick"] .coin small{display:block;font:600 .52rem Inter,sans-serif;
 body[data-g="quick"] .coin.w{background:radial-gradient(circle at 35% 30%,#e4ff8a,#8fc400);color:#0B0B10}body[data-g="quick"] .coin.w small{color:rgba(11,11,16,.6)}
 body[data-g="quick"] .coin.big{background:radial-gradient(circle at 35% 30%,#ffe08a,#ff8a1a);color:#1A0A00;box-shadow:0 0 18px rgba(255,197,61,.6),inset -4px -6px 10px rgba(0,0,0,.35)}body[data-g="quick"] .coin.big small{color:rgba(26,10,0,.6)}
 body[data-g="quick"] .coin.huge{background:radial-gradient(circle at 35% 30%,#ff9ac6,#ff2f7f);color:#fff;box-shadow:0 0 26px rgba(255,61,138,.8)}body[data-g="quick"] .coin.huge small{color:rgba(255,255,255,.7)}
+
+/* ticket rain behind the hero */
+.rain{position:absolute;inset:-60px 0 0 0;overflow:hidden;pointer-events:none;z-index:0;mask-image:linear-gradient(180deg,#000 0,#000 70%,transparent);-webkit-mask-image:linear-gradient(180deg,#000 0,#000 70%,transparent)}
+.rain i{position:absolute;top:-60px;width:54px;height:30px;border-radius:6px;background:var(--lime);transform:scale(var(--s,1)) rotate(var(--r,0deg));animation:rainfall linear infinite;will-change:transform}
+.rain i::before,.rain i::after{content:"";position:absolute;top:50%;width:10px;height:10px;border-radius:50%;background:var(--bg);transform:translateY(-50%)}.rain i::before{left:-5px}.rain i::after{right:-5px}
+.rain i:nth-child(3n){background:var(--cyan)}.rain i:nth-child(4n){background:var(--orange)}.rain i:nth-child(5n){background:var(--pink)}
+@keyframes rainfall{0%{transform:translateY(0) scale(var(--s,1)) rotate(var(--r,0deg))}100%{transform:translateY(120vh) scale(var(--s,1)) rotate(calc(var(--r,0deg) + 40deg))}}
