@@ -147,7 +147,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--lime)}
 .ldlogo i{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,var(--orange),var(--pink));display:grid;place-items:center;font-style:normal;animation:ldpulse 1.2s ease-in-out infinite}
 .ldlogo i svg{width:32px;height:32px}
 .ldtxt{position:relative;color:rgba(255,255,255,.14)}
-.ldtxt::before{content:attr(data-t);position:absolute;left:0;top:0;white-space:nowrap;overflow:hidden;width:0;color:transparent;background:linear-gradient(90deg,var(--lime),var(--cyan));-webkit-background-clip:text;background-clip:text;animation:ldfill 1.6s ease-in-out infinite}
+.ldtxt::before{content:attr(data-t);position:absolute;left:0;top:0;white-space:nowrap;overflow:hidden;width:var(--p,0%);color:transparent;background:linear-gradient(90deg,var(--lime),var(--cyan) 50%,var(--pink) 80%,var(--orange));-webkit-background-clip:text;background-clip:text;transition:width .25s ease-out}
+.ldm.out{opacity:0;transition:opacity .35s}
 @keyframes ldfill{0%{width:0}70%{width:100%}100%{width:100%}}
 @keyframes ldpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 @media(max-width:420px){.ldlogo{font-size:1.3rem;gap:10px}.ldlogo i{width:44px;height:44px}}

@@ -193,6 +193,7 @@
     const tt=$('toast'); tt.className='toast show '+(d.won_p?'win':'none'); tt.textContent='Opened '+d.n+' ticket'+(d.n===1?'':'s')+' — '+(d.won_p?'you won '+gbp(d.won_p)+'!':'no prizes'); $('finish').textContent='Finish now'; $('finish').disabled=false; }
   if(GK==='drop')dropInit(); if(GK==='striker')skMarks(); if(GK==='bingo')bingoInit(); if(GK==='wheel')wheelInit(); if(GK==='reels')reelsInit(); if(GK==='candy')candyInit(); if(GK==='words')wordsInit(); if(GK==='boxes')boxesInit(); paint();
   if(!C2.TOKEN){ $('empty').innerHTML='<p style="margin:0 0 10px;font-weight:800">Sign in to play.</p><a class="btn" href="signin.html">Sign in / create account</a>'; }
-  function ready(){ $('ldm').style.display='none'; $('ctrl').style.visibility=''; C2.checkin(); }
+  let ldP=0, ldT=setInterval(()=>{ ldP=Math.min(88,ldP+(88-ldP)*0.12+1); const t=$('ldm').querySelector('.ldtxt'); if(t)t.style.setProperty('--p',ldP+'%'); },90);
+  function ready(){ clearInterval(ldT); const t=$('ldm').querySelector('.ldtxt'); if(t)t.style.setProperty('--p','100%'); setTimeout(()=>{ $('ldm').classList.add('out'); setTimeout(()=>{ $('ldm').style.display='none'; },350); $('ctrl').style.visibility=''; C2.checkin(); },380); }
   if(!C2.TOKEN)ready(); else C2.mine().then(m=>{ if(m){bank=m.bank; C2.header(m); paint();} ready(); }).catch(()=>{ ready(); });
 })();</script></body></html>
