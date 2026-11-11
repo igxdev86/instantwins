@@ -83,6 +83,7 @@ const SND=(()=>{
   function musicStart(){ if(!theme||!ok()||mode!=='all'||musicOn)return; if(ctx.state!=='running')return; musicOn=true; step=0; nextT=now()+0.05; musBus.gain.setTargetAtTime(theme.vol,now(),0.8); musTimer=setInterval(schedule,120); schedule(); }
   function musicStop(){ if(!musicOn)return; musicOn=false; clearInterval(musTimer); musBus.gain.setTargetAtTime(0,now(),0.3); }
   S.playing=()=>musicOn;
+  S.dbg=()=>({mode,theme:!!theme,musicOn,ctx:ctx&&ctx.state,gain:musBus&&musBus.gain.value});
   S.setTheme=name=>{ const was=musicOn; if(was)musicStop(); theme=THEMES[name]||null; if(was&&theme)setTimeout(musicStart,350); };
   S.music=musicStart; S.musicStop=musicStop;
   S.setMode=m=>{ mode=m; try{localStorage.setItem('iw_snd',m);}catch(e){} if(m==='all'){musicStart();} else {musicStop();} paintBtn(); };
@@ -97,3 +98,4 @@ const SND=(()=>{
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount); else mount();
   return S;
 })();
+window.SND=SND;

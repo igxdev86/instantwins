@@ -40,7 +40,7 @@ const C2=(()=>{
     paint(); try{ const h=JSON.parse(localStorage.getItem('iw_c2hdr')); if(h&&h.balance_p!=null)$('iwBuyBal').textContent=gbp(h.balance_p); }catch(e){}
     const close=()=>d.remove(); $('iwBuyX').onclick=close; d.addEventListener('click',e=>{ if(e.target===d)close(); });
     $('iwBuyGo').onclick=async()=>{ const [n]=PACKS[sel]; const b=$('iwBuyGo'); b.disabled=true; b.textContent='Buying…'; $('iwBuyErr').textContent='';
-      try{ const r=await buy(n); if(window.SND)SND.buy(); header({bank:r.bank,balance_p:r.balance_p}); close(); checkin(); if(onDone)onDone(r); }
+      try{ const r=await buy(n); if(typeof SND!=='undefined')SND.buy(); header({bank:r.bank,balance_p:r.balance_p}); close(); checkin(); if(onDone)onDone(r); }
       catch(e){ $('iwBuyErr').textContent=e.message; b.disabled=false; b.textContent='Buy'; paint(); } }; }
   return {TABLE,CAP,PACKS,gbp,TOKEN,state,mine,buy,reveal,revealAll,header,acceptTerms,profile,termsModal,checkin,buySheet};
 })();
