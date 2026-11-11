@@ -44,6 +44,11 @@ const C2=(()=>{
       catch(e){ $('iwBuyErr').textContent=e.message; b.disabled=false; b.textContent='Buy'; paint(); } }; }
   return {TABLE,CAP,PACKS,gbp,TOKEN,state,mine,buy,reveal,revealAll,header,acceptTerms,profile,termsModal,checkin,buySheet};
 })();
-document.addEventListener('DOMContentLoaded',()=>{C2.header(); C2.mine().then(m=>{C2.header(m); if(m&&m.terms_due)C2.termsModal();}).catch(()=>{});});
+function __sync(){ if(!C2.TOKEN)return; C2.mine().then(m=>{ C2.header(m); if(m&&m.terms_due)C2.termsModal(); document.dispatchEvent(new CustomEvent('iw:sync',{detail:m})); }).catch(()=>{}); }
+document.addEventListener('DOMContentLoaded',()=>{ C2.header(); __sync(); });
+window.addEventListener('pageshow',e=>{ if(e.persisted)__sync(); });
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden)__sync(); });
+window.addEventListener('focus',__sync);
+setInterval(()=>{ if(!document.hidden)__sync(); },30000);
 
 window.__site=fetch('/api/site',{cache:'no-store'}).then(r=>r.json()).then(d=>{ d=d||{}; if(d.live)document.querySelectorAll('.testmode').forEach(e=>e.remove()); document.documentElement.classList.toggle('games-on',!!d.games); return d; }).catch(()=>({}));

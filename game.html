@@ -195,6 +195,7 @@
   if(!C2.TOKEN){ $('empty').innerHTML='<p style="margin:0 0 10px;font-weight:800">Sign in to play.</p><a class="btn" href="signin.html">Sign in / create account</a>'; }
   let ldP=0, ldT=setInterval(()=>{ ldP=Math.min(88,ldP+(88-ldP)*0.12+1); const t=$('ldm').querySelector('.ldtxt'); if(t)t.style.setProperty('--p',ldP+'%'); },90);
   document.addEventListener('click',e=>{ const a=e.target.closest('a[href="index.html#buy"]'); if(!a||!C2.TOKEN)return; e.preventDefault(); const dm=document.getElementById('iwDone'); if(dm)dm.remove(); C2.buySheet(r=>{ bank=r.bank; paint(); const tt=$('toast'); tt.className='toast show win'; tt.textContent='Added '+r.n+' ticket'+(r.n===1?'':'s')+' to your hopper'; }); });
+  document.addEventListener('iw:sync',e=>{ const m=e.detail; if(m&&!busy&&m.bank!==bank){ bank=m.bank; paint(); } });
   function ready(){ clearInterval(ldT); const t=$('ldm').querySelector('.ldtxt'); if(t)t.style.setProperty('--p','100%'); setTimeout(()=>{ $('ldm').classList.add('out'); setTimeout(()=>{ $('ldm').style.display='none'; },350); $('ctrl').style.visibility=''; C2.checkin(); },380); }
   if(!C2.TOKEN)ready(); else C2.mine().then(m=>{ if(m){bank=m.bank; C2.header(m); paint();} ready(); }).catch(()=>{ ready(); });
 })();</script></body></html>
