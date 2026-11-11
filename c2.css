@@ -237,7 +237,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--lime)}
 details.panel summary{cursor:pointer;list-style:none}details.panel summary::-webkit-details-marker{display:none}details.panel summary::before{content:'\25B8  ';color:var(--soft)}details[open].panel summary::before{content:'\25BE  '}
 @media(max-width:430px){body.signed .brand .bt{display:none}body.signed .brand{gap:0}}
 .empty p{margin:0 0 14px}
-.modal{background:#15151E;border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:22px;max-width:420px;width:calc(100% - 32px);box-shadow:0 20px 60px rgba(0,0,0,.6)}.modal h2{font-family:Unbounded,sans-serif;font-weight:900;font-size:1.2rem;margin:0 0 8px}.modal p{color:var(--soft);line-height:1.5;margin:0 0 14px}.modal p b{color:var(--ink)}.modal a{color:var(--cyan)}.mrow{display:flex;gap:8px;flex-wrap:wrap}.mrow .btn{flex:1;padding:13px 14px;font-size:.9rem}.mrow a.btn{color:var(--ink)}
+.modal{background:#15151E;border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:22px;max-width:420px;width:calc(100% - 32px);box-shadow:0 20px 60px rgba(0,0,0,.6)}.modal h2{font-family:Unbounded,sans-serif;font-weight:900;font-size:1.2rem;margin:0 0 8px}.modal p{color:var(--soft);line-height:1.5;margin:0 0 14px}.modal p b{color:var(--ink)}.modal a{color:var(--cyan)}.mrow{display:flex;gap:8px;flex-wrap:wrap}.mrow .btn{flex:1;padding:13px 14px;font-size:.9rem}.mrow a.btn{color:var(--ink)}.mrow a.btn.lime{color:#0B0B10}
 
 .enddraw{display:grid;grid-template-columns:1.3fr 1fr;gap:10px;margin:14px auto 0;max-width:620px;background:linear-gradient(135deg,#1a1020,#141420 60%,#101a16);border:1px solid rgba(255,61,138,.45);border-radius:16px;padding:12px 14px;text-align:left;box-shadow:0 0 36px rgba(255,61,138,.12)}
 .enddraw .ed-k{display:block;font:800 .62rem Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--pink)}
@@ -298,3 +298,4 @@ a.gamesgrid{display:none}html.games-on a.gamesgrid{display:inline-block}
 #quick ~ .ctrl .btn.lime,body[data-g="quick"] .btn.lime{animation:glowp 1.6s ease-in-out infinite}@keyframes glowp{50%{box-shadow:0 0 34px rgba(198,255,61,.55)}}
 @media(max-width:420px){.qk-ladder{grid-template-columns:repeat(5,1fr)}.qk-ladder div{font-size:.6rem;padding:5px 2px}.qk-ladder div b{font-size:.62rem}.qk-tally b{font-size:1.05rem}}
 body[data-g="quick"] .counter{display:none}
+.modal.done{text-align:center}.done-k{font:800 .66rem Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan)}.done-big{font:900 2.6rem Unbounded,sans-serif;letter-spacing:-.03em;margin:6px 0 4px;color:var(--soft)}.done-big.win{color:var(--lime);text-shadow:0 0 30px rgba(198,255,61,.5)}.modal.done p{margin:0 0 16px}.modal.done .mrow{margin-top:4px}
