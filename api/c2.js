@@ -20,6 +20,7 @@ export default async function handler(req, res) {
     r = await rpc(e, 'c2_state', {});
   }
   const data = await r.json();
+  if (req.method !== 'POST' && data && data.closed) { try { await rpc(e, 'c2_settle', {}); const r2 = await rpc(e, 'c2_state', {}); if (r2.ok) { const d2 = await r2.json(); res.setHeader('Cache-Control', 'no-store'); return res.status(200).json(d2); } } catch {} }
   res.setHeader('Cache-Control', 'no-store');
   if (!r.ok) return res.status(400).json({ error: friendly(data && data.message) });
   return res.status(200).json(data === null ? { ok: true } : data);
