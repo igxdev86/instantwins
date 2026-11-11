@@ -1,6 +1,6 @@
 <!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin — InstantWins.co.uk</title><meta name="description" content="InstantWins admin console"><meta name="robots" content="noindex"><link rel="canonical" href="https://instantwins.co.uk/admin.html"><link rel="stylesheet" href="c2.css"></head><body>
 <header class="top"><div class="wrap"><a class="brand" href="index.html"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1A0A00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></i><span class="bt" data-t="INSTANTWINS">INSTANTWINS</span></a>
-<div class="hr"><div class="bank" id="bankBox"></div></div></div></header><main class="wrap"><div class="legal"><h1 style="margin-bottom:10px">Admin</h1><div class="err" id="gate"></div><div id="console" style="display:none"><nav class="atabs"><a href="#overview">Overview</a><a href="#revenue">Revenue</a><a href="#users">Users</a><a href="#payments">Payments</a><a href="#postal">Postal</a><a href="#support">Support</a><a href="#affiliates">Affiliates</a><a href="#announce">Broadcast</a><a href="#prizes">Prizes</a><a href="#competitions">Competitions</a><a href="#draws">Draws</a></nav>
+<div class="hr"><div class="bank" id="bankBox"></div></div></div></header><main class="wrap"><div class="legal"><h1 style="margin-bottom:10px">Admin</h1><div class="err" id="gate"></div><div id="console" style="display:none"><nav class="atabs"><a href="#overview">Overview</a><a href="#revenue">Revenue</a><a href="#users">Users</a><a href="#payments">Payments</a><a href="#postal">Postal</a><a href="#support">Support</a><a href="#affiliates">Affiliates</a><a href="#announce">Broadcast</a></nav>
 <div class="ap" id="ap-overview">
   <div class="panel"><h2>Million Round</h2><div id="milBox"><p class="lead">Loading…</p></div></div><p class="lead">Live highlights. Tap any tile for the full breakdown.</p>
   <div class="tiles" id="tiles">
@@ -11,9 +11,6 @@
     <a class="tile alert" href="#support"><span class="tile-k">Support</span><span class="tile-v" id="tSup">\u2014</span><span class="tile-s">open threads</span><span class="tile-go">Support &rarr;</span></a>
     <a class="tile gold" href="#affiliates"><span class="tile-k">Affiliates</span><span class="tile-v" id="tAff">\u2014</span><span class="tile-s" id="tAffS">active \u2014</span><span class="tile-go">Affiliates &rarr;</span></a>
     <a class="tile" href="#payments"><span class="tile-k">Payments</span><span class="tile-v">&pound;</span><span class="tile-s">deposits &amp; withdrawals</span><span class="tile-go">Open &rarr;</span></a>
-    <a class="tile" href="#prizes"><span class="tile-k">Prizes</span><span class="tile-v">Items</span><span class="tile-s">item rounds · claims · shipping</span><span class="tile-go">Manage &rarr;</span></a>
-    <a class="tile" href="#competitions"><span class="tile-k">Competitions</span><span class="tile-v">A·B·C</span><span class="tile-s">create · key postcards</span><span class="tile-go">Manage &rarr;</span></a>
-    <a class="tile" href="#draws"><span class="tile-k">Draw &amp; ticket switches</span><span class="tile-v">&#9211;</span><span class="tile-s">turn rows on / off</span><span class="tile-go">Manage &rarr;</span></a>
     <a class="tile" href="#postal"><span class="tile-k">Postal entries</span><span class="tile-v">&#9993;</span><span class="tile-s">key in postcards</span><span class="tile-go">Enter &rarr;</span></a>
     <a class="tile" href="#announce"><span class="tile-k">Broadcast</span><span class="tile-v">&#9993;</span><span class="tile-s">message all users</span><span class="tile-go">Announce &rarr;</span></a>
   </div>
@@ -45,29 +42,7 @@
     <div class="err" id="pmErr"></div></div>
   <div class="panel"><h2>Postal log</h2><p class="lead">Last 150 cards. &ldquo;Opened&rdquo; = the entrant has opened the ticket in a game; until then nobody, including us, has seen its prize.</p><div id="plRows"><span class="m">Loading…</span></div></div>
 
-  <details class="panel"><summary><h2 style="display:inline">Classic site (v1) postcards</h2> <span class="m">draws · instant win tickets · competitions</span></summary><div class="panel" style="margin-top:10px"><h2>Key in a postcard</h2>
-    <p class="lead">Enter the card exactly as written. The entry takes the next number in the named draw or round, in the same sequence as paid entries. Unnamed cards go into the next Five Minute Draw and every Five Minute Draw for the rest of today. Log every card, including rejected ones.</p>
-    <label>Account number (IW…) or email on the card</label><input id="poEmail" placeholder="IW1000042">
-    <label>Game number written on the card (e.g. F20-DDMMYY-HHMM)</label>
-    <div style="display:flex;gap:8px;align-items:center"><input id="poNo" placeholder="F20-DDMMYY-HHMM" style="text-transform:uppercase"><button class="btn" id="poNoGo" style="margin-top:0;white-space:nowrap">ENTER</button></div>
-    <p class="lead" style="margin:10px 0 0;font-size:.7rem">No game number on the card? Use the draw + time fields below, or leave the time blank for “next draw and every Five Minute £100 draw today”.</p>
-    <label>Draw named</label>
-    <select id="poKind" style="width:100%;border:1.5px solid var(--line);border-radius:7px;padding:12px;"><option value="five">loading…</option></select>
-    <label>Date and time named (leave blank if none)</label><input id="poAt" type="datetime-local">
-    <button class="btn" id="poGo">ENTER POSTCARD</button>
-    <div class="err" id="poErr"></div>
   </div>
-  <div class="panel"><h2>Instant Win postcard</h2>
-    <p class="lead">The card names the ticket exactly as the ticket page tells them to write it — e.g. <b>“Diamond Ticket £1”</b>. Pick that line below. The entry takes the next ticket in that ticket's open round, same sequence as paid, and any prize is credited at once.</p>
-    <label>Account number or email</label><input id="ptRef" placeholder="IW1234 or name@example.com">
-    <label>Ticket named on the card</label>
-    <select id="ptTag" style="width:100%;border:1.5px solid var(--line);border-radius:7px;padding:12px;"><option>loading…</option></select>
-    <button class="btn" id="ptGo">Enter postcard</button><div class="err" id="ptErr"></div>
-  </div>
-  <div class="panel"><h2>Competition postcard</h2><p class="lead">Cards with a competition code and answer are keyed in on the <a href="#competitions" style="color:var(--cyan)">Competitions admin</a> page.</p></div></details>
-
-</div>
-</div>
 <div class="ap" id="ap-support">
   <div class="panel"><h2>Support threads</h2><div id="threads"><span class="m">Loading…</span></div></div>
   <div class="panel" id="threadPanel" style="display:none"><h2 id="threadTitle">Thread</h2>
@@ -102,64 +77,11 @@
     <div class="err" id="anErr"></div>
   </div>
 </div>
-<div class="ap" id="ap-prizes">
-  <div class="panel"><h2>Item claims</h2><p class="lead">When the item ticket sells, the cash alternative is credited at once and a claim appears here as <b>cash</b>. If the winner swaps within 7 days it becomes <b>item requested</b> with their address: buy/ship the item, then mark <b>shipped</b>. Cancel refunds the cash alternative.</p><div id="claimsBox"><p class="lead">Loading…</p></div></div>
-  <div class="panel"><h2>Live item rounds</h2><div id="roundsBox"><p class="lead">Loading…</p></div></div>
-  <div class="panel"><h2>Create an item round</h2>
-    <div style="display:flex;gap:10px"><div style="flex:1"><label>Tag (2–4 letters, unique)</label><input id="iTag" placeholder="LVN"></div><div style="flex:2"><label>Round name</label><input id="iName" placeholder="Louis Vuitton Neverfull MM"></div></div>
-    <div style="display:flex;gap:10px"><div style="flex:2"><label>URL slug (/win-…)</label><input id="iSlug" placeholder="louis-vuitton-neverfull"></div><div style="flex:1"><label>Category</label><select id="iCat"><option>bag</option><option>phone</option><option>console</option><option>watch</option><option>trainers</option><option>headphones</option><option>laptop</option><option>tablet</option><option>tv</option><option>perfume</option><option>voucher</option><option>holiday</option><option>cash</option></select></div></div>
-    <label>Item name (as shown to the winner)</label><input id="iItem" placeholder="Louis Vuitton Neverfull MM">
-    <div style="display:flex;gap:10px"><div style="flex:1"><label>RRP (£)</label><input id="iRrp" type="number" step="0.01"></div><div style="flex:1"><label>Cash alternative (£)</label><input id="iAlt" type="number" step="0.01"></div><div style="flex:1"><label>Ticket price (£)</label><input id="iPrice" type="number" step="0.01"></div><div style="flex:1"><label>Tickets in round</label><input id="iCap" type="number"></div></div>
-    <label>Cash prizes (one per line: amount £ × count, e.g. 100 x 1). None may equal the cash alternative.</label><textarea id="iTiers" placeholder="100 x 1&#10;25 x 4&#10;10 x 10&#10;5 x 25"></textarea>
-    <label>Blurb (one line under the title)</label><input id="iBlurb">
-    <label>About (HTML allowed)</label><textarea id="iAbout" rows="5"></textarea>
-    <label>FAQ (one per line: question | answer)</label><textarea id="iFaq" rows="4"></textarea>
-    <p class="lead">Have the item in hand or on order before the round opens. Photograph it yourself; no brand imagery.</p>
-    <button class="btn" id="iGo">Create / update round</button><div class="err" id="iErr"></div>
-  </div>
-
-</div>
-<div class="ap" id="ap-competitions">
-  <div class="panel"><h2>Open and recent</h2>
-    <p class="lead">Each competition closes at the time shown and settles itself on the next page load after that. Postal entries: key them in below before the close.</p>
-    <div id="listBox"><p class="lead">Loading…</p></div>
-  </div>
-  <div class="panel"><h2>Key in a postcard</h2>
-    <p class="lead">Postcard must carry the competition code, the answer letter, the entrant's name and their IW account number (email also works). A wrong answer is still recorded but will not be in the draw.</p>
-    <label>Account number or email</label><input id="pRef" placeholder="IW1234 or name@example.com">
-    <div style="display:flex;gap:10px"><div style="flex:1"><label>Competition code</label><input id="pCode" placeholder="C001"></div><div style="flex:1"><label>Answer</label><select id="pAns"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></div></div>
-    <button class="btn" id="pGo">Enter postcard</button><div class="err" id="pErr"></div>
-  </div>
-  <div class="panel"><h2>Create a competition</h2>
-    <label>Title</label><input id="cTitle" placeholder="Win £1,000">
-    <label>Blurb (optional)</label><input id="cBlurb" placeholder="One winner takes £1,000 cash.">
-    <div style="display:flex;gap:10px"><div style="flex:1"><label>Prize (£)</label><input id="cPrize" type="number" step="0.01" placeholder="1000"></div><div style="flex:1"><label>Entry fee (£)</label><input id="cPrice" type="number" step="0.01" placeholder="2"></div><div style="flex:1"><label>Open for (days)</label><input id="cDays" type="number" value="7"></div></div>
-    <label>Question</label><input id="cQ" placeholder="Which country is Usain Bolt from?">
-    <label>Answers (one per line, 2–6)</label><textarea id="cOpts" placeholder="Jamaica&#10;Kenya&#10;USA"></textarea>
-    <div style="display:flex;gap:10px"><div style="flex:1"><label>Correct answer</label><select id="cCorrect"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option><option value="4">E</option><option value="5">F</option></select></div><div style="flex:1"><label>Max entries (optional)</label><input id="cCap" type="number" placeholder="leave blank"></div></div>
-    <p class="lead" style="margin-top:10px">Keep the question easy — it is a qualifying question, not a skill test. The free postal route is what makes this lawful, so never close one early or turn the postal route off.</p>
-    <button class="btn" id="cGo">Create</button><div class="err" id="cErr"></div>
-  </div>
-
-</div>
-<div class="ap" id="ap-draws">
-  <div class="panel"><h2>Turn draws on and off</h2>
-    <p class="lead">Switch a whole cadence row or a single draw. Off = no new draws are scheduled and no new entries are taken (online or postal). Draws that already hold entries still run and pay. Takes effect within a few seconds.</p>
-    <div id="kindsBox"><p class="lead">Loading…</p></div>
-    <div class="err" id="kErr2"></div>
-  </div>
-  <div class="panel"><h2>Instant Win tickets on and off</h2>
-    <p class="lead">Switch a whole tier (every entry level) or one level. Off = not listed and not purchasable; an open round keeps its sold tickets and resumes when switched back on.</p>
-    <div id="tixBox"><p class="lead">Loading…</p></div>
-  </div>
-
-</div>
-</div>
 </div></div></main><footer class="foot"><div class="wrap">
  <div class="fcols">
-  <div><div class="fh">Play</div><a href="index.html#buy">Buy tickets</a><a href="index.html#games">Games</a><a href="prizes.html">Prize table</a><a href="v1/card.html">Timed draws</a><a href="free.html">Free entry by post</a></div>
+  <div><div class="fh">Play</div><a href="index.html#buy">Buy tickets</a><a href="index.html#games">Games</a><a href="prizes.html">Prize table</a><a href="free.html">Free entry by post</a></div>
   <div><div class="fh">Help</div><a href="support.html">Support</a><a href="fair.html">Fairness &amp; verification</a><a href="account.html">My account</a><a href="complaints.html">Complaints</a><a href="affiliate.html">Affiliates</a></div>
-  <div><div class="fh">Legal</div><a href="terms.html">Terms &amp; conditions</a><a href="privacy.html">Privacy</a><a href="responsible-play.html">Responsible play</a><a href="v1/instantwins.html">Classic site</a></div>
+  <div><div class="fh">Legal</div><a href="terms.html">Terms &amp; conditions</a><a href="privacy.html">Privacy</a><a href="responsible-play.html">Responsible play</a></div>
  </div>
  <div class="fpay"><span class="pm">VISA</span><span class="pm">Mastercard</span><span class="pm">Apple Pay</span><span class="pm">Google Pay</span><span class="pm">Bank transfer</span><span class="age">18+</span></div>
  <p class="fsmall">InstantWins.co.uk is operated by IGX Ltd, registered in England and Wales, company no. 13057559. Registered office: 20-22 Wenlock Road, London N1 7GU. Every competition on this site is a prize competition with a free postal entry route under Schedule 2 of the Gambling Act 2005; every ticket&rsquo;s prize is allocated before the round opens and before you buy, and the games are reveals only. Open to residents of Great Britain aged 18 or over. Debit cards, Apple Pay and Google Pay accepted; no credit cards. Prizes are a matter of luck and most tickets win nothing &mdash; please play within your means. <span class="testmode"><b>Launch soon:</b> play credit only until payments open.</span></p>
@@ -216,8 +138,8 @@ async function loadStats(){
   $('stats').innerHTML=
     '<div class="row"><b>Revenue (real players \u2014 bots excluded)</b><span></span></div>'
    +'<div class="row"><span>Entry fees taken</span><span class="mono">'+fmtp(d.stakes_p||0)+'</span></div>'
-   +'<div class="row"><span class="m">\u2014 from Instant Win rounds</span><span class="mono">'+fmtp(d.game_stakes_p||0)+'</span></div>'
-   +'<div class="row"><span class="m">\u2014 from the Card draws</span><span class="mono">'+fmtp(d.card_stakes_p||0)+'</span></div>'
+   +'<div class="row"><span class="m">\u2014 from tickets</span><span class="mono">'+fmtp(d.game_stakes_p||0)+'</span></div>'
+   +'<div class="row"><span class="m">\u2014 from timed draws (legacy)</span><span class="mono">'+fmtp(d.card_stakes_p||0)+'</span></div>'
    +'<div class="row"><span>Prizes paid out</span><span class="mono" style="color:var(--bad)">\u2212'+fmtp(d.prizes_paid_p||0)+'</span></div>'
    +'<div class="row"><span><b>Gross income (GGR)</b></span><span class="mono '+(ggr>=0?'win':'')+'" style="font-weight:800'+(ggr<0?';color:var(--bad)':'')+'">'+(ggr<0?'\u2212':'')+fmtp(Math.abs(ggr))+'</span></div>'
    +'<div class="row"><span>Retained after prizes</span><span class="mono">'+pct.toFixed(1)+'%</span></div>'
@@ -261,21 +183,6 @@ async function load(){try{paint(await api('/api/admin',{action:'payments',token:
 
 })();
 (function(){
-
-$('poNoGo').onclick=async()=>{
-  try{const d=await api('/api/admin',{action:'postal_no',token:s.token,email:$('poEmail').value,game_no:$('poNo').value});
-    $('poErr').textContent=(d.moved?('The draw named ('+d.named+') was full or closed — entered into the next with room, '+d.game_no):'Entered into '+d.game_no)+' — number #'+(d.first&&d.first.entry_no)+'.'+(d.moved?' Email the entrant the new game number.':'');$('poErr').className='err ok';$('poNo').value='';}
-  catch(e){$('poErr').textContent=e.message;$('poErr').className='err';}
-};
-$('poGo').onclick=async()=>{
-  try{const at=$('poAt').value; const d=await api('/api/admin',{action:'postal',token:s.token,email:$('poEmail').value,kind:$('poKind').value,off_at:at?new Date(at).toISOString():null});
-    $('poErr').textContent='Entered into '+d.entered+' draw'+(d.entered===1?'':'s')+' — first number #'+(d.first&&d.first.entry_no)+'.';$('poErr').className='err ok';$('poEmail').value='';$('poAt').value='';}
-  catch(e){$('poErr').textContent=e.message;$('poErr').className='err';}
-};
-function pl(p){return p<100?p+'p':'£'+(p/100).toLocaleString();}
-async function loadTix(){try{const t=await (await fetch('/api/tickets',{cache:'no-store'})).json();$('ptTag').innerHTML=t.map(x=>'<option value="'+x.tag+'">'+esc(x.name+' '+pl(x.price_p))+(x.sold!=null?' — '+(x.cap-x.sold)+' left':'')+'</option>').join('');}catch(e){$('ptTag').innerHTML='<option>tickets not loaded</option>';}}
-$('ptGo').onclick=async()=>{$('ptErr').className='err';$('ptErr').textContent='';try{const d=await api('/api/admin',{action:'postal_ticket',token:s.token,ref:$('ptRef').value.trim(),tag:$('ptTag').value});$('ptErr').className='err ok';$('ptErr').textContent='Entered: '+d.ticket+' — ticket #'+d.entry_no+' of '+d.cap+(d.prize_p?' — WON '+fmtp(d.prize_p):' — no prize on that ticket');$('ptRef').value='';loadTix();}catch(e){$('ptErr').textContent=e.message;}};
-(async()=>{ if(await guard()){ loadTix(); try{const st=await (await fetch('/api/card',{cache:'no-store'})).json(); if(st.kinds){$('poKind').innerHTML=st.kinds.map(k=>'<option value="'+k.kind+'"'+(k.kind==='five'?' selected':'')+'>'+k.label+' ('+(k.price_p?'£'+(k.price_p/100):'free')+')</option>').join('');} }catch(e){} } })();
 
 function plPaint(d){ $('plA').textContent=d.today_accepted; $('plR').textContent=d.today_rejected; $('plT').textContent=d.total_accepted;
   $('plRows').innerHTML=(d.rows||[]).length?d.rows.map(r=>'<div class="row"><span><b>'+esc(r.name||r.ref)+'</b> <span class="m">'+esc(r.ref)+' · '+new Date(r.at).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+(r.note?' · '+esc(r.note):'')+'</span></span><span class="mono '+(r.status==='accepted'?'win':'')+'">'+(r.status==='accepted'?'#'+Number(r.entry_no).toLocaleString()+(r.revealed?' · opened':' · in bank'):'rejected · '+esc(r.reason||''))+'</span></div>').join(''):'<span class="m">No cards keyed yet.</span>'; }
@@ -357,63 +264,6 @@ $('anGo').onclick=async()=>{
   catch(e){$('anErr').textContent=e.message;$('anErr').className='err';}
 };
 (async()=>{ await guard(); })();
-
-})();
-(function(){
-
-const when=iso=>new Date(iso).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
-function paintClaims(cs){ $('claimsBox').innerHTML=cs.length?cs.map(c=>'<div class="krow"><span class="nm">'+esc(c.item_name)+' <span class="pill">'+c.status.replace('_',' ')+'</span><small>'+esc(c.name||'')+' · '+esc(c.email)+' · '+esc(c.acct_no||'')+' · won '+when(c.created_at)+' · '+c.game+' #'+c.entry_no+' · cash alt '+fmtp(c.cashalt_p)+(c.address?'<br>Deliver to: '+esc(c.address):'')+'</small></span>'
-  +(c.status==='item_requested'?'<button class="btn" style="width:auto;padding:8px 10px" data-set="shipped" data-id="'+c.id+'">Shipped</button><button class="btn" style="width:auto;padding:8px 10px;background:#333" data-set="cancelled" data-id="'+c.id+'">Cancel</button>':'')+'</div>').join(''):'<p class="lead">No claims yet.</p>';
-  document.querySelectorAll('[data-set]').forEach(b=>b.onclick=async()=>{try{paintClaims(await api('/api/admin',{action:'itemclaimset',token:s.token,id:b.dataset.id,status:b.dataset.set}));}catch(e){$('gate').textContent=e.message;}}); }
-async function reload(){ try{paintClaims(await api('/api/admin',{action:'itemclaims',token:s.token}));}catch(e){$('claimsBox').innerHTML='<p class="err">'+esc(e.message)+'</p>';}
-  try{const t=await (await fetch('/api/tickets',{cache:'no-store'})).json(); const its=(t||[]).filter(x=>x.item_name);
-    $('roundsBox').innerHTML=its.length?its.map(x=>'<div class="krow"><span class="nm">'+esc(x.item_name)+' <small>'+x.tag+' · /win-'+x.slug+' · '+fmtp(x.price_p)+' · '+(x.sold||0)+' of '+x.cap+' sold · item '+(x.item_left>0?'still in':'WON')+' · cash alt '+fmtp(x.item_cashalt_p)+'</small></span><a href="win-'+x.slug+'" style="color:var(--cyan)">view</a></div>').join(''):'<p class="lead">No item rounds live.</p>';}catch(e){} }
-$('iGo').onclick=async()=>{$('iErr').className='err';$('iErr').textContent='';try{
-  const tiers=$('iTiers').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const m=l.match(/^£?\s*([\d.]+)\s*[x×]\s*(\d+)/i); if(!m)throw new Error('bad prize line: '+l); return [Math.round(parseFloat(m[1])*100),parseInt(m[2],10)];});
-  const faq=$('iFaq').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const i=l.indexOf('|'); if(i<0)throw new Error('FAQ line needs a |'); return [l.slice(0,i).trim(),l.slice(i+1).trim()];});
-  const d=await api('/api/admin',{action:'itemcreate',token:s.token,tag:$('iTag').value.trim(),name:$('iName').value.trim(),slug:$('iSlug').value.trim().toLowerCase(),category:$('iCat').value,item_name:$('iItem').value.trim(),
-    rrp_p:Math.round(parseFloat($('iRrp').value)*100),cashalt_p:Math.round(parseFloat($('iAlt').value)*100),price_p:Math.round(parseFloat($('iPrice').value)*100),cap:+$('iCap').value,tiers:tiers,blurb:$('iBlurb').value.trim(),about:$('iAbout').value.trim(),faq:faq});
-  $('iErr').className='err ok';$('iErr').textContent='Live: /win-'+d.slug;reload();}catch(e){$('iErr').textContent=e.message;}};
-(async()=>{ if(await guard()) reload(); })();
-
-})();
-(function(){
-
-const L='ABCDEF';
-const when=iso=>new Date(iso).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
-function paint(cs){
-  $('listBox').innerHTML=cs.length?cs.map(c=>'<div class="krow"><span class="nm">'+esc(c.code)+' · '+esc(c.title)+' <span class="pill">'+c.status+'</span><small>'+esc(c.question)+' → '+L[c.correct]+' '+esc(c.options[c.correct])+'<br>'+fmtp(c.price_p)+' entry · '+c.sold+' entries ('+c.postal+' postal) · closes '+when(c.closes_at)+(c.status==='settled'?' · '+(c.winner_entry?'winner #'+c.winner_entry+' of '+c.correct_count+' correct':'no correct entries'):'')+'</small></span></div>').join(''):'<p class="lead">None yet.</p>';
-}
-async function reload(){try{paint(await api('/api/admin',{action:'comps',token:s.token}));}catch(e){$('listBox').innerHTML='<p class="err">'+esc(e.message)+'</p>';}}
-$('pGo').onclick=async()=>{$('pErr').textContent='';$('pErr').className='err';try{const d=await api('/api/admin',{action:'comppostal',token:s.token,ref:$('pRef').value.trim(),code:$('pCode').value.trim(),answer:+$('pAns').value});$('pErr').className='err ok';$('pErr').textContent='Entered as #'+d.entry_no+' in '+d.code;$('pRef').value='';reload();}catch(e){$('pErr').textContent=e.message;}};
-$('cGo').onclick=async()=>{$('cErr').textContent='';$('cErr').className='err';try{const opts=$('cOpts').value.split('\n').map(x=>x.trim()).filter(Boolean);
-  const d=await api('/api/admin',{action:'compcreate',token:s.token,title:$('cTitle').value.trim(),blurb:$('cBlurb').value.trim(),prize_p:Math.round(parseFloat($('cPrize').value)*100),price_p:Math.round(parseFloat($('cPrice').value||0)*100),question:$('cQ').value.trim(),options:opts,correct:+$('cCorrect').value,days:+$('cDays').value||7,cap:$('cCap').value?+$('cCap').value:null});
-  $('cErr').className='err ok';$('cErr').textContent='Created '+d.code;reload();}catch(e){$('cErr').textContent=e.message;}};
-(async()=>{ if(await guard()) reload(); })();
-
-})();
-(function(){
-
-const GN={30:'30 Second Draws',60:'60 Second Draws',300:'Five Minute Draws',900:'Quarter Hour Draws',3600:'Hourly Draws',86400:'Daily Draws',600:'Free Draw'};
-function money(p){return p===0?'free':p<100?p+'p':'£'+(p/100).toLocaleString();}
-function paint(ks){
-  const steps=[...new Set(ks.map(k=>k.step_s))];
-  $('kindsBox').innerHTML=steps.map(st=>{const rows=ks.filter(k=>k.step_s===st);const allOn=rows.every(k=>k.active);
-    return '<div class="krow head"><span class="nm">'+(GN[st]||st+'s')+'<small>'+rows.length+' draws · whole row</small></span><button class="sw'+(allOn?' on':'')+'" data-step="'+st+'" data-on="'+(!allOn)+'"></button></div>'
-      +rows.map(k=>'<div class="krow"><span class="nm">'+k.label+'<small>'+k.code+' · '+money(k.price_p)+' → '+money(k.prize_p)+(k.cap?' · '+k.cap+' numbers':'')+' · '+k.open_entries+' entries in open draws'+(k.price_p>0&&k.cap?' · <a href="#" class="rl" data-kind="'+k.kind+'" data-on="'+(!k.rollover)+'" style="color:'+(k.rollover?'var(--gold)':'var(--soft)')+'">'+(k.rollover?'ROLLOVER ON':'rollover off')+'</a>':'')+'</small></span><button class="sw'+(k.active?' on':'')+'" data-kind="'+k.kind+'" data-on="'+(!k.active)+'"></button></div>').join('');}).join('');
-  document.querySelectorAll('.rl').forEach(a=>a.onclick=async(ev)=>{ev.preventDefault();try{await api('/api/admin',{action:'kindroll',token:s.token,kind:a.dataset.kind,on:a.dataset.on==='true'});paint(await api('/api/admin',{action:'kinds',token:s.token}));}catch(e){$('kErr2').textContent=e.message;}});
-  document.querySelectorAll('#kindsBox .sw').forEach(b=>b.onclick=async()=>{try{const d=await api('/api/admin',{action:'kindset',token:s.token,kind:b.dataset.kind||null,step:b.dataset.step||null,active:b.dataset.on==='true'});paint(d);}catch(e){$('kErr2').textContent=e.message;}});
-}
-
-function money2(p){return p<100?p+'p':'£'+(p/100).toLocaleString();}
-function paintTix(ts){
-  const tiers=[...new Set(ts.map(t=>t.tier))];
-  $('tixBox').innerHTML=tiers.map(tier=>{const rows=ts.filter(t=>t.tier===tier).sort((a,b)=>a.price_p-b.price_p);const allOn=rows.every(t=>t.active);
-    return '<div class="krow head"><span class="nm">'+tier+' Ticket<small>'+rows.length+' prices · whole tier</small></span><button class="sw'+(allOn?' on':'')+'" data-tier="'+tier+'" data-on="'+(!allOn)+'"></button></div>'
-      +rows.map(t=>'<div class="krow"><span class="nm">'+money2(t.price_p)+' · '+t.cap.toLocaleString()+' tickets<small>'+t.tag+' · '+(t.sold!=null?t.sold+' sold in open round':'no open round')+'</small></span><button class="sw'+(t.active?' on':'')+'" data-tag="'+t.tag+'" data-on="'+(!t.active)+'"></button></div>').join('');}).join('');
-  document.querySelectorAll('#tixBox .sw').forEach(b=>b.onclick=async()=>{try{const d=await api('/api/admin',{action:'ticketset',token:s.token,tag:b.dataset.tag||null,tier:b.dataset.tier||null,active:b.dataset.on==='true'});paintTix(d);}catch(e){$('kErr2').textContent=e.message;}});
-}
-(async()=>{ if(await guard()){ try{paint(await api('/api/admin',{action:'kinds',token:s.token}));}catch(e){$('kErr2').textContent=e.message;} try{paintTix(await api('/api/admin',{action:'tickets',token:s.token}));}catch(e){$('kErr2').textContent=e.message;} } })();
 
 })();
 showTab();

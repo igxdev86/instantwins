@@ -37,159 +37,154 @@
  "redirects": [
   {
    "source": "/balloonburst-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/cashgrab-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/dartdash-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/diamonddig-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/goldengoal-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/luckydice-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/luckyladder-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/mysterybox-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/packrip-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/pennypusher-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/photofinish-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/pinataparty-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/plinko-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/reelrush-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/rocketcash-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/rouletteroyale-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/safecracker-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/scratchgold-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/theclaw-instantwins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/spin.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/thespins.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/quizzes.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/quiz-addup.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/quiz-board.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/instantwins-demo-all-in-one.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/plinko-msnbc.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/puzzles.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/pickapiece.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/rebus-rush.html",
-   "destination": "/v1/instantwins.html",
+   "destination": "/",
    "permanent": true
   },
   {
    "source": "/:page((?!(?:index|game|prizes|signin|account|free|fair|terms|privacy|responsible-play|complaints|admin|affiliate|support)\\.html)[a-z0-9-]+).html",
-   "destination": "/v1/:page.html",
+   "destination": "/",
    "permanent": false
   }
  ],
- "rewrites": [
-  {
-   "source": "/win-:slug",
-   "destination": "/v1/prize.html"
-  }
- ]
+ "rewrites": []
 }

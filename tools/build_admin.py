@@ -10,7 +10,7 @@ MBAR=re.search(r'<nav class="mbar">.*?</nav>',open('index.html').read(),re.S).gr
 
 # ---------- ADMIN ----------
 PAGE='admin.html'
-TABS=[('overview','Overview','admin.html'),('revenue','Revenue','admin-revenue.html'),('users','Users','admin-users.html'),('payments','Payments','admin-payments.html'),('postal','Postal','admin-postal.html'),('support','Support','admin-support.html'),('affiliates','Affiliates','admin-affiliates.html'),('announce','Broadcast','admin-announce.html'),('prizes','Prizes','admin-prizes.html'),('competitions','Competitions','admin-competitions.html'),('draws','Draws','admin-draws.html')]
+TABS=[('overview','Overview','admin.html'),('revenue','Revenue','admin-revenue.html'),('users','Users','admin-users.html'),('payments','Payments','admin-payments.html'),('postal','Postal','admin-postal.html'),('support','Support','admin-support.html'),('affiliates','Affiliates','admin-affiliates.html'),('announce','Broadcast','admin-announce.html')]
 PRE="""const $=id=>document.getElementById(id);
 function sess(){try{return JSON.parse(localStorage.getItem('iw_session'))}catch(e){return null}}
 async function api(path,body){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();if(!r.ok||d.error)throw new Error(d.error||'failed');return d;}
@@ -37,11 +37,12 @@ for key,label,src in TABS:
     if key=='draws':
         body=body.replace('id="kErr"','id="kErr2"'); code=code.replace("$('kErr')","$('kErr2')").replace("document.querySelectorAll('.sw')","document.querySelectorAll('#kindsBox .sw')")
     if key=='postal':
-        body=body.replace('<div class="panel"><h2>Key in a postcard</h2>','<details class="panel"><summary><h2 style="display:inline">Classic site (v1) postcards</h2> <span class="m">draws · instant win tickets · competitions</span></summary><div class="panel" style="margin-top:10px"><h2>Key in a postcard</h2>')
+        body=re.sub(r'<div class="panel"><h2>Key in a postcard</h2>.*','',body,flags=re.S)+'</div>'; code=''
         body=body.replace('<div class="panel"><h2>Competition postcard</h2><p class="lead">Cards with a competition code and answer are keyed in on the <a href="#competitions" style="color:var(--cyan)">Competitions admin</a> page.</p></div>','<div class="panel"><h2>Competition postcard</h2><p class="lead">Cards with a competition code and answer are keyed in on the <a href="#competitions" style="color:var(--cyan)">Competitions admin</a> page.</p></div></details>')
         body=body.replace('<div class="ap" id="ap-postal">',open('tools/postal_panel.html').read())
         code+=open('tools/postal_panel.js').read()
     if key=='overview':
+        body=re.sub(r'<a class="tile" href="#(prizes|competitions|draws)">.*?</a>\s*','',body,flags=re.S)
         code+="""
 async function mil(){ try{ const st=await (await fetch('/api/c2',{cache:'no-store'})).json(); const d=await api('/api/admin',{action:'milstats',token:s.token});
   $('milBox').innerHTML='<div class="row"><span>Tickets sold</span><span class="mono">'+(st.sold||0).toLocaleString()+' / '+(st.cap||0).toLocaleString()+'</span></div>'
