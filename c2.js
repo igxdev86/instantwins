@@ -32,4 +32,4 @@ const C2=(()=>{
 })();
 document.addEventListener('DOMContentLoaded',()=>{C2.header(); C2.mine().then(m=>{C2.header(m); if(m&&m.terms_due)C2.termsModal();}).catch(()=>{});});
 
-fetch('/api/site',{cache:'no-store'}).then(r=>r.json()).then(d=>{if(d&&d.live)document.querySelectorAll('.testmode').forEach(e=>e.remove());}).catch(()=>{});
+window.__site=fetch('/api/site',{cache:'no-store'}).then(r=>r.json()).then(d=>{ d=d||{}; if(d.live)document.querySelectorAll('.testmode').forEach(e=>e.remove()); document.documentElement.classList.toggle('games-on',!!d.games); return d; }).catch(()=>({}));
