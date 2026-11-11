@@ -139,3 +139,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--lime)}
 @keyframes ldfill{0%{width:0}70%{width:100%}100%{width:100%}}
 @keyframes ldpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 @media(max-width:420px){.ldlogo{font-size:1.3rem;gap:10px}.ldlogo i{width:44px;height:44px}}
+
+.brand .bt{position:relative;color:#fff}
+.brand .bt::before{content:attr(data-t);position:absolute;left:0;top:0;white-space:nowrap;overflow:hidden;color:transparent;background:linear-gradient(90deg,var(--lime),var(--cyan));-webkit-background-clip:text;background-clip:text;animation:brandfill 6s ease-in-out infinite}
+@keyframes brandfill{0%{width:0;opacity:0}10%{opacity:1}45%{width:100%;opacity:1}75%{width:100%;opacity:0}100%{width:0;opacity:0}}
+@media(prefers-reduced-motion:reduce){.brand .bt::before,.ldtxt::before,.ldlogo i{animation:none}}
