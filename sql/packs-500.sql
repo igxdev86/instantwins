@@ -1,4 +1,4 @@
--- packs-500.sql — packs up to 500 tickets.
+-- packs-500.sql (v2) — packs up to 500 tickets, discounts capped so every pack clears the 51p average payout by a wide margin.
 create or replace function c2_pack_price(n int) returns int language sql immutable as $$
-  select case n when 1 then 100 when 5 then 450 when 10 then 800 when 25 then 1800 when 50 then 3200 when 100 then 6000 when 250 then 14500 when 500 then 28000 else null end $$;
+  select case n when 1 then 100 when 5 then 475 when 10 then 900 when 25 then 2100 when 50 then 4000 when 100 then 7500 when 250 then 18000 when 500 then 35000 else null end $$;
 notify pgrst, 'reload schema';
