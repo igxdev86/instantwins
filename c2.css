@@ -299,3 +299,4 @@ a.gamesgrid{display:none}html.games-on a.gamesgrid{display:inline-block}
 @media(max-width:420px){.qk-ladder{grid-template-columns:repeat(5,1fr)}.qk-ladder div{font-size:.6rem;padding:5px 2px}.qk-ladder div b{font-size:.62rem}.qk-tally b{font-size:1.05rem}}
 body[data-g="quick"] .counter{display:none}
 .modal.done{text-align:center}.done-k{font:800 .66rem Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan)}.done-big{font:900 2.6rem Unbounded,sans-serif;letter-spacing:-.03em;margin:6px 0 4px;color:var(--soft)}.done-big.win{color:var(--lime);text-shadow:0 0 30px rgba(198,255,61,.5)}.modal.done p{margin:0 0 16px}.modal.done .mrow{margin-top:4px}
+body[data-g] main{padding-bottom:120px}
