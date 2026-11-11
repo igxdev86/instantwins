@@ -176,8 +176,8 @@ async function loadUsers(){
 }
 (async()=>{ if(await guard()){loadUsers();} })();
 
-$('crGo').onclick=async()=>{ $('crErr').className='err'; $('crErr').textContent=''; try{ const d=await api('/api/admin',{action:'credit',token:s.token,ref:$('crRef').value.trim(),amount_p:Math.round(parseFloat($('crAmt').value||'0')*100),note:$('crNote').value.trim()}); $('crErr').className='err ok'; $('crErr').textContent=d.name+' now has '+fmtp(d.balance_p); load(); }catch(e){ $('crErr').textContent=e.message; } };
-$('cr100').onclick=async()=>{ $('crErr').className='err'; $('crErr').textContent=''; try{ const me=await api('/api/auth',{action:'me',token:s.token}); const d=await api('/api/admin',{action:'credit',token:s.token,ref:me.email||me.acct_no||'',amount_p:10000,note:'testing'}); $('crErr').className='err ok'; $('crErr').textContent='You now have '+fmtp(d.balance_p); load(); }catch(e){ $('crErr').textContent=e.message; } };
+$('crGo').onclick=async()=>{ $('crErr').className='err'; $('crErr').textContent=''; try{ const d=await api('/api/admin',{action:'credit',token:s.token,ref:$('crRef').value.trim(),amount_p:Math.round(parseFloat($('crAmt').value||'0')*100),note:$('crNote').value.trim()}); $('crErr').className='err ok'; $('crErr').textContent=d.name+' now has '+fmtp(d.balance_p); loadUsers(); }catch(e){ $('crErr').textContent=e.message; } };
+$('cr100').onclick=async()=>{ $('crErr').className='err'; $('crErr').textContent=''; try{ const me=await api('/api/auth',{action:'me',token:s.token}); const d=await api('/api/admin',{action:'credit',token:s.token,ref:me.email||me.acct_no||'',amount_p:10000,note:'testing'}); $('crErr').className='err ok'; $('crErr').textContent='You now have '+fmtp(d.balance_p); loadUsers(); }catch(e){ $('crErr').textContent=e.message; } };
 document.getElementById('users').addEventListener('click',e=>{ const row=e.target.closest('.row'); if(!row)return; const m=row.textContent.match(/[\w.+-]+@[\w.-]+/); if(m){ $('crRef').value=m[0]; $('crRef').scrollIntoView({behavior:'smooth',block:'center'}); } });
 })();
 (function(){
