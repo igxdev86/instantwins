@@ -252,3 +252,4 @@ details.panel summary{cursor:pointer;list-style:none}details.panel summary::-web
 .learn .shine{position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%);transform:translateX(-120%);animation:shine 5s ease-in-out infinite}
 .learn-p{max-width:520px;margin:18px auto 4px;color:var(--soft);font-size:.86rem;line-height:1.55}
 @media(max-width:420px){.stats{gap:6px}.stats div{padding:12px 4px 10px}.stats i{font-size:.6rem;letter-spacing:.06em}}
+.ed-terms{grid-column:1/-1;font-size:.74rem;color:var(--soft);text-decoration:none;border-top:1px solid rgba(255,255,255,.08);padding-top:8px;margin-top:2px}.ed-terms:hover{color:var(--ink)}
