@@ -41,6 +41,16 @@ for key,label,src in TABS:
         body=body.replace('<div class="panel"><h2>Competition postcard</h2><p class="lead">Cards with a competition code and answer are keyed in on the <a href="#competitions" style="color:var(--cyan)">Competitions admin</a> page.</p></div>','<div class="panel"><h2>Competition postcard</h2><p class="lead">Cards with a competition code and answer are keyed in on the <a href="#competitions" style="color:var(--cyan)">Competitions admin</a> page.</p></div></details>')
         body=body.replace('<div class="ap" id="ap-postal">',open('tools/postal_panel.html').read())
         code+=open('tools/postal_panel.js').read()
+    if key=='users':
+        body=body.replace('<div class="panel"><h2>Users</h2>','''<div class="panel"><h2>Credit a player</h2><p class="lead">Play credit for testing, or a refund once live. Negative amounts debit.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end"><div style="flex:2;min-width:160px"><label>Account no. / email</label><input id="crRef" placeholder="IW1234 or name@…" autocomplete="off" style="margin:0"></div><div style="flex:1;min-width:90px"><label>Amount £</label><input id="crAmt" type="number" step="0.01" value="100" style="margin:0"></div></div>
+    <label>Note</label><input id="crNote" placeholder="testing" style="margin:0">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn lime" id="crGo" style="margin:0">Credit</button><button class="btn ghost" id="cr100" style="margin:0">+£100 to me</button></div><div class="err" id="crErr"></div></div>
+  <div class="panel"><h2>Users</h2><p class="lead">Tap a user to fill the credit box.</p>''')
+        code+='''
+$('crGo').onclick=async()=>{ $('crErr').className='err'; $('crErr').textContent=''; try{ const d=await api('/api/admin',{action:'credit',token:s.token,ref:$('crRef').value.trim(),amount_p:Math.round(parseFloat($('crAmt').value||'0')*100),note:$('crNote').value.trim()}); $('crErr').className='err ok'; $('crErr').textContent=d.name+' now has '+fmtp(d.balance_p); load(); }catch(e){ $('crErr').textContent=e.message; } };
+$('cr100').onclick=async()=>{ $('crErr').className='err'; $('crErr').textContent=''; try{ const me=await api('/api/auth',{action:'me',token:s.token}); const d=await api('/api/admin',{action:'credit',token:s.token,ref:me.email||me.acct_no||'',amount_p:10000,note:'testing'}); $('crErr').className='err ok'; $('crErr').textContent='You now have '+fmtp(d.balance_p); load(); }catch(e){ $('crErr').textContent=e.message; } };
+document.getElementById('users').addEventListener('click',e=>{ const row=e.target.closest('.row'); if(!row)return; const m=row.textContent.match(/[\w.+-]+@[\w.-]+/); if(m){ $('crRef').value=m[0]; $('crRef').scrollIntoView({behavior:'smooth',block:'center'}); } });'''
     if key=='overview':
         body=re.sub(r'<a class="tile" href="#(prizes|competitions|draws)">.*?</a>\s*','',body,flags=re.S)
         code+="""
