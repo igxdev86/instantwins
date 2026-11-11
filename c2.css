@@ -203,3 +203,4 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--lime)}
 .tk{flex:none;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:.78rem;color:var(--soft);white-space:nowrap}.tk b{color:var(--ink)}.tk b.g{color:var(--lime)}
 @media(prefers-reduced-motion:reduce){.livedot i,.ptable.live .pt .shine,.ptable.live .pt.bump{animation:none}}
 .ptable.live .pt:last-child:nth-child(even){grid-column:1/-1}@media(min-width:700px){.ptable.live .pt:last-child:nth-child(even){grid-column:auto}}.roundbar i{font-size:.58rem;letter-spacing:.04em}.roundbar b{font-size:.92rem}
+.sndbtn.nomusic[data-m="all"]{color:var(--soft);border-color:var(--line)}
