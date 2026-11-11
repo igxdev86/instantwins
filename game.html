@@ -53,7 +53,7 @@
     const emp=!(C2.TOKEN&&(s.bank.length||session.length)); $('empty').style.display=emp?'':'none'; $('ctrl').style.display=emp?'none':'';
     $('grid').innerHTML=session.slice().reverse().map(t=>'<div class="coin'+(t.prize>=1000?' big':t.prize?' w':'')+'">'+(t.prize?gbp(t.prize):'—')+'<small>#'+t.no.toLocaleString()+'</small></div>').join(''); C2.header(); }
   // ---- Coin Drop (board drawn once; path lands on the slot for the prize) ----
-  const SLOTS=[0,100,500,0,1000,25000,500000,5000,200,0,100000,0]; const BIG=500000; // slot values in pence, centre = big
+  const SLOTS=[0,100,500,0,1000,25000,500000,5000,200,50,100000,0]; const BIG=500000; // slot values in pence, centre = big
   function dropInit(){ const pegs=$('pegs'); let s=''; for(let r=0;r<9;r++){const n=4+r, y=70+r*30, w=60+r*22; for(let i=0;i<n;i++){s+='<circle cx="'+(160-w/2+i*(w/(n-1)))+'" cy="'+y+'" r="3"/>';}} pegs.innerHTML=s;
     $('slots').innerHTML=SLOTS.map((v,i)=>{const x=26+i*(268/SLOTS.length); return '<rect x="'+(x+2)+'" y="320" width="'+(268/SLOTS.length-4)+'" height="36" rx="4" fill="'+(v?v>=10000?'#FF3D8A':v>=1000?'#FF6A1A':'#2A2A38':'#15151D')+'" stroke="#3DF2FF" stroke-opacity=".4"/><text x="'+(x+268/SLOTS.length/2)+'" y="343" text-anchor="middle" font-family="Inter,sans-serif" font-weight="800" font-size="7.5" fill="#fff">'+(v>=BIG?'£5K+':v?gbp(v):'NO')+'</text>';}).join(''); }
   function slotFor(prize){ // honest: a prize lands only in a slot of that value; no prize lands in a NO slot. Values not on the board use the nearest lower slot label? -> show exact prize text anyway
@@ -99,7 +99,7 @@
       setTimeout(res,all?300:900); };
     tick(); }); }
   // ---- Prize Wheel: 12 pockets; a prize lands only on its value pocket, a blank only on a blank pocket.
-  const POCK=[0,100,0,500,0,1000,0,5000,0,200,0,25000]; const POCKBIG=25000;
+  const POCK=[0,100,0,500,0,1000,0,5000,50,200,0,25000]; const POCKBIG=25000;
   function wheelInit(){ const g=$('wheel'); const n=POCK.length, R=140; let s=''; for(let i=0;i<n;i++){const a0=(i/n)*2*Math.PI-Math.PI/2, a1=((i+1)/n)*2*Math.PI-Math.PI/2; const x0=150+R*Math.cos(a0),y0=150+R*Math.sin(a0),x1=150+R*Math.cos(a1),y1=150+R*Math.sin(a1); const v=POCK[i]; const col=v>=POCKBIG?'#FF3D8A':v>=1000?'#FF6A1A':v?'#FFC53D':'#2A2A38';
       s+='<path d="M150 150L'+x0+' '+y0+'A'+R+' '+R+' 0 0 1 '+x1+' '+y1+'Z" fill="'+col+'" stroke="#0B0B10" stroke-width="2"/>'; const am=(a0+a1)/2; s+='<text x="'+(150+R*0.68*Math.cos(am))+'" y="'+(150+R*0.68*Math.sin(am)+4)+'" text-anchor="middle" font-family="Inter,sans-serif" font-weight="800" font-size="11" fill="'+(v?'#0B0B10':'#A7A7B8')+'" transform="rotate('+(am*180/Math.PI+90)+' '+(150+R*0.68*Math.cos(am))+' '+(150+R*0.68*Math.sin(am))+')">'+(v>=POCKBIG?'£250+':v?gbp(v):'—')+'</text>'; }
     g.innerHTML=s; g.style.transition='none'; g.style.transform='rotate(0deg)'; }
@@ -109,7 +109,7 @@
     setTimeout(()=>{ prize?SND.win(prize):SND.none(); $('wheelTxt').textContent=prize?gbp(prize)+'!':'No prize'; setTimeout(res,all?300:800); },(all?1.6:4.2)*1000+100); }); }
 
   // ---- Lucky Reels: a prize = three of the symbol for that value; no prize = three different symbols (never two of a kind) ----
-  const SYM=[['💎',10000000],['👑',2500000],['🏆',500000],['💰',100000],['🔔',25000],['⭐',5000],['🍒',1000],['🍋',500],['🍀',200],['7️⃣',100],['🍇',0],['🍊',0],['🔔',0]];
+  const SYM=[['💎',10000000],['👑',2500000],['🏆',500000],['💰',100000],['🔔',25000],['⭐',5000],['🍒',1000],['🍋',500],['🍀',200],['7️⃣',100],['🍬',50],['🍇',0],['🍊',0]];
   const SYMS=SYM.map(s=>s[0]); const uniq=[...new Set(SYMS)];
   function reelStrip(final){ const items=[]; for(let i=0;i<14;i++)items.push(uniq[Math.floor(Math.random()*uniq.length)]); items.push(final); return items; }
   function reelsInit(){ [0,1,2].forEach(i=>{ const st=$('r'+i).querySelector('.strip'); st.style.transition='none'; st.style.transform='translateY(0)'; st.innerHTML='<span>'+uniq[(i*3)%uniq.length]+'</span>'; }); }
