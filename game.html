@@ -154,7 +154,7 @@
   // ---- Reveal: no theatre. Each ticket is a ball dropped from the hopper into the tray — lime with the value for a prize, grey for a blank ----
   let turbo=false; try{ turbo=localStorage.getItem('iw_turbo')==='1'; }catch(e){}
   const TIERN=Object.fromEntries(C2.TABLE);
-  let qkLeft=null; function qkPaint(){ const n=qkLeft!=null?qkLeft:bank; $('qkHopN').textContent=n.toLocaleString(); const hop=$('qkHop'); const want=Math.min(40,n); while(hop.children.length>want)hop.lastChild.remove(); while(hop.children.length<want){ const i=document.createElement('i'); hop.appendChild(i); }
+  let qkLeft=null; function qkPaint(){ const n=qkLeft!=null?qkLeft:bank; $('qkHopN').textContent=n.toLocaleString(); const hop=$('qkHop'); const want=Math.min(40,n); while(hop.children.length>want)hop.lastChild.remove(); while(hop.children.length<want){ const i=document.createElement('i'); i.style.setProperty('--d',(Math.random()*-0.6).toFixed(2)+'s'); i.style.setProperty('--x',(Math.random()*10-5).toFixed(1)+'px'); i.style.setProperty('--y',(Math.random()*-14-4).toFixed(1)+'px'); hop.appendChild(i); }
     const won=session.reduce((a,t)=>a+t.prize,0); $('qkWon').textContent=gbp(won); $('qkWins').textContent=session.filter(t=>t.prize).length; $('qkTurbo').classList.toggle('on',turbo);
     const hits={}; session.forEach(t=>{ if(t.prize)hits[t.prize]=(hits[t.prize]||0)+1; });
     $('qkLadder').innerHTML=C2.TABLE.map(([p])=>'<div class="'+(hits[p]?'hit':'')+'"><b>'+gbp(p)+'</b><i>'+(hits[p]?'×'+hits[p]:'')+'</i></div>').join(''); }
@@ -168,8 +168,8 @@
     if(t.prize){ const r=b.getBoundingClientRect(), s=fx.getBoundingClientRect(); burst(r.left-s.left+r.width/2, r.top-s.top+r.height/2, t.prize>=100000?160:t.prize>=1000?90:t.prize>=500?30:12, t.prize>=100000?['#FF3D8A','#FFC53D','#fff']:t.prize>=1000?['#FFC53D','#FF6A1A','#fff']:['#C6FF3D','#3DF2FF']); }
     if(t.prize>=1000){ const big=$('qkBig'); big.textContent=gbp(t.prize)+'!'; big.className='qk-big show'+(t.prize>=100000?' mega':''); document.getElementById('stage').classList.add('shake'); setTimeout(()=>document.getElementById('stage').classList.remove('shake'),500); setTimeout(()=>big.className='qk-big',fast?600:1200); } }
   // disguise the round trip: a ball leaves the hopper and tumbles down the chute while the server opens the ticket
-  let fallEl=null; function qkFallStart(){ if(fallEl)return; const hop=$('qkHop'); if(hop.lastChild)hop.lastChild.remove(); fallEl=document.createElement('div'); fallEl.className='qk-fall'; $('qkTray').parentNode.insertBefore(fallEl,$('qkTray')); $('qkHopN').textContent=Math.max(0,bank-1).toLocaleString(); SND.tick(0.3); }
-  function qkFallEnd(t0){ const min=420, wait=Math.max(0,min-(performance.now()-t0)); return new Promise(res=>setTimeout(()=>{ if(fallEl){fallEl.remove();fallEl=null;} res(); },wait)); }
+  let mixing=false; function qkFallStart(){ if(mixing)return; mixing=true; $('qkHop').classList.add('mixing'); $('qkHopN').textContent=Math.max(0,bank-1).toLocaleString(); SND.tick(0.3); }
+  function qkFallEnd(t0){ const min=450, wait=Math.max(0,min-(performance.now()-t0)); return new Promise(res=>setTimeout(()=>{ $('qkHop').classList.remove('mixing'); mixing=false; res(); },wait)); }
   function quickPlay(t){ return new Promise(res=>{ qkBall(t,false); t.prize?SND.win(t.prize):SND.pop(); qkPaint(); setTimeout(()=>{ res(); if(bank===0&&!all){ const won=session.reduce((a,t)=>a+t.prize,0), wins=session.filter(t=>t.prize).length; setTimeout(()=>doneModal(session.length,wins,won),300); } },t.prize?700:250); }); }
   async function quickAll(){ let d; try{ d=await C2.revealAll(); }catch(e){ const tt=$('toast'); tt.className='toast show none'; tt.textContent=e.message; return; }
     const list=(d.tickets||[]).map(t=>({no:t.no,prize:t.prize_p})); bank=0; qkLeft=list.length; C2.header({bank:0,balance_p:d.balance_p}); const sp=turbo?0.45:1;

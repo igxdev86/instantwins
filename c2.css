@@ -330,3 +330,7 @@ body[data-g] main{padding-bottom:120px}
 .buyrow b{display:block;font:900 1rem Unbounded,sans-serif}.buyrow span{font-weight:800;color:var(--lime)}.buyrow small{display:block;color:var(--soft);font-size:.72rem}
 .buyrow .btn{padding:13px 18px;font-size:.9rem;white-space:nowrap}
 @media(max-width:420px){.packs.mini{gap:6px}.packs.mini .pack{padding:10px 4px 8px}.packs.mini .pack .t{font-size:1.2rem}}
+.qk-hop-balls.mixing i{animation:mix .28s ease-in-out infinite alternate;animation-delay:var(--d,0s)}
+@keyframes mix{0%{transform:translate(0,0)}100%{transform:translate(var(--x,4px),var(--y,-10px))}}
+.qk-hop-balls.mixing{filter:brightness(1.25)}
+.qk-hopper{transition:box-shadow .2s}.qk-hop-balls.mixing+.qk-hop-n{color:#fff}
