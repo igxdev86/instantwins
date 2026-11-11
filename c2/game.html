@@ -1,0 +1,88 @@
+<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Play — Concept 2</title><meta name="robots" content="noindex"><link rel="stylesheet" href="c2.css"></head><body>
+<div class="concept">Concept 2 &middot; prototype &middot; prototype credit, no real money</div>
+<header class="top"><div class="wrap"><a class="brand" href="index.html"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1A0A00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></i>INSTANTWINS</a>
+<div class="bank"><span>Tickets <b id="bankN">0</b></span><span style="color:var(--soft)">&middot;</span><span id="balN">£50</span><a href="index.html#buy">Buy</a></div></div></header>
+<main class="wrap">
+  <div class="stage" id="stage"><div class="k" id="stK"></div><h1 id="stH"></h1>
+    <div id="drop" style="display:none"><svg class="board" id="dropSvg" viewBox="0 0 320 420"><defs><linearGradient id="dg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE38A"/><stop offset="1" stop-color="#B8831A"/></linearGradient></defs>
+<path d="M70 20h180l44 330H26z" fill="#12121A" stroke="#3DF2FF" stroke-width="3"/>
+<g id="pegs" fill="#3DF2FF"></g>
+<g id="slots"></g>
+<circle id="coin" cx="160" cy="30" r="12" fill="url(#dg)" stroke="#FFF1B8" stroke-width="2"/>
+<text id="dropTxt" x="160" y="200" text-anchor="middle" font-family="Unbounded,sans-serif" font-weight="900" font-size="30" fill="#fff" opacity="0" style="paint-order:stroke;stroke:#0B0B10;stroke-width:6px"></text></svg></div><div id="striker" style="display:none"><svg class="board" viewBox="0 0 320 420"><defs><linearGradient id="skRail" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF3D8A"/><stop offset=".35" stop-color="#FFC53D"/><stop offset=".7" stop-color="#3DF2FF"/><stop offset="1" stop-color="#C6FF3D"/></linearGradient><linearGradient id="skBell" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF1B8"/><stop offset=".5" stop-color="#FFC53D"/><stop offset="1" stop-color="#9A6A10"/></linearGradient><linearGradient id="skBallG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".4" stop-color="#FF3D8A"/><stop offset="1" stop-color="#8A1F55"/></linearGradient><linearGradient id="skWood" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8A5A2B"/><stop offset=".5" stop-color="#C98B4B"/><stop offset="1" stop-color="#6B4019"/></linearGradient><linearGradient id="skHead" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9D6EE"/><stop offset=".5" stop-color="#5B6B8C"/><stop offset="1" stop-color="#1B2640"/></linearGradient><radialGradient id="skGlowG" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFC53D" stop-opacity=".9"/><stop offset="1" stop-color="#FFC53D" stop-opacity="0"/></radialGradient></defs>
+<rect x="20" y="380" width="280" height="26" rx="8" fill="#1E1E28"/><text x="160" y="398" text-anchor="middle" font-family="Unbounded,sans-serif" font-weight="900" font-size="12" letter-spacing="3" fill="#FFC53D">HIGH STRIKER</text>
+<rect x="140" y="40" width="40" height="340" rx="6" fill="#1E1E28" stroke="#FF6A1A" stroke-width="2"/><rect x="156" y="52" width="8" height="320" rx="4" fill="url(#skRail)" opacity=".9"/>
+<g id="skMarks" font-family="Inter,sans-serif" font-size="9" fill="#A7A7B8" text-anchor="end"></g>
+<circle id="skGlow" cx="160" cy="34" r="46" fill="url(#skGlowG)" opacity="0"/><path id="skBellP" d="M136 40c0-18 10-28 24-28s24 10 24 28l6 6h-60z" fill="url(#skBell)" stroke="#6B4A10" stroke-width="1.5"/><ellipse cx="160" cy="48" rx="6" ry="4" fill="#6B4A10"/>
+<circle id="skBall" cx="160" cy="368" r="11" fill="url(#skBallG)"/>
+<g><rect x="196" y="352" width="60" height="14" rx="4" fill="url(#skWood)"/><rect x="186" y="366" width="80" height="12" rx="4" fill="#2E2E3C"/></g>
+<g id="skHammer" transform="rotate(38 300 390)"><rect x="296" y="200" width="9" height="190" rx="4" fill="url(#skWood)"/><rect x="266" y="178" width="70" height="40" rx="8" fill="url(#skHead)" stroke="#0B0B10" stroke-width="1.5"/><rect x="272" y="184" width="58" height="8" rx="4" fill="#fff" opacity=".25"/></g>
+<text id="skText" x="160" y="238" text-anchor="middle" font-family="Unbounded,sans-serif" font-weight="900" font-size="28" fill="#fff" opacity="0" style="paint-order:stroke;stroke:#0B0B10;stroke-width:6px"></text></svg></div><div id="chest" style="display:none"><svg class="board" id="chestSvg" viewBox="0 0 320 260"><defs><linearGradient id="chWood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B07A3C"/><stop offset=".5" stop-color="#7A4A1C"/><stop offset="1" stop-color="#4A2A0C"/></linearGradient><linearGradient id="chBand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF1B8"/><stop offset=".5" stop-color="#FFC53D"/><stop offset="1" stop-color="#9A6A10"/></linearGradient><radialGradient id="chLight" cx=".5" cy=".9" r=".7"><stop offset="0" stop-color="#FFE9A8" stop-opacity=".95"/><stop offset="1" stop-color="#FFC53D" stop-opacity="0"/></radialGradient></defs>
+<ellipse cx="160" cy="236" rx="120" ry="12" fill="#000" opacity=".4"/><g id="chLightG" opacity="0"><rect x="70" y="40" width="180" height="120" fill="url(#chLight)"/></g>
+<g><rect x="60" y="130" width="200" height="96" rx="10" fill="url(#chWood)" stroke="#2A1506" stroke-width="2"/><rect x="60" y="150" width="200" height="12" fill="url(#chBand)"/><rect x="60" y="196" width="200" height="12" fill="url(#chBand)"/><rect x="100" y="130" width="12" height="96" fill="url(#chBand)"/><rect x="208" y="130" width="12" height="96" fill="url(#chBand)"/><rect x="144" y="150" width="32" height="34" rx="6" fill="url(#chBand)" stroke="#6B4A10"/><circle cx="160" cy="168" r="4" fill="#4A2A0C"/></g>
+<g id="chLid" style="transform-origin:160px 130px"><path d="M60 130v-26c0-28 22-50 50-50h100c28 0 50 22 50 50v26z" fill="url(#chWood)" stroke="#2A1506" stroke-width="2"/><path d="M60 118h200v12H60z" fill="url(#chBand)"/><rect x="100" y="54" width="12" height="76" fill="url(#chBand)"/><rect x="208" y="54" width="12" height="76" fill="url(#chBand)"/></g>
+<text id="chText" x="160" y="112" text-anchor="middle" font-family="Unbounded,sans-serif" font-weight="900" font-size="30" fill="#fff" opacity="0" style="paint-order:stroke;stroke:#0B0B10;stroke-width:6px"></text></svg></div><div id="scratch" style="display:none"><div class="sc-card"><div class="sc-under"><div class="sc-prize" id="scPrize">—</div></div><canvas id="scCanvas" width="600" height="340"></canvas></div></div><div id="dip" style="display:none"><div class="sc-card" style="border-color:var(--lime)"><div class="sc-under" style="place-items:center"><div><div style="font-size:.7rem;letter-spacing:.2em;color:var(--soft)" id="dipNo">TICKET</div><div class="sc-prize" id="dipPrize" style="color:var(--lime)">—</div></div></div></div></div>
+    <div class="counter"><div><b id="left">0</b><i>tickets left</i></div><div><b id="wins">0</b><i>wins this go</i></div><div><b id="won">£0</b><i>won this go</i></div></div>
+    <div class="ctrl"><button class="btn" id="play">Play one</button><button class="btn lime" id="playAll">Play all</button></div>
+    <div class="toast" id="toast"></div>
+    <div class="honest">Each ticket&rsquo;s prize was fixed when you bought it. The game only shows it &mdash; tapping, timing, scratching and strength change nothing. The same ticket shows the same prize in every game.</div>
+  </div>
+  <div class="empty" id="empty"><p style="margin:0 0 10px;font-weight:800">No tickets in your bank.</p><a class="btn" href="index.html#buy">Buy tickets</a></div>
+  <div class="grid" id="grid"></div>
+  <div class="ctrl" style="margin-top:16px"><a class="btn ghost" href="index.html#games">Switch game</a><a class="btn ghost" href="index.html#buy">More tickets</a></div>
+</main>
+<footer class="wrap">InstantWins Concept 2 is a design prototype. In the live product every ticket&rsquo;s prize is allocated on the server before any game runs; games are reveals only. Free entry by post on every round. 18+, Great Britain. IGX Ltd.</footer><nav class="mbar"><a href="index.html" class=""><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10H3z"/></svg>Home</a><a href="index.html#buy" class=""><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="10" rx="3"/><path d="M3 12h18"/></svg>Buy</a><a href="index.html#games" class="on"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="12" rx="4"/><path d="M7 11v4M5 13h4M15 12h.01M18 14h.01"/></svg>Games</a><a href="prizes.html" class=""><svg viewBox="0 0 24 24"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2-5.5-2.9L6.5 20l1-6.2L3 9.6l6.2-.9z"/></svg>Prizes</a><a href="index.html#free" class=""><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Free</a></nav>
+<script src="c2.js"></script><script>
+(function(){
+  const $=id=>document.getElementById(id); const gbp=C2.gbp;
+  const G={drop:{h:'COIN DROP',k:'Drop a coin',c:'#3DF2FF',btn:'Drop'},striker:{h:'HIGH STRIKER',k:'Test your strength',c:'#FF6A1A',btn:'Swing'},scratch:{h:'SCRATCHCARD',k:'Classic',c:'#FFC53D',btn:'Next card'},chest:{h:'TREASURE CHEST',k:'Open it up',c:'#F0C98A',btn:'Open'},dip:{h:'LUCKY DIP',k:'No theatre',c:'#C6FF3D',btn:'Reveal'}};
+  const q=new URLSearchParams(location.search); const GK=G[q.get('g')]?q.get('g'):'drop'; const g=G[GK];
+  document.title=g.h+' — Concept 2'; $('stage').style.setProperty('--c',g.c); $('stK').textContent=g.k; $('stH').textContent=g.h; $(GK).style.display='';
+  const TIERS=C2.TABLE.map(x=>x[0]).sort((a,b)=>a-b); // pence ascending
+  let busy=false, all=false, session=[];
+  function paint(){ const s=C2.state(); $('left').textContent=s.bank.length; $('wins').textContent=session.filter(t=>t.prize).length; $('won').textContent=gbp(session.reduce((a,t)=>a+t.prize,0));
+    $('play').textContent=g.btn+' one'; $('play').disabled=busy||!s.bank.length; $('playAll').disabled=busy||s.bank.length<2; $('playAll').textContent='Play all '+s.bank.length;
+    $('empty').style.display=s.bank.length||session.length?'none':'';
+    $('grid').innerHTML=session.slice().reverse().map(t=>'<div class="coin'+(t.prize>=1000?' big':t.prize?' w':'')+'">'+(t.prize?gbp(t.prize):'—')+'<small>#'+t.no.toLocaleString()+'</small></div>').join(''); C2.header(); }
+  // ---- Coin Drop (board drawn once; path lands on the slot for the prize) ----
+  const SLOTS=[0,100,500,0,1000,25000,500000,5000,200,0,100,0]; const BIG=500000; // slot values in pence, centre = big
+  function dropInit(){ const pegs=$('pegs'); let s=''; for(let r=0;r<9;r++){const n=4+r, y=70+r*30, w=60+r*22; for(let i=0;i<n;i++){s+='<circle cx="'+(160-w/2+i*(w/(n-1)))+'" cy="'+y+'" r="3"/>';}} pegs.innerHTML=s;
+    $('slots').innerHTML=SLOTS.map((v,i)=>{const x=26+i*(268/SLOTS.length); return '<rect x="'+(x+2)+'" y="320" width="'+(268/SLOTS.length-4)+'" height="36" rx="4" fill="'+(v?v>=10000?'#FF3D8A':v>=1000?'#FF6A1A':'#2A2A38':'#15151D')+'" stroke="#3DF2FF" stroke-opacity=".4"/><text x="'+(x+268/SLOTS.length/2)+'" y="343" text-anchor="middle" font-family="Inter,sans-serif" font-weight="800" font-size="7.5" fill="#fff">'+(v>=BIG?'£5K+':v?gbp(v):'NO')+'</text>';}).join(''); }
+  function slotFor(prize){ // honest: a prize lands only in a slot of that value; no prize lands in a NO slot. Values not on the board use the nearest lower slot label? -> show exact prize text anyway
+    const want=prize>=BIG?BIG:prize; const cands=SLOTS.map((v,i)=>[v,i]).filter(([v])=>v===want); return cands[Math.floor(Math.random()*cands.length)][1]; }
+  function dropPlay(prize){ return new Promise(res=>{ const coin=$('coin'), txt=$('dropTxt'); txt.setAttribute('opacity',0); const slot=slotFor(prize); const xEnd=26+slot*(268/SLOTS.length)+268/SLOTS.length/2;
+    const pts=[[160,30]]; for(let r=0;r<9;r++){const y=70+r*30+14; const prog=(r+1)/10; const x=160+(xEnd-160)*prog+(Math.random()*24-12)*(1-prog); pts.push([x,y]);} pts.push([xEnd,336]);
+    let i=0; function step(){ if(i>=pts.length-1){ txt.textContent=prize?gbp(prize):'NO PRIZE'; txt.setAttribute('opacity',1); setTimeout(()=>{coin.setAttribute('cx',160);coin.setAttribute('cy',30);res();},700); return; }
+      const [x0,y0]=pts[i],[x1,y1]=pts[i+1]; const t0=performance.now(), d=150; (function f(now){const k=Math.min(1,(now-t0)/d); const e=k*k; coin.setAttribute('cx',x0+(x1-x0)*k); coin.setAttribute('cy',y0+(y1-y0)*e); if(k<1)requestAnimationFrame(f); else {i++;step();}})(t0); }
+    step(); }); }
+  // ---- Striker ----
+  function skH(prize){ if(!prize) return 0.12+Math.random()*0.16; const i=TIERS.indexOf(prize), n=TIERS.length; if(i<0)return .5; if(i===n-1)return 1; return 0.42+(0.86-0.42)*(i/(n-1)); }
+  function skMarks(){ $('skMarks').innerHTML=TIERS.map((p,i)=>{const h=i===TIERS.length-1?1:0.42+(0.86-0.42)*(i/(TIERS.length-1)); const y=368-h*(368-52); return '<text x="134" y="'+(y+3)+'">'+gbp(p)+'</text><rect x="137" y="'+(y-1)+'" width="46" height="2" fill="#A7A7B8" opacity=".5"/>';}).join(''); }
+  function skPlay(prize){ return new Promise(res=>{ skMarks(); const H=$('skHammer'), ball=$('skBall'), txt=$('skText'); $('skGlow').setAttribute('opacity',0); txt.setAttribute('opacity',0); $('striker').classList.remove('bell');
+    const target=skH(prize), top=52, bottom=368, yT=bottom-target*(bottom-top); let t0=null; const swing=400, rise=800, fall=600;
+    function frame(ts){ if(!t0)t0=ts; const t=ts-t0;
+      if(t<swing){ const k=t/swing; const a=k<0.5? 38+14*(k/0.5) : 52-(k-0.5)/0.5*130; H.setAttribute('transform','rotate('+a+' 300 390)'); requestAnimationFrame(frame); return; }
+      if(t<swing+rise){ const k=(t-swing)/rise; const e=1-Math.pow(1-k,2.2); ball.setAttribute('cy',bottom-(bottom-yT)*e); if(target>=1&&k>0.97){$('skGlow').setAttribute('opacity',1);} requestAnimationFrame(frame); return; }
+      if(t<swing+rise+300){ txt.textContent=prize?gbp(prize):'NO PRIZE'; txt.setAttribute('opacity',1); requestAnimationFrame(frame); return; }
+      if(t<swing+rise+300+fall){ const k=(t-swing-rise-300)/fall; ball.setAttribute('cy',yT+(bottom-yT)*k*k); requestAnimationFrame(frame); return; }
+      ball.setAttribute('cy',bottom); H.setAttribute('transform','rotate(38 300 390)'); res(); }
+    requestAnimationFrame(frame); }); }
+  // ---- Chest ----
+  function chPlay(prize){ return new Promise(res=>{ const box=$('chest'); box.classList.remove('open'); const t=$('chText'); t.setAttribute('opacity',0); $('chLightG').setAttribute('opacity',0);
+    setTimeout(()=>box.classList.add('open'),120); setTimeout(()=>{ if(prize)$('chLightG').setAttribute('opacity',1); t.textContent=prize?gbp(prize):'EMPTY'; t.setAttribute('opacity',1); },800); setTimeout(()=>{box.classList.remove('open'); res();},1700); }); }
+  // ---- Scratch ----
+  function scPlay(prize){ return new Promise(res=>{ const pz=$('scPrize'); pz.className='sc-prize'+(prize?'':' none'); pz.textContent=prize?gbp(prize):'NO PRIZE';
+    const c=$('scCanvas'), ctx=c.getContext('2d'); c.width=600; c.height=340; ctx.globalCompositeOperation='source-over'; const gr=ctx.createLinearGradient(0,0,600,340); gr.addColorStop(0,'#C9D6EE'); gr.addColorStop(.5,'#8FA6CC'); gr.addColorStop(1,'#5B6B8C'); ctx.fillStyle=gr; ctx.fillRect(0,0,600,340);
+    ctx.fillStyle='#0B0B10'; ctx.font='900 40px Unbounded, sans-serif'; ctx.textAlign='center'; ctx.fillText('SCRATCH',300,185); ctx.globalCompositeOperation='destination-out'; let down=false, done=false, n=0;
+    const pos=e=>{const r=c.getBoundingClientRect(); return {x:(e.clientX-r.left)*600/r.width,y:(e.clientY-r.top)*340/r.height};};
+    const scr=e=>{ if(done)return; const p=pos(e); ctx.beginPath(); ctx.arc(p.x,p.y,36,0,7); ctx.fill(); e.preventDefault(); if(++n%10===0){const d=ctx.getImageData(0,0,600,340).data; let k=0; for(let i=3;i<d.length;i+=64){if(d[i]===0)k++;} if(k/(d.length/64)>0.5){done=true; ctx.clearRect(0,0,600,340); setTimeout(res,500);}} };
+    c.onpointerdown=e=>{down=true;scr(e);}; c.onpointermove=e=>{if(down)scr(e);}; c.onpointerup=c.onpointerleave=()=>{down=false;};
+    if(all){ setTimeout(()=>{done=true; ctx.clearRect(0,0,600,340); res();},500); } }); }
+  function dipPlay(t){ return new Promise(res=>{ $('dipNo').textContent='TICKET #'+t.no.toLocaleString(); const pz=$('dipPrize'); pz.className='sc-prize'+(t.prize?'':' none'); pz.style.color=t.prize?'var(--lime)':''; pz.textContent=t.prize?gbp(t.prize):'NO PRIZE'; setTimeout(res,all?350:900); }); }
+  async function one(){ const t=C2.play(); if(!t)return false; const p=t.prize;
+    if(GK==='drop')await dropPlay(p); else if(GK==='striker')await skPlay(p); else if(GK==='chest')await chPlay(p); else if(GK==='scratch')await scPlay(p); else await dipPlay(t);
+    session.push(t); const tt=$('toast'); tt.className='toast show '+(p?'win':'none'); tt.textContent=p?'Ticket #'+t.no.toLocaleString()+' — you won '+gbp(p)+'!':'Ticket #'+t.no.toLocaleString()+' — no prize'; paint(); return true; }
+  $('play').onclick=async()=>{ if(busy)return; busy=true; all=false; paint(); await one(); busy=false; paint(); };
+  $('playAll').onclick=async()=>{ if(busy)return; busy=true; all=true; paint(); while(await one()){} busy=false; all=false; paint(); };
+  if(GK==='drop')dropInit(); if(GK==='striker')skMarks(); paint();
+})();</script></body></html>
