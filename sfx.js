@@ -87,13 +87,16 @@ const SND=(()=>{
   S.setTheme=name=>{ const was=musicOn; if(was)musicStop(); theme=THEMES[name]||null; if(was&&theme)setTimeout(musicStart,350); };
   S.music=musicStart; S.musicStop=musicStop;
   S.setMode=m=>{ mode=m; try{localStorage.setItem('iw_snd',m);}catch(e){} if(m==='all'){musicStart();} else {musicStop();} paintBtn(); };
-  S.cycle=()=>{ S.setMode(mode==='all'?'sfx':mode==='sfx'?'off':'all'); if(mode!=='off')S.click(); };
+  function note(msg,ms){ let t=document.getElementById('sndNote'); if(!t){ t=document.createElement('div'); t.id='sndNote'; t.className='sndnote'; document.body.appendChild(t); } t.textContent=msg; t.classList.add('show'); clearTimeout(note.tm); note.tm=setTimeout(()=>t.classList.remove('show'),ms||2200); }
+  S.cycle=()=>{ S.setMode(mode==='all'?'sfx':mode==='sfx'?'off':'all'); if(mode!=='off')S.click();
+    setTimeout(()=>{ const st=ctx?ctx.state:'no audio engine'; note(mode==='off'?'Sound muted':(mode==='all'?'Music + effects on':'Effects only')+(st!=='running'?' — browser is blocking audio ('+st+'). Check the tab isn\'t muted.':''),2600); },350); };
+  let warned=false; function checkRunning(){ if(warned||mode==='off'||!ctx)return; setTimeout(()=>{ if(ctx.state!=='running'&&!warned){ warned=true; note('Sound is blocked by your browser — tap the speaker, or unmute this tab.',4000); } },1500); }
   S.getMode=()=>mode;
   // ---- UI ----
   function paintBtn(){ document.querySelectorAll('.sndbtn').forEach(b=>{ b.dataset.m=mode; b.classList.toggle('nomusic',!theme); b.innerHTML=(mode==='off'?'<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M19 9l-4 6M15 9l4 6"/></svg>':'<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 0 1 0 6"/>'+(mode==='all'?'<path d="M18.5 6.5a8 8 0 0 1 0 11"/>':'')+'</svg>')+'<span>'+(mode==='all'?'Music':mode==='sfx'?'SFX':'Muted')+'</span>'; b.title=mode==='all'?'Music + sound on. Tap: sound effects only':mode==='sfx'?'Sound effects only. Tap: mute':'Muted. Tap: music + sound'; }); }
   function mount(){ const hr=document.querySelector('.top .hr'); if(hr&&!document.querySelector('.sndbtn')){ const b=document.createElement('button'); b.className='sndbtn'; b.type='button'; b.onclick=e=>{e.preventDefault();S.cycle();}; hr.insertBefore(b,hr.firstChild); } paintBtn();
     document.addEventListener('click',e=>{ const t=e.target.closest('.btn,.pack,.game,.atabs a,.tabs button,.mbar a,.pill,.sw'); if(t&&!t.classList.contains('sndbtn'))S.click(); },true);
-    const unlock=()=>{ if(mode==='off'||!init())return; const go=()=>{ if(mode==='all')musicStart(); }; if(ctx.state!=='running'){ const p=ctx.resume(); if(p&&p.then)p.then(go).catch(()=>{}); else go(); } else go(); }; ['pointerdown','mousedown','touchend','click','keydown'].forEach(ev=>document.addEventListener(ev,unlock,{once:false,passive:true,capture:true}));
+    const unlock=()=>{ if(mode==='off'||!init())return; const go=()=>{ if(mode==='all')musicStart(); }; if(ctx.state!=='running'){ const p=ctx.resume(); if(p&&p.then)p.then(go).catch(()=>{}); else go(); checkRunning(); } else go(); }; ['pointerdown','mousedown','touchend','click','keydown'].forEach(ev=>document.addEventListener(ev,unlock,{once:false,passive:true,capture:true}));
     document.addEventListener('visibilitychange',()=>{ if(!ctx)return; if(document.hidden){ if(musicOn)musBus.gain.setTargetAtTime(0,now(),0.1); } else if(musicOn){ musBus.gain.setTargetAtTime(theme?theme.vol:0.12,now(),0.5); } }); }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount); else mount();
   return S;
