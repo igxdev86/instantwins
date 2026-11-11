@@ -23,159 +23,173 @@
      "value": "noindex, nofollow"
     }
    ]
+  },
+  {
+   "source": "/v1/(.*)",
+   "headers": [
+    {
+     "key": "X-Robots-Tag",
+     "value": "noindex, follow"
+    }
+   ]
   }
  ],
  "redirects": [
   {
    "source": "/balloonburst-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/cashgrab-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/dartdash-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/diamonddig-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/goldengoal-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/luckydice-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/luckyladder-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/mysterybox-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/packrip-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/pennypusher-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/photofinish-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/pinataparty-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/plinko-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/reelrush-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/rocketcash-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/rouletteroyale-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/safecracker-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/scratchgold-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/theclaw-instantwins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/spin.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/thespins.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/quizzes.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/quiz-addup.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/quiz-board.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/instantwins-demo-all-in-one.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/plinko-msnbc.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/puzzles.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/pickapiece.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
   },
   {
    "source": "/rebus-rush.html",
-   "destination": "/instantwins.html",
+   "destination": "/v1/instantwins.html",
    "permanent": true
+  },
+  {
+   "source": "/:page((?!index|game|prizes)[a-z0-9-]+).html",
+   "destination": "/v1/:page.html",
+   "permanent": false
   }
  ],
  "rewrites": [
   {
    "source": "/win-:slug",
-   "destination": "/prize.html"
+   "destination": "/v1/prize.html"
   }
  ]
 }
