@@ -225,3 +225,5 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--lime)}
 .box .in{position:absolute;inset:0;display:grid;place-items:center;font:900 1.1rem Unbounded,sans-serif;color:var(--gold);text-shadow:0 2px 6px #000}.box .in.none{color:var(--soft);font-size:.9rem}
 .box.open .lid{transform:rotateX(-110deg)}.box.open{background:linear-gradient(180deg,#8a5e22,#3d2a0e);box-shadow:0 0 30px rgba(255,197,61,.35)}.box.dim{opacity:.35}
 #penSvg{max-width:340px;margin:0 auto;display:block;border-radius:16px}
+.tally{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 4px}.tally div{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}.tally b{display:block;font-family:Unbounded,sans-serif;font-size:1.2rem;color:var(--lime)}.tally i{font-style:normal;font-size:.64rem;color:var(--soft);text-transform:uppercase;letter-spacing:.06em}
+details.panel summary{cursor:pointer;list-style:none}details.panel summary::-webkit-details-marker{display:none}details.panel summary::before{content:'\25B8  ';color:var(--soft)}details[open].panel summary::before{content:'\25BE  '}

@@ -1,0 +1,10 @@
+<div class="ap" id="ap-postal">
+  <div class="panel"><h2>Million Round postcard</h2>
+    <p class="lead">Check the card: unenclosed, handwritten, says <b>&ldquo;Million Round&rdquo;</b>, full name, account number, address, date of birth (18+). One ticket per card. Key it in or reject it &mdash; <b>every card is logged either way</b>, and the count is published on the Fairness page.</p>
+    <div class="tally"><div><b id="plA">&ndash;</b><i>accepted today</i></div><div><b id="plR">&ndash;</b><i>rejected today</i></div><div><b id="plT">&ndash;</b><i>total accepted</i></div></div>
+    <label>Account number or email on the card</label><input id="pmRef" placeholder="IW1234 or name@example.com" autocomplete="off">
+    <label>Note (optional &mdash; postmark date, batch, anything odd)</label><input id="pmNote" placeholder="postmark 10 Nov">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn lime" id="pmGo" style="margin:0">Enter ticket</button><button class="btn ghost" id="pmRejTog" style="margin:0">Reject card&hellip;</button></div>
+    <div id="pmRejBox" style="display:none;margin-top:8px"><label>Reason</label><select id="pmReason"><option value="no account">No account matches (write to them if an email is given)</option><option value="under 18 / not GB">Under 18 or not a GB address</option><option value="enclosed">Enclosed in an envelope</option><option value="not handwritten">Photocopied / printed, not handwritten</option><option value="illegible">Illegible</option><option value="no round named">Does not name the Million Round</option><option value="other">Other (say in note)</option></select><button class="btn" id="pmRejGo" style="margin-top:8px">Log rejection</button></div>
+    <div class="err" id="pmErr"></div></div>
+  <div class="panel"><h2>Postal log</h2><p class="lead">Last 150 cards. &ldquo;Opened&rdquo; = the entrant has opened the ticket in a game; until then nobody, including us, has seen its prize.</p><div id="plRows"><span class="m">Loading…</span></div></div>

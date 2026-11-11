@@ -37,13 +37,10 @@ for key,label,src in TABS:
     if key=='draws':
         body=body.replace('id="kErr"','id="kErr2"'); code=code.replace("$('kErr')","$('kErr2')").replace("document.querySelectorAll('.sw')","document.querySelectorAll('#kindsBox .sw')")
     if key=='postal':
-        body=body.replace('<div class="panel"><h2>Key in a postcard</h2>','''<div class="panel"><h2>Million Round postcard</h2>
-    <p class="lead">Card names <b>&ldquo;Million Round&rdquo;</b> with the entrant's name and account number. The entry takes the next ticket in the round, same sequence as paid, and is opened at once &mdash; any prize is credited to their account and they are emailed.</p>
-    <label>Account number or email</label><input id="pmRef" placeholder="IW1234 or name@example.com">
-    <button class="btn" id="pmGo">Enter postcard</button><div class="err" id="pmErr"></div></div>
-  <div class="panel"><h2>Key in a postcard</h2>''')
-        code+="""
-$('pmGo').onclick=async()=>{$('pmErr').className='err';$('pmErr').textContent='';try{const d=await api('/api/admin',{action:'postal_mil',token:s.token,ref:$('pmRef').value.trim()});$('pmErr').className='err ok';$('pmErr').textContent='Entered: Million Round ticket #'+d.entry_no.toLocaleString()+(d.prize_p?' — WON '+fmtp(d.prize_p):' — no prize on that ticket');$('pmRef').value='';}catch(e){$('pmErr').textContent=e.message;}};"""
+        body=body.replace('<div class="panel"><h2>Key in a postcard</h2>','<details class="panel"><summary><h2 style="display:inline">Classic site (v1) postcards</h2> <span class="m">draws · instant win tickets · competitions</span></summary><div class="panel" style="margin-top:10px"><h2>Key in a postcard</h2>')
+        body=body.replace('<div class="panel"><h2>Competition postcard</h2><p class="lead">Cards with a competition code and answer are keyed in on the <a href="#competitions" style="color:var(--cyan)">Competitions admin</a> page.</p></div>','<div class="panel"><h2>Competition postcard</h2><p class="lead">Cards with a competition code and answer are keyed in on the <a href="#competitions" style="color:var(--cyan)">Competitions admin</a> page.</p></div></details>')
+        body=body.replace('<div class="ap" id="ap-postal">',open('tools/postal_panel.html').read())
+        code+=open('tools/postal_panel.js').read()
     if key=='overview':
         code+="""
 async function mil(){ try{ const st=await (await fetch('/api/c2',{cache:'no-store'})).json(); const d=await api('/api/admin',{action:'milstats',token:s.token});

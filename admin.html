@@ -36,10 +36,16 @@
 </div>
 <div class="ap" id="ap-postal">
   <div class="panel"><h2>Million Round postcard</h2>
-    <p class="lead">Card names <b>&ldquo;Million Round&rdquo;</b> with the entrant's name and account number. The entry takes the next ticket in the round, same sequence as paid, and is opened at once &mdash; any prize is credited to their account and they are emailed.</p>
-    <label>Account number or email</label><input id="pmRef" placeholder="IW1234 or name@example.com">
-    <button class="btn" id="pmGo">Enter postcard</button><div class="err" id="pmErr"></div></div>
-  <div class="panel"><h2>Key in a postcard</h2>
+    <p class="lead">Check the card: unenclosed, handwritten, says <b>&ldquo;Million Round&rdquo;</b>, full name, account number, address, date of birth (18+). One ticket per card. Key it in or reject it &mdash; <b>every card is logged either way</b>, and the count is published on the Fairness page.</p>
+    <div class="tally"><div><b id="plA">&ndash;</b><i>accepted today</i></div><div><b id="plR">&ndash;</b><i>rejected today</i></div><div><b id="plT">&ndash;</b><i>total accepted</i></div></div>
+    <label>Account number or email on the card</label><input id="pmRef" placeholder="IW1234 or name@example.com" autocomplete="off">
+    <label>Note (optional &mdash; postmark date, batch, anything odd)</label><input id="pmNote" placeholder="postmark 10 Nov">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn lime" id="pmGo" style="margin:0">Enter ticket</button><button class="btn ghost" id="pmRejTog" style="margin:0">Reject card&hellip;</button></div>
+    <div id="pmRejBox" style="display:none;margin-top:8px"><label>Reason</label><select id="pmReason"><option value="no account">No account matches (write to them if an email is given)</option><option value="under 18 / not GB">Under 18 or not a GB address</option><option value="enclosed">Enclosed in an envelope</option><option value="not handwritten">Photocopied / printed, not handwritten</option><option value="illegible">Illegible</option><option value="no round named">Does not name the Million Round</option><option value="other">Other (say in note)</option></select><button class="btn" id="pmRejGo" style="margin-top:8px">Log rejection</button></div>
+    <div class="err" id="pmErr"></div></div>
+  <div class="panel"><h2>Postal log</h2><p class="lead">Last 150 cards. &ldquo;Opened&rdquo; = the entrant has opened the ticket in a game; until then nobody, including us, has seen its prize.</p><div id="plRows"><span class="m">Loading…</span></div></div>
+
+  <details class="panel"><summary><h2 style="display:inline">Classic site (v1) postcards</h2> <span class="m">draws · instant win tickets · competitions</span></summary><div class="panel" style="margin-top:10px"><h2>Key in a postcard</h2>
     <p class="lead">Enter the card exactly as written. The entry takes the next number in the named draw or round, in the same sequence as paid entries. Unnamed cards go into the next Five Minute Draw and every Five Minute Draw for the rest of today. Log every card, including rejected ones.</p>
     <label>Account number (IW…) or email on the card</label><input id="poEmail" placeholder="IW1000042">
     <label>Game number written on the card (e.g. F20-DDMMYY-HHMM)</label>
@@ -58,7 +64,7 @@
     <select id="ptTag" style="width:100%;border:1.5px solid var(--line);border-radius:7px;padding:12px;"><option>loading…</option></select>
     <button class="btn" id="ptGo">Enter postcard</button><div class="err" id="ptErr"></div>
   </div>
-  <div class="panel"><h2>Competition postcard</h2><p class="lead">Cards with a competition code and answer are keyed in on the <a href="#competitions" style="color:var(--cyan)">Competitions admin</a> page.</p></div>
+  <div class="panel"><h2>Competition postcard</h2><p class="lead">Cards with a competition code and answer are keyed in on the <a href="#competitions" style="color:var(--cyan)">Competitions admin</a> page.</p></div></details>
 
 </div>
 </div>
@@ -159,7 +165,7 @@
  <p class="fsmall">InstantWins.co.uk is operated by IGX Ltd, registered in England and Wales, company no. 13057559. Registered office: 20-22 Wenlock Road, London N1 7GU. Every competition on this site is a prize competition with a free postal entry route under Schedule 2 of the Gambling Act 2005; every ticket&rsquo;s prize is allocated before the round opens and before you buy, and the games are reveals only. Open to residents of Great Britain aged 18 or over. Debit cards, Apple Pay and Google Pay accepted; no credit cards. Prizes are a matter of luck and most tickets win nothing &mdash; please play within your means. <span class="testmode"><b>Launch soon:</b> play credit only until payments open.</span></p>
 </div></footer>
 <nav class="mbar"><a href="index.html" class=""><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10H3z"/></svg>Home</a><a href="index.html#buy" class=""><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="10" rx="3"/><path d="M3 12h18"/></svg>Buy</a><a href="index.html#games" class=""><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="12" rx="4"/><path d="M7 11v4M5 13h4M15 12h.01M18 14h.01"/></svg>Games</a><a href="prizes.html" class=""><svg viewBox="0 0 24 24"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2-5.5-2.9L6.5 20l1-6.2L3 9.6l6.2-.9z"/></svg>Prizes</a><a href="account.html" class=""><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>Account</a></nav>
-<script src="c2.js"></script><script src="sfx.js"></script><script>
+<script src="c2.js"></script><script>
 const $=id=>document.getElementById(id);
 function sess(){try{return JSON.parse(localStorage.getItem('iw_session'))}catch(e){return null}}
 async function api(path,body){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();if(!r.ok||d.error)throw new Error(d.error||'failed');return d;}
@@ -271,7 +277,15 @@ async function loadTix(){try{const t=await (await fetch('/api/tickets',{cache:'n
 $('ptGo').onclick=async()=>{$('ptErr').className='err';$('ptErr').textContent='';try{const d=await api('/api/admin',{action:'postal_ticket',token:s.token,ref:$('ptRef').value.trim(),tag:$('ptTag').value});$('ptErr').className='err ok';$('ptErr').textContent='Entered: '+d.ticket+' — ticket #'+d.entry_no+' of '+d.cap+(d.prize_p?' — WON '+fmtp(d.prize_p):' — no prize on that ticket');$('ptRef').value='';loadTix();}catch(e){$('ptErr').textContent=e.message;}};
 (async()=>{ if(await guard()){ loadTix(); try{const st=await (await fetch('/api/card',{cache:'no-store'})).json(); if(st.kinds){$('poKind').innerHTML=st.kinds.map(k=>'<option value="'+k.kind+'"'+(k.kind==='five'?' selected':'')+'>'+k.label+' ('+(k.price_p?'£'+(k.price_p/100):'free')+')</option>').join('');} }catch(e){} } })();
 
-$('pmGo').onclick=async()=>{$('pmErr').className='err';$('pmErr').textContent='';try{const d=await api('/api/admin',{action:'postal_mil',token:s.token,ref:$('pmRef').value.trim()});$('pmErr').className='err ok';$('pmErr').textContent='Entered: Million Round ticket #'+d.entry_no.toLocaleString()+(d.prize_p?' — WON '+fmtp(d.prize_p):' — no prize on that ticket');$('pmRef').value='';}catch(e){$('pmErr').textContent=e.message;}};
+function plPaint(d){ $('plA').textContent=d.today_accepted; $('plR').textContent=d.today_rejected; $('plT').textContent=d.total_accepted;
+  $('plRows').innerHTML=(d.rows||[]).length?d.rows.map(r=>'<div class="row"><span><b>'+esc(r.name||r.ref)+'</b> <span class="m">'+esc(r.ref)+' · '+new Date(r.at).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+(r.note?' · '+esc(r.note):'')+'</span></span><span class="mono '+(r.status==='accepted'?'win':'')+'">'+(r.status==='accepted'?'#'+Number(r.entry_no).toLocaleString()+(r.revealed?' · opened':' · in bank'):'rejected · '+esc(r.reason||''))+'</span></div>').join(''):'<span class="m">No cards keyed yet.</span>'; }
+async function plLoad(){ try{ plPaint(await api('/api/admin',{action:'postal_log',token:s.token})); }catch(e){ $('plRows').innerHTML='<span class="m">'+esc(e.message)+'</span>'; } }
+$('pmGo').onclick=async()=>{$('pmErr').className='err';$('pmErr').textContent='';try{const d=await api('/api/admin',{action:'postal_mil',token:s.token,ref:$('pmRef').value.trim(),note:$('pmNote').value.trim()});$('pmErr').className='err ok';$('pmErr').textContent='Entered for '+d.name+': Million Round ticket #'+Number(d.entry_no).toLocaleString()+' — now in their bank ('+d.bank+' unopened).';$('pmRef').value='';$('pmNote').value='';$('pmRef').focus();plLoad();}catch(e){$('pmErr').textContent=e.message;}};
+$('pmRejTog').onclick=()=>{const b=$('pmRejBox');b.style.display=b.style.display==='none'?'':'none';};
+$('pmRejGo').onclick=async()=>{$('pmErr').className='err';$('pmErr').textContent='';try{await api('/api/admin',{action:'postal_reject',token:s.token,ref:$('pmRef').value.trim(),reason:$('pmReason').value,note:$('pmNote').value.trim()});$('pmErr').className='err ok';$('pmErr').textContent='Rejection logged.';$('pmRef').value='';$('pmNote').value='';$('pmRejBox').style.display='none';plLoad();}catch(e){$('pmErr').textContent=e.message;}};
+$('pmRef').addEventListener('keydown',e=>{if(e.key==='Enter')$('pmGo').click();});
+(async()=>{ if(await guard()){ plLoad(); } })();
+
 })();
 (function(){
 
