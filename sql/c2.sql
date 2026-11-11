@@ -83,7 +83,7 @@ language sql stable security definer set search_path = public, extensions as $$
     'prize_left_p',(select coalesce(sum(prize_p),0) from allocation a where a.pool_id=p.id and a.claimed_by is null),
     'top_left',(select count(*) from allocation a where a.pool_id=p.id and a.claimed_by is null and a.prize_p=10000000),
     'tiers',(select g.tiers from games g where g.tag='MIL'),
-    'last',(select jsonb_build_object('prize_p',a.prize_p,'at',a.claimed_at,'name',split_part(coalesce(u.name,''),' ',1)) from allocation a left join users u on u.id::text=a.claimed_by where a.pool_id=p.id and a.revealed and a.prize_p>=1000 order by a.claimed_at desc limit 1))
+    'last',(select jsonb_build_object('prize_p',a.prize_p,'at',a.claimed_at,'name',split_part(coalesce(u.name,''),' ',1)) from allocation a left join users u on u.id::text=a.claimed_by where a.pool_id=p.id and a.claimed_by is not null and a.revealed and a.prize_p>=1000 order by a.claimed_at desc limit 1))
   from pools p where p.game='MIL' and p.status='open' order by p.pool_no desc limit 1 $$;
 grant execute on function c2_buy(uuid,int), c2_reveal(uuid), c2_mine(uuid), c2_state(), c2_pack_price(int), open_pool_big(text) to service_role;
 notify pgrst, 'reload schema';
