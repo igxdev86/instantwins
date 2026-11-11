@@ -335,3 +335,4 @@ body[data-g] main{padding-bottom:120px}
 .qk-hop-balls.mixing{filter:brightness(1.25)}
 .qk-hopper{transition:box-shadow .2s}.qk-hop-balls.mixing+.qk-hop-n{color:#fff}
 .sndnote{position:fixed;left:50%;top:70px;transform:translateX(-50%) translateY(-10px);background:#15151E;border:1px solid var(--line);color:var(--ink);padding:10px 14px;border-radius:12px;font:700 .8rem Inter,sans-serif;opacity:0;pointer-events:none;transition:all .2s;z-index:80;max-width:calc(100% - 32px);text-align:center}.sndnote.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.qk-ball.out{transition:transform .3s ease-in,opacity .3s;transform:translateY(60px) scale(.6);opacity:0}
