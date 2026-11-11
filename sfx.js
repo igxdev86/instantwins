@@ -38,6 +38,13 @@ const SND=(()=>{
     const big=p>=100000, mid=p>=1000; const seq=big?[523,659,784,1047,1319,1568,2093]:mid?[523,659,784,1047,1319]:[659,784,1047];
     seq.forEach((f,i)=>{ tone('triangle',f,null,t+i*(big?0.11:0.09),0.35,0.28); tone('sine',f*2,null,t+i*(big?0.11:0.09),0.3,0.1); });
     bell(t+seq.length*0.1,seq[seq.length-1],big?2.5:1.2,0.5); if(mid)S.sparkle(); if(big){ setTimeout(()=>S.sparkle(),400); setTimeout(()=>S.sparkle(),900); tone('sine',65,65,t,2.5,0.5); } };
+  S.reelSpin=(dur)=>{ if(!ok())return; let el=0; const total=dur*1000; (function sched(){ const k=el/total; if(k>=1)return; const gap=40+Math.pow(k,2)*120; S.tick(0.25); el+=gap; setTimeout(sched,gap); })(); };
+  S.reelStop=()=>{ if(!ok())return; const t=now(); tone('sine',260,120,t,0.14,0.5); burst(t,0.06,0.4,1200,1,'lowpass'); };
+  S.candyPop=()=>{ if(!ok())return; const t=now(); tone('sine',900+Math.random()*600,1800,t,0.07,0.25); burst(t,0.03,0.2,3000,2); };
+  S.candyGold=()=>{ if(!ok())return; const t=now(); bell(t,1568+Math.random()*400,0.6,0.35); };
+  S.blip=(hi)=>{ if(!ok())return; const t=now(); tone('square',hi?1320:880,hi?1320:880,t,0.05,0.07); tone('sine',hi?2640:1760,null,t,0.06,0.12); };
+  S.kick=()=>{ if(!ok())return; const t=now(); tone('sine',140,50,t,0.18,0.8); const b=burst(t,0.3,0.5,600,0.8); b.f.frequency.exponentialRampToValueAtTime(3000,t+0.3); };
+  S.crowd=(cheer)=>{ if(!ok())return; const t=now(); const b=burst(t,cheer?1.6:1.1,cheer?0.5:0.3,cheer?1400:500,0.6,'bandpass'); b.f.frequency.setValueAtTime(cheer?900:700,t); b.f.frequency.exponentialRampToValueAtTime(cheer?2400:300,t+(cheer?0.5:1)); if(cheer){ tone('sawtooth',440,660,t,0.6,0.08); tone('sawtooth',554,830,t+0.05,0.6,0.06); } else { tone('sawtooth',330,220,t,0.8,0.06); } duckMusic(1500); };
   // ---- music: one generative theme per game (16 steps per bar) ----
   const mtof=m=>440*Math.pow(2,(m-69)/12);
   const THEMES={
@@ -47,7 +54,12 @@ const SND=(()=>{
     chest:{bpm:100,chords:[[50,53,57],[46,50,53],[53,57,60],[45,49,52]],drone:true,pad:'sawtooth',padCut:[300,700],bass:{wave:'sine',on:[0,6,8,14]},kick:[],tom:[0,6,8,14],snare:[],hat:[],open:[],lead:{wave:'triangle',prob:.55,on:[0,3,6,8,11,14],oct:12},echo:.75,vol:.13},
     bingo:{bpm:112,swing:.18,chords:[[60,64,67,70],[57,60,64,67],[53,57,60,64],[55,59,62,65]],organ:true,bass:{wave:'triangle',on:[0,4,8,12],walk:true},kick:[0,8],snare:[4,12],hat:[0,2,4,6,8,10,12,14],open:[6,14],stab:{wave:'organ',on:[2,6,10,14]},echo:.3,vol:.12},
     wheel:{bpm:126,chords:[[57,60,64,67],[62,65,69,72],[55,59,62,65],[60,64,67,71]],bass:{wave:'sawtooth',on:[0,2,4,6,8,10,12,14],oct:true},kick:[0,4,8,12],snare:[4,12],hat:[0,2,4,6,8,10,12,14],open:[2,6,10,14],stab:{wave:'sawtooth',on:[0,3,8,11],brass:true},arp:{wave:'sine',on:[1,5,9,13],oct:24},echo:.5,vol:.12},
-    dip:{bpm:72,chords:[[60,64,67,71],[57,60,64,67],[65,69,72,76],[55,59,62,67]],pad:'sine',padCut:[800,1600],bass:{wave:'sine',on:[0]},kick:[],snare:[],hat:[],open:[],lead:{wave:'sine',prob:.3,on:[0,4,8,12],oct:12},echo:.75,vol:.12}
+    dip:{bpm:72,chords:[[60,64,67,71],[57,60,64,67],[65,69,72,76],[55,59,62,67]],pad:'sine',padCut:[800,1600],bass:{wave:'sine',on:[0]},kick:[],snare:[],hat:[],open:[],lead:{wave:'sine',prob:.3,on:[0,4,8,12],oct:12},echo:.75,vol:.12},
+    reels:{bpm:118,chords:[[57,60,64,67],[55,59,62,65],[53,57,60,64],[52,55,59,62]],bass:{wave:'sawtooth',on:[0,3,6,10,12,14]},kick:[0,6,8,14],snare:[4,12],hat:[2,6,10,14],open:[14],stab:{wave:'sawtooth',on:[2,10],brass:true},arp:{wave:'sine',on:[0,4,8,12],oct:24},echo:.5,vol:.11},
+    candy:{bpm:132,chords:[[60,64,67],[62,65,69],[65,69,72],[67,71,74]],pad:'square',padCut:[1200,2600],bass:{wave:'triangle',on:[0,4,8,12]},kick:[0,8],snare:[4,12],hat:[0,2,4,6,8,10,12,14],open:[],arp:{wave:'sine',on:[0,2,4,6,8,10,12,14],oct:24},lead:{wave:'triangle',prob:.5,on:[1,5,9,13],oct:12},echo:.5,vol:.11},
+    words:{bpm:88,chords:[[62,65,69,72],[58,62,65,69],[60,64,67,71],[57,60,64,67]],pad:'sine',padCut:[900,1800],bass:{wave:'sine',on:[0,8]},kick:[],snare:[],hat:[4,12],open:[],arp:{wave:'triangle',on:[0,3,6,9,12],oct:12},echo:.75,vol:.12},
+    boxes:{bpm:96,chords:[[48,51,55],[46,50,53],[44,48,51],[43,47,50]],drone:true,pad:'sawtooth',padCut:[250,600],bass:{wave:'sine',on:[0,10]},kick:[0],tom:[6,14],snare:[],hat:[2,6,10,14],open:[],lead:{wave:'sine',prob:.35,on:[4,12],oct:24},echo:1,vol:.12},
+    penalty:{bpm:120,chords:[[57,60,64],[57,60,64],[53,57,60],[55,59,62]],bass:{wave:'triangle',on:[0,8]},kick:[0,4,8,12],tom:[6,14],snare:[4,12],hat:[2,6,10,14],open:[],stab:{wave:'sawtooth',on:[0,6,8],brass:true},echo:.5,vol:.12}
   };
   let theme=null, step=0, nextT=0;
   function voice(wave,f,t,dur,vol,cut,detune){ const o=ctx.createOscillator(), g=ctx.createGain(); o.type=wave==='organ'?'sine':wave; o.frequency.value=f; if(detune)o.detune.value=detune; let n=o; if(cut){ const fl=ctx.createBiquadFilter(); fl.type='lowpass'; fl.frequency.value=cut; o.connect(fl); n=fl; } env(g,t,0.01,dur*0.4,0.5,dur*0.5,vol); n.connect(g); g.connect(musBus); o.start(t); o.stop(t+dur+0.2); if(wave==='organ'){ const o2=ctx.createOscillator(), g2=ctx.createGain(); o2.type='sine'; o2.frequency.value=f*2; env(g2,t,0.01,dur*0.4,0.5,dur*0.5,vol*0.4); o2.connect(g2); g2.connect(musBus); o2.start(t); o2.stop(t+dur+0.2); } }
