@@ -28,8 +28,8 @@ a{color:inherit;text-decoration:none}
 .stats b{display:block;font-family:Unbounded,sans-serif;font-size:clamp(.9rem,4.2vw,1.25rem);letter-spacing:-.03em;white-space:nowrap;color:#fff;text-shadow:0 2px 12px rgba(198,255,61,.25)}.stats div:nth-child(2) b{text-shadow:0 2px 12px rgba(61,242,255,.25)}.stats div:nth-child(3) b{text-shadow:0 2px 12px rgba(255,106,26,.25)}.stats i{font-style:normal;font-size:.68rem;color:var(--soft);letter-spacing:.1em;text-transform:uppercase}
 /* steps */
 .step{margin:26px 0}
-.step-h{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.step-h .n{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-family:Unbounded,sans-serif;font-weight:900;color:#1A0A00;background:var(--lime)}
+.step-h{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}.step-h>div{min-width:0}
+.step-h .n{flex:0 0 40px;width:40px;height:40px;min-height:40px;aspect-ratio:1;line-height:1;font-size:1rem;border-radius:12px;display:grid;place-items:center;font-family:Unbounded,sans-serif;font-weight:900;color:#1A0A00;background:var(--lime)}
 .step-h h2{margin:0;font-family:Unbounded,sans-serif;font-weight:700;font-size:1.3rem;letter-spacing:-.02em}
 .step-h p{margin:2px 0 0;color:var(--soft);font-size:.86rem}
 /* packs */
