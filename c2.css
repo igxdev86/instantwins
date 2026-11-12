@@ -535,3 +535,6 @@ body[data-skin="tickets"] .coin{display:flex;flex-direction:column-reverse;justi
 .qopts{display:grid;gap:8px;margin-top:4px}.qopts .btn{margin:0;padding:13px;font-size:1rem}
 .dob{display:grid;grid-template-columns:1fr 1fr 1.6fr;gap:8px}.dob input{text-align:center;font-weight:800;margin:0}
 .modal.onb{text-align:left;max-width:460px}.modal.onb label{display:block;margin-top:10px}.modal.onb .chk{display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;font-size:.88rem;color:var(--ink);margin-top:12px}.modal.onb .chk input{width:auto;margin:3px 0 0}.modal.onb .chk a{color:var(--cyan)}
+/* one-box date of birth */
+.dob1{text-align:center;font:900 1.35rem/1 Unbounded,sans-serif;letter-spacing:.06em;padding:14px 10px}.dob1::placeholder{letter-spacing:.04em;font-weight:700;color:rgba(255,255,255,.28)}.dob1.good{border-color:var(--lime);box-shadow:0 0 0 3px rgba(190,255,60,.18)}.dob1.bad{border-color:#ff4d8a;box-shadow:0 0 0 3px rgba(255,77,138,.18)}
+.dobsay{margin:8px 0 2px;font-size:.78rem;font-weight:600;color:var(--soft);line-height:1.4;min-height:1.1em}.dobsay.good{color:var(--lime)}.dobsay.bad{color:#ff8ab4}
