@@ -525,3 +525,10 @@ body[data-skin="tickets"] .coin{display:flex;flex-direction:column-reverse;justi
 .buytile .bt-art .t3{right:36px;top:52px;transform:rotate(4deg);background:linear-gradient(180deg,#ffb3d3,#FF3D8A 45%,#b4155a);animation-delay:-2.6s;opacity:.9}
 @media(max-width:420px){.buytile{padding-top:112px}.buytile .bt-art{right:50%;top:12px;transform:translateX(50%);width:140px}.buytile p{max-width:none}}
 .buytile .qr-btn i{font-style:normal}
+
+/* free entry — equal prominence */
+.freebtn{display:flex;flex-direction:column;gap:2px;text-decoration:none;color:var(--ink);background:linear-gradient(135deg,rgba(61,242,255,.12),rgba(198,255,61,.08)),var(--panel);border:1px solid rgba(61,242,255,.4);border-radius:14px;padding:12px 14px}
+.freebtn b{font:900 .78rem Unbounded,sans-serif;letter-spacing:-.01em;color:var(--cyan)}.freebtn span{font-size:.8rem;color:var(--soft);line-height:1.35}
+.freebtn.slim{margin:10px 0 0;flex-direction:row;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px}.freebtn.slim span{text-align:right}
+.bt-free{position:relative;z-index:1;display:inline-block;margin-left:12px;font:700 .8rem Inter,sans-serif;color:var(--cyan);text-decoration:underline;text-underline-offset:3px}
+@media(max-width:420px){.bt-free{display:block;margin:10px 0 0}.freebtn.slim{flex-direction:column;align-items:flex-start}.freebtn.slim span{text-align:left}}
