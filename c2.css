@@ -471,3 +471,18 @@ body[data-g="quick"] .stage .honest{font-size:.66rem;line-height:1.35;margin-top
 .fr-snake rect{animation:frbob .5s ease-in-out infinite alternate}.fr-snake rect:nth-child(2){animation-delay:-.12s}.fr-snake rect:nth-child(3){animation-delay:-.24s}.fr-snake rect:nth-child(4){animation-delay:-.36s}@keyframes frbob{from{transform:translateY(-1px)}to{transform:translateY(1px)}}
 .quickrow .fr-art svg{clip-path:inset(-20px 0 -20px 0)}
 @media(max-width:420px){.quickrow.feedrow{padding-right:16px;padding-top:112px;min-height:0}.quickrow .fr-art{right:50%;top:14px;transform:translateX(50%);width:170px;height:100px}}
+
+/* coloured tickets: snake + stack in the game, snake in the home tile, rain shape */
+.fd-snake i:nth-child(4n+1){background:linear-gradient(180deg,#f0ff9e,#C6FF3D 45%,#9fd81c)}
+.fd-snake i:nth-child(4n+2){background:linear-gradient(180deg,#b7f9ff,#3DF2FF 45%,#1aa7c4)}
+.fd-snake i:nth-child(4n+3){background:linear-gradient(180deg,#ffd0a3,#FF6A1A 45%,#c23a08)}
+.fd-snake i:nth-child(4n+4){background:linear-gradient(180deg,#ffb3d3,#FF3D8A 45%,#b4155a)}
+.fd-stack .fd-t:nth-child(4n+1){background:linear-gradient(90deg,#f0ff9e,#C6FF3D 40%,#9fd81c)}
+.fd-stack .fd-t:nth-child(4n+2){background:linear-gradient(90deg,#b7f9ff,#3DF2FF 40%,#1aa7c4)}
+.fd-stack .fd-t:nth-child(4n+3){background:linear-gradient(90deg,#ffd0a3,#FF6A1A 40%,#c23a08)}
+.fd-stack .fd-t:nth-child(4n+4){background:linear-gradient(90deg,#ffb3d3,#FF3D8A 40%,#b4155a)}
+.fr-snake rect:nth-child(2){fill:url(#hTickC)}.fr-snake rect:nth-child(3){fill:url(#hTickO)}.fr-snake rect:nth-child(4){fill:url(#hTickP)}
+.rain i{width:58px;height:28px;border-radius:5px}
+.rain i::before,.rain i::after{width:9px;height:9px}
+.rain i>s{position:absolute;left:62%;top:4px;bottom:4px;border-left:2px dashed rgba(11,11,16,.45)}
+.rain i>b{position:absolute;left:8px;top:50%;transform:translateY(-50%);font:900 .62rem Unbounded,sans-serif;color:rgba(11,11,16,.55)}
