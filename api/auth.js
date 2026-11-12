@@ -1,5 +1,5 @@
 // api/auth.js — signup / login / me / logout. Rate-limited per IP on the credential actions.
-const RPC = { signup:'iw_signup', login:'iw_login', me:'iw_me', logout:'iw_logout', reset:'iw_reset_password',
+const RPC = { signup:'iw_signup', login:'iw_login', code:'iw_code_request', codelogin:'iw_code_login', me:'iw_me', logout:'iw_logout', reset:'iw_reset_password',
               limits:'iw_limits', setlimit:'iw_set_limit', setmlimit:'iw_set_monthly_limit', takebreak:'iw_take_break', close:'iw_close_account' };
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
@@ -9,9 +9,11 @@ export default async function handler(req, res) {
   const fn = RPC[b && b.action];
   if (!fn) return res.status(400).json({ error: 'bad action' });
   const e = { KEY, URL };
-  if (['login','signup','reset'].includes(b.action) && !await allow(e, 'auth:' + ip(req), 20, 600)) return res.status(429).json({ error: 'too many attempts — try again in a few minutes' });
+  if (['login','signup','reset','code','codelogin'].includes(b.action) && !await allow(e, 'auth:' + ip(req), 20, 600)) return res.status(429).json({ error: 'too many attempts — try again in a few minutes' });
   let args;
   if (b.action === 'signup') args = { p_email: String(b.email||''), p_pass: String(b.password||''), p_name: String(b.name||''), p_dob: String(b.dob||''), p_ref: String(b.ref||'') };
+  else if (b.action === 'code') args = { p_email: String(b.email||'') };
+  else if (b.action === 'codelogin') args = { p_email: String(b.email||''), p_code: String(b.code||'') };
   else if (b.action === 'login') args = { p_email: String(b.email||''), p_pass: String(b.password||'') };
   else if (b.action === 'reset') args = { p_email: String(b.email||''), p_dob: String(b.dob||''), p_newpass: String(b.password||'') };
   else if (b.action === 'setmlimit') args = { p_token: String(b.token||''), p_limit_p: (b.limit_p===null||b.limit_p==='')?null:Math.max(parseInt(b.limit_p,10)||0,0) };
@@ -25,7 +27,7 @@ export default async function handler(req, res) {
   const data = await r.json();
   res.setHeader('Cache-Control', 'no-store');
   if (!r.ok) return res.status(400).json({ error: friendly(data && data.message) });
-  if (b.action === 'signup' || b.action === 'setlimit' || b.action === 'setmlimit') flushMail(e, 3).catch(() => {});
+  if (b.action === 'signup' || b.action === 'setlimit' || b.action === 'setmlimit' || b.action === 'code') flushMail(e, 3).catch(() => {});
   return res.status(200).json(data === null ? { ok: true } : data);
 }
 
