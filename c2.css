@@ -486,3 +486,4 @@ body[data-g="quick"] .stage .honest{font-size:.66rem;line-height:1.35;margin-top
 .rain i::before,.rain i::after{width:9px;height:9px}
 .rain i>s{position:absolute;left:62%;top:4px;bottom:4px;border-left:2px dashed rgba(11,11,16,.45)}
 .rain i>b{position:absolute;left:8px;top:50%;transform:translateY(-50%);font:900 .62rem Unbounded,sans-serif;color:rgba(11,11,16,.55)}
+.steps3 .s1,.steps3 .s2{cursor:pointer;transition:transform .12s}.steps3 .s1:hover,.steps3 .s2:hover{transform:translateY(-2px)}.steps3 .s1:active,.steps3 .s2:active{transform:scale(.98)}
