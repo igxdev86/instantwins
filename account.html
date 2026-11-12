@@ -1,16 +1,55 @@
 <!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Account — InstantWins.co.uk</title><link rel="icon" href="favicon.svg?v=3" type="image/svg+xml"><link rel="icon" href="favicon.ico?v=3" sizes="any"><link rel="apple-touch-icon" href="apple-touch-icon.png?v=3"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0B0B10"><link rel="stylesheet" href="c2.css"></head><body>
 <header class="top"><div class="wrap"><a class="brand" href="index.html"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1A0A00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></i><span class="bt" data-t="INSTANTWINS">INSTANTWINS</span></a>
 <div class="hr"><div class="bank" id="bankBox"></div></div></div></header><main class="wrap">
-<section class="hero" style="padding-bottom:6px"><div class="k">Account</div><h1 style="font-size:2.2rem" id="hello">ACCOUNT</h1></section>
-<div class="kv"><div><b id="aBal">—</b><i>credit</i></div><div><b id="aBank">—</b><i>tickets in bank</i></div><div><b id="aWon">—</b><i>won in total</i></div><div><b id="aAcct">—</b><i>account no.</i></div></div>
-<div class="ctrl" style="margin:12px 0"><a class="btn lime" href="game.html?g=quick">Reveal my tickets</a><a class="btn" href="index.html#buy">Buy tickets</a><a class="btn ghost" id="adminTop" href="admin.html" style="display:none">Admin</a></div>
-<div class="card"><h2>Recent tickets</h2><div class="wins" id="recent"><p>—</p></div></div>
-<div class="card" id="money"><h2>Money</h2><div id="payBox"><p>Loading…</p></div></div>
-<div class="card" id="profile"><h2>Winners list</h2><p>Prizes of &pound;100 or more are published on the <a href="winners.html">winners page</a> with your first name and county. You can switch that off.</p><label>County (shown with your first name)</label><input id="pfCounty" placeholder="e.g. Glamorgan" maxlength="40"><label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:.9rem"><input type="checkbox" id="pfPub" checked style="width:auto">Publish my wins on the winners page</label><button class="btn" id="pfSave" style="margin-top:10px">Save</button><div class="err" id="pfErr"></div></div>
-<div class="card" id="limits"><h2>Responsible play</h2><p>Daily and monthly limits on paid tickets. Lowering takes effect at once; raising or removing takes 24 hours. Setting £0 keeps your account on free postal entries only.</p><div class="row"><span>Current daily limit<small id="limNow">—</small></span></div><label>Set daily limit</label><select id="limSel"><option value="">No limit</option><option value="0">£0 — free entries only</option><option value="500">£5</option><option value="1000">£10</option><option value="2000">£20</option><option value="5000">£50</option><option value="10000">£100</option></select><button class="btn ghost" id="limGo" style="margin-top:10px">Save daily limit</button><div class="row" style="margin-top:14px"><span>Current monthly limit<small id="mlimNow">—</small></span></div><label>Set monthly limit (all paid entries this calendar month)</label><select id="mlimSel"><option value="">No limit</option><option value="0">£0 — free entries only</option><option value="2000">£20</option><option value="5000">£50</option><option value="10000">£100</option><option value="25000">£250</option><option value="50000">£500</option><option value="100000">£1,000</option></select><button class="btn ghost" id="mlimGo" style="margin-top:10px">Save monthly limit</button>
-  <label>Take a break</label><div class="ctrl" style="justify-content:flex-start"><button class="btn ghost" data-days="1">24 hours</button><button class="btn ghost" data-days="7">7 days</button><button class="btn ghost" data-days="30">30 days</button></div><div class="err" id="limErr"></div>
-  <p style="margin-top:12px">Need help? GamCare 0808 8020 133 (free, 24h). <a href="responsible-play.html" style="color:var(--cyan)">More</a></p></div>
-<div class="ctrl"><button class="btn ghost" id="out">Sign out</button></div></main><footer class="foot"><div class="wrap">
+<section class="hero" style="padding-bottom:4px"><div class="k">My account</div><h1 style="font-size:2.2rem" id="hello">ACCOUNT</h1><p class="acmeta" id="acMeta"></p></section>
+
+<div class="acbal">
+  <div class="acbal-k">Credit</div>
+  <div class="acbal-v" id="aBal">&mdash;</div>
+  <div class="acbal-sub"><span><b id="aBank">&mdash;</b> tickets in your bank</span><span><b id="aWon">&mdash;</b> won in total</span></div>
+  <div class="acbtns">
+    <button class="btn lime" id="depBtn">Deposit</button>
+    <button class="btn ghost" id="wdBtn">Withdraw</button>
+    <a class="btn" href="index.html#buy">Buy tickets</a>
+    <a class="btn ghost" href="game.html?g=quick">Reveal</a>
+  </div>
+  <div class="acnote" id="acNote"></div>
+</div>
+
+<details class="acc" open id="secTickets"><summary><span>My tickets</span><em id="tkSum"></em></summary>
+  <div class="acc-b"><div class="wins" id="recent"><p>&mdash;</p></div><button class="btn ghost slim" id="tkMore" style="display:none">Show all</button></div></details>
+
+<details class="acc" id="secMoney"><summary><span>Payments</span><em id="payCount"></em></summary>
+  <div class="acc-b" id="payBox"><p>Loading&hellip;</p></div></details>
+
+<details class="acc" id="secLimits"><summary><span>Spending limits</span><em id="limSum"></em></summary>
+  <div class="acc-b">
+    <p>Lowering a limit takes effect at once; raising or removing it takes 24 hours. &pound;0 keeps you on free postal entries only.</p>
+    <div class="row"><span>Daily<small id="limNow">&mdash;</small></span><select id="limSel" class="sel"><option value="">No limit</option><option value="0">&pound;0</option><option value="500">&pound;5</option><option value="1000">&pound;10</option><option value="2000">&pound;20</option><option value="5000">&pound;50</option><option value="10000">&pound;100</option></select></div>
+    <div class="row"><span>Monthly<small id="mlimNow">&mdash;</small></span><select id="mlimSel" class="sel"><option value="">No limit</option><option value="0">&pound;0</option><option value="2000">&pound;20</option><option value="5000">&pound;50</option><option value="10000">&pound;100</option><option value="25000">&pound;250</option><option value="50000">&pound;500</option><option value="100000">&pound;1,000</option></select></div>
+    <button class="btn ghost slim" id="limGo" style="margin-top:12px">Save limits</button>
+    <div class="err" id="limErr"></div>
+    <div class="acsub">Take a break</div>
+    <p>Pauses paid tickets. Cannot be ended early.</p>
+    <div class="acrow3"><button class="btn ghost slim" data-days="1">24 hours</button><button class="btn ghost slim" data-days="7">7 days</button><button class="btn ghost slim" data-days="30">30 days</button></div>
+    <p class="m" style="margin-top:12px">Need help? GamCare 0808 8020 133 (free, 24h). <a href="responsible-play.html">More</a></p>
+  </div></details>
+
+<details class="acc" id="secProfile"><summary><span>Winners list</span><em id="pfSum"></em></summary>
+  <div class="acc-b">
+    <p>Prizes of &pound;100 or more appear on the <a href="winners.html">winners page</a> as your first name and county. Switch it off any time.</p>
+    <label>County</label><input id="pfCounty" placeholder="e.g. Glamorgan" maxlength="40">
+    <label class="chkrow"><input type="checkbox" id="pfPub" checked><span>Publish my wins</span></label>
+    <button class="btn ghost slim" id="pfSave" style="margin-top:12px">Save</button><div class="err" id="pfErr"></div>
+  </div></details>
+
+<details class="acc" id="secAcct"><summary><span>Account</span><em id="aAcct"></em></summary>
+  <div class="acc-b">
+    <div class="row"><span>Account number</span><b id="aAcct2">&mdash;</b></div>
+    <div class="row"><span>Email</span><b id="aEmail">&mdash;</b></div>
+    <div class="acrow3" style="margin-top:12px"><a class="btn ghost slim" id="adminTop" href="admin.html" style="display:none">Admin</a><a class="btn ghost slim" href="support.html">Support</a><button class="btn ghost slim" id="out">Sign out</button></div>
+  </div></details>
+</main><footer class="foot"><div class="wrap">
  <div class="fcols">
   <div><div class="fh">Play</div><a href="index.html#buy">Buy tickets</a><a href="game.html?g=quick">Reveal</a><a href="prizes.html">Prize table</a><a href="winners.html">Winners</a><a href="free.html">Free entry by post</a></div>
   <div><div class="fh">Help</div><a href="support.html">Support</a><a href="how-it-works.html">How it works</a><a href="fair.html">Fairness &amp; verification</a><a href="account.html">My account</a><a href="complaints.html">Complaints</a><a href="affiliate.html">Affiliates</a></div>
@@ -20,24 +59,46 @@
  <p class="fsmall">InstantWins.co.uk is operated by IGX Ltd, registered in England and Wales, company no. 13057559. Registered office: 20-22 Wenlock Road, London N1 7GU. Every competition on this site is a prize competition with a free postal entry route under Schedule 2 of the Gambling Act 2005; every ticket&rsquo;s prize is allocated before the round opens and before you buy, and the games are reveals only. Open to residents of Great Britain aged 18 or over. Debit cards, Apple Pay and Google Pay accepted; no credit cards. Prizes are a matter of luck and most tickets win nothing &mdash; please play within your means. <span class="testmode"><b>Launch soon:</b> play credit only until payments open.</span></p>
 </div></footer>
 <nav class="mbar"><a href="index.html" class=""><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10H3z"/></svg>Home</a><a href="index.html#buy" class=""><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="10" rx="3"/><path d="M3 12h18"/></svg>Buy</a><a href="game.html?g=quick" class=""><svg viewBox="0 0 24 24"><path d="M5 3h14l-2 7H7z"/><path d="M12 10v3"/><circle cx="12" cy="17" r="3.5"/></svg>Reveal</a><a href="prizes.html" class=""><svg viewBox="0 0 24 24"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2-5.5-2.9L6.5 20l1-6.2L3 9.6l6.2-.9z"/></svg>Prizes</a><a href="index.html#free" class=""><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Free</a></nav><script src="c2.js"></script><script>
-document.addEventListener('DOMContentLoaded',()=>{ const $=id=>document.getElementById(id); C2.mine().then(m=>{ if(!m)return; $('pfCounty').value=m.county||''; $('pfPub').checked=m.publish_wins!==false; }).catch(()=>{});
-  $('pfSave').onclick=async()=>{ $('pfErr').className='err'; $('pfErr').textContent=''; try{ await C2.profile($('pfCounty').value,$('pfPub').checked); $('pfErr').className='err ok'; $('pfErr').textContent='Saved.'; }catch(e){ $('pfErr').textContent=e.message; } }; });
-</script><script>
 (function(){const $=id=>document.getElementById(id); const gbp=C2.gbp; let S=null; try{S=JSON.parse(localStorage.getItem('iw_session'));}catch(e){} if(!S||!S.token){location.href='signin.html?next=account.html';return;}
   const api=(u,b)=>fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({token:S.token},b))}).then(async r=>{const d=await r.json(); if(!r.ok||d.error)throw new Error(d.error||'failed'); return d;});
-  $('hello').textContent='HELLO, '+(S.name||'').toUpperCase(); if(S.is_admin)$('adminTop').style.display=''; fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'me',token:S.token})}).then(r=>r.json()).then(me=>{ if(me&&me.is_admin){ $('adminTop').style.display=''; S.is_admin=true; try{localStorage.setItem('iw_session',JSON.stringify(S));}catch(e){} } }).catch(()=>{});
-  C2.mine().then(m=>{ C2.header(m); $('aBal').textContent=gbp(m.balance_p); $('aBank').textContent=m.bank; $('aWon').textContent=gbp(m.won_p!=null?m.won_p:m.recent.reduce((a,t)=>a+t.prize_p,0)); $('recent').innerHTML=m.recent.length?m.recent.slice(0,20).map(t=>'<div><span>Ticket #'+t.no.toLocaleString()+'</span>'+(t.prize_p?'<b>'+gbp(t.prize_p)+'</b>':'<span style="color:var(--soft)">no prize</span>')+'</div>').join(''):'<p>No tickets revealed yet.</p>'; }).catch(e=>{$('recent').innerHTML='<p>'+e.message+'</p>';});
-  api('/api/auth',{action:'me'}).then(d=>{$('aAcct').textContent=d.acct_no||'—';}).catch(()=>{});
-  api('/api/pay',{action:'mine'}).then(d=>{ const box=$('payBox'); const note=d.live?'':'<div class="err ok" style="display:block;margin:0 0 12px">Test mode — bank transfers are logged and credited by hand as play credit. Real money opens at launch.</div>';
-    box.innerHTML=note+'<p><b>Deposit by bank transfer</b> to '+(d.bank&&d.bank.sort?d.bank.name+' · '+(d.bank.bank?d.bank.bank+' · ':'')+'sort code '+d.bank.sort+' · account '+d.bank.acct:'IGX Ltd (bank details to follow)')+' using reference <b>'+d.reference+'</b>, then tell us the amount:</p><label>Amount (£5–£500)</label><input id="depAmt" type="number" step="1" min="5" max="500"><button class="btn lime" id="depGo" style="margin-top:10px">I\'ve sent it</button><div class="err" id="depErr"></div>'
-      +'<p style="margin-top:14px"><b>Withdraw</b> any amount, no minimum, to a UK account in your name.</p><label>Amount (£)</label><input id="wdAmt" type="number" step="0.01"><label>Account holder</label><input id="wdName"><label>Sort code</label><input id="wdSort" inputmode="numeric"><label>Account number</label><input id="wdAcct" inputmode="numeric"><button class="btn ghost" id="wdGo" style="margin-top:10px">Request withdrawal</button><div class="err" id="wdErr"></div>'
-      +'<div style="margin-top:10px">'+(d.deposits||[]).slice(0,5).map(x=>'<div class="row"><span>Deposit '+gbp(x.amount_p)+'<small>'+new Date(x.created_at).toLocaleDateString('en-GB')+'</small></span><span class="pill '+(x.status==='approved'?'ok':x.status==='pending'?'warn':'')+'">'+x.status+'</span></div>').join('')+(d.withdrawals||[]).slice(0,5).map(x=>'<div class="row"><span>Withdrawal '+gbp(x.amount_p)+'<small>'+new Date(x.created_at).toLocaleDateString('en-GB')+'</small></span><span class="pill '+(x.status==='paid'?'ok':x.status==='pending'?'warn':'')+'">'+x.status+'</span></div>').join('')+'</div>';
-    $('depGo').onclick=async()=>{$('depErr').className='err';try{await api('/api/pay',{action:'deposit',amount:$('depAmt').value});$('depErr').className='err ok';$('depErr').textContent='Logged — credited when it lands.';}catch(e){$('depErr').textContent=e.message;}};
-    $('wdGo').onclick=async()=>{$('wdErr').className='err';try{await api('/api/pay',{action:'withdraw',amount:$('wdAmt').value,name:$('wdName').value,sort:$('wdSort').value,acct:$('wdAcct').value});$('wdErr').className='err ok';$('wdErr').textContent='Requested — paid within 5 working days.';}catch(e){$('wdErr').textContent=e.message;}};
-  }).catch(()=>{$('payBox').innerHTML='<p>Payments unavailable right now.</p>';});
-  function lim(){api('/api/auth',{action:'limits'}).then(l=>{ const m=$('mlimNow'); if(m)m.textContent=(l.monthly_limit_p==null?'No limit':gbp(l.monthly_limit_p)+' a month')+(l.pending_mlimit_at?' · changing to '+(l.pending_mlimit_p==null?'no limit':gbp(l.pending_mlimit_p))+' on '+new Date(l.pending_mlimit_at).toLocaleString():'')+(l.spent_month_p!=null?' · spent '+gbp(l.spent_month_p)+' this month':'');$('limNow').textContent=(l.daily_limit_p==null?'No limit':gbp(l.daily_limit_p)+' a day')+(l.pending_limit_at?' · changing to '+(l.pending_limit_p==null?'no limit':gbp(l.pending_limit_p))+' on '+new Date(l.pending_limit_at).toLocaleDateString('en-GB'):'')+' · spent today '+gbp(l.spent_today_p||0)+(l.excluded_until?' · on a break until '+new Date(l.excluded_until).toLocaleString('en-GB'):'');}).catch(()=>{});}
-  $('mlimGo').onclick=async()=>{$('limErr').className='err';try{await api('/api/auth',{action:'setmlimit',limit_p:$('mlimSel').value});$('limErr').className='err ok';$('limErr').textContent='Saved.';lim();}catch(e){$('limErr').textContent=e.message;}};
-  lim(); $('limGo').onclick=async()=>{$('limErr').className='err';try{await api('/api/auth',{action:'setlimit',limit_p:$('limSel').value});$('limErr').className='err ok';$('limErr').textContent='Saved.';lim();}catch(e){$('limErr').textContent=e.message;}};
-  document.querySelectorAll('[data-days]').forEach(b=>b.onclick=async()=>{if(!confirm('Pause paid tickets for '+b.dataset.days+' day(s)? This cannot be undone early.'))return;try{await api('/api/auth',{action:'takebreak',days:+b.dataset.days});lim();}catch(e){$('limErr').textContent=e.message;}});
-  $('out').onclick=()=>{localStorage.removeItem('iw_session');location.href='index.html';};
+  const dt=s=>new Date(s).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  $('hello').textContent='HELLO, '+(S.name||'').toUpperCase().split(' ')[0]; if(S.is_admin)$('adminTop').style.display='';
+  api('/api/auth',{action:'me'}).then(me=>{ if(me.is_admin){ $('adminTop').style.display=''; S.is_admin=true; try{localStorage.setItem('iw_session',JSON.stringify(S));}catch(e){} } $('aAcct').textContent=me.acct_no||''; $('aAcct2').textContent=me.acct_no||'\u2014'; $('aEmail').textContent=me.email||'\u2014'; $('acMeta').textContent=[me.email,me.acct_no?'#'+me.acct_no:''].filter(Boolean).join(' \u00b7 '); }).catch(()=>{});
+
+  // Tickets
+  let recent=[]; function paintTk(all){ const list=all?recent:recent.slice(0,6); $('recent').innerHTML=list.length?list.map(t=>'<div><span>Ticket #'+t.no.toLocaleString()+'</span>'+(t.prize_p?'<b>'+gbp(t.prize_p)+'</b>':'<span style="color:var(--soft)">no prize</span>')+'</div>').join(''):'<p class="m">No tickets revealed yet. <a href="game.html?g=quick">Reveal some</a> or <a href="index.html#buy">buy tickets</a>.</p>'; $('tkMore').style.display=recent.length>6&&!all?'':'none'; }
+  $('tkMore').onclick=()=>paintTk(true);
+  C2.mine().then(m=>{ C2.header(m); $('aBal').textContent=gbp(m.balance_p); $('aBank').textContent=m.bank; $('aWon').textContent=gbp(m.won_p!=null?m.won_p:m.recent.reduce((a,t)=>a+t.prize_p,0)); recent=m.recent||[]; const wins=recent.filter(t=>t.prize_p).length; $('tkSum').textContent=recent.length?recent.length+' revealed \u00b7 '+wins+' won':'none yet'; paintTk(false); $('pfCounty').value=m.county||''; $('pfPub').checked=m.publish_wins!==false; $('pfSum').textContent=m.publish_wins===false?'off':'on'; }).catch(e=>{$('recent').innerHTML='<p>'+e.message+'</p>';});
+
+  // Payments
+  let PAY=null;
+  function paintPay(d){ const rows=[].concat((d.deposits||[]).map(x=>({t:'Deposit',x})),(d.withdrawals||[]).map(x=>({t:'Withdrawal',x}))).sort((a,b)=>new Date(b.x.created_at)-new Date(a.x.created_at));
+    $('payCount').textContent=rows.length?rows.length+' recent':'';
+    $('payBox').innerHTML=(d.live?'':'<p class="m">Test mode: bank transfers are logged and credited by hand as play credit.</p>')+(rows.length?rows.map(r=>'<div class="row"><span>'+r.t+' '+gbp(r.x.amount_p)+'<small>'+dt(r.x.created_at)+'</small></span><span class="pill '+(r.x.status==='approved'||r.x.status==='paid'?'ok':r.x.status==='pending'?'warn':'')+'">'+r.x.status+'</span></div>').join(''):'<p class="m">No deposits or withdrawals yet.</p>'); }
+  api('/api/pay',{action:'mine'}).then(d=>{ PAY=d; paintPay(d); if(!d.live)$('acNote').textContent='Test mode \u2014 play credit only until payments open.'; }).catch(()=>{ $('payBox').innerHTML='<p class="m">Payments unavailable right now.</p>'; });
+
+  // Modals
+  function modal(id,html){ let d=document.getElementById(id); if(d)d.remove(); d=document.createElement('div'); d.id=id; d.className='ldm'; d.style.zIndex=72; d.innerHTML='<div class="modal buy"><button class="x" aria-label="Close">\u00d7</button>'+html+'</div>'; document.body.appendChild(d); const close=()=>d.remove(); d.querySelector('.x').onclick=close; d.addEventListener('click',e=>{if(e.target===d)close();}); return {d,close}; }
+  $('depBtn').onclick=()=>{ const b=PAY&&PAY.bank; const bank=b&&b.sort?'<div class="bankbox"><div><small>Pay to</small><b>'+b.name+'</b></div>'+(b.bank?'<div><small>Bank</small><b>'+b.bank+'</b></div>':'')+'<div><small>Sort code</small><b>'+b.sort+'</b></div><div><small>Account</small><b>'+b.acct+'</b></div><div><small>Reference</small><b class="ref">'+(PAY.reference||'')+'</b></div></div>':'<p>Bank details to follow.</p>';
+    const m=modal('iwDep','<div class="done-k">Deposit</div><h2>Bank transfer</h2><p>Send from a UK account in your name, using your reference so we can match it.</p>'+bank+'<label>Amount sent (\u00a35\u2013\u00a3500)</label><input id="depAmt" type="number" inputmode="numeric" step="1" min="5" max="500" placeholder="20"><button class="btn lime" id="depGo" style="width:100%;margin-top:14px">I\u2019ve sent it</button><div class="err" id="depErr"></div>');
+    $('depGo').onclick=async()=>{ $('depErr').className='err'; try{ await api('/api/pay',{action:'deposit',amount:$('depAmt').value}); $('depErr').className='err ok'; $('depErr').textContent='Logged \u2014 credited when it lands.'; $('depGo').disabled=true; api('/api/pay',{action:'mine'}).then(d=>{PAY=d;paintPay(d);}); setTimeout(m.close,1600); }catch(e){ $('depErr').textContent=e.message; } }; };
+  $('wdBtn').onclick=()=>{ const m=modal('iwWd','<div class="done-k">Withdraw</div><h2>To your bank</h2><p>Any amount, no minimum, to a UK account in your name. Paid within 5 working days.</p><label>Amount (\u00a3)</label><input id="wdAmt" type="number" inputmode="decimal" step="0.01" placeholder="'+(C2.cachedBal?(C2.cachedBal()/100).toFixed(2):'')+'"><label>Account holder</label><input id="wdName" autocomplete="name"><div class="two"><div><label>Sort code</label><input id="wdSort" inputmode="numeric" placeholder="00-00-00"></div><div><label>Account number</label><input id="wdAcct" inputmode="numeric" placeholder="12345678"></div></div><button class="btn lime" id="wdGo" style="width:100%;margin-top:14px">Request withdrawal</button><div class="err" id="wdErr"></div>');
+    $('wdGo').onclick=async()=>{ $('wdErr').className='err'; try{ await api('/api/pay',{action:'withdraw',amount:$('wdAmt').value,name:$('wdName').value,sort:$('wdSort').value,acct:$('wdAcct').value}); $('wdErr').className='err ok'; $('wdErr').textContent='Requested \u2014 paid within 5 working days.'; $('wdGo').disabled=true; api('/api/pay',{action:'mine'}).then(d=>{PAY=d;paintPay(d);}); C2.mine().then(x=>{C2.header(x);$('aBal').textContent=gbp(x.balance_p);}); setTimeout(m.close,1600); }catch(e){ $('wdErr').textContent=e.message; } }; };
+
+  // Limits
+  function lim(){ api('/api/auth',{action:'limits'}).then(l=>{ const dl=l.daily_limit_p==null?'No limit':gbp(l.daily_limit_p); const ml=l.monthly_limit_p==null?'No limit':gbp(l.monthly_limit_p);
+    $('limNow').textContent=dl+(l.pending_limit_at?' \u2192 '+(l.pending_limit_p==null?'no limit':gbp(l.pending_limit_p))+' from '+dt(l.pending_limit_at):'')+' \u00b7 spent today '+gbp(l.spent_today_p||0);
+    $('mlimNow').textContent=ml+(l.pending_mlimit_at?' \u2192 '+(l.pending_mlimit_p==null?'no limit':gbp(l.pending_mlimit_p))+' from '+dt(l.pending_mlimit_at):'')+(l.spent_month_p!=null?' \u00b7 spent '+gbp(l.spent_month_p)+' this month':'');
+    $('limSel').value=l.daily_limit_p==null?'':String(l.daily_limit_p); $('mlimSel').value=l.monthly_limit_p==null?'':String(l.monthly_limit_p);
+    $('limSum').textContent=(l.daily_limit_p==null?'no daily':gbp(l.daily_limit_p)+'/day')+(l.excluded_until?' \u00b7 on a break':'');
+    if(l.excluded_until)$('acNote').textContent='On a break until '+new Date(l.excluded_until).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+'.'; }).catch(()=>{}); }
+  lim();
+  $('limGo').onclick=async()=>{ $('limErr').className='err'; try{ await api('/api/auth',{action:'setlimit',limit_p:$('limSel').value}); await api('/api/auth',{action:'setmlimit',limit_p:$('mlimSel').value}); $('limErr').className='err ok'; $('limErr').textContent='Saved.'; lim(); }catch(e){ $('limErr').textContent=e.message; } };
+  document.querySelectorAll('[data-days]').forEach(b=>b.onclick=async()=>{ if(!confirm('Pause paid tickets for '+b.dataset.days+' day(s)? This cannot be undone early.'))return; try{ await api('/api/auth',{action:'takebreak',days:+b.dataset.days}); lim(); }catch(e){ $('limErr').textContent=e.message; } });
+
+  // Profile
+  $('pfSave').onclick=async()=>{ $('pfErr').className='err'; $('pfErr').textContent=''; try{ await C2.profile($('pfCounty').value,$('pfPub').checked); $('pfErr').className='err ok'; $('pfErr').textContent='Saved.'; $('pfSum').textContent=$('pfPub').checked?'on':'off'; }catch(e){ $('pfErr').textContent=e.message; } };
+  $('out').onclick=()=>{ localStorage.removeItem('iw_session'); location.href='index.html'; };
+  // deep links: account.html#money etc
+  const h=location.hash.replace('#',''); const map={money:'secMoney',payments:'secMoney',limits:'secLimits',tickets:'secTickets'}; if(map[h]){ const el=$(map[h]); el.open=true; el.scrollIntoView({block:'start'}); }
 })();</script></body></html>

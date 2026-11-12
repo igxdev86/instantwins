@@ -538,3 +538,30 @@ body[data-skin="tickets"] .coin{display:flex;flex-direction:column-reverse;justi
 /* one-box date of birth */
 .dob1{text-align:center;font:900 1.35rem/1 Unbounded,sans-serif;letter-spacing:.06em;padding:14px 10px}.dob1::placeholder{letter-spacing:.04em;font-weight:700;color:rgba(255,255,255,.28)}.dob1.good{border-color:var(--lime);box-shadow:0 0 0 3px rgba(190,255,60,.18)}.dob1.bad{border-color:#ff4d8a;box-shadow:0 0 0 3px rgba(255,77,138,.18)}
 .dobsay{margin:8px 0 2px;font-size:.78rem;font-weight:600;color:var(--soft);line-height:1.4;min-height:1.1em}.dobsay.good{color:var(--lime)}.dobsay.bad{color:#ff8ab4}
+/* account */
+.acmeta{color:var(--soft);font-size:.82rem;margin:4px 0 0;word-break:break-all}
+.acbal{position:relative;overflow:hidden;margin:14px 0 16px;padding:20px 18px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.14);background:radial-gradient(120% 90% at 100% 0%,rgba(198,255,61,.22),transparent 55%),radial-gradient(90% 80% at 0% 100%,rgba(255,61,138,.18),transparent 55%),linear-gradient(160deg,#1a2230 0%,#121219 55%,#0d0d13 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 18px 50px rgba(0,0,0,.5)}
+.acbal::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,0) 40%);pointer-events:none}
+.acbal>*{position:relative;z-index:1}
+.acbal-k{font:800 .66rem Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan)}
+.acbal-v{font:900 2.8rem/1 Unbounded,sans-serif;letter-spacing:-.03em;margin:6px 0 10px;color:var(--lime);text-shadow:0 0 26px rgba(198,255,61,.35)}
+.acbal-sub{display:flex;gap:16px;flex-wrap:wrap;color:var(--soft);font-size:.82rem;margin-bottom:16px}.acbal-sub b{color:var(--ink);font-family:Unbounded,sans-serif;font-size:.9rem}
+.acbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}.acbtns .btn{padding:13px 10px;font-size:.9rem;text-align:center}.acbtns a.btn{color:var(--ink)}.acbtns a.btn:not(.ghost){color:#0B0B10}
+@media(min-width:560px){.acbtns{grid-template-columns:repeat(4,1fr)}}
+.acnote{margin-top:12px;font-size:.78rem;color:var(--soft)}.acnote:empty{display:none}
+.acc{border:1px solid var(--line);border-radius:16px;background:var(--panel);margin:10px 0;overflow:hidden}
+.acc summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px 18px;font:900 1rem Unbounded,sans-serif;user-select:none}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary em{font:600 .76rem Inter,sans-serif;color:var(--soft);text-transform:none;margin-left:auto}
+.acc summary::after{content:"";width:9px;height:9px;border-right:2px solid var(--soft);border-bottom:2px solid var(--soft);transform:rotate(45deg);margin:0 4px 4px 6px;transition:transform .2s;flex:none}
+.acc[open] summary::after{transform:rotate(-135deg);margin-bottom:-4px}
+.acc[open] summary{border-bottom:1px solid var(--line)}
+.acc-b{padding:14px 18px 18px}.acc-b>p{color:var(--soft);font-size:.86rem;line-height:1.5;margin:0 0 12px}.acc-b p.m a,.acc-b>p a{color:var(--cyan)}
+.acc-b .row small{display:block;color:var(--soft);font-weight:500;font-size:.76rem;margin-top:3px}
+.acc-b .row .sel{width:auto;min-width:110px;margin:0;padding:9px 12px}
+.acsub{font:800 .66rem Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin:18px 0 6px}
+.acrow3{display:flex;gap:8px;flex-wrap:wrap}.acrow3 .btn{flex:1;text-align:center}
+.btn.slim{padding:11px 14px;font-size:.86rem}
+.chkrow{display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:.9rem;font-weight:600;color:var(--ink);margin-top:12px}.chkrow input{width:auto;margin:0}
+.bankbox{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 6px}.bankbox small{display:block;color:var(--soft);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em}.bankbox b{font-family:Unbounded,sans-serif;font-size:.86rem}.bankbox .ref{color:var(--lime)}
+.modal .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
