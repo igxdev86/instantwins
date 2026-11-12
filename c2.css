@@ -487,3 +487,13 @@ body[data-g="quick"] .stage .honest{font-size:.66rem;line-height:1.35;margin-top
 .rain i>s{position:absolute;left:62%;top:4px;bottom:4px;border-left:2px dashed rgba(11,11,16,.45)}
 .rain i>b{position:absolute;left:8px;top:50%;transform:translateY(-50%);font:900 .62rem Unbounded,sans-serif;color:rgba(11,11,16,.55)}
 .steps3 .s1,.steps3 .s2{cursor:pointer;transition:transform .12s}.steps3 .s1:hover,.steps3 .s2:hover{transform:translateY(-2px)}.steps3 .s1:active,.steps3 .s2:active{transform:scale(.98)}
+
+/* results grid in the reader look: small stubs */
+body[data-skin="tickets"] .grid{grid-template-columns:repeat(3,1fr);gap:8px}@media(min-width:700px){body[data-skin="tickets"] .grid{grid-template-columns:repeat(6,1fr)}}
+body[data-skin="tickets"] .coin{aspect-ratio:auto;border-radius:7px;position:relative;padding:8px 8px 7px;font:900 .8rem Unbounded,sans-serif;letter-spacing:-.02em;background:linear-gradient(180deg,#2d2d3a,#1c1c26);border:1px solid rgba(255,255,255,.08);color:#777;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 5px 10px rgba(0,0,0,.45);display:block;text-align:left;overflow:hidden}
+body[data-skin="tickets"] .coin::before,body[data-skin="tickets"] .coin::after{content:"";position:absolute;top:50%;width:10px;height:10px;border-radius:50%;background:var(--bg);transform:translateY(-50%)}body[data-skin="tickets"] .coin::before{left:-5px}body[data-skin="tickets"] .coin::after{right:-5px}
+body[data-skin="tickets"] .coin small{display:block;font:700 .56rem Inter,sans-serif;letter-spacing:.08em;color:rgba(255,255,255,.4);margin:0 0 2px;text-align:left}
+body[data-skin="tickets"] .coin.w{background:linear-gradient(180deg,#e4ff8a,#b9f23a 60%,#8fc400);color:#0B0B10;border-color:#eaffb0;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 6px 12px rgba(0,0,0,.45)}body[data-skin="tickets"] .coin.w small{color:rgba(11,11,16,.55)}
+body[data-skin="tickets"] .coin.big{background:linear-gradient(180deg,#ffe08a,#ffb02e 60%,#ff8a1a);color:#1A0A00;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 0 16px rgba(255,197,61,.5)}body[data-skin="tickets"] .coin.big small{color:rgba(26,10,0,.55)}
+body[data-skin="tickets"] .coin.huge{background:linear-gradient(180deg,#ff9ac6,#ff4f98 60%,#ff2f7f);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 0 22px rgba(255,61,138,.75)}body[data-skin="tickets"] .coin.huge small{color:rgba(255,255,255,.7)}
+body[data-skin="tickets"] .coin{display:flex;flex-direction:column-reverse;justify-content:flex-end}

@@ -51,7 +51,7 @@
   function paint(){ const s={bank:{length:bank}}; $('left').textContent=s.bank.length; $('wins').textContent=session.filter(t=>t.prize).length; $('won').textContent=gbp(session.reduce((a,t)=>a+t.prize,0));
     $('play').textContent=(GK==='quick'?(skin==='tickets'?'Feed':'Drop'):g.btn)+' one'; $('play').disabled=busy||!s.bank.length; $('playAll').disabled=busy||s.bank.length<2; $('playAll').textContent=(GK==='quick'?(skin==='tickets'?'Feed all ':'Drop all '):'Play all ')+s.bank.length; if(GK==='quick'){ skinPaint(); qkPaint(); } $('finish').style.display=(busy&&all&&bank>1&&GK!=='quick')?'':'none';
     const emp=!(C2.TOKEN&&(s.bank.length||session.length)); $('empty').style.display=emp?'':'none'; $('ctrl').style.display=emp?'none':'';
-    $('grid').innerHTML=session.slice().reverse().map(t=>'<div class="coin'+(t.prize>=100000?' huge':t.prize>=1000?' big':t.prize?' w':'')+'">'+(t.prize?gbp(t.prize):'—')+'<small>#'+t.no.toLocaleString()+'</small></div>').join(''); C2.header(); }
+    $('grid').innerHTML=session.slice().reverse().map(t=>'<div class="coin'+(t.prize>=100000?' huge':t.prize>=1000?' big':t.prize?' w':'')+'">'+(t.prize?gbp(t.prize):(document.body.dataset.skin==='tickets'?'NO PRIZE':'—'))+'<small>#'+t.no.toLocaleString()+'</small></div>').join(''); C2.header(); }
   // ---- Coin Drop (board drawn once; path lands on the slot for the prize) ----
   const SLOTS=[0,100,500,0,1000,25000,500000,5000,200,50,100000,0]; const BIG=500000; // slot values in pence, centre = big
   function dropInit(){ const pegs=$('pegs'); let s=''; for(let r=0;r<9;r++){const n=4+r, y=70+r*30, w=60+r*22; for(let i=0;i<n;i++){s+='<circle cx="'+(160-w/2+i*(w/(n-1)))+'" cy="'+y+'" r="3"/>';}} pegs.innerHTML=s;
