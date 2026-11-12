@@ -1,4 +1,6 @@
 // api/c2.js — Million Round: GET -> round state; POST {action:'buy',n} | {action:'reveal'} | {action:'revealall'} | {action:'mine'} | {action:'accept_terms'} | {action:'profile'} with token
+// qualifying questions (answer compared server-side)
+const QUESTIONS=[{q:'What is 7 + 6?',opts:['11','13','15'],a:'13'},{q:'Which of these is a prime number?',opts:['21','27','29'],a:'29'},{q:'What is 9 × 8?',opts:['72','64','81'],a:'72'},{q:'How many minutes are in two and a half hours?',opts:['120','150','180'],a:'150'},{q:'What is 144 ÷ 12?',opts:['11','12','14'],a:'12'},{q:'Which number comes next: 3, 6, 12, 24, …?',opts:['36','48','54'],a:'48'}];
 export default async function handler(req, res) {
   const e = env(res); if (!e) return;
   let r;
@@ -11,10 +13,13 @@ export default async function handler(req, res) {
     else if (a === 'reveal') { if (!await allow(e, 'rev:' + token, 400, 60)) return res.status(429).json({ error: 'slow down a moment' }); r = await rpc(e, 'c2_reveal', { p_token: token }); }
     else if (a === 'revealall') r = await rpc(e, 'c2_reveal_all', { p_token: token });
     else if (a === 'mine') r = await rpc(e, 'c2_mine', { p_token: token });
+    else if (a === 'answer') { const Q=QUESTIONS[b.qi|0]; if(!Q) return res.status(400).json({ error: 'bad question' }); r = await rpc(e, 'c2_answer', { p_token: token, p_q: Q.q, p_answer: String(b.answer||'').slice(0,100), p_correct: String(b.answer)===Q.a }); }
     else if (a === 'accept_terms') r = await rpc(e, 'iw_accept_terms', { p_token: token });
     else if (a === 'profile') r = await rpc(e, 'iw_set_profile', { p_token: token, p_county: String(b.county || '').slice(0, 40), p_publish: b.publish !== false });
     else return res.status(400).json({ error: 'bad request' });
     if (a === 'buy' || a === 'buybal' || a === 'revealall') { flushMail(e, 5).catch(() => {}); }
+  } else if (req.query && req.query.q !== undefined) {
+    const i = Math.floor(Math.random()*QUESTIONS.length); const Q=QUESTIONS[i]; res.setHeader('Cache-Control','no-store'); return res.status(200).json({ qi:i, q:Q.q, opts:Q.opts.slice().sort(()=>Math.random()-.5) });
   } else {
     if (!await allow(e, 'state:' + ip(req), 120, 60)) return res.status(429).json({ error: 'slow down' });
     r = await rpc(e, 'c2_state', {});
