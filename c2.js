@@ -1,7 +1,7 @@
 /* InstantWins (Concept 2) shared client: session, ticket bank, round state */
 const C2=(()=>{
-  const TABLE=[[10000000,1],[2500000,2],[500000,5],[100000,20],[25000,100],[5000,1000],[1000,10000],[500,50000],[200,100000],[100,150000],[50,100000]];
-  const CAP=2000000;
+  const TABLE=[[1000000,1],[250000,2],[50000,10],[10000,50],[2500,200],[1000,600],[500,2000],[200,6000],[100,24000],[50,40000]];
+  const CAP=200000;
   const PACKS=[[1,100],[5,475],[10,900],[25,2100],[50,4000],[100,7500],[250,18000],[500,35000],[1000,68000]];
   const gbp=p=>p===0?'£0':p<100?p+'p':'£'+(p/100).toLocaleString('en-GB',{minimumFractionDigits:p%100?2:0,maximumFractionDigits:2});
   let S=null; try{S=JSON.parse(localStorage.getItem('iw_session'));}catch(e){} const TOKEN=S&&S.token;
