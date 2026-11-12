@@ -497,3 +497,15 @@ body[data-skin="tickets"] .coin.w{background:linear-gradient(180deg,#e4ff8a,#b9f
 body[data-skin="tickets"] .coin.big{background:linear-gradient(180deg,#ffe08a,#ffb02e 60%,#ff8a1a);color:#1A0A00;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 0 16px rgba(255,197,61,.5)}body[data-skin="tickets"] .coin.big small{color:rgba(26,10,0,.55)}
 body[data-skin="tickets"] .coin.huge{background:linear-gradient(180deg,#ff9ac6,#ff4f98 60%,#ff2f7f);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 0 22px rgba(255,61,138,.75)}body[data-skin="tickets"] .coin.huge small{color:rgba(255,255,255,.7)}
 body[data-skin="tickets"] .coin{display:flex;flex-direction:column-reverse;justify-content:flex-end}
+
+/* end prize draw tile: extra gloss */
+.enddraw{position:relative;overflow:hidden;background:radial-gradient(110% 90% at 100% 0%,rgba(255,61,138,.42),transparent 55%),radial-gradient(80% 80% at 0% 100%,rgba(255,106,26,.25),transparent 55%),linear-gradient(160deg,#241326 0%,#141420 55%,#0d0d13 100%);border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.6),0 16px 40px rgba(0,0,0,.55),0 0 44px rgba(255,61,138,.18)}
+.enddraw::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,0) 42%);pointer-events:none}
+.enddraw>*{position:relative;z-index:1}
+.enddraw .ed-shine{position:absolute;inset:0;z-index:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.10) 48%,transparent 60%);transform:translateX(-130%);animation:shine 6.5s ease-in-out infinite;pointer-events:none}
+.enddraw .ed-art{position:absolute;right:-18px;top:50%;transform:translateY(-50%);width:120px;height:120px;opacity:.14;z-index:0;pointer-events:none;animation:edspin 18s linear infinite}
+.enddraw .ed-art svg{width:100%;height:100%}
+@keyframes edspin{to{transform:translateY(-50%) rotate(360deg)}}
+.enddraw .ed-l b{font-size:1.7rem;text-shadow:0 0 22px rgba(255,61,138,.45)}
+.enddraw .ed-k{color:#ff9ac6}
+@media(max-width:420px){.enddraw .ed-art{width:96px;height:96px;right:-14px}}
