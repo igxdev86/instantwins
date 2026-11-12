@@ -510,3 +510,18 @@ body[data-skin="tickets"] .coin{display:flex;flex-direction:column-reverse;justi
 .enddraw .ed-k{color:#ff9ac6}
 @media(max-width:420px){.enddraw .ed-art{width:96px;height:96px;right:-14px}}
 .pack.all{grid-column:1/-1;background:linear-gradient(135deg,rgba(61,242,255,.14),rgba(198,255,61,.1)),var(--panel);border-color:rgba(61,242,255,.45)}.pack.all .each{color:var(--cyan);font-weight:800}.pack.all.sel{border-color:var(--lime)}@media(min-width:700px){.pack.all{grid-column:auto}}
+
+.buytile{display:block;position:relative;overflow:hidden;border-radius:22px;padding:22px 18px 20px;text-decoration:none;color:var(--ink);background:radial-gradient(120% 90% at 100% 0%,rgba(255,106,26,.35),transparent 55%),radial-gradient(90% 80% at 0% 100%,rgba(198,255,61,.18),transparent 55%),linear-gradient(160deg,#2a1a12 0%,#141420 55%,#0d0d13 100%);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.6),0 18px 44px rgba(0,0,0,.55),0 0 40px rgba(255,106,26,.14);transition:transform .15s}
+.buytile:hover{transform:translateY(-2px)}
+.buytile::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 40%);pointer-events:none}
+.buytile>*{position:relative;z-index:1}.buytile>.qr-shine,.buytile>.bt-art{z-index:0}
+.buytile .k{color:var(--orange)}.buytile h3{margin:4px 0 6px;font:900 1.6rem Unbounded,sans-serif;letter-spacing:-.03em}.buytile p{margin:0 0 16px;color:var(--soft);font-size:.86rem;line-height:1.45;max-width:400px}
+.buytile .qr-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 20px;border-radius:999px;font:900 .92rem Unbounded,sans-serif;letter-spacing:-.01em;animation:glowp 1.8s ease-in-out infinite;background:linear-gradient(180deg,#ffb27a 0%,var(--orange) 45%,#d9520e 100%);color:#1A0A00;box-shadow:0 10px 26px rgba(255,106,26,.35),inset 0 1px 0 rgba(255,255,255,.6),inset 0 -2px 0 rgba(0,0,0,.15)}
+.buytile .bt-art{position:absolute;right:14px;top:18px;width:130px;height:100px;pointer-events:none}
+.buytile .bt-art i{position:absolute;width:92px;height:46px;border-radius:7px;box-shadow:0 10px 18px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.6);animation:qrfloat 4s ease-in-out infinite}
+.buytile .bt-art i::before,.buytile .bt-art i::after{content:"";position:absolute;top:50%;width:14px;height:14px;border-radius:50%;background:#1a1420;transform:translateY(-50%)}.buytile .bt-art i::before{left:-7px}.buytile .bt-art i::after{right:-7px}
+.buytile .bt-art .t1{right:0;top:0;transform:rotate(-14deg);background:linear-gradient(180deg,#f0ff9e,#C6FF3D 45%,#9fd81c);opacity:.95}
+.buytile .bt-art .t2{right:18px;top:26px;transform:rotate(-6deg);background:linear-gradient(180deg,#ffd0a3,#FF6A1A 45%,#c23a08);animation-delay:-1.4s}
+.buytile .bt-art .t3{right:36px;top:52px;transform:rotate(4deg);background:linear-gradient(180deg,#ffb3d3,#FF3D8A 45%,#b4155a);animation-delay:-2.6s;opacity:.9}
+@media(max-width:420px){.buytile{padding-top:112px}.buytile .bt-art{right:50%;top:12px;transform:translateX(50%);width:140px}.buytile p{max-width:none}}
+.buytile .qr-btn i{font-style:normal}

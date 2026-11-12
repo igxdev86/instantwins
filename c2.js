@@ -53,6 +53,7 @@ const C2=(()=>{
 })();
 function __sync(){ if(!C2.TOKEN)return; C2.mine().then(m=>{ C2.header(m); if(m&&m.terms_due)C2.termsModal(); document.dispatchEvent(new CustomEvent('iw:sync',{detail:m})); }).catch(()=>{}); }
 document.addEventListener('DOMContentLoaded',()=>{ C2.header(); __sync(); });
+document.addEventListener('click',e=>{ const a=e.target.closest('a[href$="#buy"]'); if(!a||document.body.dataset.g)return; if(!C2.TOKEN){ e.preventDefault(); location.href='signin.html'; return; } e.preventDefault(); C2.buySheet(r=>{ if(!/game\.html/.test(location.pathname)){ location.href='game.html?g=quick'; } }); });
 window.addEventListener('pageshow',e=>{ if(e.persisted)__sync(); });
 document.addEventListener('visibilitychange',()=>{ if(!document.hidden)__sync(); });
 window.addEventListener('focus',__sync);
