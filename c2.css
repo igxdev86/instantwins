@@ -565,3 +565,5 @@ body[data-skin="tickets"] .coin{display:flex;flex-direction:column-reverse;justi
 .chkrow{display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:.9rem;font-weight:600;color:var(--ink);margin-top:12px}.chkrow input{width:auto;margin:0}
 .bankbox{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 6px}.bankbox small{display:block;color:var(--soft);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em}.bankbox b{font-family:Unbounded,sans-serif;font-size:.86rem}.bankbox .ref{color:var(--lime)}
 .modal .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bank .me{width:36px;height:36px;border-radius:50%;background:linear-gradient(160deg,#ffb257,var(--orange) 60%,#ff6a1f);display:grid;place-items:center;margin-left:2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 4px 14px rgba(255,122,24,.35);flex:none}.bank .me svg{width:19px;height:19px}
+@media(max-width:430px){body.signed .bank .me{width:30px;height:30px}body.signed .bank .me svg{width:16px;height:16px}}
