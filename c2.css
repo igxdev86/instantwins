@@ -567,3 +567,7 @@ body[data-skin="tickets"] .coin{display:flex;flex-direction:column-reverse;justi
 .modal .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .bank .me{width:36px;height:36px;border-radius:50%;background:linear-gradient(160deg,#ffb257,var(--orange) 60%,#ff6a1f);display:grid;place-items:center;margin-left:2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 4px 14px rgba(255,122,24,.35);flex:none}.bank .me svg{width:19px;height:19px}
 @media(max-width:430px){body.signed .bank .me{width:30px;height:30px}body.signed .bank .me svg{width:16px;height:16px}}
+/* feed one: a single ticket travels in */
+.fd-snake.solo i:not(:first-child){display:none}
+.fd-snake.solo.go{animation:snakeone 1.1s cubic-bezier(.3,0,.7,1) forwards}
+@keyframes snakeone{0%{opacity:0;left:100%;transform:none}12%{opacity:1}100%{opacity:1;left:-90px;transform:none}}
