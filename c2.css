@@ -534,3 +534,4 @@ body[data-skin="tickets"] .coin{display:flex;flex-direction:column-reverse;justi
 @media(max-width:420px){.bt-free{display:block;margin:10px 0 0}.freebtn.slim{flex-direction:column;align-items:flex-start}.freebtn.slim span{text-align:left}}
 .qopts{display:grid;gap:8px;margin-top:4px}.qopts .btn{margin:0;padding:13px;font-size:1rem}
 .dob{display:grid;grid-template-columns:1fr 1fr 1.6fr;gap:8px}.dob input{text-align:center;font-weight:800;margin:0}
+.modal.onb{text-align:left;max-width:460px}.modal.onb label{display:block;margin-top:10px}.modal.onb .chk{display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;font-size:.88rem;color:var(--ink);margin-top:12px}.modal.onb .chk input{width:auto;margin:3px 0 0}.modal.onb .chk a{color:var(--cyan)}

@@ -1,5 +1,5 @@
 // api/auth.js — signup / login / me / logout. Rate-limited per IP on the credential actions.
-const RPC = { signup:'iw_signup', login:'iw_login', code:'iw_code_request', codelogin:'iw_code_login', me:'iw_me', logout:'iw_logout', reset:'iw_reset_password',
+const RPC = { signup:'iw_signup', login:'iw_login', code:'iw_code_request', codelogin:'iw_code_login', onboard:'iw_onboard', me:'iw_me', logout:'iw_logout', reset:'iw_reset_password',
               limits:'iw_limits', setlimit:'iw_set_limit', setmlimit:'iw_set_monthly_limit', takebreak:'iw_take_break', close:'iw_close_account' };
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
@@ -13,6 +13,7 @@ export default async function handler(req, res) {
   let args;
   if (b.action === 'signup') args = { p_email: String(b.email||''), p_pass: String(b.password||''), p_name: String(b.name||''), p_dob: String(b.dob||''), p_ref: String(b.ref||'') };
   else if (b.action === 'code') args = { p_email: String(b.email||'') };
+  else if (b.action === 'onboard') args = { p_token: String(b.token||''), p_name: String(b.name||'').slice(0,80), p_dob: String(b.dob||''), p_gb: b.gb===true, p_limit_p: (b.limit_p===null||b.limit_p===undefined||b.limit_p==='')?null:Math.max(parseInt(b.limit_p,10)||0,0) };
   else if (b.action === 'codelogin') args = { p_email: String(b.email||''), p_code: String(b.code||'') };
   else if (b.action === 'login') args = { p_email: String(b.email||''), p_pass: String(b.password||'') };
   else if (b.action === 'reset') args = { p_email: String(b.email||''), p_dob: String(b.dob||''), p_newpass: String(b.password||'') };
