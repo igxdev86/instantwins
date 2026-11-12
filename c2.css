@@ -459,3 +459,15 @@ body[data-g="quick"] .qk-turbo,body[data-g="quick"] .qk-skin{padding:0 10px;font
 body[data-g="quick"] .qk-ladder{display:flex;overflow-x:auto;gap:5px;scrollbar-width:none;margin-top:8px}body[data-g="quick"] .qk-ladder::-webkit-scrollbar{display:none}body[data-g="quick"] .qk-ladder div{flex:none;min-width:58px}
 body[data-g="quick"] .stage .honest{font-size:.66rem;line-height:1.35;margin-top:8px}
 @media(min-width:700px){body[data-g="quick"] #ctrl{position:static;background:none;padding:0;margin-top:12px}body[data-g="quick"] main{padding-bottom:40px}.feeder .fd-stub{width:150px}}
+
+/* home: feeder tile */
+.quickrow.feedrow{padding-right:150px;min-height:170px}
+.quickrow .fr-art{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:150px;height:92px;pointer-events:none}
+.quickrow .fr-art svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 12px 18px rgba(0,0,0,.6))}
+.fr-led{animation:frled 3.6s steps(1) infinite}
+@keyframes frled{0%{opacity:1}45%{opacity:1}50%{opacity:.25}55%{opacity:1}90%{opacity:1}95%{opacity:.25}}
+.fr-snake{animation:frsnake 1.6s linear infinite}
+@keyframes frsnake{0%{transform:translateX(0)}100%{transform:translateX(-76px)}}
+.fr-snake rect{animation:frbob .5s ease-in-out infinite alternate}.fr-snake rect:nth-child(2){animation-delay:-.12s}.fr-snake rect:nth-child(3){animation-delay:-.24s}.fr-snake rect:nth-child(4){animation-delay:-.36s}@keyframes frbob{from{transform:translateY(-1px)}to{transform:translateY(1px)}}
+.quickrow .fr-art svg{clip-path:inset(-20px 0 -20px 0)}
+@media(max-width:420px){.quickrow.feedrow{padding-right:16px;padding-top:112px;min-height:0}.quickrow .fr-art{right:50%;top:14px;transform:translateX(50%);width:170px;height:100px}}
