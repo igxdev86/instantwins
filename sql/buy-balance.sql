@@ -1,6 +1,6 @@
 -- buy-balance.sql — "Use my whole balance": tickets priced on a sliding rate (same ladder as the packs), server authoritative.
 create or replace function c2_rate_for(p_amount_p int) returns int language sql immutable as $$
-  select case when p_amount_p >= 35000 then 70 when p_amount_p >= 18000 then 72 when p_amount_p >= 7500 then 75 when p_amount_p >= 4000 then 80
+  select case when p_amount_p >= 68000 then 68 when p_amount_p >= 35000 then 70 when p_amount_p >= 18000 then 72 when p_amount_p >= 7500 then 75 when p_amount_p >= 4000 then 80
               when p_amount_p >= 2100 then 84 when p_amount_p >= 900 then 90 when p_amount_p >= 475 then 95 else 100 end $$;
 
 -- shared issue path

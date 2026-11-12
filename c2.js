@@ -2,7 +2,7 @@
 const C2=(()=>{
   const TABLE=[[10000000,1],[2500000,2],[500000,5],[100000,20],[25000,100],[5000,1000],[1000,10000],[500,50000],[200,100000],[100,150000],[50,100000]];
   const CAP=2000000;
-  const PACKS=[[1,100],[5,475],[10,900],[25,2100],[50,4000],[100,7500],[250,18000],[500,35000]];
+  const PACKS=[[1,100],[5,475],[10,900],[25,2100],[50,4000],[100,7500],[250,18000],[500,35000],[1000,68000]];
   const gbp=p=>p===0?'£0':p<100?p+'p':'£'+(p/100).toLocaleString('en-GB',{minimumFractionDigits:p%100?2:0,maximumFractionDigits:2});
   let S=null; try{S=JSON.parse(localStorage.getItem('iw_session'));}catch(e){} const TOKEN=S&&S.token;
   const post=(body)=>fetch('/api/c2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({token:TOKEN},body))}).then(async r=>{const d=await r.json(); if(!r.ok||d.error)throw new Error(d.error||'failed'); return d;});
@@ -10,7 +10,7 @@ const C2=(()=>{
   const mine=()=>TOKEN?post({action:'mine'}):Promise.resolve(null);
   const buy=n=>post({action:'buy',n});
   const buyBalance=()=>post({action:'buybal'});
-  const rateFor=a=>a>=35000?70:a>=18000?72:a>=7500?75:a>=4000?80:a>=2100?84:a>=900?90:a>=475?95:100;
+  const rateFor=a=>a>=68000?68:a>=35000?70:a>=18000?72:a>=7500?75:a>=4000?80:a>=2100?84:a>=900?90:a>=475?95:100;
   const balQuote=bal=>{ const r=rateFor(bal), n=Math.min(5000,Math.floor(bal/r)); return n<1?null:{n,rate:r,cost:n*r,save:n*100-n*r}; };
   const cachedBal=()=>{ try{ const h=JSON.parse(localStorage.getItem('iw_c2hdr')); return h&&h.balance_p!=null?h.balance_p:null; }catch(e){ return null; } };
   const reveal=()=>post({action:'reveal'});

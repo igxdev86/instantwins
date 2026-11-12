@@ -6,7 +6,7 @@ export default async function handler(req, res) {
     let b = req.body; if (typeof b === 'string') { try { b = JSON.parse(b); } catch { b = {}; } }
     const token = String((b && b.token) || ''); if (!token) return res.status(401).json({ error: 'sign in first' });
     const a = b.action;
-    if (a === 'buy') { if (!await allow(e, 'buy:' + token, 30, 60)) return res.status(429).json({ error: 'slow down a moment' }); const n = parseInt(b.n, 10); if (![1,5,10,25,50,100,250,500].includes(n)) return res.status(400).json({ error: 'pick a pack' }); r = await rpc(e, 'c2_buy', { p_token: token, p_n: n }); }
+    if (a === 'buy') { if (!await allow(e, 'buy:' + token, 30, 60)) return res.status(429).json({ error: 'slow down a moment' }); const n = parseInt(b.n, 10); if (![1,5,10,25,50,100,250,500,1000].includes(n)) return res.status(400).json({ error: 'pick a pack' }); r = await rpc(e, 'c2_buy', { p_token: token, p_n: n }); }
     else if (a === 'buybal') { if (!await allow(e, 'buy:' + token, 30, 60)) return res.status(429).json({ error: 'slow down a moment' }); r = await rpc(e, 'c2_buy_balance', { p_token: token }); }
     else if (a === 'reveal') { if (!await allow(e, 'rev:' + token, 400, 60)) return res.status(429).json({ error: 'slow down a moment' }); r = await rpc(e, 'c2_reveal', { p_token: token }); }
     else if (a === 'revealall') r = await rpc(e, 'c2_reveal_all', { p_token: token });
