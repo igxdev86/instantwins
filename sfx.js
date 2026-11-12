@@ -92,7 +92,9 @@ const SND=(()=>{
   S.music=musicStart; S.musicStop=musicStop;
   S.setMode=m=>{ mode=m; try{localStorage.setItem('iw_snd',m);}catch(e){} if(m==='all'){musicStart();} else {musicStop();} paintBtn(); };
   function note(msg,ms){ let t=document.getElementById('sndNote'); if(!t){ t=document.createElement('div'); t.id='sndNote'; t.className='sndnote'; document.body.appendChild(t); } t.textContent=msg; t.classList.add('show'); clearTimeout(note.tm); note.tm=setTimeout(()=>t.classList.remove('show'),ms||2200); }
-  S.cycle=()=>{ S.setMode(mode==='off'?'all':'off'); if(mode!=='off')S.click();
+  // plain test beep on a fresh context created inside the click — bypasses the whole engine
+  function beep(){ try{ const AC=window.AudioContext||window.webkitAudioContext; const c=new AC(); const o=c.createOscillator(), g=c.createGain(); o.frequency.value=660; g.gain.value=0.2; o.connect(g); g.connect(c.destination); o.start(); o.stop(c.currentTime+0.18); c.resume(); setTimeout(()=>c.close(),600); return c.state; }catch(e){ return 'beep failed: '+e.message; } }
+  S.cycle=()=>{ S.setMode(mode==='off'?'all':'off'); if(mode!=='off'){ S.click(); const bs=beep(); setTimeout(()=>{ const st=ctx?ctx.state:'none'; if(st!=='running')note('Engine '+st+' · test '+bs+' · '+(navigator.userAgent.match(/Chrome|Safari|Firefox/)||['?'])[0],5000); },700); }
     setTimeout(()=>{ const st=ctx?ctx.state:'no audio engine'; note(mode==='off'?'Sound off':'Sound on'+(st!=='running'?' — browser is blocking audio ('+st+'). Check the tab isn\'t muted.':''),2600); },350); };
   let warned=false; function checkRunning(){ if(warned||mode==='off'||!ctx)return; setTimeout(()=>{ if(ctx.state!=='running'&&!warned){ warned=true; note('Sound is blocked by your browser — tap the speaker, or unmute this tab.',4000); } },1500); }
   S.getMode=()=>mode;

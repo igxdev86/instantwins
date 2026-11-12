@@ -458,7 +458,7 @@ body[data-g="quick"] .qk-tally{margin:8px 10px 4px;gap:6px}body[data-g="quick"] 
 body[data-g="quick"] .qk-turbo,body[data-g="quick"] .qk-skin{padding:0 10px;font-size:.6rem}
 body[data-g="quick"] .qk-ladder{display:flex;overflow-x:auto;gap:5px;scrollbar-width:none;margin-top:8px}body[data-g="quick"] .qk-ladder::-webkit-scrollbar{display:none}body[data-g="quick"] .qk-ladder div{flex:none;min-width:58px}
 body[data-g="quick"] .stage .honest{font-size:.66rem;line-height:1.35;margin-top:8px}
-@media(min-width:700px){body[data-g="quick"] #ctrl{bottom:0;padding:14px 0 18px;background:linear-gradient(180deg,rgba(11,11,16,0),rgba(11,11,16,.96) 30%)}body[data-g="quick"] #ctrl .btn{flex:none;min-width:220px;max-width:320px}body[data-g="quick"] #ctrl{justify-content:center}body[data-g="quick"] main{padding-bottom:110px}.feeder .fd-stub{width:150px}}
+@media(min-width:700px){body[data-g="quick"] #ctrl{bottom:64px;padding:14px 0 10px;background:linear-gradient(180deg,rgba(11,11,16,0),rgba(11,11,16,.96) 30%);justify-content:center}body[data-g="quick"] #ctrl .btn{flex:none;min-width:220px;max-width:320px}body[data-g="quick"] main{padding-bottom:160px}.feeder .fd-stub{width:150px}body[data-g="quick"] .stage{max-width:560px;margin:0 auto}.feeder{margin:8px auto 0;max-width:440px}.feeder .fd-out{max-width:none}body[data-g="quick"] .qk-tally{max-width:440px;margin:8px auto 4px}}
 
 /* home: feeder tile */
 .quickrow.feedrow{padding-right:150px;min-height:170px}
