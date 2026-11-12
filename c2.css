@@ -369,7 +369,7 @@ body[data-g="quick"] .coin.huge{background:radial-gradient(circle at 35% 30%,#ff
 
 /* ---- ticket feeder skin ---- */
 .qk-skin{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--soft);border-radius:12px;padding:0 12px;font:900 .68rem Unbounded,sans-serif;letter-spacing:.06em;cursor:pointer}
-.qk-tally{grid-template-columns:1fr 1fr auto auto}
+.qk-tally{grid-template-columns:1fr 1fr auto}
 .feeder{display:none}body[data-skin="tickets"] .feeder{display:block}body[data-skin="tickets"] .qk-hopper,body[data-skin="tickets"] .qk-chute,body[data-skin="tickets"] .qk-tray{display:none}
 .feeder{margin:12px 12px 0;position:relative}
 .fd-top{display:flex;gap:10px;align-items:stretch;margin-bottom:10px}
