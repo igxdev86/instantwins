@@ -509,3 +509,4 @@ body[data-skin="tickets"] .coin{display:flex;flex-direction:column-reverse;justi
 .enddraw .ed-l b{font-size:1.7rem;text-shadow:0 0 22px rgba(255,61,138,.45)}
 .enddraw .ed-k{color:#ff9ac6}
 @media(max-width:420px){.enddraw .ed-art{width:96px;height:96px;right:-14px}}
+.pack.all{grid-column:1/-1;background:linear-gradient(135deg,rgba(61,242,255,.14),rgba(198,255,61,.1)),var(--panel);border-color:rgba(61,242,255,.45)}.pack.all .each{color:var(--cyan);font-weight:800}.pack.all.sel{border-color:var(--lime)}@media(min-width:700px){.pack.all{grid-column:auto}}

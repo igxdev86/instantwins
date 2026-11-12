@@ -9,6 +9,10 @@ const C2=(()=>{
   const state=()=>fetch('/api/c2',{cache:'no-store'}).then(r=>r.json());
   const mine=()=>TOKEN?post({action:'mine'}):Promise.resolve(null);
   const buy=n=>post({action:'buy',n});
+  const buyBalance=()=>post({action:'buybal'});
+  const rateFor=a=>a>=35000?70:a>=18000?72:a>=7500?75:a>=4000?80:a>=2100?84:a>=900?90:a>=475?95:100;
+  const balQuote=bal=>{ const r=rateFor(bal), n=Math.min(5000,Math.floor(bal/r)); return n<1?null:{n,rate:r,cost:n*r,save:n*100-n*r}; };
+  const cachedBal=()=>{ try{ const h=JSON.parse(localStorage.getItem('iw_c2hdr')); return h&&h.balance_p!=null?h.balance_p:null; }catch(e){ return null; } };
   const reveal=()=>post({action:'reveal'});
   const revealAll=()=>post({action:'revealall'});
   function header(m){ const box=document.getElementById('bankBox'); if(!box)return;
@@ -34,15 +38,18 @@ const C2=(()=>{
     d.innerHTML='<div class="modal buy"><button type="button" class="x" id="iwBuyX" aria-label="close">&times;</button><div class="done-k">Buy tickets</div><h2>Pick a pack</h2><div class="packs mini" id="iwPacks"></div><div class="buyrow"><div><b id="iwSelT"></b><span id="iwSelP"></span><small id="iwSelE"></small></div><button class="btn lime" id="iwBuyGo">Buy</button></div><div class="err" id="iwBuyErr"></div><p class="m" style="margin:12px 0 0">Balance <b id="iwBuyBal">–</b> · <a href="account.html#money">add credit</a> · Free entry by post, same odds &mdash; <a href="free.html">how</a></p></div>';
     document.body.appendChild(d);
     const $=id=>document.getElementById(id);
-    function paint(){ $('iwPacks').innerHTML=PACKS.map(([n,p],i)=>{const full=n*100, sv=full-p; return '<div class="pack'+(i===sel?' sel':'')+'" data-i="'+i+'">'+(sv?'<span class="save">SAVE '+gbp(sv)+'</span>':'')+'<div class="t">'+n+'<small>ticket'+(n>1?'s':'')+'</small></div><div class="p">'+gbp(p)+'</div></div>';}).join('');
-      const [n,p]=PACKS[sel]; $('iwSelT').textContent=n+' ticket'+(n>1?'s':''); $('iwSelP').textContent=gbp(p); $('iwSelE').textContent=gbp(Math.round(p/n))+' each'; $('iwBuyGo').textContent='Buy for '+gbp(p);
-      d.querySelectorAll('.pack').forEach(el=>el.onclick=()=>{sel=+el.dataset.i;paint();}); }
+    function paint(){ const bal=cachedBal(), q=bal!=null?balQuote(bal):null;
+      $('iwPacks').innerHTML=PACKS.map(([n,p],i)=>{const full=n*100, sv=full-p; return '<div class="pack'+(i===sel?' sel':'')+'" data-i="'+i+'">'+(sv?'<span class="save">SAVE '+gbp(sv)+'</span>':'')+'<div class="t">'+n+'<small>ticket'+(n>1?'s':'')+'</small></div><div class="p">'+gbp(p)+'</div></div>';}).join('')
+        +(q?'<div class="pack all'+(sel==='bal'?' sel':'')+'" data-i="bal">'+(q.save?'<span class="save">SAVE '+gbp(q.save)+'</span>':'')+'<div class="t">'+q.n.toLocaleString()+'<small>tickets</small></div><div class="p">'+gbp(q.cost)+'</div><div class="each">whole balance · '+q.rate+'p each</div></div>':'');
+      if(sel==='bal'&&q){ $('iwSelT').textContent=q.n.toLocaleString()+' tickets'; $('iwSelP').textContent=gbp(q.cost); $('iwSelE').textContent=q.rate+'p each · uses your whole balance'; $('iwBuyGo').textContent='Buy for '+gbp(q.cost); }
+      else { if(sel==='bal')sel=1; const [n,p]=PACKS[sel]; $('iwSelT').textContent=n+' ticket'+(n>1?'s':''); $('iwSelP').textContent=gbp(p); $('iwSelE').textContent=gbp(Math.round(p/n))+' each'; $('iwBuyGo').textContent='Buy for '+gbp(p); }
+      d.querySelectorAll('.pack').forEach(el=>el.onclick=()=>{sel=el.dataset.i==='bal'?'bal':+el.dataset.i;paint();}); }
     paint(); try{ const h=JSON.parse(localStorage.getItem('iw_c2hdr')); if(h&&h.balance_p!=null)$('iwBuyBal').textContent=gbp(h.balance_p); }catch(e){}
     const close=()=>d.remove(); $('iwBuyX').onclick=close; d.addEventListener('click',e=>{ if(e.target===d)close(); });
-    $('iwBuyGo').onclick=async()=>{ const [n]=PACKS[sel]; const b=$('iwBuyGo'); b.disabled=true; b.textContent='Buying…'; $('iwBuyErr').textContent='';
-      try{ const r=await buy(n); if(typeof SND!=='undefined')SND.buy(); header({bank:r.bank,balance_p:r.balance_p}); close(); checkin(); if(onDone)onDone(r); }
+    $('iwBuyGo').onclick=async()=>{ const b=$('iwBuyGo'); b.disabled=true; b.textContent='Buying…'; $('iwBuyErr').textContent='';
+      try{ const r=sel==='bal'?await buyBalance():await buy(PACKS[sel][0]); if(typeof SND!=='undefined')SND.buy(); header({bank:r.bank,balance_p:r.balance_p}); close(); checkin(); if(onDone)onDone(r); }
       catch(e){ $('iwBuyErr').textContent=e.message; b.disabled=false; b.textContent='Buy'; paint(); } }; }
-  return {TABLE,CAP,PACKS,gbp,TOKEN,state,mine,buy,reveal,revealAll,header,acceptTerms,profile,termsModal,checkin,buySheet};
+  return {TABLE,CAP,PACKS,gbp,TOKEN,state,mine,buy,buyBalance,balQuote,cachedBal,reveal,revealAll,header,acceptTerms,profile,termsModal,checkin,buySheet};
 })();
 function __sync(){ if(!C2.TOKEN)return; C2.mine().then(m=>{ C2.header(m); if(m&&m.terms_due)C2.termsModal(); document.dispatchEvent(new CustomEvent('iw:sync',{detail:m})); }).catch(()=>{}); }
 document.addEventListener('DOMContentLoaded',()=>{ C2.header(); __sync(); });
