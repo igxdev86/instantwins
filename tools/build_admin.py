@@ -41,6 +41,8 @@ for key,label,src in TABS:
         body=body.replace('<div class="panel"><h2>Competition postcard</h2><p class="lead">Cards with a competition code and answer are keyed in on the <a href="#competitions" style="color:var(--cyan)">Competitions admin</a> page.</p></div>','<div class="panel"><h2>Competition postcard</h2><p class="lead">Cards with a competition code and answer are keyed in on the <a href="#competitions" style="color:var(--cyan)">Competitions admin</a> page.</p></div></details>')
         body=body.replace('<div class="ap" id="ap-postal">',open('tools/postal_panel.html').read())
         code+=open('tools/postal_panel.js').read()
+    if key=='support':
+        body=open('tools/support_panel.html').read(); code=open('tools/support_panel.js').read()
     if key=='payments':
         body=body.replace('<div class="ap" id="ap-payments">','<div class="ap" id="ap-payments">'+open('tools/card_panel.html').read())
         code+=open('tools/card_panel.js').read()

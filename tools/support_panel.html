@@ -1,0 +1,12 @@
+<div class="ap" id="ap-support">
+  <div class="panel"><h2>Inbox</h2>
+    <p class="lead">Site messages and every email sent to <b>@instantwins.co.uk</b> land here. Replies go out by email from hello@instantwins.co.uk and, for members, show in their support thread too.</p>
+    <div class="row"><span>Resend Receiving <small class="m">webhook: https://instantwins.co.uk/api/inbound</small></span><span class="pill" id="inStat">—</span></div>
+    <div id="threads" style="margin-top:10px"><span class="m">Loading…</span></div></div>
+  <div class="panel" id="threadPanel" style="display:none"><h2 id="threadTitle">Thread</h2><p class="lead" id="threadMeta"></p>
+    <div id="thread" style="display:flex;flex-direction:column;gap:8px"></div>
+    <label style="margin-top:14px">Reply as InstantWins</label><textarea id="reBody" rows="5" placeholder="Hi … "></textarea>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px"><button class="btn lime" id="reGo" style="margin:0">Send reply</button><span class="m" id="reTo"></span></div>
+    <div class="err" id="reErr"></div>
+  </div>
+</div>

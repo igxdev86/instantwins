@@ -583,3 +583,4 @@ body[data-g].noctrl main{padding-bottom:24px}
 .bankalt{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}.bankalt summary{cursor:pointer;color:var(--soft);font-size:.84rem;font-weight:700;list-style:none}.bankalt summary::-webkit-details-marker{display:none}.bankalt summary::after{content:" \25BE";color:var(--cyan)}.bankalt[open] summary{margin-bottom:10px}
 .refbig{font-family:Unbounded,sans-serif;font-size:1.05rem;letter-spacing:.14em;color:var(--lime)}
 .bankbox .ref{letter-spacing:.14em;font-size:1.05rem}
+.krow.hot{border-color:rgba(198,255,61,.35)}.krow .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--lime);margin-right:8px;vertical-align:middle;box-shadow:0 0 8px var(--lime)}

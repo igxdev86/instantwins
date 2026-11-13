@@ -3,7 +3,7 @@ const MAP = { stats:'iw_admin_stats', users:'iw_admin_users', threads:'iw_admin_
               thread:'iw_admin_thread', reply:'iw_admin_reply', announce:'iw_admin_announce',
               aff_list:'iw_admin_aff_list', aff_create:'iw_admin_aff_create', aff_update:'iw_admin_aff_update',
               setbal:'iw_admin_my_balance', postal:'iw_admin_postal_enter', postal_no:'iw_admin_postal_enter_no', kinds:'iw_admin_kinds', kindset:'iw_admin_kind_active',
-              payments:'iw_admin_payments', cardpay:'iw_admin_card_payments', depdecide:'iw_admin_deposit_decide', wddecide:'iw_admin_withdraw_decide', setting:'iw_admin_setting', golive:'iw_go_live', tickets:'iw_admin_tickets', ticketset:'iw_admin_ticket_active',
+              payments:'iw_admin_payments', cardpay:'iw_admin_card_payments', inboxcount:'iw_admin_inbox_count', depdecide:'iw_admin_deposit_decide', wddecide:'iw_admin_withdraw_decide', setting:'iw_admin_setting', golive:'iw_go_live', tickets:'iw_admin_tickets', ticketset:'iw_admin_ticket_active',
               comps:'iw_admin_comps', compcreate:'iw_admin_comp_create', comppostal:'iw_admin_comp_postal', postal_ticket:'iw_admin_postal_ticket', kindroll:'iw_admin_kind_rollover', itemcreate:'iw_admin_item_create', itemclaims:'iw_admin_item_claims', itemclaimset:'iw_admin_item_claim_set', postal_mil:'iw_admin_postal_mil', postal_reject:'iw_admin_postal_reject', postal_log:'iw_admin_postal_log', milstats:'iw_admin_mil_stats', milset:'iw_admin_mil_set', milclose:'iw_admin_mil_close', games:'iw_admin_games', skillq:'iw_admin_skillq', credit:'iw_admin_credit' };
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
@@ -14,8 +14,8 @@ export default async function handler(req, res) {
   const fn = MAP[b && b.action];
   if (!token || !fn) return res.status(400).json({ error: 'bad request' });
   const args = { p_token: token };
-  if (b.action === 'thread') args.p_user = String(b.user_id||'');
-  if (b.action === 'reply') { args.p_user = String(b.user_id||''); args.p_body = String(b.body||''); }
+  if (b.action === 'thread') args.p_key = String(b.key||b.user_id||'');
+  if (b.action === 'reply') { args.p_key = String(b.key||b.user_id||''); args.p_body = String(b.body||''); }
   if (b.action === 'announce') { args.p_title = String(b.title||''); args.p_body = String(b.body||''); }
   if (b.action === 'aff_create') { args.p_name=String(b.name||''); args.p_email=String(b.email||''); args.p_code=String(b.code||''); args.p_model='cpa' /* rev-share withdrawn */; args.p_rate=parseInt(b.rate,10)||0; }
   if (b.action === 'aff_update') { args.p_code=String(b.code||''); args.p_model=String(b.model||''); args.p_rate=(b.rate===''||b.rate==null)?null:parseInt(b.rate,10); args.p_status=String(b.status||''); }
@@ -45,7 +45,7 @@ export default async function handler(req, res) {
   const data = await r.json();
   res.setHeader('Cache-Control', 'no-store');
   if (!r.ok) return res.status(400).json({ error: friendly(data && data.message) });
-  if (['depdecide','wddecide','postal_mil','announce'].includes(b.action)) flushMail({ KEY, URL }, 10).catch(() => {});
+  if (['depdecide','wddecide','postal_mil','announce','reply'].includes(b.action)) flushMail({ KEY, URL }, 10).catch(() => {});
   return res.status(200).json(data);
 }
 

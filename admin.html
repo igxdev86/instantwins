@@ -56,14 +56,18 @@
 
   </div>
 <div class="ap" id="ap-support">
-  <div class="panel"><h2>Support threads</h2><div id="threads"><span class="m">Loading…</span></div></div>
-  <div class="panel" id="threadPanel" style="display:none"><h2 id="threadTitle">Thread</h2>
-    <div id="thread" style="display:flex;flex-direction:column"></div>
-    <label>Reply as InstantWins</label><textarea id="reBody"></textarea>
-    <button class="btn" id="reGo">SEND REPLY</button>
+  <div class="panel"><h2>Inbox</h2>
+    <p class="lead">Site messages and every email sent to <b>@instantwins.co.uk</b> land here. Replies go out by email from hello@instantwins.co.uk and, for members, show in their support thread too.</p>
+    <div class="row"><span>Resend Receiving <small class="m">webhook: https://instantwins.co.uk/api/inbound</small></span><span class="pill" id="inStat">—</span></div>
+    <div id="threads" style="margin-top:10px"><span class="m">Loading…</span></div></div>
+  <div class="panel" id="threadPanel" style="display:none"><h2 id="threadTitle">Thread</h2><p class="lead" id="threadMeta"></p>
+    <div id="thread" style="display:flex;flex-direction:column;gap:8px"></div>
+    <label style="margin-top:14px">Reply as InstantWins</label><textarea id="reBody" rows="5" placeholder="Hi … "></textarea>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px"><button class="btn lime" id="reGo" style="margin:0">Send reply</button><span class="m" id="reTo"></span></div>
     <div class="err" id="reErr"></div>
   </div>
 </div>
+
 <div class="ap" id="ap-affiliates">
   <div class="panel"><h2>Affiliate program</h2>
     <p class="lead">Create an affiliate on a <b>CPA</b> (fixed \u00a3 per player who places a paid entry). Rev-share is no longer offered (legal review, Oct 2026). Their link is <span class="mono">?ref=CODE</span>.</p>
@@ -232,27 +236,27 @@ $('pmRef').addEventListener('keydown',e=>{if(e.key==='Enter')$('pmGo').click();}
 
 })();
 (function(){
-
-let curUser=null;
-async function loadThreads(){
-  const t=await api('/api/admin',{action:'threads',token:s.token});
-  $('threads').innerHTML=t.length?t.map(x=>
-    '<div class="row"><span><b>'+esc(x.name)+'</b> <span class="m">'+esc(x.email)+' \u00b7 '+x.count+' msgs</span></span>'
-    +'<button class="pill" style="cursor:pointer;border:none" onclick="openThread(\''+x.user_id+'\',\''+esc(x.name)+'\')">Open</button></div>').join('')
-    :'<span style="color:var(--soft);font-size:.75rem">No support messages yet.</span>';
-}
-window.openThread=async(uid,name)=>{
-  curUser=uid;$('threadPanel').style.display='';$('threadTitle').textContent='Thread \u2014 '+name;
-  const m=await api('/api/admin',{action:'thread',token:s.token,user_id:uid});
-  $('thread').innerHTML=m.map(x=>'<div class="msg '+(x.sender==='admin'?'user':'admin')+'">'+esc(x.body)+'<div class="t">'+x.sender+' \u00b7 '+new Date(x.at).toLocaleString()+'</div></div>').join('');
-  $('threadPanel').scrollIntoView({behavior:'smooth'});
-};
-$('reGo').onclick=async()=>{
-  const b=$('reBody').value.trim(); if(!b||!curUser)return;
-  try{await api('/api/admin',{action:'reply',token:s.token,user_id:curUser,body:b});$('reBody').value='';openThread(curUser,$('threadTitle').textContent.slice(9));loadThreads();}
-  catch(e){$('reErr').textContent=e.message;}
-};
-(async()=>{ if(await guard()){loadThreads();setInterval(loadThreads,20000);} })();
+(function(){
+let curKey=null, curName='';
+function when(t){ return new Date(t).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); }
+async function loadThreads(){ try{ const t=await api('/api/admin',{action:'threads',token:s.token});
+  $('threads').innerHTML=t.length?t.map(x=>'<div class="krow'+(x.unread>0?' hot':'')+'"><span class="nm">'+(x.unread>0?'<b class="dot"></b>':'')+esc(x.name)+(x.member?'':' <small class="pill">not a member</small>')+'<small>'+esc(x.email)+' · '+(x.channel==='email'?'email':'site')+(x.subject?' · '+esc(x.subject):'')+' · '+when(x.last_at)+' · '+x.count+' msg'+(x.unread>0?' · <b style="color:var(--lime)">'+x.unread+' new</b>':'')+'</small></span>'
+    +'<button class="pill" style="cursor:pointer;border:none" data-key="'+esc(x.key)+'" data-name="'+esc(x.name)+'">Open</button></div>').join(''):'<span class="m">Inbox empty.</span>';
+  $('threads').querySelectorAll('[data-key]').forEach(b=>b.onclick=()=>openThread(b.dataset.key,b.dataset.name));
+  const unread=t.reduce((a,x)=>a+(x.unread||0),0); const tile=$('tSup'); if(tile)tile.textContent=unread?unread+' new':t.length;
+ }catch(e){ $('threads').innerHTML='<span class="m">'+esc(e.message)+'</span>'; } }
+async function openThread(key,name){ curKey=key; curName=name; $('threadPanel').style.display=''; $('threadTitle').textContent=name;
+  const m=await api('/api/admin',{action:'thread',token:s.token,key});
+  $('threadMeta').textContent=(key.startsWith('mail:')?key.slice(5)+' — not a member, replies go by email only':'Member — replies go by email and into their site thread');
+  $('reTo').textContent='Sends to '+(key.startsWith('mail:')?key.slice(5):'their account email');
+  $('thread').innerHTML=m.map(x=>'<div class="msg '+(x.sender==='admin'?'user':'admin')+'">'+(x.subject&&x.sender!=='admin'?'<div class="t" style="margin:0 0 6px;color:var(--cyan)">'+esc(x.subject)+'</div>':'')+esc(x.body).replace(/\n/g,'<br>')+'<div class="t">'+(x.sender==='admin'?'InstantWins':name)+' · '+(x.channel==='email'?'email':'site')+' · '+when(x.at)+'</div></div>').join('')||'<span class="m">No messages.</span>';
+  $('threadPanel').scrollIntoView({behavior:'smooth'}); loadThreads(); }
+$('reGo').onclick=async()=>{ const b=$('reBody').value.trim(); if(!b||!curKey)return; $('reGo').disabled=true; $('reErr').className='err'; $('reErr').textContent='';
+  try{ await api('/api/admin',{action:'reply',token:s.token,key:curKey,body:b}); $('reBody').value=''; $('reErr').className='err ok'; $('reErr').textContent='Sent.'; openThread(curKey,curName); }
+  catch(e){ $('reErr').textContent=e.message; } $('reGo').disabled=false; };
+fetch('/api/inbound').then(r=>{ $('inStat').textContent=r.status===405?'endpoint live':'check'; $('inStat').className='pill '+(r.status===405?'ok':'warn'); }).catch(()=>{});
+(async()=>{ if(await guard()){ loadThreads(); setInterval(loadThreads,45000); } })();
+})();
 
 })();
 (function(){
