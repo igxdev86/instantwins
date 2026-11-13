@@ -37,6 +37,6 @@ export default async function handler(req, res){
   const j=await out.json().catch(()=>({}));
   if(!out.ok) return res.status(500).json({error:(j&&j.message)||'db'});
   // tell the admin
-  const notify=process.env.MAIL_ADMIN_TO; if(notify){ try{ await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+RK},body:JSON.stringify({from:process.env.MAIL_FROM||'InstantWins <hello@instantwins.co.uk>',to:[notify],subject:'Support: '+(from.name||from.email)+' — '+(m.subject||'(no subject)'),text:text+'\n\n— open in admin: https://instantwins.co.uk/admin.html#support'})}); }catch{} }
+  const notify=process.env.MAIL_ADMIN_TO; if(notify){ try{ await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+RK},body:JSON.stringify({from:process.env.MAIL_FROM||'InstantWins.co.uk <hello@instantwins.co.uk>',to:[notify],subject:'Support: '+(from.name||from.email)+' — '+(m.subject||'(no subject)'),text:text+'\n\n— open in admin: https://instantwins.co.uk/admin.html#support'})}); }catch{} }
   return res.status(200).json({ok:true,id:j.id});
 }
