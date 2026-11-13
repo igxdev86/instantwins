@@ -30,15 +30,14 @@ language plpgsql security definer set search_path = public, extensions as $$
 begin
   perform iw_admin(p_token);
   return (select coalesce(jsonb_agg(t order by (t->>'unread')::int desc, t->>'last_at' desc),'[]'::jsonb) from (
-    select jsonb_build_object('key', coalesce(m.user_id::text, 'mail:'||lower(m.email)),
-             'name', coalesce(u.name, nullif(max(m.from_name),''), lower(m.email)),
-             'email', coalesce(u.email, lower(m.email)), 'member', u.id is not null,
-             'last_at', max(m.created_at), 'count', count(*),
-             'unread', count(*) filter (where m.sender='user' and m.read_at is null),
-             'subject', (select subject from messages x where coalesce(x.user_id::text,'mail:'||lower(x.email))=coalesce(m.user_id::text,'mail:'||lower(m.email)) and x.subject<>'' order by x.created_at desc limit 1),
-             'channel', case when bool_or(m.channel='email') then 'email' else 'site' end) as t
-      from messages m left join users u on u.id=m.user_id
-     group by m.user_id, lower(m.email), u.id, u.name, u.email) s);
+    select jsonb_build_object('key', g.key, 'name', coalesce(u.name, nullif(g.from_name,''), g.mail), 'email', coalesce(u.email, g.mail), 'member', u.id is not null,
+             'last_at', g.last_at, 'count', g.n, 'unread', g.unread,
+             'subject', (select x.subject from messages x where coalesce(x.user_id::text,'mail:'||lower(x.email)) = g.key and coalesce(x.subject,'')<>'' order by x.created_at desc limit 1),
+             'channel', case when g.any_email then 'email' else 'site' end) as t
+      from (select coalesce(m.user_id::text, 'mail:'||lower(m.email)) as key, m.user_id as uid, lower(m.email) as mail, max(m.from_name) as from_name,
+                   max(m.created_at) as last_at, count(*) as n, count(*) filter (where m.sender='user' and m.read_at is null) as unread, bool_or(m.channel='email') as any_email
+              from messages m group by 1,2,3) g
+      left join users u on u.id=g.uid) s);
 end $$;
 
 create or replace function iw_admin_thread(p_token uuid, p_key text) returns jsonb
