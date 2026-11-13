@@ -1,0 +1,36 @@
+<!-- InstantWins fixed footer bar — paste once before </body>. Static (no rotation). Dismissable; stays hidden for IW_DAYS after close. -->
+<script>
+(function(){
+  var REF='bettingsites', H='https://instantwins.co.uk', IW_DAYS=1, KEY='iw_foot_seen';
+  try{ var seen=+localStorage.getItem(KEY)||0; if(Date.now()-seen<IW_DAYS*864e5)return; }catch(e){}
+  var css=''
+   +'#iwFoot{position:fixed;left:0;right:0;bottom:0;z-index:2147482000;padding:10px 10px calc(10px + env(safe-area-inset-bottom));font-family:-apple-system,"Inter","Segoe UI",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;animation:iwFup .4s cubic-bezier(.2,.8,.2,1)}'
+   +'@keyframes iwFup{from{transform:translateY(110%)}to{transform:none}}@keyframes iwFsh{0%{transform:translateX(-150%) skewX(-18deg)}55%,100%{transform:translateX(420%) skewX(-18deg)}}'
+   +'#iwFoot .iwB{position:relative;max-width:720px;margin:0 auto;border-radius:18px;padding:1px;background:linear-gradient(160deg,rgba(255,255,255,.3),rgba(255,255,255,.06) 45%,rgba(198,255,61,.3));box-shadow:0 -6px 30px rgba(0,0,0,.35),0 18px 44px rgba(0,0,0,.5)}'
+   +'#iwFoot .iwI{position:relative;overflow:hidden;border-radius:17px;display:flex;align-items:center;gap:12px;padding:10px 12px 10px 14px;background:radial-gradient(90% 140% at 100% 0%,rgba(61,242,255,.26),transparent 55%),radial-gradient(70% 120% at 0% 100%,rgba(255,61,138,.2),transparent 60%),linear-gradient(180deg,#1b1b25,#0d0d13);color:#fff}'
+   +'#iwFoot .iwI:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,0) 45%);pointer-events:none}'
+   +'#iwFoot .iwI:after{content:"";position:absolute;top:0;bottom:0;width:30%;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.12),rgba(255,255,255,0));transform:translateX(-150%) skewX(-18deg);animation:iwFsh 5s ease-in-out infinite;pointer-events:none}'
+   +'#iwFoot .iwIc{flex:none;width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#FF6A1A,#FF3D8A);display:grid;place-items:center;box-shadow:0 6px 16px rgba(255,106,26,.4),inset 0 1px 0 rgba(255,255,255,.5)}'
+   +'#iwFoot .iwIc svg{width:24px;height:24px}'
+   +'#iwFoot .iwT{position:relative;flex:1;min-width:0}#iwFoot .iwT>span{display:block}'
+   +'#iwFoot .iwK{font-weight:800;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:#3DF2FF;margin-bottom:2px;white-space:nowrap}'
+   +'#iwFoot .iwH{font-weight:900;font-size:17px;line-height:1.1;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#iwFoot .iwH b{color:#C6FF3D}'
+   +'#iwFoot .iwM{font-size:11px;color:#b9bcc8;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
+   +'#iwFoot .iwGo{position:relative;flex:none;padding:12px 16px;border-radius:999px;background:linear-gradient(135deg,#f4ffb0,#C6FF3D 45%,#9fd81c);color:#0B0B10;font-weight:900;font-size:14px;text-decoration:none;white-space:nowrap;box-shadow:0 8px 22px rgba(198,255,61,.35),inset 0 1px 0 rgba(255,255,255,.7)}'
+   +'#iwFoot .iwX{position:relative;flex:none;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:#fff;font-size:18px;line-height:28px;cursor:pointer;padding:0}'
+   +'@media(max-width:420px){#iwFoot .iwI{gap:9px;padding:9px 9px 9px 11px}#iwFoot .iwIc{width:36px;height:36px;border-radius:10px}#iwFoot .iwH{font-size:15px}#iwFoot .iwM{font-size:10.5px}#iwFoot .iwGo{padding:11px 13px;font-size:13px}}'
+   +'@media(min-width:720px){#iwFoot .iwM{font-size:12px}}@media(prefers-reduced-motion:reduce){#iwFoot,#iwFoot .iwI:after{animation:none}}';
+  var st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
+  var d=document.createElement('div'); d.id='iwFoot';
+  d.innerHTML='<div class="iwB"><div class="iwI">'
+   +'<a class="iwIc" href="'+H+'/?ref='+REF+'" target="_blank" rel="sponsored noopener" aria-label="InstantWins"><svg viewBox="0 0 24 24" fill="none" stroke="#1A0A00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></a>'
+   +'<span class="iwT"><span class="iwK">InstantWins &middot; New</span><span class="iwH">&pound;1,185,000 <b>in prizes</b></span><span class="iwM">From 19p &middot; 1 in 5.7 win &middot; 18+ &middot; free entry by post</span></span>'
+   +'<a class="iwGo" href="'+H+'/?ref='+REF+'" target="_blank" rel="sponsored noopener">Play now &rarr;</a>'
+   +'<button class="iwX" type="button" aria-label="Close">&times;</button>'
+   +'</div></div>';
+  function close(){ d.remove(); document.body.style.paddingBottom=''; try{ localStorage.setItem(KEY,String(Date.now())); }catch(e){} }
+  d.querySelector('.iwX').onclick=close; d.querySelector('.iwGo').addEventListener('click',function(){ try{ localStorage.setItem(KEY,String(Date.now())); }catch(e){} });
+  function show(){ document.body.appendChild(d); document.body.style.paddingBottom=(d.offsetHeight+4)+'px'; }
+  if(document.readyState==='complete')setTimeout(show,800); else window.addEventListener('load',function(){ setTimeout(show,800); });
+})();
+</script>
