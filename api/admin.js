@@ -34,7 +34,7 @@ export default async function handler(req, res) {
   if (b.action === 'comppostal') { args.p_ref=String(b.ref||''); args.p_code=String(b.code||''); args.p_answer=parseInt(b.answer,10)||0; }
   if (b.action === 'postal_mil') { args.p_ref=String(b.ref||'').slice(0,120); args.p_note=b.note?String(b.note).slice(0,200):null; }
   if (b.action === 'credit') { args.p_ref=String(b.ref||'').slice(0,120); args.p_amount_p=parseInt(b.amount_p,10)||0; args.p_note=b.note?String(b.note).slice(0,120):null; }
-  if (b.action === 'games' || b.action === 'skillq') { args.p_on = b.on === true; }
+  if (b.action === 'games') { args.p_on = b.on === true; } else if (b.action === 'skillq') { args.p_mode = ['off','round','each'].includes(b.mode)?b.mode:(b.on===true?'round':'off'); }
   if (b.action === 'milset') { args.p_closes_at=b.closes_at?String(b.closes_at):null; args.p_end_prize_p=(b.end_prize_p===null||b.end_prize_p===undefined||b.end_prize_p==='')?null:Math.max(0,parseInt(b.end_prize_p,10)||0); }
   if (b.action === 'postal_reject') { args.p_ref=String(b.ref||'').slice(0,120); args.p_reason=String(b.reason||'other').slice(0,60); args.p_note=b.note?String(b.note).slice(0,200):null; }
   if (b.action === 'setbal') { args.p_target_p = parseInt(b.amount_p,10)||0; }

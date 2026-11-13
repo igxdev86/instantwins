@@ -1,6 +1,26 @@
 // api/c2.js — Million Round: GET -> round state; POST {action:'buy',n} | {action:'reveal'} | {action:'revealall'} | {action:'mine'} | {action:'accept_terms'} | {action:'profile'} with token
-// qualifying questions (answer compared server-side)
-const QUESTIONS=[{q:'What is 7 + 6?',opts:['11','13','15'],a:'13'},{q:'Which of these is a prime number?',opts:['21','27','29'],a:'29'},{q:'What is 9 × 8?',opts:['72','64','81'],a:'72'},{q:'How many minutes are in two and a half hours?',opts:['120','150','180'],a:'150'},{q:'What is 144 ÷ 12?',opts:['11','12','14'],a:'12'},{q:'Which number comes next: 3, 6, 12, 24, …?',opts:['36','48','54'],a:'48'}];
+// qualifying questions — generated fresh each time, answer carried as an HMAC so nothing is stored and nothing is guessable
+import { createHmac } from 'crypto';
+const R=n=>Math.floor(Math.random()*n), pick=a=>a[R(a.length)], shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=R(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;};
+function distract(ans, span){ const set=new Set([ans]); let g=0; while(set.size<3&&g++<50){ const d=ans+(R(2)?1:-1)*(1+R(span)); if(d>=0&&d!==ans)set.add(d); } while(set.size<3)set.add(ans+set.size*3); return shuffle([...set]).map(String); }
+const WORDS=['TICKET','REVEAL','WINNER','JACKPOT','MILLION','PRIZE','ORANGE','PURPLE','BANANA','LONDON','CARDIFF','SUMMER','WINTER','ROCKET','PLANET','GUITAR','SILVER','GOLDEN','BRIDGE','CASTLE'];
+const GEN=[
+  ()=>{ const a=11+R(40), b=11+R(40); return {q:`What is ${a} + ${b}?`, a:a+b, span:4}; },
+  ()=>{ const a=30+R(60), b=5+R(25); return {q:`What is ${a} − ${b}?`, a:a-b, span:4}; },
+  ()=>{ const a=3+R(10), b=3+R(10); return {q:`What is ${a} × ${b}?`, a:a*b, span:6}; },
+  ()=>{ const b=2+R(10), r=2+R(10); return {q:`What is ${b*r} ÷ ${b}?`, a:r, span:3}; },
+  ()=>{ const s=1+R(9), d=2+R(7); const seq=[s,s+d,s+2*d,s+3*d]; return {q:`Which number comes next: ${seq.join(', ')}, …?`, a:s+4*d, span:d}; },
+  ()=>{ const s=1+R(4), m=2+R(2); const seq=[s,s*m,s*m*m,s*m*m*m]; return {q:`Which number comes next: ${seq.join(', ')}, …?`, a:s*m*m*m*m, span:6}; },
+  ()=>{ const h=1+R(5), half=R(2); const mins=h*60+(half?30:0); return {q:`How many minutes are in ${h}${half?' and a half':''} hour${h>1||half?'s':''}?`, opts:shuffle([mins,mins+30,mins-30].map(String)), a:mins}; },
+  ()=>{ const pc=pick([10,20,25,50]), n=pick([40,60,80,120,200,300]); const v=pc*n/100; return {q:`What is ${pc}% of ${n}?`, opts:shuffle([v,v+5,v-5>0?v-5:v+10].map(String)), a:v}; },
+  ()=>{ const w=pick(WORDS); return {q:`How many letters are in the word ${w}?`, a:w.length, span:2}; },
+  ()=>{ const u=[...new Set([10+R(80),10+R(80),10+R(80)])]; while(u.length<3)u.push(u[u.length-1]+7); const big=Math.max(...u); return {q:`Which of these is the largest number?`, opts:shuffle(u.map(String)), a:big}; },
+  ()=>{ const a=2+R(9); return {q:`What is ${a} squared?`, a:a*a, span:5}; },
+  ()=>{ const d=pick([['Monday',3,'Thursday'],['Tuesday',4,'Saturday'],['Friday',3,'Monday'],['Wednesday',5,'Monday'],['Sunday',2,'Tuesday'],['Thursday',4,'Monday']]); return {q:`If today is ${d[0]}, what day is it in ${d[1]} days?`, opts:shuffle([d[2],...shuffle(['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].filter(x=>x!==d[2])).slice(0,2)]), a:d[2]}; },
+  ()=>{ const a=10+R(30), b=10+R(30), c=5+R(20); return {q:`What is ${a} + ${b} − ${c}?`, a:a+b-c, span:4}; },
+];
+function makeQ(e){ const g=pick(GEN)(); const a=String(g.a); const opts=g.opts||distract(g.a,g.span||4); const exp=Date.now()+15*60*1000; const sig=sign(e,g.q,a,exp); return {q:g.q,opts,exp,sig}; }
+function sign(e,q,a,exp){ return createHmac('sha256', e.KEY).update(q+'|'+a+'|'+exp).digest('hex'); }
 export default async function handler(req, res) {
   const e = env(res); if (!e) return;
   let r;
@@ -13,13 +33,13 @@ export default async function handler(req, res) {
     else if (a === 'reveal') { if (!await allow(e, 'rev:' + token, 400, 60)) return res.status(429).json({ error: 'slow down a moment' }); r = await rpc(e, 'c2_reveal', { p_token: token }); }
     else if (a === 'revealall') r = await rpc(e, 'c2_reveal_all', { p_token: token });
     else if (a === 'mine') r = await rpc(e, 'c2_mine', { p_token: token });
-    else if (a === 'answer') { const Q=QUESTIONS[b.qi|0]; if(!Q) return res.status(400).json({ error: 'bad question' }); r = await rpc(e, 'c2_answer', { p_token: token, p_q: Q.q, p_answer: String(b.answer||'').slice(0,100), p_correct: String(b.answer)===Q.a }); }
+    else if (a === 'answer') { if (!await allow(e, 'ans:' + token, 8, 60)) return res.status(429).json({ error: 'too many tries — wait a minute' }); const q=String(b.q||'').slice(0,200), ans=String(b.answer||'').slice(0,100), exp=+b.exp||0; if(!q||!b.sig||exp<Date.now()) return res.status(400).json({ error: 'question expired — try again' }); const ok = sign(e,q,ans,exp)===String(b.sig); r = await rpc(e, 'c2_answer', { p_token: token, p_q: q, p_answer: ans, p_correct: ok }); }
     else if (a === 'accept_terms') r = await rpc(e, 'iw_accept_terms', { p_token: token });
     else if (a === 'profile') r = await rpc(e, 'iw_set_profile', { p_token: token, p_county: String(b.county || '').slice(0, 40), p_publish: b.publish !== false });
     else return res.status(400).json({ error: 'bad request' });
     if (a === 'buy' || a === 'buybal' || a === 'revealall') { flushMail(e, 5).catch(() => {}); }
   } else if (req.query && req.query.q !== undefined) {
-    const i = Math.floor(Math.random()*QUESTIONS.length); const Q=QUESTIONS[i]; res.setHeader('Cache-Control','no-store'); return res.status(200).json({ qi:i, q:Q.q, opts:Q.opts.slice().sort(()=>Math.random()-.5) });
+    res.setHeader('Cache-Control','no-store'); return res.status(200).json(makeQ(e));
   } else {
     if (!await allow(e, 'state:' + ip(req), 120, 60)) return res.status(429).json({ error: 'slow down' });
     r = await rpc(e, 'c2_state', {});
