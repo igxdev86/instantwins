@@ -584,3 +584,14 @@ body[data-g].noctrl main{padding-bottom:24px}
 .refbig{font-family:Unbounded,sans-serif;font-size:1.05rem;letter-spacing:.14em;color:var(--lime)}
 .bankbox .ref{letter-spacing:.14em;font-size:1.05rem}
 .krow.hot{border-color:rgba(198,255,61,.35)}.krow .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--lime);margin-right:8px;vertical-align:middle;box-shadow:0 0 8px var(--lime)}
+/* learn modal art: floating tickets instead of balls */
+.lm-art{width:170px;height:150px;right:-6px;top:-4px}
+.lm-art i{border-radius:5px;opacity:.5;box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 6px 14px rgba(0,0,0,.45);animation:lmfloat 5s ease-in-out infinite}
+.lm-art i::before,.lm-art i::after{content:"";position:absolute;top:50%;width:9px;height:9px;border-radius:50%;background:var(--panel);transform:translateY(-50%)}.lm-art i::before{left:-4px}.lm-art i::after{right:-4px}
+.lm-art .b1{width:64px;height:34px;right:14px;top:18px;background:linear-gradient(180deg,#f0ff9e,#C6FF3D 45%,#9fd81c);transform:rotate(-14deg)}
+.lm-art .b2{width:50px;height:27px;right:92px;top:40px;background:linear-gradient(180deg,#b7f9ff,#3DF2FF 45%,#1aa7c4);transform:rotate(12deg);animation-delay:-1.4s}
+.lm-art .b3{width:58px;height:31px;right:34px;top:74px;background:linear-gradient(180deg,#ffd0a3,#FF6A1A 45%,#c23a08);transform:rotate(8deg);animation-delay:-2.6s}
+.lm-art .b4{width:42px;height:23px;right:104px;top:98px;background:linear-gradient(180deg,#ffb3d3,#FF3D8A 45%,#b4155a);transform:rotate(-20deg);animation-delay:-3.5s}
+@keyframes lmfloat{0%,100%{margin-top:0}50%{margin-top:-7px}}
+.lm-art{width:190px;height:120px;right:-14px;top:-18px}.lm-art i{opacity:.34}
+.lm-art .b1{right:70px;top:14px}.lm-art .b2{right:132px;top:48px}.lm-art .b3{right:8px;top:62px;width:52px;height:28px}.lm-art .b4{right:96px;top:84px;width:38px;height:21px}
