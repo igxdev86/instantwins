@@ -595,3 +595,6 @@ body[data-g].noctrl main{padding-bottom:24px}
 @keyframes lmfloat{0%,100%{margin-top:0}50%{margin-top:-7px}}
 .lm-art{width:190px;height:120px;right:-14px;top:-18px}.lm-art i{opacity:.34}
 .lm-art .b1{right:70px;top:14px}.lm-art .b2{right:132px;top:48px}.lm-art .b3{right:8px;top:62px;width:52px;height:28px}.lm-art .b4{right:96px;top:84px;width:38px;height:21px}
+.refcard{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--bg);border:1px dashed rgba(198,255,61,.5);border-radius:14px;padding:16px 18px;margin:6px 0 4px}
+.refcard b{font:900 2rem/1 Unbounded,sans-serif;letter-spacing:.2em;color:var(--lime);text-shadow:0 0 18px rgba(198,255,61,.4)}
+.modal .chkrow{margin-top:14px}.modal .chkrow b{color:var(--lime)}
