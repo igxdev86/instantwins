@@ -5,7 +5,7 @@ const C2=(()=>{
   const PACKS=[[1,100],[5,475],[10,900],[25,2100],[50,4000],[100,7500],[250,18000],[500,35000],[1000,68000]];
   const gbp=p=>p===0?'£0':p<100?p+'p':'£'+(p/100).toLocaleString('en-GB',{minimumFractionDigits:p%100?2:0,maximumFractionDigits:2});
   let S=null; try{S=JSON.parse(localStorage.getItem('iw_session'));}catch(e){} const TOKEN=S&&S.token;
-  const post=(body)=>fetch('/api/c2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({token:TOKEN},body))}).then(async r=>{const d=await r.json(); if(!r.ok||d.error)throw new Error(d.error||'failed'); return d;});
+  const post=(body)=>fetch('/api/c2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({token:TOKEN},body))}).then(async r=>{const d=await r.json(); if(!r.ok||d.error)throw new Error(String(d.error||'failed').replace(/insufficient credit/i,'not enough funds').replace(/not enough credit/i,'not enough funds')); return d;});
   const state=()=>fetch('/api/c2',{cache:'no-store'}).then(r=>r.json());
   const mine=()=>TOKEN?post({action:'mine'}):Promise.resolve(null);
   const buy=n=>post({action:'buy',n});
@@ -55,7 +55,7 @@ const C2=(()=>{
   function buySheet(onDone){ if(!TOKEN){ location.href='signin.html'; return; } if(document.getElementById('iwBuy'))return; if(window.__needOnboard){ onboardModal(); document.addEventListener('iw:onboarded',()=>{ window.__needOnboard=false; buySheet(onDone); },{once:true}); return; } skillGate(()=>buySheet2(onDone)); }
   function buySheet2(onDone){ if(document.getElementById('iwBuy'))return; let sel=1;
     const d=document.createElement('div'); d.id='iwBuy'; d.className='ldm'; d.style.zIndex=66;
-    d.innerHTML='<div class="modal buy"><button type="button" class="x" id="iwBuyX" aria-label="close">&times;</button><div class="done-k">Buy tickets</div><h2>How many tickets?</h2><div class="packs mini" id="iwPacks"></div><div class="buyrow"><div><b id="iwSelT"></b><span id="iwSelP"></span><small id="iwSelE"></small></div><button class="btn lime" id="iwBuyGo">Buy</button></div><div class="err" id="iwBuyErr"></div><p class="m" style="margin:12px 0 10px">Balance <b id="iwBuyBal">–</b> · <a href="account.html#money">add credit</a></p><a class="freebtn" href="free.html"><b>No purchase necessary</b><span>Enter free by post &mdash; same tickets, same odds, same End Prize Draw &rarr;</span></a></div>';
+    d.innerHTML='<div class="modal buy"><button type="button" class="x" id="iwBuyX" aria-label="close">&times;</button><div class="done-k">Buy tickets</div><h2>How many tickets?</h2><div class="packs mini" id="iwPacks"></div><div class="buyrow"><div><b id="iwSelT"></b><span id="iwSelP"></span><small id="iwSelE"></small></div><button class="btn lime" id="iwBuyGo">Buy</button></div><div class="err" id="iwBuyErr"></div><p class="m" style="margin:12px 0 10px">Balance <b id="iwBuyBal">–</b> · <a href="account.html#money">add funds</a></p><a class="freebtn" href="free.html"><b>No purchase necessary</b><span>Enter free by post &mdash; same tickets, same odds, same End Prize Draw &rarr;</span></a></div>';
     document.body.appendChild(d);
     const $=id=>document.getElementById(id);
     function paint(){ const bal=cachedBal(), q=bal!=null?balQuote(bal):null;
