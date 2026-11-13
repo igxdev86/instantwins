@@ -15,9 +15,9 @@ const SND=(()=>{
   function bell(t,f,dur,vol){ const parts=[[1,1],[2.76,.5],[5.4,.25],[8.93,.12]]; parts.forEach(([m,a],i)=>{ const o=ctx.createOscillator(), g=ctx.createGain(); o.type='sine'; o.frequency.value=f*m; env(g,t,0.003,dur*(0.25-i*0.04),0.15,dur*0.6,vol*a); o.connect(g); g.connect(sfxBus); o.start(t); o.stop(t+dur+0.1); }); }
   let boosted=false; const musVol=()=>(theme?theme.vol:0.12)*(boosted?2.2:1);
   function duckMusic(ms){ if(!musBus||!musicOn)return; const t=now(); duck.cancelScheduledValues(t); duck.setTargetAtTime(boosted?0.1:0.04,t,0.03); duck.setTargetAtTime(musVol(),t+ms/1000,0.4); }
-  S.boost=(on)=>{ boosted=!!on; if(!musBus||!musicOn)return; const t=now(); duck.cancelScheduledValues(t); duck.setTargetAtTime(musVol(),t,on?0.25:1.2); };
   // ---- public SFX ----
   const S={};
+  S.boost=(on)=>{ boosted=!!on; if(!musBus||!musicOn)return; const t=now(); duck.cancelScheduledValues(t); duck.setTargetAtTime(musVol(),t,on?0.25:1.2); };
   S.click=()=>{ if(!ok())return; const t=now(); burst(t,0.05,0.5,2600,2); tone('sine',1400,900,t,0.045,0.18); };
   S.buy=()=>{ if(!ok())return; const t=now(); burst(t,0.06,0.5,3000,2); tone('square',2200,2200,t+0.05,0.05,0.08); bell(t+0.1,1760,0.6,0.35); bell(t+0.22,2349,0.7,0.3); duckMusic(900); };
   S.peg=()=>{ if(!ok())return; const t=now(); tone('sine',800+Math.random()*700,500,t,0.07,0.25); burst(t,0.025,0.25,4000,3); };
