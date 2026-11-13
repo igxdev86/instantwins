@@ -1,5 +1,6 @@
 -- skill-mode.sql — qualifying question modes: off / round (one correct answer per round) / each (a fresh answer for every purchase).
 -- Questions are generated at random by the API; only the text and the answer given are logged here.
+create table if not exists skill_answers (user_id uuid not null, pool_no int not null, q text not null, answer text not null, correct boolean not null, used boolean not null default false, created_at timestamptz not null default now(), primary key (user_id, pool_no));
 alter table skill_answers add column if not exists used boolean not null default false;
 insert into site_settings (key,value) values ('skill_q','off') on conflict (key) do nothing;
 update site_settings set value='round' where key='skill_q' and value='true';
