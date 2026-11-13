@@ -40,3 +40,16 @@ end $$;
 select case when exists (select 1 from pools where game='MIL' and status='open') then 'already open'::text else open_pool_big('MIL')::text end;
 update pools set closes_at = '2027-01-31 20:00:00 Europe/London'::timestamptz where game='MIL' and status='open' and (closes_at is null or closes_at <> '2027-01-31 20:00:00 Europe/London'::timestamptz);
 select pool_no, sold, cap, price_p, closes_at at time zone 'Europe/London' as closes_uk, (select count(*) from allocation a where a.pool_id=p.id) as winners from pools p where game='MIL' and status='open';
+
+-- whole balance: no artificial cap below 50,000 tickets
+create or replace function c2_buy_balance(p_token uuid) returns jsonb
+language plpgsql security definer set search_path = public, extensions as $$
+declare u users%rowtype; v_bal int; v_rate int; v_n int;
+begin
+  u := iw_user(p_token);
+  v_bal := iw_balance(u.id);
+  if v_bal < 25 then raise exception 'not enough funds for a ticket'; end if;
+  v_rate := c2_rate_for(v_bal); v_n := least(v_bal / v_rate, 50000);
+  return c2_issue(u.id, v_n, v_n * v_rate, '(whole balance @ '||v_rate||'p)');
+end $$;
+notify pgrst, 'reload schema';

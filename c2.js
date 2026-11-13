@@ -11,7 +11,7 @@ const C2=(()=>{
   const buy=n=>post({action:'buy',n});
   const buyBalance=()=>post({action:'buybal'});
   const rateFor=a=>a>=19000?19:a>=10000?20:a>=2100?21:a>=1100?22:a>=575?23:a>=240?24:25;
-  const balQuote=bal=>{ const r=rateFor(bal), n=Math.min(20000,Math.floor(bal/r)); return n<1?null:{n,rate:r,cost:n*r,save:n*FACE-n*r}; };
+  const balQuote=bal=>{ const r=rateFor(bal), full=Math.floor(bal/r), n=Math.min(50000,full); return n<1?null:{n,rate:r,cost:n*r,save:n*FACE-n*r,capped:full>n}; };
   const cachedBal=()=>{ try{ const h=JSON.parse(localStorage.getItem('iw_c2hdr')); return h&&h.balance_p!=null?h.balance_p:null; }catch(e){ return null; } };
   const reveal=()=>post({action:'reveal'});
   const revealAll=()=>post({action:'revealall'});
@@ -60,8 +60,8 @@ const C2=(()=>{
     const $=id=>document.getElementById(id);
     function paint(){ const bal=cachedBal(), q=bal!=null?balQuote(bal):null;
       $('iwPacks').innerHTML=PACKS.map(([n,p],i)=>{const full=n*FACE, sv=full-p; return '<div class="pack'+(i===sel?' sel':'')+'" data-i="'+i+'">'+(sv?'<span class="save">SAVE '+gbp(sv)+'</span>':'')+'<div class="t">'+n+'<small>ticket'+(n>1?'s':'')+'</small></div><div class="p">'+gbp(p)+'</div></div>';}).join('')
-        +(q?'<div class="pack all'+(sel==='bal'?' sel':'')+'" data-i="bal">'+(q.save?'<span class="save">SAVE '+gbp(q.save)+'</span>':'')+'<div class="t">'+q.n.toLocaleString()+'<small>tickets</small></div><div class="p">'+gbp(q.cost)+'</div><div class="each">whole balance · '+q.rate+'p each</div></div>':'');
-      if(sel==='bal'&&q){ $('iwSelT').textContent=q.n.toLocaleString()+' tickets'; $('iwSelP').textContent=gbp(q.cost); $('iwSelE').textContent=q.rate+'p each · uses your whole balance'; $('iwBuyGo').textContent='Buy for '+gbp(q.cost); }
+        +(q?'<div class="pack all'+(sel==='bal'?' sel':'')+'" data-i="bal">'+(q.save?'<span class="save">SAVE '+gbp(q.save)+'</span>':'')+'<div class="t">'+q.n.toLocaleString()+'<small>tickets</small></div><div class="p">'+gbp(q.cost)+'</div><div class="each">'+(q.capped?'max order':'whole balance')+' · '+q.rate+'p each</div></div>':'');
+      if(sel==='bal'&&q){ $('iwSelT').textContent=q.n.toLocaleString()+' tickets'; $('iwSelP').textContent=gbp(q.cost); $('iwSelE').textContent=q.rate+'p each · '+(q.capped?'biggest single order':'uses your whole balance'); $('iwBuyGo').textContent='Buy for '+gbp(q.cost); }
       else { if(sel==='bal')sel=1; const [n,p]=PACKS[sel]; $('iwSelT').textContent=n+' ticket'+(n>1?'s':''); $('iwSelP').textContent=gbp(p); $('iwSelE').textContent=gbp(Math.round(p/n))+' each'; $('iwBuyGo').textContent='Buy for '+gbp(p); }
       d.querySelectorAll('.pack').forEach(el=>el.onclick=()=>{sel=el.dataset.i==='bal'?'bal':+el.dataset.i;paint();}); }
     paint(); try{ const h=JSON.parse(localStorage.getItem('iw_c2hdr')); if(h&&h.balance_p!=null)$('iwBuyBal').textContent=gbp(h.balance_p); }catch(e){}
