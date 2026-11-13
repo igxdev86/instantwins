@@ -12,7 +12,6 @@ begin
   perform iw_mail(new.id,'Welcome to InstantWins',
     '<p>Hi '||v_first||', your account is open and ready.</p>'
     ||'<p>Your account number is <b>'||coalesce(new.acct_no,'')||'</b> &mdash; keep it, you need it on any free postal entry.</p>'
-    ||case when v_credit > 0 then '<p>We have put <b>£'||to_char(v_credit/100.0,'FM999,990')||' of play credit</b> in your account while we are in test mode, so you can try the Reveal game straight away.</p>' else '' end
     ||'<p><a class="btn" href="https://instantwins.co.uk/#buy">Buy your first ticket</a></p>'
     ||'<p>No purchase necessary: <a href="https://instantwins.co.uk/free.html">enter free by post</a> &mdash; same tickets, same odds. Every ticket in the round also goes into the guaranteed End Prize Draw.</p>'
     ||'<p>Questions? Just reply to this email.</p>');
