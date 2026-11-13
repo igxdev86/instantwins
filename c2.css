@@ -606,3 +606,5 @@ body.demo .freebtn{display:none}
 .demobar .tag{flex:none;background:linear-gradient(90deg,var(--pink),var(--orange));color:#1A0A00;font:900 .66rem Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:4px 9px;border-radius:999px}
 .demobar .txt{flex:1;min-width:0;color:var(--ink)}.demobar a{flex:none;color:var(--lime);text-decoration:none;font-weight:800}
 @media(max-width:420px){.demobar{gap:8px;padding:7px 12px}.demobar .txt{font-size:.74rem}}
+.sndchip{position:fixed;left:50%;bottom:150px;transform:translateX(-50%);z-index:60;border:1px solid rgba(198,255,61,.5);background:rgba(21,21,29,.92);color:var(--lime);font:800 .8rem Inter,sans-serif;padding:10px 16px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.5);backdrop-filter:blur(8px);cursor:pointer;animation:chipin .4s ease-out}
+@keyframes chipin{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}

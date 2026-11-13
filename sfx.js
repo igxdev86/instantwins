@@ -105,8 +105,13 @@ const SND=(()=>{
   function paintBtn(){ document.querySelectorAll('.sndbtn').forEach(b=>{ b.dataset.m=mode; b.classList.toggle('nomusic',!theme); b.innerHTML=(mode==='off'?'<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M19 9l-4 6M15 9l4 6"/></svg>':'<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 0 1 0 6"/>'+(mode==='all'?'<path d="M18.5 6.5a8 8 0 0 1 0 11"/>':'')+'</svg>')+'<span>'+(mode==='off'?'Sound off':'Sound on')+'</span>'; b.title=mode==='off'?'Sound is off. Tap to turn on':'Sound is on. Tap to mute'; }); }
   function mount(){ const hr=document.querySelector('.top .hr'); if(hr&&!document.querySelector('.sndbtn')){ const b=document.createElement('button'); b.className='sndbtn'; b.type='button'; b.onclick=e=>{e.preventDefault();S.cycle();}; hr.insertBefore(b,hr.firstChild); } paintBtn();
     document.addEventListener('click',e=>{ const t=e.target.closest('.btn,.pack,.game,.atabs a,.tabs button,.mbar a,.pill,.sw'); if(t&&!t.classList.contains('sndbtn'))S.click(); },true);
-    const unlock=()=>{ if(mode==='off'||!init())return; const go=()=>{ if(mode==='all')musicStart(); }; if(ctx.state!=='running'){ const p=ctx.resume(); if(p&&p.then)p.then(go).catch(()=>{}); else go(); checkRunning(); } else go(); }; ['pointerdown','mousedown','touchend','click','keydown'].forEach(ev=>document.addEventListener(ev,unlock,{once:false,passive:true,capture:true}));
-    document.addEventListener('visibilitychange',()=>{ if(!ctx)return; if(document.hidden){ if(musicOn)musBus.gain.setTargetAtTime(0,now(),0.1); } else if(musicOn){ musBus.gain.setTargetAtTime(theme?theme.vol:0.12,now(),0.5); } }); }
+    const unlock=()=>{ if(mode==='off'||!init())return; const go=()=>{ if(mode==='all')musicStart(); }; if(ctx.state!=='running'){ const p=ctx.resume(); if(p&&p.then)p.then(go).catch(()=>{}); else go(); checkRunning(); } else go(); }; ['pointerdown','mousedown','touchstart','touchend','click','keydown','scroll','wheel'].forEach(ev=>document.addEventListener(ev,unlock,{once:false,passive:true,capture:true}));
+    // try to start the music straight away; browsers that need a tap first get a small 'tap for sound' chip until the first touch
+    const chip=document.createElement('button'); chip.type='button'; chip.className='sndchip'; chip.innerHTML='&#128266; Tap for sound'; chip.style.display='none'; document.body.appendChild(chip); chip.onclick=unlock;
+    S.autoplay=()=>{ if(mode!=='all'||!init())return; const tryGo=()=>{ if(ctx.state==='running'){ musicStart(); chip.style.display='none'; } else chip.style.display=''; }; try{ const p=ctx.resume(); if(p&&p.then)p.then(tryGo).catch(tryGo); }catch(e){} setTimeout(tryGo,700); };
+    setInterval(()=>{ if(musicOn||mode!=='all')chip.style.display='none'; },500);
+    S.autoplay();
+    document.addEventListener('visibilitychange',()=>{ if(!ctx)return; if(document.hidden){ if(musicOn)musBus.gain.setTargetAtTime(0,now(),0.1); } else if(musicOn){ musBus.gain.setTargetAtTime(musVol(),now(),0.5); } }); }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount); else mount();
   return S;
 })();
