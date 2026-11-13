@@ -83,10 +83,11 @@ const SND=(()=>{
   function schedule(){ const th=theme; if(!th)return; const beat=60/th.bpm, st=beat/4; while(nextT<now()+0.4){ const bar=Math.floor(step/16)%th.chords.length, sub=step%16, chord=th.chords[bar]; const sw=(th.swing&&sub%2)?st*th.swing:0, t=nextT+sw;
       if(sub===0){ if(th.pad)pad(t,chord,beat*4,th); if(th.drone)drone(t,chord[0],beat*4); }
       if(th.bass.on.includes(sub)){ let n=chord[0]; if(th.bass.alt&&sub===8)n=chord[2]-12; if(th.bass.walk)n=chord[[0,2,1,3][sub/4|0]%chord.length]; if(th.bass.oct&&sub%4===2)n+=12; bassN(t,n,st*2.5,th,th.bass.wave); }
-      if(th.kick.includes(sub))kick(t); if(th.tom&&th.tom.includes(sub))tom(t); if(th.snare.includes(sub))snare(t); if(th.hat.includes(sub))hat(t,false); if(th.open.includes(sub))hat(t,true);
-      if(th.stab&&th.stab.on.includes(sub))stab(t,chord,st*1.6,th); if(th.lead&&th.lead.on.includes(sub))lead(t,chord,st*2,th); if(th.arp&&th.arp.on.includes(sub))arp(t,chord,st*1.8,th,step/2|0);
+      const intro=step<32; // first two bars: no drums, no stabs — a clean fade-in
+      if(!intro){ if(th.kick.includes(sub))kick(t); if(th.tom&&th.tom.includes(sub))tom(t); if(th.snare.includes(sub))snare(t); if(th.hat.includes(sub))hat(t,false); if(th.open.includes(sub))hat(t,true); }
+      if(!intro){ if(th.stab&&th.stab.on.includes(sub))stab(t,chord,st*1.6,th); if(th.lead&&th.lead.on.includes(sub))lead(t,chord,st*2,th); } if(th.arp&&th.arp.on.includes(sub))arp(t,chord,st*1.8,th,step/2|0);
       step++; nextT+=st; } }
-  function musicStart(){ if(!theme||!ok()||mode!=='all'||musicOn)return; if(ctx.state!=='running')return; musicOn=true; step=0; nextT=now()+0.05; musBus.gain.setTargetAtTime(musVol(),now(),0.8); musTimer=setInterval(schedule,120); schedule(); }
+  function musicStart(){ if(!theme||!ok()||mode!=='all'||musicOn)return; if(ctx.state!=='running')return; musicOn=true; step=0; nextT=now()+0.05; musBus.gain.cancelScheduledValues(now()); musBus.gain.setValueAtTime(0,now()); musBus.gain.setTargetAtTime(musVol(),now()+0.1,1.2); musTimer=setInterval(schedule,120); schedule(); }
   function musicStop(){ if(!musicOn)return; musicOn=false; clearInterval(musTimer); musBus.gain.setTargetAtTime(0,now(),0.3); }
   S.playing=()=>musicOn;
   S.dbg=()=>({mode,theme:!!theme,musicOn,ctx:ctx&&ctx.state,gain:musBus&&musBus.gain.value});
