@@ -573,3 +573,9 @@ body[data-skin="tickets"] .coin{display:flex;flex-direction:column-reverse;justi
 @keyframes snakeone{0%{opacity:0;left:100%;transform:none}12%{opacity:1}100%{opacity:1;left:-90px;transform:none}}
 .modal .tabs2{display:flex;gap:6px;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:4px;margin:4px 0 14px}.modal .tabs2 button{flex:1;border:0;background:transparent;color:var(--soft);font:800 .82rem Inter,sans-serif;padding:9px;border-radius:999px;cursor:pointer}.modal .tabs2 button.on{background:var(--panel);color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.4)}
 .modal .amts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.modal .amts .btn{padding:12px 6px;font-size:.9rem;text-align:center}
+.empty{margin-top:14px;padding:26px 20px 24px;border:1px solid var(--line);background:radial-gradient(80% 70% at 50% 0%,rgba(61,242,255,.08),transparent 60%),var(--panel)}
+.empty .empty-k{font:800 .66rem Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px}
+.empty p{font-weight:700;font-size:1rem;margin:0 0 16px;color:var(--ink)}
+.empty .btn{display:inline-block;min-width:200px;text-align:center}
+.empty .empty-free{display:block;margin-top:14px;color:var(--soft);font-size:.84rem;font-weight:600;text-decoration:none}.empty .empty-free:hover{color:var(--cyan)}
+body[data-g].noctrl main{padding-bottom:24px}

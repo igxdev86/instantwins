@@ -26,9 +26,9 @@
     <div class="toast" id="toast"></div>
     <div class="honest">Each ticket&rsquo;s prize was fixed when you bought it. The game only shows it &mdash; tapping, timing, scratching and strength change nothing. The same ticket shows the same prize in every game. Every ticket, prize or not, also goes into the End Prize Draw when the round closes.</div>
   </div>
-  <div class="empty" id="empty"><p style="margin:0 0 10px;font-weight:800">No tickets in your bank.</p><a class="btn" href="index.html#buy">Buy tickets</a></div>
+  <div class="empty" id="empty"><div class="empty-k">Hopper empty</div><p>No tickets in your bank yet.</p><a class="btn" href="index.html#buy">Buy tickets</a><a class="empty-free" href="free.html">or enter free by post &rarr;</a></div>
   <div class="grid" id="grid"></div>
-  <div class="ctrl" style="margin-top:16px"><a class="btn ghost gamesgrid" href="index.html#games">Switch game</a><a class="btn ghost" href="index.html#buy">More tickets</a></div>
+  <div class="ctrl" id="moreRow" style="margin-top:16px"><a class="btn ghost gamesgrid" href="index.html#games">Switch game</a><a class="btn ghost" href="index.html#buy">More tickets</a></div>
 </main>
 <footer class="foot"><div class="wrap">
  <div class="fcols">
@@ -50,7 +50,7 @@
   let busy=false, all=false, session=[], bank=0;
   function paint(){ const s={bank:{length:bank}}; $('left').textContent=s.bank.length; $('wins').textContent=session.filter(t=>t.prize).length; $('won').textContent=gbp(session.reduce((a,t)=>a+t.prize,0));
     $('play').textContent=(GK==='quick'?(skin==='tickets'?'Feed':'Drop'):g.btn)+' one'; $('play').disabled=busy||!s.bank.length; $('playAll').disabled=busy||s.bank.length<2; $('playAll').textContent=(GK==='quick'?(skin==='tickets'?'Feed all ':'Drop all '):'Play all ')+s.bank.length; if(GK==='quick'){ skinPaint(); qkPaint(); } $('finish').style.display=(busy&&all&&bank>1&&GK!=='quick')?'':'none';
-    const emp=!(C2.TOKEN&&(s.bank.length||session.length)); $('empty').style.display=emp?'':'none'; $('ctrl').style.display=emp?'none':'';
+    const emp=!(C2.TOKEN&&(s.bank.length||session.length)); $('empty').style.display=emp?'':'none'; $('ctrl').style.display=emp?'none':''; $('moreRow').style.display=emp?'none':''; document.body.classList.toggle('noctrl',emp);
     $('grid').innerHTML=session.slice().reverse().map(t=>'<div class="coin'+(t.prize>=100000?' huge':t.prize>=1000?' big':t.prize?' w':'')+'">'+(t.prize?gbp(t.prize):(document.body.dataset.skin==='tickets'?'NO PRIZE':'—'))+'<small>#'+t.no.toLocaleString()+'</small></div>').join(''); C2.header(); }
   // ---- Coin Drop (board drawn once; path lands on the slot for the prize) ----
   const SLOTS=[0,100,500,0,1000,25000,500000,5000,200,50,100000,0]; const BIG=500000; // slot values in pence, centre = big
@@ -203,7 +203,7 @@
     bank=0; d.won_p?SND.win(d.won_p):SND.none(); (d.tickets||[]).forEach(t=>session.push({no:t.no,prize:t.prize_p})); C2.header({bank:0,balance_p:d.balance_p});
     const tt=$('toast'); tt.className='toast show '+(d.won_p?'win':'none'); tt.textContent='Opened '+d.n+' ticket'+(d.n===1?'':'s')+' — '+(d.won_p?'you won '+gbp(d.won_p)+'!':'no prizes'); $('finish').textContent='Finish now'; $('finish').disabled=false; }
   if(GK==='drop')dropInit(); if(GK==='striker')skMarks(); if(GK==='bingo')bingoInit(); if(GK==='wheel')wheelInit(); if(GK==='reels')reelsInit(); if(GK==='candy')candyInit(); if(GK==='words')wordsInit(); if(GK==='boxes')boxesInit(); paint();
-  if(!C2.TOKEN){ $('empty').innerHTML='<p style="margin:0 0 10px;font-weight:800">Sign in to play.</p><a class="btn" href="signin.html">Sign in / create account</a>'; }
+  if(!C2.TOKEN){ $('empty').innerHTML='<div class="empty-k">Reveal</div><p>Sign in to feed your tickets.</p><a class="btn" href="signin.html">Sign in / create account</a>'; }
   let ldP=0, ldT=setInterval(()=>{ ldP=Math.min(88,ldP+(88-ldP)*0.12+1); const t=$('ldm').querySelector('.ldtxt'); if(t)t.style.setProperty('--p',ldP+'%'); },90);
   document.addEventListener('click',e=>{ const a=e.target.closest('a[href="index.html#buy"]'); if(!a||!C2.TOKEN)return; e.preventDefault(); const dm=document.getElementById('iwDone'); if(dm)dm.remove(); C2.buySheet(r=>{ qkReset(); bank=r.bank; paint(); const tt=$('toast'); tt.className='toast show win'; tt.textContent='Added '+r.n+' ticket'+(r.n===1?'':'s')+(skin==='tickets'?' to the stack':' to your hopper'); }); });
   document.addEventListener('iw:sync',e=>{ const m=e.detail; if(m&&!busy&&m.bank!==bank){ bank=m.bank; paint(); } });
