@@ -1,5 +1,5 @@
 <!-- InstantWins rotating banner — paste where it should appear (e.g. just above the page <h1>). Self-contained. -->
-<div id="iwStrip" aria-label="InstantWins"></div>
+<div id="iwStrip" aria-label="InstantWins" style="min-height:112px"></div>
 <script>
 (function(){
   var REF='bettingsites', H='https://instantwins.co.uk', EVERY=4200;
@@ -25,14 +25,14 @@
    +'#iwStrip .iwShot{position:relative;z-index:2;flex:none;width:92px;height:76px;border-radius:10px;object-fit:cover;object-position:50% 20%;border:1px solid rgba(61,242,255,.5);box-shadow:0 6px 18px rgba(0,0,0,.5)}'
    +'#iwStrip .iwDots{position:absolute;left:16px;bottom:7px;display:flex;gap:5px;z-index:4;pointer-events:none}#iwStrip .iwDots i{width:14px;height:3px;border-radius:2px;background:rgba(255,255,255,.22);transition:background .3s}#iwStrip .iwDots i.on{background:#C6FF3D}'
    +'#iwStrip .iwLegal{position:absolute;right:10px;bottom:5px;z-index:4;font-size:9px;color:rgba(255,255,255,.45);pointer-events:none;letter-spacing:.04em}'
-   +'@media(max-width:420px){#iwStrip .iwW{height:108px}#iwStrip .iwS.s1 .iwLogo{display:none}#iwStrip .iwH{font-size:18px}#iwStrip .iwArt{display:none}#iwStrip .iwBtn{padding:10px 13px;font-size:13px}#iwStrip .iwShot{width:62px;height:56px}#iwStrip .iwS{gap:10px;padding-left:12px}#iwStrip .iwLogo{height:22px}}'
+   +'@media(max-width:420px){#iwStrip{min-height:108px!important}#iwStrip .iwW{height:108px}#iwStrip .iwS.s1 .iwLogo{display:none}#iwStrip .iwH{font-size:18px}#iwStrip .iwArt{display:none}#iwStrip .iwBtn{padding:10px 13px;font-size:13px}#iwStrip .iwShot{width:62px;height:56px}#iwStrip .iwS{gap:10px;padding-left:12px}#iwStrip .iwLogo{height:22px}}'
    +'@media(prefers-reduced-motion:reduce){#iwStrip .iwS:after{animation:none}}';
   var st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
   var root=document.getElementById('iwStrip'); var go=H+'/?ref='+REF, demo=H+'/game.html?g=quick&demo=1&ref='+REF;
   root.innerHTML='<div class="iwW">'
-   +'<a class="iwS s1 on" href="'+go+'" target="_blank" rel="noopener"><img class="iwLogo" src="'+H+'/mail/logo.png" alt="InstantWins"><img class="iwArt" src="'+H+'/mail/tickets.png" alt=""><span class="iwT"><span class="iwK">New &middot; Instant win tickets</span><span class="iwH">&pound;1,185,000 <b>in prizes</b></span><span class="iwM">From 19p a ticket &middot; 1 in 5.7 win</span></span><span class="iwBtn">Play now &rarr;</span></a>'
-   +'<a class="iwS s2" href="'+demo+'" target="_blank" rel="noopener"><img class="iwShot" src="'+H+'/promo/reveal-poster.jpg" alt=""><span class="iwT"><span class="iwK">Try it free</span><span class="iwH">Feed the <b>reader</b></span><span class="iwM">250 demo tickets, free</span></span><span class="iwBtn">Try it &rarr;</span></a>'
-   +'<a class="iwS s3" href="'+go+'" target="_blank" rel="noopener"><img class="iwArt" src="'+H+'/mail/star.png" alt=""><span class="iwT"><span class="iwK">Top prize</span><span class="iwH">Win <i>&pound;20,000</i></span><span class="iwM">on a 25p ticket &middot; &pound;10k End Prize Draw</span></span><span class="iwBtn">Win this &rarr;</span></a>'
+   +'<a class="iwS s1 on" href="'+go+'" target="_blank" rel="sponsored noopener"><img class="iwLogo" src="'+H+'/mail/logo.png" alt="InstantWins"><img class="iwArt" src="'+H+'/mail/tickets.png" alt=""><span class="iwT"><span class="iwK">New &middot; Instant win tickets</span><span class="iwH">&pound;1,185,000 <b>in prizes</b></span><span class="iwM">From 19p a ticket &middot; 1 in 5.7 win</span></span><span class="iwBtn">Play now &rarr;</span></a>'
+   +'<a class="iwS s2" href="'+demo+'" target="_blank" rel="sponsored noopener"><img class="iwShot" src="'+H+'/promo/reveal-poster.jpg" alt=""><span class="iwT"><span class="iwK">Try it free</span><span class="iwH">Feed the <b>reader</b></span><span class="iwM">250 demo tickets, free</span></span><span class="iwBtn">Try it &rarr;</span></a>'
+   +'<a class="iwS s3" href="'+go+'" target="_blank" rel="sponsored noopener"><img class="iwArt" src="'+H+'/mail/star.png" alt=""><span class="iwT"><span class="iwK">Top prize</span><span class="iwH">Win <i>&pound;20,000</i></span><span class="iwM">on a 25p ticket &middot; &pound;10k End Prize Draw</span></span><span class="iwBtn">Win this &rarr;</span></a>'
    +'<div class="iwDots"><i class="on"></i><i></i><i></i></div><div class="iwLegal">18+ &middot; GB &middot; free entry by post &middot; T&amp;Cs apply</div></div>';
   var slides=root.querySelectorAll('.iwS'), dots=root.querySelectorAll('.iwDots i'), i=0, t;
   function show(n){ slides[i].classList.remove('on'); dots[i].classList.remove('on'); i=(n+slides.length)%slides.length; slides[i].classList.add('on'); dots[i].classList.add('on'); }

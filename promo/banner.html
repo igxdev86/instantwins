@@ -3,6 +3,11 @@
 (function(){
   var IW_REF='bettingsites', IW_DAYS=7, IW_DELAY=2500, KEY='iw_promo_seen', H='https://instantwins.co.uk';
   try{ var seen=+localStorage.getItem(KEY)||0; if(Date.now()-seen<IW_DAYS*864e5)return; }catch(e){}
+  // SEO: never interrupt a visitor who has just landed from a search engine (Google's intrusive-interstitial rule).
+  // Show on their second page of the visit, or once they have scrolled a screen's worth on this one.
+  var fromSearch=/google\.|bing\.|duckduckgo\.|yahoo\.|ecosia\./i.test(document.referrer||''); var second=false;
+  try{ second=sessionStorage.getItem('iw_pv')==='1'; sessionStorage.setItem('iw_pv','1'); }catch(e){}
+  var armed=!fromSearch||second;
   var F='-apple-system,"Inter","Segoe UI",Helvetica,Arial,sans-serif';
   var css=''
    +'#iwPromo{position:fixed;inset:0;z-index:2147483000;background:rgba(4,4,9,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:14px;font-family:'+F+';animation:iwFade .25s ease-out;-webkit-font-smoothing:antialiased}'
@@ -37,9 +42,9 @@
    +'<div class="iwScreen"><div><video autoplay muted loop playsinline poster="'+H+'/promo/reveal-poster.jpg"><source src="'+H+'/promo/reveal-demo.mp4" type="video/mp4"><img class="iwGif" src="'+H+'/promo/reveal-demo.gif" alt="The InstantWins ticket reader"></video><span class="iwDemo">DEMO</span></div></div>'
    +'<div class="iwStats"><div><b>25p</b><span>a ticket</span></div><div><b>1 in 5.7</b><span>tickets win</span></div><div><b>&pound;20,000</b><span>top prize</span></div></div>'
    +'<p>Feed your tickets through the reader and see what\'s on them. Plus a &pound;10,000 End Prize Draw on 31 January.</p>'
-   +'<a class="iwGo" href="'+H+'/?ref='+IW_REF+'" target="_blank" rel="noopener">Play now &rarr;<i></i></a>'
-   +'<a class="iwFree" href="'+H+'/free.html" target="_blank" rel="noopener">No purchase necessary &mdash; enter free by post</a>'
-   +'<div class="iwLegal">18+, Great Britain only. Prize competition with a free postal entry route under Schedule 2 of the Gambling Act 2005, operated by IGX Ltd. Prizes are a matter of luck and most tickets win nothing &mdash; please play within your means. <a href="'+H+'/terms.html" target="_blank" rel="noopener">Terms</a> &middot; <a href="'+H+'/responsible-play.html" target="_blank" rel="noopener">Responsible play</a></div>'
+   +'<a class="iwGo" href="'+H+'/?ref='+IW_REF+'" target="_blank" rel="sponsored noopener">Play now &rarr;<i></i></a>'
+   +'<a class="iwFree" href="'+H+'/free.html" target="_blank" rel="sponsored noopener">No purchase necessary &mdash; enter free by post</a>'
+   +'<div class="iwLegal">18+, Great Britain only. Prize competition with a free postal entry route under Schedule 2 of the Gambling Act 2005, operated by IGX Ltd. Prizes are a matter of luck and most tickets win nothing &mdash; please play within your means. <a href="'+H+'/terms.html" target="_blank" rel="sponsored noopener">Terms</a> &middot; <a href="'+H+'/responsible-play.html" target="_blank" rel="sponsored noopener">Responsible play</a></div>'
    +'<button class="iwNo" type="button">Not now</button>'
    +'</div></div>';
   function mark(){ try{ localStorage.setItem(KEY,String(Date.now())); }catch(e){} }
@@ -48,6 +53,7 @@
   d.querySelector('.iwGo').addEventListener('click',mark);
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&d.parentNode)close(); });
   function show(){ document.body.appendChild(d); }
-  if(document.readyState==='complete')setTimeout(show,IW_DELAY); else window.addEventListener('load',function(){ setTimeout(show,IW_DELAY); });
+  function arm(){ if(document.readyState==='complete')setTimeout(show,IW_DELAY); else window.addEventListener('load',function(){ setTimeout(show,IW_DELAY); }); }
+  if(armed)arm(); else window.addEventListener('scroll',function onS(){ if(window.scrollY>window.innerHeight*0.9){ window.removeEventListener('scroll',onS); setTimeout(show,600); } },{passive:true});
 })();
 </script>
