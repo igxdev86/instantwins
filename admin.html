@@ -60,6 +60,14 @@
     <p class="lead">Site messages and every email sent to <b>@instantwins.co.uk</b> land here. Replies go out by email from hello@instantwins.co.uk and, for members, show in their support thread too.</p>
     <div class="row"><span>Resend Receiving <small class="m">webhook: https://instantwins.co.uk/api/inbound</small></span><span class="pill" id="inStat">—</span></div>
     <div id="threads" style="margin-top:10px"><span class="m">Loading…</span></div></div>
+  <div class="panel"><h2>New email</h2>
+    <p class="lead">Email one person. Members by account number or email; anyone else by email. It is kept on their thread so replies come back here.</p>
+    <label>To</label><input id="mcTo" placeholder="IW1234 or name@example.com" autocomplete="off">
+    <label>Subject</label><input id="mcSub" placeholder="About your account">
+    <label>Message</label><textarea id="mcBody" rows="6"></textarea>
+    <div style="display:flex;gap:8px;align-items:center;margin-top:8px"><button class="btn lime" id="mcGo" style="margin:0">Send email</button></div>
+    <div class="err" id="mcErr"></div>
+  </div>
   <div class="panel" id="threadPanel" style="display:none"><h2 id="threadTitle">Thread</h2><p class="lead" id="threadMeta"></p>
     <div id="thread" style="display:flex;flex-direction:column;gap:8px"></div>
     <label style="margin-top:14px">Reply as InstantWins</label><textarea id="reBody" rows="5" placeholder="Hi … "></textarea>
@@ -85,14 +93,20 @@
   </div>
 </div>
 <div class="ap" id="ap-announce">
-  <div class="panel"><h2>Send an announcement to all users</h2>
-    <p class="lead">Drops an admin message into every user\u2019s inbox.</p>
-    <label>Title</label><input id="anTitle" placeholder="e.g. New games live tonight">
-    <label>Message</label><textarea id="anBody"></textarea>
-    <button class="btn" id="anGo">PUBLISH ANNOUNCEMENT</button>
-    <div class="err" id="anErr"></div>
+  <div class="panel"><h2>Broadcast</h2>
+    <p class="lead">Email everyone who ticked "email me about new rounds and prizes", and pin the same message as an announcement on the support page. Anyone who has not opted in is skipped &mdash; that is the law (PECR), not a setting.</p>
+    <div class="row"><span>Members</span><span class="mono" id="bcMembers">—</span></div>
+    <div class="row"><span>Opted in to emails</span><span class="mono" id="bcOpt">—</span></div>
+    <div class="row"><span>Opted in &amp; bought in last 90 days</span><span class="mono" id="bcBuy">—</span></div>
+    <div class="row"><span>Waiting to send</span><span class="mono" id="bcPend">—</span></div>
+    <label>Send to</label><select id="bcAud" class="sel"><option value="test">Just me (test)</option><option value="all">Everyone opted in</option><option value="buyers">Opted in &amp; recent buyers</option></select>
+    <label>Subject</label><input id="bcSub" placeholder="New round open — £1 million in prizes">
+    <label>Message</label><textarea id="bcBody" rows="8" placeholder="Plain text. Line breaks are kept. The site branding, footer and opt-out link are added automatically."></textarea>
+    <div style="display:flex;gap:8px;align-items:center;margin-top:8px"><button class="btn lime" id="bcGo" style="margin:0">Send</button></div>
+    <div class="err" id="bcErr"></div>
   </div>
 </div>
+
 </div></div></main><footer class="foot"><div class="wrap">
  <div class="fcols">
   <div><div class="fh">Play</div><a href="index.html#buy">Buy tickets</a><a href="game.html?g=quick">Reveal</a><a href="prizes.html">Prize table</a><a href="winners.html">Winners</a><a href="free.html">Free entry by post</a></div>
@@ -254,6 +268,10 @@ async function openThread(key,name){ curKey=key; curName=name; $('threadPanel').
 $('reGo').onclick=async()=>{ const b=$('reBody').value.trim(); if(!b||!curKey)return; $('reGo').disabled=true; $('reErr').className='err'; $('reErr').textContent='';
   try{ await api('/api/admin',{action:'reply',token:s.token,key:curKey,body:b}); $('reBody').value=''; $('reErr').className='err ok'; $('reErr').textContent='Sent.'; openThread(curKey,curName); }
   catch(e){ $('reErr').textContent=e.message; } $('reGo').disabled=false; };
+$('mcGo').onclick=async()=>{ $('mcErr').className='err'; $('mcErr').textContent=''; $('mcGo').disabled=true;
+  try{ const r=await api('/api/admin',{action:'mailone',token:s.token,to:$('mcTo').value,subject:$('mcSub').value,body:$('mcBody').value}); $('mcErr').className='err ok'; $('mcErr').textContent='Sent to '+r.to+(r.member?'':' (not a member)'); $('mcBody').value=''; $('mcSub').value=''; if(typeof loadThreads==='function')loadThreads(); }
+  catch(e){ $('mcErr').textContent=e.message; } $('mcGo').disabled=false; };
+
 fetch('/api/inbound').then(r=>{ $('inStat').textContent=r.status===405?'endpoint live':'check'; $('inStat').className='pill '+(r.status===405?'ok':'warn'); }).catch(()=>{});
 (async()=>{ if(await guard()){ loadThreads(); setInterval(loadThreads,45000); } })();
 })();
@@ -298,13 +316,14 @@ window.affToggle=async(code,status)=>{ try{await api('/api/admin',{action:'aff_u
 
 })();
 (function(){
-
-$('anGo').onclick=async()=>{
-  try{await api('/api/admin',{action:'announce',token:s.token,title:$('anTitle').value,body:$('anBody').value});
-    $('anTitle').value='';$('anBody').value='';$('anErr').textContent='Published.';$('anErr').className='err ok';}
-  catch(e){$('anErr').textContent=e.message;$('anErr').className='err';}
-};
-(async()=>{ await guard(); })();
+(function(){
+async function counts(){ try{ const c=await api('/api/admin',{action:'mailcounts',token:s.token}); $('bcMembers').textContent=c.members; $('bcOpt').textContent=c.opted_in; $('bcBuy').textContent=c.buyers; $('bcPend').textContent=c.pending; }catch(e){} }
+$('bcGo').onclick=async()=>{ const aud=$('bcAud').value; $('bcErr').className='err'; $('bcErr').textContent='';
+  if(aud!=='test'&&!confirm('Send this to '+(aud==='all'?$('bcOpt').textContent:$('bcBuy').textContent)+' people? It cannot be recalled.'))return;
+  $('bcGo').disabled=true; try{ const r=await api('/api/admin',{action:'mailall',token:s.token,subject:$('bcSub').value,body:$('bcBody').value,audience:aud}); $('bcErr').className='err ok'; $('bcErr').textContent=r.queued+' queued — they go out over the next few minutes.'; counts(); }
+  catch(e){ $('bcErr').textContent=e.message; } $('bcGo').disabled=false; };
+(async()=>{ if(await guard()){ counts(); } })();
+})();
 
 })();
 showTab();

@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     else if (a === 'mine') r = await rpc(e, 'c2_mine', { p_token: token });
     else if (a === 'answer') { if (!await allow(e, 'ans:' + token, 8, 60)) return res.status(429).json({ error: 'too many tries — wait a minute' }); const q=String(b.q||'').slice(0,200), ans=String(b.answer||'').slice(0,100), exp=+b.exp||0; if(!q||!b.sig||exp<Date.now()) return res.status(400).json({ error: 'question expired — try again' }); const ok = sign(e,q,ans,exp)===String(b.sig); r = await rpc(e, 'c2_answer', { p_token: token, p_q: q, p_answer: ans, p_correct: ok }); }
     else if (a === 'accept_terms') r = await rpc(e, 'iw_accept_terms', { p_token: token });
-    else if (a === 'profile') r = await rpc(e, 'iw_set_profile', { p_token: token, p_county: String(b.county || '').slice(0, 40), p_publish: b.publish !== false });
+    else if (a === 'profile') r = await rpc(e, 'iw_set_profile', { p_token: token, p_county: String(b.county || '').slice(0, 40), p_publish: b.publish !== false, p_marketing: typeof b.marketing === 'boolean' ? b.marketing : null });
     else return res.status(400).json({ error: 'bad request' });
     if (a === 'buy' || a === 'buybal' || a === 'revealall') { flushMail(e, 5).catch(() => {}); }
   } else if (req.query && req.query.q !== undefined) {

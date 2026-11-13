@@ -40,6 +40,7 @@
     <p>Prizes of &pound;100 or more appear on the <a href="winners.html">winners page</a> as your first name and county. Switch it off any time.</p>
     <label>County</label><input id="pfCounty" placeholder="e.g. Glamorgan" maxlength="40">
     <label class="chkrow"><input type="checkbox" id="pfPub" checked><span>Publish my wins</span></label>
+    <label class="chkrow"><input type="checkbox" id="pfMkt"><span>Email me about new rounds and prizes</span></label>
     <button class="btn ghost slim" id="pfSave" style="margin-top:12px">Save</button><div class="err" id="pfErr"></div>
   </div></details>
 
@@ -68,7 +69,7 @@
   // Tickets
   let recent=[]; function paintTk(all){ const list=all?recent:recent.slice(0,6); $('recent').innerHTML=list.length?list.map(t=>'<div><span>Ticket #'+t.no.toLocaleString()+'</span>'+(t.prize_p?'<b>'+gbp(t.prize_p)+'</b>':'<span style="color:var(--soft)">no prize</span>')+'</div>').join(''):'<p class="m">No tickets revealed yet. <a href="game.html?g=quick">Reveal some</a> or <a href="index.html#buy">buy tickets</a>.</p>'; $('tkMore').style.display=recent.length>6&&!all?'':'none'; }
   $('tkMore').onclick=()=>paintTk(true);
-  C2.mine().then(m=>{ C2.header(m); $('aBal').textContent=gbp(m.balance_p); $('aBank').textContent=m.bank; $('aWon').textContent=gbp(m.won_p!=null?m.won_p:m.recent.reduce((a,t)=>a+t.prize_p,0)); recent=m.recent||[]; const wins=recent.filter(t=>t.prize_p).length; $('tkSum').textContent=recent.length?recent.length+' revealed \u00b7 '+wins+' won':'none yet'; paintTk(false); $('pfCounty').value=m.county||''; $('pfPub').checked=m.publish_wins!==false; $('pfSum').textContent=m.publish_wins===false?'off':'on'; }).catch(e=>{$('recent').innerHTML='<p>'+e.message+'</p>';});
+  C2.mine().then(m=>{ C2.header(m); $('aBal').textContent=gbp(m.balance_p); $('aBank').textContent=m.bank; $('aWon').textContent=gbp(m.won_p!=null?m.won_p:m.recent.reduce((a,t)=>a+t.prize_p,0)); recent=m.recent||[]; const wins=recent.filter(t=>t.prize_p).length; $('tkSum').textContent=recent.length?recent.length+' revealed \u00b7 '+wins+' won':'none yet'; paintTk(false); $('pfCounty').value=m.county||''; $('pfPub').checked=m.publish_wins!==false; $('pfMkt').checked=!!m.marketing_ok; $('pfSum').textContent=m.publish_wins===false?'off':'on'; }).catch(e=>{$('recent').innerHTML='<p>'+e.message+'</p>';});
 
   // Payments
   let PAY=null;
@@ -111,8 +112,8 @@
   document.querySelectorAll('[data-days]').forEach(b=>b.onclick=async()=>{ if(!confirm('Pause paid tickets for '+b.dataset.days+' day(s)? This cannot be undone early.'))return; try{ await api('/api/auth',{action:'takebreak',days:+b.dataset.days}); lim(); }catch(e){ $('limErr').textContent=e.message; } });
 
   // Profile
-  $('pfSave').onclick=async()=>{ $('pfErr').className='err'; $('pfErr').textContent=''; try{ await C2.profile($('pfCounty').value,$('pfPub').checked); $('pfErr').className='err ok'; $('pfErr').textContent='Saved.'; $('pfSum').textContent=$('pfPub').checked?'on':'off'; }catch(e){ $('pfErr').textContent=e.message; } };
+  $('pfSave').onclick=async()=>{ $('pfErr').className='err'; $('pfErr').textContent=''; try{ await C2.profile($('pfCounty').value,$('pfPub').checked,$('pfMkt').checked); $('pfErr').className='err ok'; $('pfErr').textContent='Saved.'; $('pfSum').textContent=$('pfPub').checked?'on':'off'; }catch(e){ $('pfErr').textContent=e.message; } };
   $('out').onclick=()=>{ localStorage.removeItem('iw_session'); location.href='index.html'; };
   // deep links: account.html#money etc
-  const h=location.hash.replace('#',''); const map={money:'secMoney',payments:'secMoney',limits:'secLimits',tickets:'secTickets'}; if(map[h]){ const el=$(map[h]); el.open=true; el.scrollIntoView({block:'start'}); }
+  const h=location.hash.replace('#',''); const map={money:'secMoney',payments:'secMoney',limits:'secLimits',tickets:'secTickets',profile:'secProfile'}; if(map[h]){ const el=$(map[h]); el.open=true; el.scrollIntoView({block:'start'}); }
 })();</script></body></html>

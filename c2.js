@@ -22,7 +22,7 @@ const C2=(()=>{
     const bank=m&&m.bank!=null?m.bank:'–', bal=m&&m.balance_p!=null?(window.innerWidth<=430&&m.balance_p>=10000?'£'+Math.floor(m.balance_p/100).toLocaleString():gbp(m.balance_p)):'–';
     box.innerHTML='<a class="bk" href="account.html" title="My tickets"><svg viewBox="0 0 24 24"><path d="M3 9a2 2 0 0 0 2-2V5h14v2a2 2 0 0 0 0 4v2a2 2 0 0 0 0 4v2H5v-2a2 2 0 0 0-2-2z"/><path d="M12 5v14" stroke-dasharray="2 2"/></svg><b id="bankN">'+bank+'</b><small>tickets</small></a><a class="bal" id="balN" href="account.html">'+bal+'</a><a class="me" href="account.html" title="My account" aria-label="My account"><svg viewBox="0 0 24 24" fill="none" stroke="#1A0A00" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.5 20c.8-3.6 3.9-5.5 7.5-5.5s6.7 1.9 7.5 5.5"/></svg></a>'; }
   const acceptTerms=()=>post({action:'accept_terms'});
-  const profile=(county,publish)=>post({action:'profile',county,publish});
+  const profile=(county,publish,marketing)=>post({action:'profile',county,publish,marketing});
   function onboardModal(){ if(document.getElementById('iwOnb'))return; const d=document.createElement('div'); d.id='iwOnb'; d.className='ldm'; d.style.zIndex=72;
     d.innerHTML='<div class="modal onb"><div class="done-k">Almost there</div><h2>Set up your account</h2><p>We need this once. You must be 18 or over and live in Great Britain to play.</p>'
       +'<label>Your name</label><input id="onName" autocomplete="name" placeholder="First and last name">'

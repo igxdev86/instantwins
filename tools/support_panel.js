@@ -16,6 +16,10 @@ async function openThread(key,name){ curKey=key; curName=name; $('threadPanel').
 $('reGo').onclick=async()=>{ const b=$('reBody').value.trim(); if(!b||!curKey)return; $('reGo').disabled=true; $('reErr').className='err'; $('reErr').textContent='';
   try{ await api('/api/admin',{action:'reply',token:s.token,key:curKey,body:b}); $('reBody').value=''; $('reErr').className='err ok'; $('reErr').textContent='Sent.'; openThread(curKey,curName); }
   catch(e){ $('reErr').textContent=e.message; } $('reGo').disabled=false; };
+$('mcGo').onclick=async()=>{ $('mcErr').className='err'; $('mcErr').textContent=''; $('mcGo').disabled=true;
+  try{ const r=await api('/api/admin',{action:'mailone',token:s.token,to:$('mcTo').value,subject:$('mcSub').value,body:$('mcBody').value}); $('mcErr').className='err ok'; $('mcErr').textContent='Sent to '+r.to+(r.member?'':' (not a member)'); $('mcBody').value=''; $('mcSub').value=''; if(typeof loadThreads==='function')loadThreads(); }
+  catch(e){ $('mcErr').textContent=e.message; } $('mcGo').disabled=false; };
+
 fetch('/api/inbound').then(r=>{ $('inStat').textContent=r.status===405?'endpoint live':'check'; $('inStat').className='pill '+(r.status===405?'ok':'warn'); }).catch(()=>{});
 (async()=>{ if(await guard()){ loadThreads(); setInterval(loadThreads,45000); } })();
 })();

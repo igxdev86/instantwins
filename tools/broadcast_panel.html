@@ -1,0 +1,14 @@
+<div class="ap" id="ap-announce">
+  <div class="panel"><h2>Broadcast</h2>
+    <p class="lead">Email everyone who ticked "email me about new rounds and prizes", and pin the same message as an announcement on the support page. Anyone who has not opted in is skipped &mdash; that is the law (PECR), not a setting.</p>
+    <div class="row"><span>Members</span><span class="mono" id="bcMembers">—</span></div>
+    <div class="row"><span>Opted in to emails</span><span class="mono" id="bcOpt">—</span></div>
+    <div class="row"><span>Opted in &amp; bought in last 90 days</span><span class="mono" id="bcBuy">—</span></div>
+    <div class="row"><span>Waiting to send</span><span class="mono" id="bcPend">—</span></div>
+    <label>Send to</label><select id="bcAud" class="sel"><option value="test">Just me (test)</option><option value="all">Everyone opted in</option><option value="buyers">Opted in &amp; recent buyers</option></select>
+    <label>Subject</label><input id="bcSub" placeholder="New round open — £1 million in prizes">
+    <label>Message</label><textarea id="bcBody" rows="8" placeholder="Plain text. Line breaks are kept. The site branding, footer and opt-out link are added automatically."></textarea>
+    <div style="display:flex;gap:8px;align-items:center;margin-top:8px"><button class="btn lime" id="bcGo" style="margin:0">Send</button></div>
+    <div class="err" id="bcErr"></div>
+  </div>
+</div>
