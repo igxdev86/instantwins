@@ -16,7 +16,11 @@ begin
   return jsonb_build_object('id',v_id,'amount_p',p_amount_p,'reference',v_ref);
 end $$;
 create index if not exists deposits_ref on deposits(reference);
--- run cashflows.sql first (card_payments table)
+-- card_payments may not exist yet (cashflows.sql); create it so this file runs in any order
+create table if not exists card_payments (
+  id bigserial primary key, user_id uuid not null references users(id), ref text not null unique,
+  amount_p int not null check (amount_p > 0), status text not null default 'started',
+  job_ref text, pay_ref text, note text, created_at timestamptz not null default now(), paid_at timestamptz, updated_at timestamptz);
 -- my payments now include card deposits
 create or replace function iw_my_payments(p_token uuid) returns jsonb
 language plpgsql security definer set search_path = public, extensions as $$
