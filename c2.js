@@ -64,7 +64,7 @@ const C2=(()=>{
     const $=id=>document.getElementById(id);
     function paint(){ const bal=cachedBal(), q=bal!=null?balQuote(bal):null;
       $('iwPacks').innerHTML=PACKS.map(([n,p],i)=>{const full=n*FACE, sv=full-p; return '<div class="pack'+(i===sel?' sel':'')+'" data-i="'+i+'">'+(sv?'<span class="save">SAVE '+gbp(sv)+'</span>':'')+'<div class="t">'+n+'<small>ticket'+(n>1?'s':'')+'</small></div><div class="p">'+gbp(p)+'</div></div>';}).join('')
-        +(q?'<div class="pack all'+(sel==='bal'?' sel':'')+'" data-i="bal">'+(q.save?'<span class="save">SAVE '+gbp(q.save)+'</span>':'')+'<div class="t">'+q.n.toLocaleString()+'<small>tickets</small></div><div class="p">'+gbp(q.cost)+'</div><div class="each">'+(q.capped?'max order':'whole balance')+' · '+q.rate+'p each</div></div>':'');
+        +(q?'<div class="pack all'+(sel==='bal'?' sel':'')+'" data-i="bal">'+(q.save?'<span class="save">SAVE '+gbp(q.save)+'</span>':'')+'<div class="t">'+q.n.toLocaleString()+'<small>tickets</small></div><div class="p">'+gbp(q.cost)+'</div><div class="each">max amount · '+q.rate+'p each</div></div>':'');
       if(sel==='bal'&&q){ $('iwSelT').textContent=q.n.toLocaleString()+' tickets'; $('iwSelP').textContent=gbp(q.cost); $('iwSelE').textContent=q.rate+'p each · '+'max amount'; $('iwBuyGo').textContent='Buy for '+gbp(q.cost); }
       else { if(sel==='bal')sel=1; const [n,p]=PACKS[sel]; $('iwSelT').textContent=n+' ticket'+(n>1?'s':''); $('iwSelP').textContent=gbp(p); $('iwSelE').textContent=gbp(Math.round(p/n))+' each'; $('iwBuyGo').textContent='Buy for '+gbp(p); }
       d.querySelectorAll('.pack').forEach(el=>el.onclick=()=>{sel=el.dataset.i==='bal'?'bal':+el.dataset.i;paint();}); }
