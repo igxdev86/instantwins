@@ -598,3 +598,7 @@ body[data-g].noctrl main{padding-bottom:24px}
 .refcard{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--bg);border:1px dashed rgba(198,255,61,.5);border-radius:14px;padding:16px 18px;margin:6px 0 4px}
 .refcard b{font:900 2rem/1 Unbounded,sans-serif;letter-spacing:.2em;color:var(--lime);text-shadow:0 0 18px rgba(198,255,61,.4)}
 .modal .chkrow{margin-top:14px}.modal .chkrow b{color:var(--lime)}
+.herobtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:4px}.herobtns .learn{margin:0}
+.learn.try{background:linear-gradient(135deg,var(--orange),var(--pink));color:#1A0A00;text-decoration:none;box-shadow:0 8px 24px rgba(255,106,26,.35)}
+.demobar{position:sticky;top:0;z-index:40;background:linear-gradient(90deg,var(--pink),var(--orange));color:#1A0A00;font:700 .78rem/1.35 Inter,sans-serif;text-align:center;padding:8px 14px}.demobar b{font-weight:900;letter-spacing:.12em;margin-right:6px}.demobar a{color:#1A0A00;text-decoration:underline}
+body.demo .freebtn{display:none}
