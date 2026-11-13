@@ -44,19 +44,19 @@
 // DEMO MODE: ?demo=1 — 250 pretend tickets, no account, nothing saved. Prize odds roughly match the real table, and generous
 // — it is a taster, labelled as a demo everywhere.
 (function(){ if(!/[?&]demo=1/.test(location.search))return; window.__demo=true;
-  const T=[[2000000,2],[50000,6],[20000,15],[10000,30],[5000,80],[2000,160],[1000,260],[500,420],[200,600],[100,700],[50,900]]; // prize pence, per-10,000 weight (demo is generous on purpose)
+  const T=[[100000,4],[50000,12],[20000,40],[10000,100],[5000,200],[2000,350],[1000,500],[500,700],[200,900],[100,1100],[50,1300]]; // prize pence, per-10,000 weight — demo tops out at £1,000
   function roll(){ let r=Math.random()*10000; for(const [p,w] of T){ if(r<w)return p; r-=w; } return 0; }
   let bank=[], no=1; const mk=()=>({no:900000+(no++),prize_p:roll()});
   for(let i=0;i<250;i++)bank.push(mk());
-  // guaranteed drama in every demo run
-  bank[2].prize_p=500; bank[7].prize_p=2000; bank[14].prize_p=10000; bank[23].prize_p=1000; bank[38].prize_p=50000; bank[61].prize_p=5000; bank[95].prize_p=20000; bank[140].prize_p=2000000; bank[190].prize_p=10000;
+  // a few guaranteed hits so every run shows some action
+  bank[2].prize_p=500; bank[9].prize_p=2000; bank[21].prize_p=5000; bank[47].prize_p=1000; bank[88].prize_p=20000; bank[150].prize_p=100000; bank[210].prize_p=10000;
   let bal=0;
   const wait=ms=>new Promise(r=>setTimeout(r,ms));
   C2.TOKEN='demo'; C2.mine=async()=>({balance_p:bal,bank:bank.length,won_p:bal,recent:[]});
   C2.reveal=async()=>{ await wait(250); const t=bank.shift(); if(!t)return {empty:true,bank:0,balance_p:bal}; bal+=t.prize_p; return {no:t.no,prize_p:t.prize_p,bank:bank.length,balance_p:bal}; };
   C2.revealAll=async()=>{ await wait(300); const ts=bank.splice(0); const won=ts.reduce((a,t)=>a+t.prize_p,0); bal+=won; return {tickets:ts,won_p:won,bank:0,balance_p:bal}; };
   C2.state=async()=>({}); C2.buySheet=()=>{ location.href='signin.html#su'; };
-  C2.header=(m)=>{ const box=document.getElementById('bankBox'); if(!box)return; const b=m&&m.bank!=null?m.bank:bank.length, p=m&&m.balance_p!=null?m.balance_p:bal; box.innerHTML='<span class="bk" title="demo tickets"><b>'+b+'</b><small>demo</small></span><span class="bal">'+C2.gbp(p)+'</span><a class="cta" href="signin.html#su">Join</a>'; };
+  C2.header=()=>{ const box=document.getElementById('bankBox'); if(box)box.innerHTML=''; };
   document.addEventListener('DOMContentLoaded',()=>{ document.body.classList.add('demo'); const b=document.createElement('div'); b.className='demobar'; b.innerHTML='<b>DEMO</b> 250 pretend tickets, pretend prizes. Nothing here is real or saved. <a href="signin.html#su">Create an account</a> to play for real.'; document.body.prepend(b); C2.header(); document.addEventListener('iw:sync',()=>C2.header()); setTimeout(()=>C2.header(),800); });
 })();
 </script><script src="sfx.js"></script><script>
