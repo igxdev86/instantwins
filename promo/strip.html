@@ -1,0 +1,44 @@
+<!-- InstantWins rotating banner — paste where it should appear (e.g. just above the page <h1>). Self-contained. -->
+<div id="iwStrip" aria-label="InstantWins"></div>
+<script>
+(function(){
+  var REF='bettingsites', H='https://instantwins.co.uk', EVERY=4200;
+  var css=''
+   +'#iwStrip{position:relative;overflow:hidden;margin:12px 0 18px;border-radius:18px;padding:1px;background:linear-gradient(160deg,rgba(255,255,255,.3),rgba(255,255,255,.06) 45%,rgba(198,255,61,.3));box-shadow:0 16px 40px rgba(0,0,0,.35);font-family:-apple-system,"Inter","Segoe UI",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}'
+   +'#iwStrip .iwW{position:relative;overflow:hidden;border-radius:17px;height:112px;background:linear-gradient(180deg,#1b1b25,#0d0d13);color:#fff}'
+   +'#iwStrip .iwW:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,0) 40%);pointer-events:none;z-index:3}'
+   +'#iwStrip .iwS{position:absolute;inset:0;display:flex;align-items:center;gap:12px;padding:0 14px 10px 16px;text-decoration:none;color:#fff;opacity:0;transform:translateX(18px);transition:opacity .55s ease,transform .55s cubic-bezier(.2,.8,.2,1);pointer-events:none}'
+   +'#iwStrip .iwS.on{opacity:1;transform:none;pointer-events:auto}'
+   +'#iwStrip .iwS:after{content:"";position:absolute;top:0;bottom:0;width:30%;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.14),rgba(255,255,255,0));transform:translateX(-150%) skewX(-18deg);animation:iwSw 4.2s ease-in-out infinite;pointer-events:none}'
+   +'@keyframes iwSw{0%{transform:translateX(-150%) skewX(-18deg)}55%,100%{transform:translateX(420%) skewX(-18deg)}}'
+   +'#iwStrip .iwS.s1{background:radial-gradient(90% 120% at 100% 0%,rgba(61,242,255,.28),transparent 55%),radial-gradient(70% 100% at 0% 100%,rgba(255,61,138,.22),transparent 60%)}'
+   +'#iwStrip .iwS.s2{background:radial-gradient(90% 120% at 100% 0%,rgba(198,255,61,.26),transparent 55%),radial-gradient(70% 100% at 0% 100%,rgba(61,242,255,.18),transparent 60%)}'
+   +'#iwStrip .iwS.s3{background:radial-gradient(90% 120% at 100% 0%,rgba(255,106,26,.32),transparent 55%),radial-gradient(70% 100% at 0% 100%,rgba(198,255,61,.18),transparent 60%)}'
+   +'#iwStrip .iwArt{position:absolute;right:92px;top:-10px;width:150px;height:auto;opacity:.9;pointer-events:none}'
+   +'#iwStrip .iwT{position:relative;z-index:2;flex:1;min-width:0;display:block}#iwStrip .iwT>span{display:block}'
+   +'#iwStrip .iwK{font-weight:800;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#3DF2FF;margin-bottom:4px;white-space:nowrap}'
+   +'#iwStrip .iwH{font-weight:900;font-size:21px;line-height:1.05;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#iwStrip .iwH b{color:#C6FF3D}#iwStrip .iwH i{font-style:normal;color:#FF6A1A}'
+   +'#iwStrip .iwM{font-size:12px;color:#b9bcc8;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
+   +'#iwStrip .iwBtn{position:relative;z-index:2;flex:none;padding:11px 16px;border-radius:999px;background:linear-gradient(135deg,#f4ffb0,#C6FF3D 45%,#9fd81c);color:#0B0B10;font-weight:900;font-size:14px;white-space:nowrap;box-shadow:0 8px 22px rgba(198,255,61,.35),inset 0 1px 0 rgba(255,255,255,.7)}'
+   +'#iwStrip .iwS.s3 .iwBtn{background:linear-gradient(135deg,#ffd0a3,#FF6A1A 45%,#e0520f);color:#1A0A00;box-shadow:0 8px 22px rgba(255,106,26,.4),inset 0 1px 0 rgba(255,255,255,.6)}'
+   +'#iwStrip .iwLogo{position:relative;z-index:2;flex:none;height:26px;width:auto}'
+   +'#iwStrip .iwShot{position:relative;z-index:2;flex:none;width:92px;height:76px;border-radius:10px;object-fit:cover;object-position:50% 20%;border:1px solid rgba(61,242,255,.5);box-shadow:0 6px 18px rgba(0,0,0,.5)}'
+   +'#iwStrip .iwDots{position:absolute;left:16px;bottom:7px;display:flex;gap:5px;z-index:4;pointer-events:none}#iwStrip .iwDots i{width:14px;height:3px;border-radius:2px;background:rgba(255,255,255,.22);transition:background .3s}#iwStrip .iwDots i.on{background:#C6FF3D}'
+   +'#iwStrip .iwLegal{position:absolute;right:10px;bottom:5px;z-index:4;font-size:9px;color:rgba(255,255,255,.45);pointer-events:none;letter-spacing:.04em}'
+   +'@media(max-width:420px){#iwStrip .iwW{height:108px}#iwStrip .iwS.s1 .iwLogo{display:none}#iwStrip .iwH{font-size:18px}#iwStrip .iwArt{display:none}#iwStrip .iwBtn{padding:10px 13px;font-size:13px}#iwStrip .iwShot{width:62px;height:56px}#iwStrip .iwS{gap:10px;padding-left:12px}#iwStrip .iwLogo{height:22px}}'
+   +'@media(prefers-reduced-motion:reduce){#iwStrip .iwS:after{animation:none}}';
+  var st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
+  var root=document.getElementById('iwStrip'); var go=H+'/?ref='+REF, demo=H+'/game.html?g=quick&demo=1&ref='+REF;
+  root.innerHTML='<div class="iwW">'
+   +'<a class="iwS s1 on" href="'+go+'" target="_blank" rel="noopener"><img class="iwLogo" src="'+H+'/mail/logo.png" alt="InstantWins"><img class="iwArt" src="'+H+'/mail/tickets.png" alt=""><span class="iwT"><span class="iwK">New &middot; Instant win tickets</span><span class="iwH">&pound;1,185,000 <b>in prizes</b></span><span class="iwM">From 19p a ticket &middot; 1 in 5.7 win</span></span><span class="iwBtn">Play now &rarr;</span></a>'
+   +'<a class="iwS s2" href="'+demo+'" target="_blank" rel="noopener"><img class="iwShot" src="'+H+'/promo/reveal-poster.jpg" alt=""><span class="iwT"><span class="iwK">Try it free</span><span class="iwH">Feed the <b>reader</b></span><span class="iwM">250 demo tickets, free</span></span><span class="iwBtn">Try it &rarr;</span></a>'
+   +'<a class="iwS s3" href="'+go+'" target="_blank" rel="noopener"><img class="iwArt" src="'+H+'/mail/star.png" alt=""><span class="iwT"><span class="iwK">Top prize</span><span class="iwH">Win <i>&pound;20,000</i></span><span class="iwM">on a 25p ticket &middot; &pound;10k End Prize Draw</span></span><span class="iwBtn">Win this &rarr;</span></a>'
+   +'<div class="iwDots"><i class="on"></i><i></i><i></i></div><div class="iwLegal">18+ &middot; GB &middot; free entry by post &middot; T&amp;Cs apply</div></div>';
+  var slides=root.querySelectorAll('.iwS'), dots=root.querySelectorAll('.iwDots i'), i=0, t;
+  function show(n){ slides[i].classList.remove('on'); dots[i].classList.remove('on'); i=(n+slides.length)%slides.length; slides[i].classList.add('on'); dots[i].classList.add('on'); }
+  function start(){ stop(); t=setInterval(function(){ show(i+1); },EVERY); } function stop(){ clearInterval(t); }
+  root.addEventListener('mouseenter',stop); root.addEventListener('mouseleave',start);
+  var x0=null; root.addEventListener('touchstart',function(e){ x0=e.touches[0].clientX; stop(); },{passive:true}); root.addEventListener('touchend',function(e){ if(x0!=null){ var dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>40)show(i+(dx<0?1:-1)); } x0=null; start(); },{passive:true});
+  start();
+})();
+</script>
