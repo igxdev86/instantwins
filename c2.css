@@ -579,3 +579,5 @@ body[data-skin="tickets"] .coin{display:flex;flex-direction:column-reverse;justi
 .empty .btn{display:inline-block;min-width:200px;text-align:center}
 .empty .empty-free{display:block;margin-top:14px;color:var(--soft);font-size:.84rem;font-weight:600;text-decoration:none}.empty .empty-free:hover{color:var(--cyan)}
 body[data-g].noctrl main{padding-bottom:24px}
+.modal .amts.anna{grid-template-columns:repeat(4,1fr)}.modal .amts.anna .btn{padding:12px 4px;font-size:.86rem}
+.bankalt{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}.bankalt summary{cursor:pointer;color:var(--soft);font-size:.84rem;font-weight:700;list-style:none}.bankalt summary::-webkit-details-marker{display:none}.bankalt summary::after{content:" \25BE";color:var(--cyan)}.bankalt[open] summary{margin-bottom:10px}
