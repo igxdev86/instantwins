@@ -92,7 +92,7 @@ begin
   u := iw_user(p_token);
   return jsonb_build_object('live', iw_payments_live(), 'card', coalesce((select value='true' from site_settings where key='card_on'),false) or coalesce(u.is_admin,false),
     'reference', coalesce(u.acct_no,'IW'||substr(u.id::text,1,8)), 'balance_p', iw_balance(u.id),
-    'deposits', coalesce((select jsonb_agg(jsonb_build_object('id',id,'amount_p',amount_p,'status',status,'created_at',created_at,'decided_at',decided_at,'note',note) order by created_at desc) from (select * from deposits where user_id=u.id order by created_at desc limit 20) d),'[]'::jsonb),
+    'deposits', coalesce((select jsonb_agg(jsonb_build_object('id',id,'amount_p',amount_p,'reference',reference,'status',status,'created_at',created_at,'decided_at',decided_at,'note',note) order by created_at desc) from (select * from deposits where user_id=u.id order by created_at desc limit 20) d),'[]'::jsonb),
     'cards', coalesce((select jsonb_agg(jsonb_build_object('ref',ref,'amount_p',amount_p,'status',status,'created_at',created_at,'paid_at',paid_at) order by created_at desc) from (select * from card_payments where user_id=u.id and status<>'started' order by created_at desc limit 20) c),'[]'::jsonb),
     'withdrawals', coalesce((select jsonb_agg(jsonb_build_object('id',id,'amount_p',amount_p,'status',status,'created_at',created_at,'decided_at',decided_at,'note',note,'last4',right(account_no,4)) order by created_at desc) from (select * from withdrawals where user_id=u.id order by created_at desc limit 20) w),'[]'::jsonb));
 end $$;
