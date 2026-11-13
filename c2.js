@@ -83,4 +83,5 @@ document.addEventListener('visibilitychange',()=>{ if(!document.hidden)__sync();
 window.addEventListener('focus',__sync);
 setInterval(()=>{ if(!document.hidden)__sync(); },30000);
 
+try{ const _r=new URLSearchParams(location.search).get('ref'); if(_r&&/^[a-z0-9_-]{2,40}$/i.test(_r))localStorage.setItem('iw_ref',_r.toLowerCase()); }catch(e){}
 window.__site=fetch('/api/site',{cache:'no-store'}).then(r=>r.json()).then(d=>{ d=d||{}; if(d.live)document.querySelectorAll('.testmode').forEach(e=>e.remove()); document.documentElement.classList.toggle('games-on',!!d.games); return d; }).catch(()=>({}));

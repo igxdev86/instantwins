@@ -1,0 +1,30 @@
+<!-- InstantWins promo modal — paste this once, anywhere before </body> on bettingsites.co.uk.
+     Shows once per visitor per 7 days (change IW_DAYS). Edit IW_REF for tracking. -->
+<script>
+(function(){
+  var IW_REF='bettingsites', IW_DAYS=7, KEY='iw_promo_seen';
+  try{ var seen=+localStorage.getItem(KEY)||0; if(Date.now()-seen<IW_DAYS*864e5)return; }catch(e){}
+  var css='#iwPromo{position:fixed;inset:0;z-index:2147483000;background:rgba(5,5,10,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:16px;font-family:-apple-system,Inter,Helvetica,Arial,sans-serif;animation:iwIn .25s ease-out}'
+   +'@keyframes iwIn{from{opacity:0}to{opacity:1}}'
+   +'#iwPromo .iwBox{position:relative;width:100%;max-width:380px;border-radius:22px;overflow:hidden;background:linear-gradient(170deg,#1b1b25,#0e0e14);border:1px solid rgba(255,255,255,.14);box-shadow:0 30px 70px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.14);color:#fff;text-align:center}'
+   +'#iwPromo .iwX{position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.45);color:#fff;font-size:20px;line-height:32px;cursor:pointer;z-index:2}'
+   +'#iwPromo video,#iwPromo img{display:block;width:100%;height:auto;background:#0b0b10}'
+   +'#iwPromo .iwT{padding:18px 20px 6px}#iwPromo .iwK{font:800 11px/1 inherit;letter-spacing:.18em;text-transform:uppercase;color:#3DF2FF;margin-bottom:8px}'
+   +'#iwPromo h3{margin:0 0 6px;font:900 24px/1.1 inherit;letter-spacing:-.02em}#iwPromo h3 b{color:#FF6A1A}'
+   +'#iwPromo p{margin:0 0 14px;font-size:14px;line-height:1.45;color:#b9bcc8}'
+   +'#iwPromo .iwGo{display:block;margin:0 20px 10px;padding:15px 20px;border-radius:999px;background:linear-gradient(135deg,#f0ff9e,#C6FF3D 45%,#9fd81c);color:#0B0B10;font:900 17px inherit;text-decoration:none;box-shadow:0 10px 30px rgba(198,255,61,.35)}'
+   +'#iwPromo .iwS{display:block;padding:0 20px 16px;font-size:11px;color:#7c8190}#iwPromo .iwS a{color:#9aa0ad}';
+  var st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
+  var d=document.createElement('div'); d.id='iwPromo';
+  d.innerHTML='<div class="iwBox"><button class="iwX" aria-label="Close">&times;</button>'
+   +'<video autoplay muted loop playsinline poster="https://instantwins.co.uk/promo/reveal-poster.jpg"><source src="https://instantwins.co.uk/promo/reveal-demo.mp4" type="video/mp4"><img src="https://instantwins.co.uk/promo/reveal-demo.gif" alt="InstantWins ticket reader"></video>'
+   +'<div class="iwT"><div class="iwK">New &middot; InstantWins</div><h3>&pound;1,185,000 <b>in prizes</b></h3><p>Tickets from 19p. Feed them through the reader, see what you\'ve won. 1 in 5.7 tickets wins.</p></div>'
+   +'<a class="iwGo" href="https://instantwins.co.uk/?ref='+IW_REF+'" target="_blank" rel="noopener">Play now &rarr;</a>'
+   +'<span class="iwS">18+ &middot; GB only &middot; <a href="https://instantwins.co.uk/free.html" target="_blank" rel="noopener">Free entry by post</a> &middot; Prizes are a matter of luck, most tickets win nothing</span></div>';
+  function close(){ d.remove(); try{ localStorage.setItem(KEY,String(Date.now())); }catch(e){} }
+  d.querySelector('.iwX').onclick=close; d.addEventListener('click',function(e){ if(e.target===d)close(); });
+  d.querySelector('.iwGo').addEventListener('click',function(){ try{ localStorage.setItem(KEY,String(Date.now())); }catch(e){} });
+  function show(){ document.body.appendChild(d); }
+  if(document.readyState==='complete')setTimeout(show,2500); else window.addEventListener('load',function(){ setTimeout(show,2500); });
+})();
+</script>
