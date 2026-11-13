@@ -20,7 +20,7 @@ language plpgsql security definer set search_path = public, extensions as $$
 declare u users%rowtype;
 begin
   u := iw_user(p_token);
-  return jsonb_build_object('balance_p',iw_balance(u.id),'name',u.name,'county',u.county,'publish_wins',u.publish_wins,'marketing_ok',coalesce(u.marketing_ok,false),
+  return jsonb_build_object('balance_p',iw_balance(u.id),'name',u.name,'county',u.county,'publish_wins',u.publish_wins,'marketing_ok',coalesce(u.marketing_ok,false),'name',coalesce(u.name,''),'dob',to_char(u.dob,'YYYY-MM-DD'),
     'terms_due',(u.terms_version is distinct from (select value from site_settings where key='terms_version')),
     'onboard',(u.dob is null or coalesce(u.name,'')='' or u.terms_version is distinct from (select value from site_settings where key='terms_version')),
     'won_p',(select coalesce(sum(delta_p),0) from ledger where user_id=u.id and delta_p>0 and reason like 'win MIL-%'),

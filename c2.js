@@ -23,15 +23,16 @@ const C2=(()=>{
     box.innerHTML='<a class="bk" href="account.html" title="My tickets"><svg viewBox="0 0 24 24"><path d="M3 9a2 2 0 0 0 2-2V5h14v2a2 2 0 0 0 0 4v2a2 2 0 0 0 0 4v2H5v-2a2 2 0 0 0-2-2z"/><path d="M12 5v14" stroke-dasharray="2 2"/></svg><b id="bankN">'+bank+'</b><small>tickets</small></a><a class="bal" id="balN" href="account.html">'+bal+'</a><a class="me" href="account.html" title="My account" aria-label="My account"><svg viewBox="0 0 24 24" fill="none" stroke="#1A0A00" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.5 20c.8-3.6 3.9-5.5 7.5-5.5s6.7 1.9 7.5 5.5"/></svg></a>'; }
   const acceptTerms=()=>post({action:'accept_terms'});
   const profile=(county,publish,marketing)=>post({action:'profile',county,publish,marketing});
-  function onboardModal(){ if(document.getElementById('iwOnb'))return; const d=document.createElement('div'); d.id='iwOnb'; d.className='ldm'; d.style.zIndex=72;
-    d.innerHTML='<div class="modal onb"><div class="done-k">Almost there</div><h2>Set up your account</h2><p>We need this once. You must be 18 or over and live in Great Britain to play.</p>'
+  function onboardModal(m){ if(document.getElementById('iwOnb'))return; m=m||window.__me||{}; const has=!!(m.name&&m.dob); const d=document.createElement('div'); d.id='iwOnb'; d.className='ldm'; d.style.zIndex=72;
+    d.innerHTML='<div class="modal onb"><div class="done-k">'+(has?'Quick double-check':'Almost there')+'</div><h2>'+(has?'Are these right?':'Set up your account')+'</h2><p>'+(has?'We have these from your sign-up. Check them, tick the two boxes and you are in.':'We need this once. You must be 18 or over and live in Great Britain to play.')+'</p>'
       +'<label>Your name</label><input id="onName" autocomplete="name" placeholder="First and last name">'
       +'<label>Date of birth</label><div class="dob"><input id="onD" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="DD" autocomplete="bday-day"><input id="onM" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="MM" autocomplete="bday-month"><input id="onY" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="YYYY" autocomplete="bday-year"></div>'
       +'<label>Daily spending limit <small class="m">(optional, change any time)</small></label><select id="onLim"><option value="">No limit</option><option value="500">£5 a day</option><option value="1000">£10 a day</option><option value="2000">£20 a day</option><option value="5000">£50 a day</option><option value="0">£0 — free entries only</option></select>'
       +'<label class="chk"><input type="checkbox" id="onGb"><span>I am 18 or over and live in Great Britain</span></label>'
       +'<label class="chk"><input type="checkbox" id="onTerms"><span>I accept the <a href="terms.html" target="_blank">terms &amp; conditions</a> and <a href="privacy.html" target="_blank">privacy policy</a></span></label>'
-      +'<button class="btn lime" id="onGo" style="width:100%;margin-top:14px">Start playing</button><div class="err" id="onErr"></div><p class="m" style="margin:12px 0 0">Prizes are a matter of luck and most tickets win nothing. <a href="responsible-play.html" target="_blank">Responsible play</a></p></div>';
+      +'<button class="btn lime" id="onGo" style="width:100%;margin-top:14px">'+(has?'Yes, that\'s me':'Start playing')+'</button><div class="err" id="onErr"></div><p class="m" style="margin:12px 0 0">Prizes are a matter of luck and most tickets win nothing. <a href="responsible-play.html" target="_blank">Responsible play</a></p></div>';
     document.body.appendChild(d); const $=id=>document.getElementById(id);
+    if(has){ $('onName').value=m.name; const [y,mo,da]=String(m.dob).split('-'); $('onD').value=da; $('onM').value=mo; $('onY').value=y; }
     [['onD','onM'],['onM','onY']].forEach(([a,b])=>$(a).addEventListener('input',()=>{ if($(a).value.replace(/\D/g,'').length>=2)$(b).focus(); }));
     $('onGo').onclick=async()=>{ $('onErr').textContent=''; const dd=$('onD').value.replace(/\D/g,''), mm=$('onM').value.replace(/\D/g,''), yy=$('onY').value.replace(/\D/g,'');
       if(!$('onGb').checked){ $('onErr').textContent='Please confirm you are 18+ and live in Great Britain.'; return; } if(!$('onTerms').checked){ $('onErr').textContent='Please accept the terms to continue.'; return; }
@@ -75,7 +76,7 @@ const C2=(()=>{
       catch(e){ $('iwBuyErr').textContent=e.message; b.disabled=false; b.textContent='Buy'; paint(); } }; }
   return {TABLE,CAP,PACKS,gbp,TOKEN,state,mine,buy,buyBalance,balQuote,cachedBal,reveal,revealAll,header,acceptTerms,profile,termsModal,onboardModal,checkin,buySheet};
 })();
-function __sync(){ if(!C2.TOKEN)return; C2.mine().then(m=>{ window.__needOnboard=!!(m&&m.onboard); C2.header(m); if(m&&m.onboard)C2.onboardModal(); else if(m&&m.terms_due)C2.termsModal(); document.dispatchEvent(new CustomEvent('iw:sync',{detail:m})); }).catch(()=>{}); }
+function __sync(){ if(!C2.TOKEN)return; C2.mine().then(m=>{ window.__me=m; window.__needOnboard=!!(m&&m.onboard); C2.header(m); if(m&&m.onboard)C2.onboardModal(m); else if(m&&m.terms_due)C2.termsModal(); document.dispatchEvent(new CustomEvent('iw:sync',{detail:m})); }).catch(()=>{}); }
 document.addEventListener('DOMContentLoaded',()=>{ C2.header(); __sync(); });
 document.addEventListener('click',e=>{ const a=e.target.closest('a[href$="#buy"]'); if(!a||document.body.dataset.g)return; if(!C2.TOKEN){ e.preventDefault(); location.href='signin.html'; return; } e.preventDefault(); C2.buySheet(r=>{ if(!/game\.html/.test(location.pathname)){ location.href='game.html?g=quick'; } }); });
 window.addEventListener('pageshow',e=>{ if(e.persisted)__sync(); });
