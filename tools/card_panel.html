@@ -1,0 +1,8 @@
+<div class="panel"><h2>Card payments (Cashflows)</h2>
+<p class="lead">Hosted payment page. Keys live in Vercel env: <code>CASHFLOWS_CONFIG_ID</code>, <code>CASHFLOWS_API_KEY</code>, <code>CASHFLOWS_ENV</code> (<code>int</code> sandbox or <code>live</code>). Webhook URL to give Cashflows: <code>https://instantwins.co.uk/api/cashflows</code>.</p>
+<div class="row"><span>Gateway <small class="m" id="cfEnv">checking…</small></span><span class="pill" id="cfStat">—</span></div>
+<div class="row"><span>Card deposits open to players <small class="m">(off = admins only, for testing)</small></span><button class="sw" id="cardSw" aria-label="toggle card deposits"></button></div>
+<div class="row"><span>Taken today</span><span class="mono" id="cfToday">—</span></div>
+<div class="row"><span>Last 30 days</span><span class="mono" id="cf30">—</span></div>
+<div id="cfRows" style="margin-top:10px"><span class="m">Loading…</span></div>
+<div class="err" id="cfErr"></div></div>

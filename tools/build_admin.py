@@ -41,6 +41,9 @@ for key,label,src in TABS:
         body=body.replace('<div class="panel"><h2>Competition postcard</h2><p class="lead">Cards with a competition code and answer are keyed in on the <a href="#competitions" style="color:var(--cyan)">Competitions admin</a> page.</p></div>','<div class="panel"><h2>Competition postcard</h2><p class="lead">Cards with a competition code and answer are keyed in on the <a href="#competitions" style="color:var(--cyan)">Competitions admin</a> page.</p></div></details>')
         body=body.replace('<div class="ap" id="ap-postal">',open('tools/postal_panel.html').read())
         code+=open('tools/postal_panel.js').read()
+    if key=='payments':
+        body=body.replace('<div class="ap" id="ap-payments">','<div class="ap" id="ap-payments">'+open('tools/card_panel.html').read())
+        code+=open('tools/card_panel.js').read()
     if key=='users':
         body=body.replace('<div class="panel"><h2>Users</h2>','''<div class="panel"><h2>Credit a player</h2><p class="lead">Play credit for testing, or a refund once live. Negative amounts debit.</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end"><div style="flex:2;min-width:160px"><label>Account no. / email</label><input id="crRef" placeholder="IW1234 or name@…" autocomplete="off" style="margin:0"></div><div style="flex:1;min-width:90px"><label>Amount £</label><input id="crAmt" type="number" step="0.01" value="100" style="margin:0"></div></div>

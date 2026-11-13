@@ -25,7 +25,15 @@
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn lime" id="crGo" style="margin:0">Credit</button><button class="btn ghost" id="cr100" style="margin:0">+£100 to me</button></div><div class="err" id="crErr"></div></div>
   <div class="panel"><h2>Users</h2><p class="lead">Tap a user to fill the credit box.</p><div id="users"><span class="m">Loading…</span></div></div>
 </div>
-<div class="ap" id="ap-payments">
+<div class="ap" id="ap-payments"><div class="panel"><h2>Card payments (Cashflows)</h2>
+<p class="lead">Hosted payment page. Keys live in Vercel env: <code>CASHFLOWS_CONFIG_ID</code>, <code>CASHFLOWS_API_KEY</code>, <code>CASHFLOWS_ENV</code> (<code>int</code> sandbox or <code>live</code>). Webhook URL to give Cashflows: <code>https://instantwins.co.uk/api/cashflows</code>.</p>
+<div class="row"><span>Gateway <small class="m" id="cfEnv">checking…</small></span><span class="pill" id="cfStat">—</span></div>
+<div class="row"><span>Card deposits open to players <small class="m">(off = admins only, for testing)</small></span><button class="sw" id="cardSw" aria-label="toggle card deposits"></button></div>
+<div class="row"><span>Taken today</span><span class="mono" id="cfToday">—</span></div>
+<div class="row"><span>Last 30 days</span><span class="mono" id="cf30">—</span></div>
+<div id="cfRows" style="margin-top:10px"><span class="m">Loading…</span></div>
+<div class="err" id="cfErr"></div></div>
+
   <div class="panel"><h2>Payments switch</h2>
     <div class="krow"><span class="nm">Payments live<small>Off = site stays in play-money test mode. Only switch on after solicitor sign-off and once the bank details are set in Vercel (IGX_BANK_NAME, IGX_ACCOUNT_NAME, IGX_SORT_CODE, IGX_ACCOUNT_NO).</small></span><button class="sw" id="liveSw"></button></div>
   </div>
@@ -197,6 +205,18 @@ function paint(d){
 }
 async function load(){try{paint(await api('/api/admin',{action:'payments',token:s.token}));}catch(e){$('kErr').textContent=e.message;}}
 (async()=>{ if(await guard()){ load(); setInterval(load,30000);} })();
+
+(function(){
+function money(p){return '£'+(p/100).toLocaleString('en-GB',{minimumFractionDigits:2});}
+function when(t){return t?new Date(t).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'';}
+async function loadCard(){ try{ const d=await api('/api/admin',{action:'cardpay',token:s.token});
+  const sw=$('cardSw'); sw.className='sw'+(d.card_on?' on':''); sw.onclick=async()=>{ const on=!sw.classList.contains('on'); if(on&&!confirm('Open card deposits to all players?'))return; try{ await api('/api/admin',{action:'setting',token:s.token,key:'card_on',value:on?'true':'false'}); sw.classList.toggle('on',on); }catch(e){ $('cfErr').textContent=e.message; } };
+  $('cfToday').textContent=money(d.paid_today_p||0); $('cf30').textContent=money(d.paid_30d_p||0);
+  const rows=d.rows||[]; $('cfRows').innerHTML=rows.length?rows.map(x=>'<div class="krow"><span class="nm">'+money(x.amount_p)+' · <b>'+esc(x.ref)+'</b><small>'+esc(x.name||'')+' · '+esc(x.email||'')+' · '+when(x.created_at)+(x.job_ref?' · job '+esc(x.job_ref):'')+(x.note?' · '+esc(x.note):'')+'</small></span><span class="pill '+(x.status==='paid'?'ok':x.status==='pending'||x.status==='started'?'warn':'')+'">'+esc(x.status)+'</span></div>').join(''):'<span class="m">No card payments yet.</span>';
+ }catch(e){ $('cfErr').textContent=e.message; } }
+fetch('/api/cashflows',{cache:'no-store'}).then(r=>r.json()).then(g=>{ $('cfEnv').textContent=g.env==='live'?'live':'sandbox (gateway-int)'; $('cfStat').textContent=g.enabled?'configured':'keys missing'; $('cfStat').className='pill '+(g.enabled?'ok':'warn'); }).catch(()=>{});
+(async()=>{ if(await guard()){ loadCard(); setInterval(loadCard,60000);} })();
+})();
 
 })();
 (function(){
