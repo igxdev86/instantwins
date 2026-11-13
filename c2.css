@@ -623,3 +623,5 @@ body.demo .freebtn{display:none}
 /* iOS: inputs under 16px make Safari zoom the page on focus and leave it zoomed */
 @media(max-width:600px){input,select,textarea,.dob1,.dob input,.sel{font-size:16px!important}}
 a.btn.lime,a.btn.lime:visited,.modal a.btn.lime{color:#0B0B10!important}a.btn:not(.ghost):not(.lime){color:#1A0A00}
+.modal .amts .btn.lime,.modal .amts .btn.ghost.lime{background:linear-gradient(135deg,#f4ffb0,var(--lime) 45%,#9fd81c);border-color:transparent;color:#0B0B10;box-shadow:0 8px 22px rgba(198,255,61,.35),inset 0 1px 0 rgba(255,255,255,.6)}
+.modal .amts .btn.ghost:active{background:rgba(198,255,61,.14);border-color:rgba(198,255,61,.5);color:var(--ink)}
