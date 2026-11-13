@@ -622,3 +622,4 @@ body.demo .freebtn{display:none}
 
 /* iOS: inputs under 16px make Safari zoom the page on focus and leave it zoomed */
 @media(max-width:600px){input,select,textarea,.dob1,.dob input,.sel{font-size:16px!important}}
+a.btn.lime,a.btn.lime:visited,.modal a.btn.lime{color:#0B0B10!important}a.btn:not(.ghost):not(.lime){color:#1A0A00}
