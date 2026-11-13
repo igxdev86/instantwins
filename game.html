@@ -57,7 +57,7 @@
   C2.revealAll=async()=>{ await wait(300); const ts=bank.splice(0); const won=ts.reduce((a,t)=>a+t.prize_p,0); bal+=won; return {tickets:ts,won_p:won,bank:0,balance_p:bal}; };
   C2.state=async()=>({}); C2.buySheet=()=>{ location.href='signin.html#su'; };
   C2.header=()=>{ const box=document.getElementById('bankBox'); if(box)box.innerHTML=''; };
-  document.addEventListener('DOMContentLoaded',()=>{ document.body.classList.add('demo'); const b=document.createElement('div'); b.className='demobar'; b.innerHTML='<b>DEMO</b> 250 pretend tickets, pretend prizes. Nothing here is real or saved. <a href="signin.html#su">Create an account</a> to play for real.'; document.body.prepend(b); C2.header(); document.addEventListener('iw:sync',()=>C2.header()); setTimeout(()=>C2.header(),800); });
+  document.addEventListener('DOMContentLoaded',()=>{ document.body.classList.add('demo'); const b=document.createElement('div'); b.className='demobar'; b.innerHTML='<span class="tag">Demo</span><span class="txt">Pretend tickets, pretend prizes &mdash; nothing is saved</span><a href="signin.html#su">Play for real &rarr;</a>'; document.body.prepend(b); C2.header(); document.addEventListener('iw:sync',()=>C2.header()); setTimeout(()=>C2.header(),800); });
 })();
 </script><script src="sfx.js"></script><script>
 (function(){

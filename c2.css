@@ -602,3 +602,7 @@ body[data-g].noctrl main{padding-bottom:24px}
 .learn.try{background:linear-gradient(135deg,var(--orange),var(--pink));color:#1A0A00;text-decoration:none;box-shadow:0 8px 24px rgba(255,106,26,.35)}
 .demobar{position:sticky;top:0;z-index:40;background:linear-gradient(90deg,var(--pink),var(--orange));color:#1A0A00;font:700 .78rem/1.35 Inter,sans-serif;text-align:center;padding:8px 14px}.demobar b{font-weight:900;letter-spacing:.12em;margin-right:6px}.demobar a{color:#1A0A00;text-decoration:underline}
 body.demo .freebtn{display:none}
+.demobar{display:flex;align-items:center;justify-content:center;gap:10px;background:#15151D;border-bottom:1px solid rgba(255,61,138,.35);color:var(--soft);font:600 .78rem/1.3 Inter,sans-serif;padding:8px 14px;text-align:left}
+.demobar .tag{flex:none;background:linear-gradient(90deg,var(--pink),var(--orange));color:#1A0A00;font:900 .66rem Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:4px 9px;border-radius:999px}
+.demobar .txt{flex:1;min-width:0;color:var(--ink)}.demobar a{flex:none;color:var(--lime);text-decoration:none;font-weight:800}
+@media(max-width:420px){.demobar{gap:8px;padding:7px 12px}.demobar .txt{font-size:.74rem}}
