@@ -1,8 +1,8 @@
 /* InstantWins (Concept 2) shared client: session, ticket bank, round state */
 const C2=(()=>{
-  const TABLE=[[2000000,5],[500000,20],[200000,50],[100000,50],[50000,100],[10000,500],[5000,1000],[2000,2500],[1000,7000],[500,20000],[200,60000],[100,100000],[50,160000]];
-  const CAP=2000000;
-  const PACKS=[[1,100],[5,475],[10,900],[25,2100],[50,4000],[100,7500],[250,18000],[500,35000],[1000,68000]];
+  const TABLE=[[2000000,5],[500000,20],[200000,50],[100000,50],[50000,100],[10000,400],[5000,800],[2000,2000],[1000,5000],[500,12000],[200,40000],[100,100000],[50,250000],[25,1000000]];
+  const CAP=8000000; const FACE=25;
+  const PACKS=[[1,25],[5,125],[10,240],[25,575],[50,1100],[100,2100],[250,5250],[500,10000],[1000,19000]];
   const gbp=p=>p===0?'£0':p<100?p+'p':'£'+(p/100).toLocaleString('en-GB',{minimumFractionDigits:p%100?2:0,maximumFractionDigits:2});
   let S=null; try{S=JSON.parse(localStorage.getItem('iw_session'));}catch(e){} const TOKEN=S&&S.token;
   const post=(body)=>fetch('/api/c2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({token:TOKEN},body))}).then(async r=>{const d=await r.json(); if(!r.ok||d.error)throw new Error(String(d.error||'failed').replace(/insufficient credit/i,'not enough funds').replace(/not enough credit/i,'not enough funds')); return d;});
@@ -10,8 +10,8 @@ const C2=(()=>{
   const mine=()=>TOKEN?post({action:'mine'}):Promise.resolve(null);
   const buy=n=>post({action:'buy',n});
   const buyBalance=()=>post({action:'buybal'});
-  const rateFor=a=>a>=68000?68:a>=35000?70:a>=18000?72:a>=7500?75:a>=4000?80:a>=2100?84:a>=900?90:a>=475?95:100;
-  const balQuote=bal=>{ const r=rateFor(bal), n=Math.min(5000,Math.floor(bal/r)); return n<1?null:{n,rate:r,cost:n*r,save:n*100-n*r}; };
+  const rateFor=a=>a>=19000?19:a>=10000?20:a>=2100?21:a>=1100?22:a>=575?23:a>=240?24:25;
+  const balQuote=bal=>{ const r=rateFor(bal), n=Math.min(20000,Math.floor(bal/r)); return n<1?null:{n,rate:r,cost:n*r,save:n*FACE-n*r}; };
   const cachedBal=()=>{ try{ const h=JSON.parse(localStorage.getItem('iw_c2hdr')); return h&&h.balance_p!=null?h.balance_p:null; }catch(e){ return null; } };
   const reveal=()=>post({action:'reveal'});
   const revealAll=()=>post({action:'revealall'});
@@ -59,7 +59,7 @@ const C2=(()=>{
     document.body.appendChild(d);
     const $=id=>document.getElementById(id);
     function paint(){ const bal=cachedBal(), q=bal!=null?balQuote(bal):null;
-      $('iwPacks').innerHTML=PACKS.map(([n,p],i)=>{const full=n*100, sv=full-p; return '<div class="pack'+(i===sel?' sel':'')+'" data-i="'+i+'">'+(sv?'<span class="save">SAVE '+gbp(sv)+'</span>':'')+'<div class="t">'+n+'<small>ticket'+(n>1?'s':'')+'</small></div><div class="p">'+gbp(p)+'</div></div>';}).join('')
+      $('iwPacks').innerHTML=PACKS.map(([n,p],i)=>{const full=n*FACE, sv=full-p; return '<div class="pack'+(i===sel?' sel':'')+'" data-i="'+i+'">'+(sv?'<span class="save">SAVE '+gbp(sv)+'</span>':'')+'<div class="t">'+n+'<small>ticket'+(n>1?'s':'')+'</small></div><div class="p">'+gbp(p)+'</div></div>';}).join('')
         +(q?'<div class="pack all'+(sel==='bal'?' sel':'')+'" data-i="bal">'+(q.save?'<span class="save">SAVE '+gbp(q.save)+'</span>':'')+'<div class="t">'+q.n.toLocaleString()+'<small>tickets</small></div><div class="p">'+gbp(q.cost)+'</div><div class="each">whole balance · '+q.rate+'p each</div></div>':'');
       if(sel==='bal'&&q){ $('iwSelT').textContent=q.n.toLocaleString()+' tickets'; $('iwSelP').textContent=gbp(q.cost); $('iwSelE').textContent=q.rate+'p each · uses your whole balance'; $('iwBuyGo').textContent='Buy for '+gbp(q.cost); }
       else { if(sel==='bal')sel=1; const [n,p]=PACKS[sel]; $('iwSelT').textContent=n+' ticket'+(n>1?'s':''); $('iwSelP').textContent=gbp(p); $('iwSelE').textContent=gbp(Math.round(p/n))+' each'; $('iwBuyGo').textContent='Buy for '+gbp(p); }
