@@ -13,7 +13,9 @@ const SND=(()=>{
   let noiseBuf=null; function noise(){ if(noiseBuf)return noiseBuf; const b=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate), d=b.getChannelData(0); let last=0; for(let i=0;i<d.length;i++){ const w=Math.random()*2-1; last=(last+0.02*w)/1.02; d[i]=w*0.6+last*3; } noiseBuf=b; return b; }
   function burst(t,dur,vol,fc,q,type,dest){ const s=ctx.createBufferSource(); s.buffer=noise(); s.loop=true; const f=ctx.createBiquadFilter(); f.type=type||'bandpass'; f.frequency.value=fc||2000; f.Q.value=q||1; const g=ctx.createGain(); env(g,t,0.003,dur*0.3,0.25,dur*0.7,vol); s.connect(f); f.connect(g); g.connect(dest||sfxBus); s.start(t); s.stop(t+dur+0.05); return {s,f,g}; }
   function bell(t,f,dur,vol){ const parts=[[1,1],[2.76,.5],[5.4,.25],[8.93,.12]]; parts.forEach(([m,a],i)=>{ const o=ctx.createOscillator(), g=ctx.createGain(); o.type='sine'; o.frequency.value=f*m; env(g,t,0.003,dur*(0.25-i*0.04),0.15,dur*0.6,vol*a); o.connect(g); g.connect(sfxBus); o.start(t); o.stop(t+dur+0.1); }); }
-  function duckMusic(ms){ if(!musBus||!musicOn)return; const t=now(); duck.cancelScheduledValues(t); duck.setTargetAtTime(0.04,t,0.03); duck.setTargetAtTime(theme?theme.vol:0.12,t+ms/1000,0.4); }
+  let boosted=false; const musVol=()=>(theme?theme.vol:0.12)*(boosted?2.2:1);
+  function duckMusic(ms){ if(!musBus||!musicOn)return; const t=now(); duck.cancelScheduledValues(t); duck.setTargetAtTime(boosted?0.1:0.04,t,0.03); duck.setTargetAtTime(musVol(),t+ms/1000,0.4); }
+  S.boost=(on)=>{ boosted=!!on; if(!musBus||!musicOn)return; const t=now(); duck.cancelScheduledValues(t); duck.setTargetAtTime(musVol(),t,on?0.25:1.2); };
   // ---- public SFX ----
   const S={};
   S.click=()=>{ if(!ok())return; const t=now(); burst(t,0.05,0.5,2600,2); tone('sine',1400,900,t,0.045,0.18); };
@@ -84,7 +86,7 @@ const SND=(()=>{
       if(th.kick.includes(sub))kick(t); if(th.tom&&th.tom.includes(sub))tom(t); if(th.snare.includes(sub))snare(t); if(th.hat.includes(sub))hat(t,false); if(th.open.includes(sub))hat(t,true);
       if(th.stab&&th.stab.on.includes(sub))stab(t,chord,st*1.6,th); if(th.lead&&th.lead.on.includes(sub))lead(t,chord,st*2,th); if(th.arp&&th.arp.on.includes(sub))arp(t,chord,st*1.8,th,step/2|0);
       step++; nextT+=st; } }
-  function musicStart(){ if(!theme||!ok()||mode!=='all'||musicOn)return; if(ctx.state!=='running')return; musicOn=true; step=0; nextT=now()+0.05; musBus.gain.setTargetAtTime(theme.vol,now(),0.8); musTimer=setInterval(schedule,120); schedule(); }
+  function musicStart(){ if(!theme||!ok()||mode!=='all'||musicOn)return; if(ctx.state!=='running')return; musicOn=true; step=0; nextT=now()+0.05; musBus.gain.setTargetAtTime(musVol(),now(),0.8); musTimer=setInterval(schedule,120); schedule(); }
   function musicStop(){ if(!musicOn)return; musicOn=false; clearInterval(musTimer); musBus.gain.setTargetAtTime(0,now(),0.3); }
   S.playing=()=>musicOn;
   S.dbg=()=>({mode,theme:!!theme,musicOn,ctx:ctx&&ctx.state,gain:musBus&&musBus.gain.value});
