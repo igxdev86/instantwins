@@ -7,20 +7,43 @@ create index if not exists outreach_status on outreach(status);
 alter table outreach enable row level security;
 
 insert into site_settings (key,value) values
- ('outreach_subject','Partner with InstantWins.co.uk — £10 per player, free-entry prize competition'),
- ('outreach_body','Hi {{first}},
+ ('outreach_subject_intro','InstantWins.co.uk affiliate programme — £10 per player'),
+ ('outreach_body_intro','Hi {{first}},
 
-I run InstantWins.co.uk, a new UK prize competition site: 25p tickets, £1,185,000 in prizes per round, a free postal entry route, and a ticket reader that is actually fun to watch. I came across {{site}} and think your readers would like it.
+InstantWins.co.uk is a new UK prize competition site: 25p tickets, £1,185,000 in prizes each round, a free postal entry route and a ticket reader that is fun to watch. We think it would sit well with the audience on {{site}}.
 
-We pay partners £10 CPA for every new player who deposits and buys a ticket. No revenue share, no negative carryover, paid monthly by bank transfer. Creatives, a rotating banner and a demo you can embed are ready to go.
+The affiliate programme pays £10 CPA for every new player who deposits and buys a ticket. No revenue share, no negative carryover, paid monthly by bank transfer. Banners, a rotating strip and an embeddable demo are ready to go.
+
+Details and terms: {{link}}
+
+If you would like to join, just reply with the code you would like to use and we will set it up the same day.
+
+InstantWins.co.uk Affiliates
+hello@instantwins.co.uk'),
+ ('outreach_subject_followup','Following up — InstantWins.co.uk affiliates'),
+ ('outreach_body_followup','Hi {{first}},
+
+A quick follow-up in case the last note got buried. The InstantWins.co.uk affiliate programme is open: £10 CPA per new depositing player, paid monthly, creatives supplied.
 
 Programme details: {{link}}
 
-If you are up for it, reply with the code you would like (e.g. your site name) and I will set you up today.
+Reply with a code you would like and you will be live within the day. If it is not a fit for {{site}}, no problem at all — just say and we will not write again.
 
-Ryan Hughes
-InstantWins.co.uk · IGX Ltd')
-on conflict (key) do nothing;
+InstantWins.co.uk Affiliates'),
+ ('outreach_subject_welcome','Welcome to InstantWins.co.uk affiliates — your link is live'),
+ ('outreach_body_welcome','Hi {{first}},
+
+You are set up. Your code is {{code}} and your link is https://instantwins.co.uk/?ref={{code}} — players who sign up through it are tracked to you automatically.
+
+Stats, creatives and the embeddable banners: {{link}}
+
+Pays £10 for each referred player who deposits and buys a ticket, monthly by bank transfer. Please keep "free entry by post" next to any price you show and do not list us under a betting or casino heading — the full rules are on the programme page.
+
+Anything you need, reply to this email.
+
+InstantWins.co.uk Affiliates')
+on conflict (key) do update set value=excluded.value, updated_at=now();
+delete from site_settings where key in ('outreach_subject','outreach_body');
 
 create or replace function iw_admin_outreach_list(p_token uuid, p_status text default null, p_q text default null) returns jsonb
 language plpgsql security definer set search_path = public, extensions as $$
@@ -30,8 +53,7 @@ begin
     'rows', coalesce((select jsonb_agg(to_jsonb(o) order by case o.status when 'replied' then 0 when 'new' then 1 when 'contacted' then 2 when 'joined' then 3 else 4 end, o.dr desc nulls last, o.domain)
                       from outreach o where (p_status is null or p_status='' or o.status=p_status) and (p_q is null or p_q='' or o.domain ilike '%'||p_q||'%' or coalesce(o.email,'') ilike '%'||p_q||'%')),'[]'::jsonb),
     'counts', (select jsonb_object_agg(status,n) from (select status, count(*) n from outreach group by status) c),
-    'subject', (select value from site_settings where key='outreach_subject'),
-    'body', (select value from site_settings where key='outreach_body'));
+    'templates', (select jsonb_object_agg(k, jsonb_build_object('subject',(select value from site_settings where key='outreach_subject_'||k),'body',(select value from site_settings where key='outreach_body_'||k))) from unnest(array['intro','followup','welcome']) k));
 end $$;
 
 -- import: array of {domain, dr, traffic, name, email, source}
@@ -74,36 +96,42 @@ create or replace function iw_admin_outreach_delete(p_token uuid, p_domain text)
 language plpgsql security definer set search_path = public, extensions as $$
 begin perform iw_admin(p_token); delete from outreach where domain=p_domain; return jsonb_build_object('ok',true); end $$;
 
-create or replace function iw_admin_outreach_template(p_token uuid, p_subject text, p_body text) returns jsonb
+drop function if exists iw_admin_outreach_template(uuid,text,text);
+create or replace function iw_admin_outreach_template(p_token uuid, p_tpl text, p_subject text, p_body text) returns jsonb
 language plpgsql security definer set search_path = public, extensions as $$
 begin
   perform iw_admin(p_token);
-  insert into site_settings (key,value,updated_at) values ('outreach_subject',p_subject,now()) on conflict (key) do update set value=excluded.value, updated_at=now();
-  insert into site_settings (key,value,updated_at) values ('outreach_body',p_body,now()) on conflict (key) do update set value=excluded.value, updated_at=now();
+  if p_tpl not in ('intro','followup','welcome') then raise exception 'unknown template'; end if;
+  insert into site_settings (key,value,updated_at) values ('outreach_subject_'||p_tpl,p_subject,now()) on conflict (key) do update set value=excluded.value, updated_at=now();
+  insert into site_settings (key,value,updated_at) values ('outreach_body_'||p_tpl,p_body,now()) on conflict (key) do update set value=excluded.value, updated_at=now();
   return jsonb_build_object('ok',true);
 end $$;
 
 -- render the welcome for a domain (used for both sending and the copy-to-clipboard version)
-create or replace function iw_outreach_render(p_domain text) returns jsonb
+drop function if exists iw_outreach_render(text);
+create or replace function iw_outreach_render(p_domain text, p_tpl text default 'intro') returns jsonb
 language plpgsql security definer set search_path = public, extensions as $$
-declare o outreach%rowtype; v_sub text; v_body text; v_first text;
+declare o outreach%rowtype; v_sub text; v_body text; v_first text; v_site text;
 begin
   select * into o from outreach where domain=p_domain; if not found then raise exception 'unknown domain'; end if;
+  if p_tpl not in ('intro','followup','welcome') then p_tpl := 'intro'; end if;
   v_first := coalesce(nullif(split_part(coalesce(o.name,''),' ',1),''),'there');
-  v_sub := (select value from site_settings where key='outreach_subject'); v_body := (select value from site_settings where key='outreach_body');
-  v_body := replace(replace(replace(replace(v_body,'{{first}}',v_first),'{{site}}',o.domain),'{{link}}','https://instantwins.co.uk/affiliate.html'),'{{email}}',coalesce(o.email,''));
-  v_sub := replace(v_sub,'{{site}}',o.domain);
+  v_site := case when o.domain like '%@%' then 'your site' else o.domain end;
+  v_sub := (select value from site_settings where key='outreach_subject_'||p_tpl); v_body := (select value from site_settings where key='outreach_body_'||p_tpl);
+  v_body := replace(replace(replace(replace(replace(v_body,'{{first}}',v_first),'{{site}}',v_site),'{{link}}','https://instantwins.co.uk/affiliate.html'),'{{email}}',coalesce(o.email,'')),'{{code}}',coalesce(o.aff_code,'(code)'));
+  v_sub := replace(replace(v_sub,'{{site}}',v_site),'{{code}}',coalesce(o.aff_code,''));
   return jsonb_build_object('subject',v_sub,'text',v_body);
 end $$;
 
-create or replace function iw_admin_outreach_send(p_token uuid, p_domain text) returns jsonb
+drop function if exists iw_admin_outreach_send(uuid,text);
+create or replace function iw_admin_outreach_send(p_token uuid, p_domain text, p_tpl text default 'intro') returns jsonb
 language plpgsql security definer set search_path = public, extensions as $$
 declare o outreach%rowtype; r jsonb; v_html text;
 begin
   perform iw_admin(p_token);
   select * into o from outreach where domain=p_domain; if not found then raise exception 'unknown domain'; end if;
   if o.email is null then raise exception 'no email on file — find a contact first'; end if;
-  r := iw_outreach_render(p_domain);
+  r := iw_outreach_render(p_domain, p_tpl);
   v_html := '<p>'||replace(replace(replace(replace(r->>'text','&','&amp;'),'<','&lt;'),E'\n\n','</p><p>'),E'\n','<br>')||'</p>';
   insert into outbox (user_id, to_email, subject, html) values (null, o.email, r->>'subject', v_html);
   insert into messages (user_id, sender, body, channel, email, subject, from_name) values (null, 'admin', r->>'text', 'email', o.email, r->>'subject', o.domain);
@@ -122,5 +150,5 @@ end $$;
 drop trigger if exists outreach_reply on messages;
 create trigger outreach_reply after insert on messages for each row execute function trg_outreach_reply();
 
-grant execute on function iw_admin_outreach_list(uuid,text,text), iw_admin_outreach_import(uuid,jsonb), iw_admin_outreach_set(uuid,text,jsonb), iw_admin_outreach_delete(uuid,text), iw_admin_outreach_template(uuid,text,text), iw_outreach_render(text), iw_admin_outreach_send(uuid,text) to service_role;
+grant execute on function iw_admin_outreach_list(uuid,text,text), iw_admin_outreach_import(uuid,jsonb), iw_admin_outreach_set(uuid,text,jsonb), iw_admin_outreach_delete(uuid,text), iw_admin_outreach_template(uuid,text,text,text), iw_outreach_render(text,text), iw_admin_outreach_send(uuid,text,text) to service_role;
 notify pgrst, 'reload schema';

@@ -17,9 +17,11 @@ export default async function handler(req, res) {
   if (b.action === 'outreach') { args.p_status=String(b.status||''); args.p_q=String(b.q||''); }
   if (b.action === 'outreach_import') { args.p_rows=Array.isArray(b.rows)?b.rows.slice(0,2000):[]; }
   if (b.action === 'outreach_set') { args.p_domain=String(b.domain||''); args.p_fields=b.fields&&typeof b.fields==='object'?b.fields:{}; }
-  if (b.action === 'outreach_delete' || b.action === 'outreach_send') { args.p_domain=String(b.domain||''); }
-  if (b.action === 'outreach_render') { delete args.p_token; args.p_domain=String(b.domain||''); }
-  if (b.action === 'outreach_template') { args.p_subject=String(b.subject||'').slice(0,200); args.p_body=String(b.body||'').slice(0,6000); }
+  const TPL=['intro','followup','welcome'].includes(b.tpl)?b.tpl:'intro';
+  if (b.action === 'outreach_delete') { args.p_domain=String(b.domain||''); }
+  if (b.action === 'outreach_send') { args.p_domain=String(b.domain||''); args.p_tpl=TPL; }
+  if (b.action === 'outreach_render') { delete args.p_token; args.p_domain=String(b.domain||''); args.p_tpl=TPL; }
+  if (b.action === 'outreach_template') { args.p_tpl=TPL; args.p_subject=String(b.subject||'').slice(0,200); args.p_body=String(b.body||'').slice(0,6000); }
   if (b.action === 'outreach_scan') {
     // fetch the site and look for a contact: mailto links, plain addresses, a contact/about/advertise page
     const dom=String(b.domain||'').toLowerCase().replace(/[^a-z0-9.-]/g,''); if(!dom) return res.status(400).json({ error:'domain?' });

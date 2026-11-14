@@ -21,12 +21,14 @@
       <input id="orQ" placeholder="search domain / email" style="flex:2;margin:0">
       <button class="btn ghost slim" id="orScanAll">Find contacts for all new</button>
     </div>
+    <div class="orow3" style="margin-bottom:10px"><span class="m">Message to send / copy:</span><select id="orTplSend" class="sel" style="width:auto;margin:0"><option value="intro">Intro</option><option value="followup">Follow-up</option><option value="welcome">Welcome (after joining)</option></select></div>
     <div id="orList"><span class="m">Loading…</span></div>
     <div class="err" id="orErr"></div>
   </div>
 
-  <div class="panel"><h2>Welcome message</h2>
-    <p class="lead">Sent from hello@instantwins.co.uk in the site branding. Replies land in Support and flip the prospect to <b>Replied</b>. Placeholders: <code>{{first}}</code> <code>{{site}}</code> <code>{{link}}</code></p>
+  <div class="panel"><h2>Messages</h2>
+    <p class="lead">Sent from hello@instantwins.co.uk in the site branding, signed as InstantWins.co.uk Affiliates. Replies land in Support and flip the prospect to <b>Replied</b>. Placeholders: <code>{{first}}</code> <code>{{site}}</code> <code>{{link}}</code> <code>{{code}}</code></p>
+    <div class="orow3" style="margin-bottom:6px"><select id="orTplEdit" class="sel" style="width:auto;margin:0"><option value="intro">Intro</option><option value="followup">Follow-up</option><option value="welcome">Welcome (after joining)</option></select></div>
     <label>Subject</label><input id="orSub">
     <label>Message</label><textarea id="orBody" rows="12"></textarea>
     <div class="orow3" style="margin-top:8px"><button class="btn lime slim" id="orTplSave">Save template</button></div>
