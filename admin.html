@@ -134,7 +134,7 @@
       <label class="chkrow" style="margin:0"><input type="checkbox" id="mbOut"><span>Easy opt-out line</span></label>
     </div>
     <label>Preview</label><div class="mbprev"><b id="mbSub"></b><pre id="mbBody"></pre></div>
-    <div class="orow3" style="margin-top:8px"><button class="btn lime slim" data-slot="custom">Use as Custom</button><button class="btn ghost slim" data-slot="intro">Save as Intro</button><button class="btn ghost slim" data-slot="followup">Save as Follow-up</button><button class="btn ghost slim" id="mbCopy">Copy text</button></div>
+    <div class="orow3" style="margin-top:8px"><button class="btn lime slim" data-slot="custom">Use as Custom</button><button class="btn ghost slim" data-slot="intro">Save as Intro</button><button class="btn ghost slim" data-slot="followup">Save as Follow-up</button><button class="btn ghost slim" id="mbCopy">Copy text</button><button class="btn ghost slim" id="mbTest">Email me a test</button></div>
     <div class="err" id="mbErr"></div>
   </div>
   <div class="panel"><h2>Messages</h2>
@@ -142,7 +142,7 @@
     <div class="orow3" style="margin-bottom:6px"><select id="orTplEdit" class="sel" style="width:auto;margin:0"><option value="intro">Intro</option><option value="followup">Follow-up</option><option value="welcome">Welcome (after joining)</option><option value="custom">Custom</option></select></div>
     <label>Subject</label><input id="orSub">
     <label>Message</label><textarea id="orBody" rows="12"></textarea>
-    <div class="orow3" style="margin-top:8px"><button class="btn lime slim" id="orTplSave">Save template</button></div>
+    <div class="orow3" style="margin-top:8px"><button class="btn lime slim" id="orTplSave">Save template</button><button class="btn ghost slim" id="orTplTest">Email me a test</button></div>
     <div class="err" id="orTplErr"></div>
   </div>
 </div>
@@ -421,6 +421,7 @@ $('orAdd').onclick=async()=>{ const v=$('orOne').value.trim(); if(!v)return; try
 $('orScanAll').onclick=async()=>{ const rows=[...$('orList').querySelectorAll('.orow')].filter(r=>r.querySelector('.orSt').value==='new'&&!r.querySelector('.orEmail').value).slice(0,15); $('orScanAll').disabled=true; let n=0; for(const r of rows){ $('orScanAll').textContent='Scanning '+(++n)+'/'+rows.length+'…'; try{ await api('/api/admin',{action:'outreach_scan',token:s.token,domain:r.dataset.d}); }catch(e){} } $('orScanAll').textContent='Find contacts for all new'; $('orScanAll').disabled=false; load(); };
 $('orTplSave').onclick=async()=>{ $('orTplErr').className='err'; const k=$('orTplEdit').value; try{ await api('/api/admin',{action:'outreach_template',token:s.token,tpl:k,subject:$('orSub').value,body:$('orBody').value}); TPLS[k]={subject:$('orSub').value,body:$('orBody').value}; $('orTplErr').className='err ok'; $('orTplErr').textContent='Saved.'; }catch(e){ $('orTplErr').textContent=e.message; } };
 $('orTplEdit').onchange=showTpl;
+$('orTplTest').onclick=async()=>{ $('orTplErr').className='err'; $('orTplTest').disabled=true; try{ const r=await api('/api/admin',{action:'outreach_test',token:s.token,tpl:$('orTplEdit').value,subject:$('orSub').value,body:$('orBody').value}); $('orTplErr').className='err ok'; $('orTplErr').textContent='Test sent to '+r.to+' — check your inbox in a few seconds.'; }catch(e){ $('orTplErr').textContent=e.message; } $('orTplTest').disabled=false; };
 // ---- message builder
 const MB={
  open:{plain:'Hi {{first}},',warm:'Hi {{first}}, hope all is well.',direct:'{{first}} —'},
@@ -444,6 +445,7 @@ function build(){ const a=$('mbAngle').value, L=$('mbLen').value, T=$('mbTone').
   p.push(MB.sign); const text=p.join('\n\n'); $('mbSub').textContent=MB.subj[a]; $('mbBody').textContent=text; return {subject:MB.subj[a],body:text}; }
 ['mbAngle','mbLen','mbTone','mbAsk','mbFree','mbCreative','mbOut'].forEach(id=>$(id).addEventListener('change',build)); build();
 document.querySelectorAll('[data-slot]').forEach(b=>b.onclick=async()=>{ const m=build(); const k=b.dataset.slot; $('mbErr').className='err'; try{ await api('/api/admin',{action:'outreach_template',token:s.token,tpl:k,subject:m.subject,body:m.body}); TPLS[k]=m; if($('orTplEdit').value===k)showTpl(); if(k==='custom')$('orTplSend').value='custom'; $('mbErr').className='err ok'; $('mbErr').textContent='Saved to '+b.textContent.replace(/^(Use as|Save as) /,'')+'. '+(k==='custom'?'Send / Copy on the list now uses it.':''); }catch(e){ $('mbErr').textContent=e.message; } });
+$('mbTest').onclick=async()=>{ const m=build(); $('mbErr').className='err'; $('mbTest').disabled=true; try{ const r=await api('/api/admin',{action:'outreach_test',token:s.token,tpl:'custom',subject:m.subject,body:m.body}); $('mbErr').className='err ok'; $('mbErr').textContent='Test sent to '+r.to+'.'; }catch(e){ $('mbErr').textContent=e.message; } $('mbTest').disabled=false; };
 $('mbCopy').onclick=async()=>{ const m=build(); await navigator.clipboard.writeText(m.subject+'\n\n'+m.body); $('mbCopy').textContent='Copied'; setTimeout(()=>$('mbCopy').textContent='Copy text',1500); };
 $('orStatus').onchange=load; let qt; $('orQ').oninput=()=>{ clearTimeout(qt); qt=setTimeout(load,300); };
 (async()=>{ if(await guard()){ load(); } })();

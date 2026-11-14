@@ -141,6 +141,22 @@ begin
   return jsonb_build_object('ok',true,'to',o.email);
 end $$;
 
+-- send a test of any template (or ad-hoc subject/body) to the admin's own address, rendered as if to a sample prospect
+create or replace function iw_admin_outreach_test(p_token uuid, p_tpl text, p_subject text default null, p_body text default null) returns jsonb
+language plpgsql security definer set search_path = public, extensions as $$
+declare u users%rowtype; v_sub text; v_body text; v_html text;
+begin
+  u := iw_admin(p_token);
+  if p_subject is not null then v_sub := p_subject; v_body := p_body;
+  else v_sub := (select value from site_settings where key='outreach_subject_'||p_tpl); v_body := (select value from site_settings where key='outreach_body_'||p_tpl); end if;
+  if v_sub is null then raise exception 'unknown template'; end if;
+  v_body := replace(replace(replace(replace(replace(coalesce(v_body,''),'{{first}}','Sam'),'{{site}}','example.co.uk'),'{{link}}','https://instantwins.co.uk/affiliate.html'),'{{email}}','sam@example.co.uk'),'{{code}}','example');
+  v_sub := '[TEST] '||replace(replace(v_sub,'{{site}}','example.co.uk'),'{{code}}','example');
+  v_html := '<p>'||replace(replace(replace(replace(v_body,'&','&amp;'),'<','&lt;'),E'\n\n','</p><p>'),E'\n','<br>')||'</p>';
+  insert into outbox (user_id, to_email, subject, html) values (u.id, u.email, v_sub, v_html);
+  return jsonb_build_object('ok',true,'to',u.email);
+end $$;
+
 -- a reply from a prospect's address moves them to 'replied' automatically
 create or replace function trg_outreach_reply() returns trigger language plpgsql security definer set search_path = public, extensions as $$
 begin
@@ -152,5 +168,5 @@ end $$;
 drop trigger if exists outreach_reply on messages;
 create trigger outreach_reply after insert on messages for each row execute function trg_outreach_reply();
 
-grant execute on function iw_admin_outreach_list(uuid,text,text), iw_admin_outreach_import(uuid,jsonb), iw_admin_outreach_set(uuid,text,jsonb), iw_admin_outreach_delete(uuid,text), iw_admin_outreach_template(uuid,text,text,text), iw_outreach_render(text,text), iw_admin_outreach_send(uuid,text,text) to service_role;
+grant execute on function iw_admin_outreach_list(uuid,text,text), iw_admin_outreach_import(uuid,jsonb), iw_admin_outreach_set(uuid,text,jsonb), iw_admin_outreach_delete(uuid,text), iw_admin_outreach_template(uuid,text,text,text), iw_outreach_render(text,text), iw_admin_outreach_send(uuid,text,text), iw_admin_outreach_test(uuid,text,text,text) to service_role;
 notify pgrst, 'reload schema';

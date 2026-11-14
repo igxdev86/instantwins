@@ -3,7 +3,7 @@ const MAP = { stats:'iw_admin_stats', users:'iw_admin_users', threads:'iw_admin_
               thread:'iw_admin_thread', reply:'iw_admin_reply', announce:'iw_admin_announce',
               aff_list:'iw_admin_aff_list', aff_create:'iw_admin_aff_create', aff_update:'iw_admin_aff_update',
               setbal:'iw_admin_my_balance', postal:'iw_admin_postal_enter', postal_no:'iw_admin_postal_enter_no', kinds:'iw_admin_kinds', kindset:'iw_admin_kind_active',
-              payments:'iw_admin_payments', cardpay:'iw_admin_card_payments', inboxcount:'iw_admin_inbox_count', mailone:'iw_admin_mail_one', mailall:'iw_admin_mail_all', mailcounts:'iw_admin_mail_counts', outreach:'iw_admin_outreach_list', outreach_import:'iw_admin_outreach_import', outreach_set:'iw_admin_outreach_set', outreach_delete:'iw_admin_outreach_delete', outreach_template:'iw_admin_outreach_template', outreach_send:'iw_admin_outreach_send', outreach_render:'iw_outreach_render', outreach_scan:'iw_admin_outreach_set', depdecide:'iw_admin_deposit_decide', wddecide:'iw_admin_withdraw_decide', setting:'iw_admin_setting', golive:'iw_go_live', tickets:'iw_admin_tickets', ticketset:'iw_admin_ticket_active',
+              payments:'iw_admin_payments', cardpay:'iw_admin_card_payments', inboxcount:'iw_admin_inbox_count', mailone:'iw_admin_mail_one', mailall:'iw_admin_mail_all', mailcounts:'iw_admin_mail_counts', outreach:'iw_admin_outreach_list', outreach_import:'iw_admin_outreach_import', outreach_set:'iw_admin_outreach_set', outreach_delete:'iw_admin_outreach_delete', outreach_template:'iw_admin_outreach_template', outreach_send:'iw_admin_outreach_send', outreach_render:'iw_outreach_render', outreach_scan:'iw_admin_outreach_set', outreach_test:'iw_admin_outreach_test', depdecide:'iw_admin_deposit_decide', wddecide:'iw_admin_withdraw_decide', setting:'iw_admin_setting', golive:'iw_go_live', tickets:'iw_admin_tickets', ticketset:'iw_admin_ticket_active',
               comps:'iw_admin_comps', compcreate:'iw_admin_comp_create', comppostal:'iw_admin_comp_postal', postal_ticket:'iw_admin_postal_ticket', kindroll:'iw_admin_kind_rollover', itemcreate:'iw_admin_item_create', itemclaims:'iw_admin_item_claims', itemclaimset:'iw_admin_item_claim_set', postal_mil:'iw_admin_postal_mil', postal_reject:'iw_admin_postal_reject', postal_log:'iw_admin_postal_log', milstats:'iw_admin_mil_stats', milset:'iw_admin_mil_set', milclose:'iw_admin_mil_close', games:'iw_admin_games', skillq:'iw_admin_skillq', credit:'iw_admin_credit' };
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
@@ -21,6 +21,7 @@ export default async function handler(req, res) {
   if (b.action === 'outreach_delete') { args.p_domain=String(b.domain||''); }
   if (b.action === 'outreach_send') { args.p_domain=String(b.domain||''); args.p_tpl=TPL; }
   if (b.action === 'outreach_render') { delete args.p_token; args.p_domain=String(b.domain||''); args.p_tpl=TPL; }
+  if (b.action === 'outreach_test') { args.p_tpl=TPL; args.p_subject=b.subject!=null?String(b.subject).slice(0,200):null; args.p_body=b.body!=null?String(b.body).slice(0,6000):null; }
   if (b.action === 'outreach_template') { args.p_tpl=TPL; args.p_subject=String(b.subject||'').slice(0,200); args.p_body=String(b.body||'').slice(0,6000); }
   if (b.action === 'outreach_scan') {
     // fetch the site and look for a contact: mailto links, plain addresses, a contact/about/advertise page
@@ -73,7 +74,7 @@ export default async function handler(req, res) {
   const data = await r.json();
   res.setHeader('Cache-Control', 'no-store');
   if (!r.ok) return res.status(400).json({ error: friendly(data && data.message) });
-  if (['depdecide','wddecide','postal_mil','announce','reply','mailone','outreach_send'].includes(b.action)) flushMail({ KEY, URL }, 10).catch(() => {}); if (b.action === 'mailall') flushMail({ KEY, URL }, 50).catch(() => {});
+  if (['depdecide','wddecide','postal_mil','announce','reply','mailone','outreach_send','outreach_test'].includes(b.action)) flushMail({ KEY, URL }, 10).catch(() => {}); if (b.action === 'mailall') flushMail({ KEY, URL }, 50).catch(() => {});
   return res.status(200).json(data);
 }
 
