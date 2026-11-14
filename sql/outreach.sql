@@ -43,7 +43,9 @@ begin
   for r in select * from jsonb_array_elements(p_rows) loop
     v_dom := lower(regexp_replace(regexp_replace(coalesce(r->>'domain',''),'^https?://(www\.)?',''),'/.*$',''));
     v_dom := regexp_replace(v_dom,'^www\.','');
-    if v_dom !~ '^[a-z0-9.-]+\.[a-z]{2,}$' then continue; end if;
+    -- a contact with no site of their own is keyed by their email address
+    if v_dom = '' and coalesce(r->>'email','') <> '' then v_dom := lower(trim(r->>'email')); end if;
+    if v_dom !~ '^[a-z0-9.-]+\.[a-z]{2,}$' and v_dom !~ '^[^@\s]+@[^@\s]+\.[a-z]{2,}$' then continue; end if;
     insert into outreach (domain, name, dr, traffic, source, email)
       values (v_dom, nullif(r->>'name',''), nullif(r->>'dr','')::int, nullif(regexp_replace(coalesce(r->>'traffic',''),'[^0-9]','','g'),'')::int, coalesce(nullif(r->>'source',''),'ahrefs'), nullif(lower(r->>'email'),''))
       on conflict (domain) do update set dr=coalesce(excluded.dr,outreach.dr), traffic=coalesce(excluded.traffic,outreach.traffic), name=coalesce(outreach.name,excluded.name), email=coalesce(outreach.email,excluded.email), updated_at=now();
