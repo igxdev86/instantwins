@@ -10,7 +10,7 @@ MBAR=re.search(r'<nav class="mbar">.*?</nav>',open('index.html').read(),re.S).gr
 
 # ---------- ADMIN ----------
 PAGE='admin.html'
-TABS=[('overview','Overview','admin.html'),('revenue','Revenue','admin-revenue.html'),('users','Users','admin-users.html'),('payments','Payments','admin-payments.html'),('postal','Postal','admin-postal.html'),('support','Support','admin-support.html'),('affiliates','Affiliates','admin-affiliates.html'),('announce','Broadcast','admin-announce.html')]
+TABS=[('overview','Overview','admin.html'),('revenue','Revenue','admin-revenue.html'),('users','Users','admin-users.html'),('payments','Payments','admin-payments.html'),('postal','Postal','admin-postal.html'),('support','Support','admin-support.html'),('affiliates','Affiliates','admin-affiliates.html'),('outreach','Outreach',None),('announce','Broadcast','admin-announce.html')]
 PRE="""const $=id=>document.getElementById(id);
 function sess(){try{return JSON.parse(localStorage.getItem('iw_session'))}catch(e){return null}}
 async function api(path,body){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();if(!r.ok||d.error)throw new Error(d.error||'failed');return d;}
@@ -24,6 +24,8 @@ window.addEventListener('hashchange',showTab);
 """
 panels=[];js=[]
 for key,label,src in TABS:
+    if src is None:
+        panels.append(open('tools/outreach_panel.html').read()); js.append(open('tools/outreach_panel.js').read()); continue
     s=open('v1/'+src).read(); i=s.find('<div id="all" style="display:none">'); j=s.find('</div></div><nav class="mtab"')
     body=s[i:j].strip()
     assert body.endswith('</div>'), src

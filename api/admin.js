@@ -3,7 +3,7 @@ const MAP = { stats:'iw_admin_stats', users:'iw_admin_users', threads:'iw_admin_
               thread:'iw_admin_thread', reply:'iw_admin_reply', announce:'iw_admin_announce',
               aff_list:'iw_admin_aff_list', aff_create:'iw_admin_aff_create', aff_update:'iw_admin_aff_update',
               setbal:'iw_admin_my_balance', postal:'iw_admin_postal_enter', postal_no:'iw_admin_postal_enter_no', kinds:'iw_admin_kinds', kindset:'iw_admin_kind_active',
-              payments:'iw_admin_payments', cardpay:'iw_admin_card_payments', inboxcount:'iw_admin_inbox_count', mailone:'iw_admin_mail_one', mailall:'iw_admin_mail_all', mailcounts:'iw_admin_mail_counts', depdecide:'iw_admin_deposit_decide', wddecide:'iw_admin_withdraw_decide', setting:'iw_admin_setting', golive:'iw_go_live', tickets:'iw_admin_tickets', ticketset:'iw_admin_ticket_active',
+              payments:'iw_admin_payments', cardpay:'iw_admin_card_payments', inboxcount:'iw_admin_inbox_count', mailone:'iw_admin_mail_one', mailall:'iw_admin_mail_all', mailcounts:'iw_admin_mail_counts', outreach:'iw_admin_outreach_list', outreach_import:'iw_admin_outreach_import', outreach_set:'iw_admin_outreach_set', outreach_delete:'iw_admin_outreach_delete', outreach_template:'iw_admin_outreach_template', outreach_send:'iw_admin_outreach_send', outreach_render:'iw_outreach_render', outreach_scan:'iw_admin_outreach_set', depdecide:'iw_admin_deposit_decide', wddecide:'iw_admin_withdraw_decide', setting:'iw_admin_setting', golive:'iw_go_live', tickets:'iw_admin_tickets', ticketset:'iw_admin_ticket_active',
               comps:'iw_admin_comps', compcreate:'iw_admin_comp_create', comppostal:'iw_admin_comp_postal', postal_ticket:'iw_admin_postal_ticket', kindroll:'iw_admin_kind_rollover', itemcreate:'iw_admin_item_create', itemclaims:'iw_admin_item_claims', itemclaimset:'iw_admin_item_claim_set', postal_mil:'iw_admin_postal_mil', postal_reject:'iw_admin_postal_reject', postal_log:'iw_admin_postal_log', milstats:'iw_admin_mil_stats', milset:'iw_admin_mil_set', milclose:'iw_admin_mil_close', games:'iw_admin_games', skillq:'iw_admin_skillq', credit:'iw_admin_credit' };
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
@@ -14,6 +14,30 @@ export default async function handler(req, res) {
   const fn = MAP[b && b.action];
   if (!token || !fn) return res.status(400).json({ error: 'bad request' });
   const args = { p_token: token };
+  if (b.action === 'outreach') { args.p_status=String(b.status||''); args.p_q=String(b.q||''); }
+  if (b.action === 'outreach_import') { args.p_rows=Array.isArray(b.rows)?b.rows.slice(0,2000):[]; }
+  if (b.action === 'outreach_set') { args.p_domain=String(b.domain||''); args.p_fields=b.fields&&typeof b.fields==='object'?b.fields:{}; }
+  if (b.action === 'outreach_delete' || b.action === 'outreach_send') { args.p_domain=String(b.domain||''); }
+  if (b.action === 'outreach_render') { delete args.p_token; args.p_domain=String(b.domain||''); }
+  if (b.action === 'outreach_template') { args.p_subject=String(b.subject||'').slice(0,200); args.p_body=String(b.body||'').slice(0,6000); }
+  if (b.action === 'outreach_scan') {
+    // fetch the site and look for a contact: mailto links, plain addresses, a contact/about/advertise page
+    const dom=String(b.domain||'').toLowerCase().replace(/[^a-z0-9.-]/g,''); if(!dom) return res.status(400).json({ error:'domain?' });
+    { const chk=await rpc({ KEY, URL }, 'iw_admin_outreach_list', { p_token: token, p_status:'joined', p_q:'zz-none-zz' }); if(!chk.ok) return res.status(403).json({ error:'not admin' }); }
+    const found=new Set(); let contact=null, title=null;
+    const grab=async(url)=>{ try{ const c=new AbortController(); const t=setTimeout(()=>c.abort(),6000); const r=await fetch(url,{signal:c.signal,redirect:'follow',headers:{'User-Agent':'Mozilla/5.0 (compatible; InstantWinsBot/1.0; +https://instantwins.co.uk)','Accept':'text/html'}}); clearTimeout(t); if(!r.ok) return null; const h=(await r.text()).slice(0,400000); return h; }catch(e){ return null; } };
+    const scanHtml=(h,base)=>{ if(!h) return; const m=h.match(/<title[^>]*>([^<]{1,120})<\/title>/i); if(m&&!title) title=m[1].trim();
+      for(const x of h.matchAll(/mailto:([^"'?\s>]+)/gi)) found.add(x[1].toLowerCase());
+      for(const x of h.matchAll(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi)) { const e=x[0].toLowerCase(); if(!/\.(png|jpg|jpeg|gif|svg|webp|css|js)$/.test(e)&&!/example\.|sentry|wixpress|@2x|@3x/.test(e)) found.add(e); }
+      if(!contact){ const c=h.match(/href=["']([^"']*(contact|advertis|partner|about)[^"']*)["']/i); if(c){ try{ contact=new URL(c[1],base).href; }catch(e){} } } };
+    const base='https://'+dom+'/'; const home=await grab(base); scanHtml(home,base);
+    const pages=[contact,base+'contact',base+'contact-us',base+'about',base+'advertise'].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).slice(0,3);
+    for(const u of pages){ if(found.size>=5) break; scanHtml(await grab(u),u); }
+    const emails=[...found].filter(e=>!/noreply|no-reply|donotreply/.test(e)).sort((a,b)=>{ const s=x=>(x.endsWith('@'+dom)?0:1)+(/^(info|hello|hi|contact|partners|admin|editor|press|advertis|media)/.test(x)?0:2); return s(a)-s(b); }).slice(0,8);
+    const best=emails[0]||null;
+    await rpc({ KEY, URL }, 'iw_admin_outreach_set', { p_token: b.token, p_domain: dom, p_fields: { emails_found: emails, contact_url: contact||null, ...(best?{email:best}:{}), ...(title?{name:title.replace(/[|\-–—].*$/,'').trim().slice(0,60)}:{}) } }).catch(()=>{});
+    return res.status(200).json({ emails, contact, title, best });
+  }
   if (b.action === 'mailone') { args.p_to=String(b.to||''); args.p_subject=String(b.subject||''); args.p_body=String(b.body||''); }
   if (b.action === 'mailall') { args.p_subject=String(b.subject||''); args.p_body=String(b.body||''); args.p_audience=['all','buyers','test'].includes(b.audience)?b.audience:'all'; }
   if (b.action === 'thread') args.p_key = String(b.key||b.user_id||'');
@@ -47,7 +71,7 @@ export default async function handler(req, res) {
   const data = await r.json();
   res.setHeader('Cache-Control', 'no-store');
   if (!r.ok) return res.status(400).json({ error: friendly(data && data.message) });
-  if (['depdecide','wddecide','postal_mil','announce','reply','mailone'].includes(b.action)) flushMail({ KEY, URL }, 10).catch(() => {}); if (b.action === 'mailall') flushMail({ KEY, URL }, 50).catch(() => {});
+  if (['depdecide','wddecide','postal_mil','announce','reply','mailone','outreach_send'].includes(b.action)) flushMail({ KEY, URL }, 10).catch(() => {}); if (b.action === 'mailall') flushMail({ KEY, URL }, 50).catch(() => {});
   return res.status(200).json(data);
 }
 

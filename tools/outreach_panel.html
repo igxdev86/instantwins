@@ -1,0 +1,31 @@
+<div class="ap" id="ap-outreach">
+  <div class="panel"><h2>Find affiliate sites</h2>
+    <p class="lead">Use Ahrefs to find sites already sending traffic to competitions and betting content, export, paste below. Any CSV/TSV with a Domain/Target column works; DR and Traffic are picked up when present.</p>
+    <div class="orow3">
+      <a class="btn ghost slim" href="https://app.ahrefs.com/site-explorer/overview/v2/subdomains/live?target=bettingsites.co.uk" target="_blank" rel="noopener">Competing domains &rarr;</a>
+      <a class="btn ghost slim" href="https://app.ahrefs.com/content-explorer?q=%22free%20prize%20draw%22%20OR%20%22prize%20competition%22&country=gb" target="_blank" rel="noopener">Content Explorer &rarr;</a>
+      <a class="btn ghost slim" href="https://app.ahrefs.com/site-explorer/overview/v2/subdomains/live?target=raffall.com" target="_blank" rel="noopener">Linking to Raffall &rarr;</a>
+    </div>
+    <label>Paste export</label><textarea id="orPaste" rows="5" placeholder="Domain	DR	Traffic&#10;example.co.uk	42	12,300&#10;or just one domain per line"></textarea>
+    <div class="orow3" style="margin-top:8px"><button class="btn lime slim" id="orImport">Import</button><input id="orOne" placeholder="or add one: domain.co.uk" style="flex:2;margin:0"><button class="btn ghost slim" id="orAdd">Add</button></div>
+    <div class="err" id="orImpErr"></div>
+  </div>
+
+  <div class="panel"><h2>Prospects <small class="m" id="orCounts"></small></h2>
+    <div class="orow3" style="margin-bottom:10px">
+      <select id="orStatus" class="sel" style="margin:0"><option value="">All</option><option value="new">New</option><option value="contacted">Contacted</option><option value="replied">Replied</option><option value="joined">Joined</option><option value="no">Not interested</option></select>
+      <input id="orQ" placeholder="search domain / email" style="flex:2;margin:0">
+      <button class="btn ghost slim" id="orScanAll">Find contacts for all new</button>
+    </div>
+    <div id="orList"><span class="m">Loading…</span></div>
+    <div class="err" id="orErr"></div>
+  </div>
+
+  <div class="panel"><h2>Welcome message</h2>
+    <p class="lead">Sent from hello@instantwins.co.uk in the site branding. Replies land in Support and flip the prospect to <b>Replied</b>. Placeholders: <code>{{first}}</code> <code>{{site}}</code> <code>{{link}}</code></p>
+    <label>Subject</label><input id="orSub">
+    <label>Message</label><textarea id="orBody" rows="12"></textarea>
+    <div class="orow3" style="margin-top:8px"><button class="btn lime slim" id="orTplSave">Save template</button></div>
+    <div class="err" id="orTplErr"></div>
+  </div>
+</div>
