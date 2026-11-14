@@ -4,11 +4,14 @@ do $$
 declare i int; v_id uuid;
 begin
   for i in 1..5 loop
-    insert into users (email, pass, name, dob, gb_resident, terms_version)
-      values ('user'||i||'@instantwins.co.uk', crypt('123456', gen_salt('bf')), 'Test User '||i, date '1990-01-01' + (i*37), true, (select value from site_settings where key='terms_version'))
-      on conflict (email) do update set pass=crypt('123456', gen_salt('bf')), name=excluded.name, dob=excluded.dob, gb_resident=true, terms_version=excluded.terms_version
-      returning id into v_id;
-    if v_id is null then select id into v_id from users where email='user'||i||'@instantwins.co.uk'; end if;
+    select id into v_id from users where lower(email)='user'||i||'@instantwins.co.uk';
+    if v_id is null then
+      insert into users (email, pass, name, dob, gb_resident, terms_version)
+        values ('user'||i||'@instantwins.co.uk', crypt('123456', gen_salt('bf')), 'Test User '||i, date '1990-01-01' + (i*37), true, (select value from site_settings where key='terms_version'))
+        returning id into v_id;
+    else
+      update users set pass=crypt('123456', gen_salt('bf')), name='Test User '||i, dob=date '1990-01-01' + (i*37), gb_resident=true, terms_version=(select value from site_settings where key='terms_version') where id=v_id;
+    end if;
     if iw_balance(v_id) < 500000 then
       insert into ledger (user_id, delta_p, reason) values (v_id, 500000 - iw_balance(v_id), 'admin: test funds');
     end if;
