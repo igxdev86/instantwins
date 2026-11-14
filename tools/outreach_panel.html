@@ -21,14 +21,31 @@
       <input id="orQ" placeholder="search domain / email" style="flex:2;margin:0">
       <button class="btn ghost slim" id="orScanAll">Find contacts for all new</button>
     </div>
-    <div class="orow3" style="margin-bottom:10px"><span class="m">Message to send / copy:</span><select id="orTplSend" class="sel" style="width:auto;margin:0"><option value="intro">Intro</option><option value="followup">Follow-up</option><option value="welcome">Welcome (after joining)</option></select></div>
+    <div class="orow3" style="margin-bottom:10px"><span class="m">Message to send / copy:</span><select id="orTplSend" class="sel" style="width:auto;margin:0"><option value="intro">Intro</option><option value="followup">Follow-up</option><option value="welcome">Welcome (after joining)</option><option value="custom">Custom (from builder)</option></select></div>
     <div id="orList"><span class="m">Loading…</span></div>
     <div class="err" id="orErr"></div>
   </div>
 
+  <div class="panel"><h2>Message builder</h2>
+    <p class="lead">Pick a few options, the message writes itself. Put it in a slot, then Send or Copy from the list.</p>
+    <div class="mbgrid">
+      <div><label>Angle</label><select id="mbAngle" class="sel"><option value="prizes">The prizes (£1.185m, 25p tickets)</option><option value="earn">What they earn (£10 CPA)</option><option value="demo">The demo / ticket reader</option><option value="audience">Fit for their audience</option><option value="nudge">Gentle nudge</option></select></div>
+      <div><label>Length</label><select id="mbLen" class="sel"><option value="short">Short (3 lines)</option><option value="med" selected>Medium</option></select></div>
+      <div><label>Tone</label><select id="mbTone" class="sel"><option value="plain" selected>Plain</option><option value="warm">Warm</option><option value="direct">Direct</option></select></div>
+      <div><label>Ask</label><select id="mbAsk" class="sel"><option value="code">Reply with a code</option><option value="look">Take a look at the page</option><option value="question">Ask if they take partners</option></select></div>
+    </div>
+    <div class="orow3" style="margin:8px 0 4px">
+      <label class="chkrow" style="margin:0"><input type="checkbox" id="mbFree" checked><span>Mention free entry by post</span></label>
+      <label class="chkrow" style="margin:0"><input type="checkbox" id="mbCreative" checked><span>Mention banners / demo embed</span></label>
+      <label class="chkrow" style="margin:0"><input type="checkbox" id="mbOut"><span>Easy opt-out line</span></label>
+    </div>
+    <label>Preview</label><div class="mbprev"><b id="mbSub"></b><pre id="mbBody"></pre></div>
+    <div class="orow3" style="margin-top:8px"><button class="btn lime slim" data-slot="custom">Use as Custom</button><button class="btn ghost slim" data-slot="intro">Save as Intro</button><button class="btn ghost slim" data-slot="followup">Save as Follow-up</button><button class="btn ghost slim" id="mbCopy">Copy text</button></div>
+    <div class="err" id="mbErr"></div>
+  </div>
   <div class="panel"><h2>Messages</h2>
     <p class="lead">Sent from hello@instantwins.co.uk in the site branding, signed as InstantWins.co.uk Affiliates. Replies land in Support and flip the prospect to <b>Replied</b>. Placeholders: <code>{{first}}</code> <code>{{site}}</code> <code>{{link}}</code> <code>{{code}}</code></p>
-    <div class="orow3" style="margin-bottom:6px"><select id="orTplEdit" class="sel" style="width:auto;margin:0"><option value="intro">Intro</option><option value="followup">Follow-up</option><option value="welcome">Welcome (after joining)</option></select></div>
+    <div class="orow3" style="margin-bottom:6px"><select id="orTplEdit" class="sel" style="width:auto;margin:0"><option value="intro">Intro</option><option value="followup">Follow-up</option><option value="welcome">Welcome (after joining)</option><option value="custom">Custom</option></select></div>
     <label>Subject</label><input id="orSub">
     <label>Message</label><textarea id="orBody" rows="12"></textarea>
     <div class="orow3" style="margin-top:8px"><button class="btn lime slim" id="orTplSave">Save template</button></div>

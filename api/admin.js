@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   if (b.action === 'outreach') { args.p_status=String(b.status||''); args.p_q=String(b.q||''); }
   if (b.action === 'outreach_import') { args.p_rows=Array.isArray(b.rows)?b.rows.slice(0,2000):[]; }
   if (b.action === 'outreach_set') { args.p_domain=String(b.domain||''); args.p_fields=b.fields&&typeof b.fields==='object'?b.fields:{}; }
-  const TPL=['intro','followup','welcome'].includes(b.tpl)?b.tpl:'intro';
+  const TPL=['intro','followup','welcome','custom'].includes(b.tpl)?b.tpl:'intro';
   if (b.action === 'outreach_delete') { args.p_domain=String(b.domain||''); }
   if (b.action === 'outreach_send') { args.p_domain=String(b.domain||''); args.p_tpl=TPL; }
   if (b.action === 'outreach_render') { delete args.p_token; args.p_domain=String(b.domain||''); args.p_tpl=TPL; }

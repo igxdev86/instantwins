@@ -27,7 +27,7 @@ async function load(){ try{ const d=await api('/api/admin',{action:'outreach',to
     +'<div class="orhead">'+(o.domain.includes('@')?'<b>'+esc(o.name||o.domain)+'</b>'+(o.name?' <span class="m">'+esc(o.domain)+'</span>':''):'<a href="https://'+esc(o.domain)+'" target="_blank" rel="noopener"><b>'+esc(o.domain)+'</b></a>'+(o.name?' <span class="m">'+esc(o.name)+'</span>':''))+'<span class="pill '+(o.status==='joined'?'ok':o.status==='replied'?'warn':'')+'">'+ST[o.status]+'</span></div>'
     +'<div class="ormeta">'+(o.dr!=null?'DR '+o.dr+' · ':'')+(o.traffic!=null?o.traffic.toLocaleString()+' visits · ':'')+(o.contacted_at?'emailed '+when(o.contacted_at)+' · ':'')+(o.aff_code?'code '+esc(o.aff_code)+' · ':'')+(o.domain.includes('@')?'contact':'<a href="https://app.ahrefs.com/site-explorer/overview/v2/subdomains/live?target='+encodeURIComponent(o.domain)+'" target="_blank" rel="noopener">Ahrefs</a>')+(o.contact_url?' · <a href="'+esc(o.contact_url)+'" target="_blank" rel="noopener">contact page</a>':'')+'</div>'
     +'<div class="orform"><input class="orEmail" placeholder="email" value="'+esc(o.email||'')+'" list="dl-'+esc(o.domain).replace(/\W/g,'')+'"><datalist id="dl-'+esc(o.domain).replace(/\W/g,'')+'">'+(o.emails_found||[]).map(e=>'<option value="'+esc(e)+'">').join('')+'</datalist>'
-    +(o.domain.includes('@')?'':'<button class="pill act" data-a="scan">Find contact</button>')<button class="pill act" data-a="send">Send</button><button class="pill act" data-a="copy">Copy message</button>'
+    +(o.domain.includes('@')?'':'<button class="pill act" data-a="scan">Find contact</button>')+'<button class="pill act" data-a="send">Send</button><button class="pill act" data-a="copy">Copy message</button>'
     +'<select class="sel orSt" style="width:auto;margin:0;padding:6px 10px">'+Object.keys(ST).map(k=>'<option value="'+k+'"'+(k===o.status?' selected':'')+'>'+ST[k]+'</option>').join('')+'</select>'
     +'<button class="pill act" data-a="join">Create affiliate</button><button class="pill act" data-a="del" title="remove">&times;</button></div>'
     +'<input class="orNotes" placeholder="notes" value="'+esc(o.notes||'')+'">'
@@ -49,6 +49,30 @@ $('orAdd').onclick=async()=>{ const v=$('orOne').value.trim(); if(!v)return; try
 $('orScanAll').onclick=async()=>{ const rows=[...$('orList').querySelectorAll('.orow')].filter(r=>r.querySelector('.orSt').value==='new'&&!r.querySelector('.orEmail').value).slice(0,15); $('orScanAll').disabled=true; let n=0; for(const r of rows){ $('orScanAll').textContent='Scanning '+(++n)+'/'+rows.length+'…'; try{ await api('/api/admin',{action:'outreach_scan',token:s.token,domain:r.dataset.d}); }catch(e){} } $('orScanAll').textContent='Find contacts for all new'; $('orScanAll').disabled=false; load(); };
 $('orTplSave').onclick=async()=>{ $('orTplErr').className='err'; const k=$('orTplEdit').value; try{ await api('/api/admin',{action:'outreach_template',token:s.token,tpl:k,subject:$('orSub').value,body:$('orBody').value}); TPLS[k]={subject:$('orSub').value,body:$('orBody').value}; $('orTplErr').className='err ok'; $('orTplErr').textContent='Saved.'; }catch(e){ $('orTplErr').textContent=e.message; } };
 $('orTplEdit').onchange=showTpl;
+// ---- message builder
+const MB={
+ open:{plain:'Hi {{first}},',warm:'Hi {{first}}, hope all is well.',direct:'{{first}} —'},
+ angle:{
+  prizes:['InstantWins.co.uk is a new UK prize competition site: 25p tickets, £1,185,000 in prizes in every round and a £20,000 top prize.','The hook for readers is simple — tickets from 19p, 1 in 5.7 wins, and a ticket reader that makes opening 100 of them a proper show.'],
+  earn:['The InstantWins.co.uk affiliate programme pays £10 for every new player you send who deposits and buys a ticket.','No revenue share, no negative carryover, paid monthly by bank transfer — a flat fee per player, nothing clawed back.'],
+  demo:['InstantWins.co.uk has a ticket reader you can embed on {{site}} — visitors feed 250 demo tickets through it before they ever sign up.','It is the best-converting piece we have: people watch the run, then click play.'],
+  audience:['InstantWins.co.uk is a UK prize competition site (25p tickets, £1,185,000 in prizes per round) and it looks like a natural fit for the audience on {{site}}.','It is not betting or casino — it is a free-entry prize competition — so it sits comfortably next to promotions and deals content.'],
+  nudge:['Just checking this reached you — the InstantWins.co.uk affiliate programme is open and paying £10 per new depositing player.','']},
+ free:'There is a free postal entry route on every round, so it is marketed as a prize competition, not gambling.',
+ creative:'Banners, a rotating strip and the embeddable demo are ready to drop in.',
+ ask:{code:'If you would like to join, reply with the code you want to use and it will be live the same day.',look:'Programme details are here: {{link}} — have a look and reply if it is of interest.',question:'Do you take affiliate partners on {{site}}? If so, reply and we will send the details over.'},
+ out:'If it is not a fit, just say and we will not write again.',
+ sign:'InstantWins.co.uk Affiliates\nhello@instantwins.co.uk',
+ subj:{prizes:'£1,185,000 in prizes — InstantWins.co.uk affiliates',earn:'£10 per player — InstantWins.co.uk affiliate programme',demo:'A demo your readers can play — InstantWins.co.uk',audience:'InstantWins.co.uk for {{site}}',nudge:'Quick follow-up — InstantWins.co.uk affiliates'}};
+function build(){ const a=$('mbAngle').value, L=$('mbLen').value, T=$('mbTone').value; const p=[]; p.push(MB.open[T]);
+  const body=MB.angle[a].filter(Boolean); p.push(L==='short'?body[0]:body.join(' '));
+  if(L!=='short'){ const extras=[]; if($('mbFree').checked)extras.push(MB.free); if($('mbCreative').checked)extras.push(MB.creative); if(extras.length)p.push(extras.join(' ')); }
+  p.push(MB.ask[$('mbAsk').value]+(($('mbOut').checked)?' '+MB.out:''));
+  if(L==='short'&&$('mbFree').checked&&a!=='audience')p[1]+=' Free entry by post on every round.';
+  p.push(MB.sign); const text=p.join('\n\n'); $('mbSub').textContent=MB.subj[a]; $('mbBody').textContent=text; return {subject:MB.subj[a],body:text}; }
+['mbAngle','mbLen','mbTone','mbAsk','mbFree','mbCreative','mbOut'].forEach(id=>$(id).addEventListener('change',build)); build();
+document.querySelectorAll('[data-slot]').forEach(b=>b.onclick=async()=>{ const m=build(); const k=b.dataset.slot; $('mbErr').className='err'; try{ await api('/api/admin',{action:'outreach_template',token:s.token,tpl:k,subject:m.subject,body:m.body}); TPLS[k]=m; if($('orTplEdit').value===k)showTpl(); if(k==='custom')$('orTplSend').value='custom'; $('mbErr').className='err ok'; $('mbErr').textContent='Saved to '+b.textContent.replace(/^(Use as|Save as) /,'')+'. '+(k==='custom'?'Send / Copy on the list now uses it.':''); }catch(e){ $('mbErr').textContent=e.message; } });
+$('mbCopy').onclick=async()=>{ const m=build(); await navigator.clipboard.writeText(m.subject+'\n\n'+m.body); $('mbCopy').textContent='Copied'; setTimeout(()=>$('mbCopy').textContent='Copy text',1500); };
 $('orStatus').onchange=load; let qt; $('orQ').oninput=()=>{ clearTimeout(qt); qt=setTimeout(load,300); };
 (async()=>{ if(await guard()){ load(); } })();
 })();

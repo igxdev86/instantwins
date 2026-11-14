@@ -636,3 +636,6 @@ a.btn.lime,a.btn.lime:visited,.modal a.btn.lime{color:#0B0B10!important}a.btn:no
 .orform{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.orform .orEmail{flex:1;min-width:180px;margin:0;padding:8px 10px;font-size:14px}
 .pill.act{cursor:pointer;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-weight:700}.pill.act:hover{border-color:var(--lime);color:var(--lime)}
 .orNotes{margin:8px 0 0;padding:7px 10px;font-size:13px;font-weight:500;color:var(--soft)}
+.mbgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.mbgrid label{margin-top:0}.mbgrid .sel{margin:0}
+.mbprev{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px}.mbprev b{display:block;margin-bottom:8px;font-size:.9rem}.mbprev pre{margin:0;white-space:pre-wrap;font:500 .84rem/1.55 Inter,system-ui,sans-serif;color:var(--soft)}
+@media(max-width:480px){.mbgrid{grid-template-columns:1fr}}

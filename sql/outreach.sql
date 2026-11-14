@@ -30,6 +30,8 @@ Programme details: {{link}}
 Reply with a code you would like and you will be live within the day. If it is not a fit for {{site}}, no problem at all — just say and we will not write again.
 
 InstantWins.co.uk Affiliates'),
+ ('outreach_subject_custom','InstantWins.co.uk affiliates'),
+ ('outreach_body_custom',''),
  ('outreach_subject_welcome','Welcome to InstantWins.co.uk affiliates — your link is live'),
  ('outreach_body_welcome','Hi {{first}},
 
@@ -53,7 +55,7 @@ begin
     'rows', coalesce((select jsonb_agg(to_jsonb(o) order by case o.status when 'replied' then 0 when 'new' then 1 when 'contacted' then 2 when 'joined' then 3 else 4 end, o.dr desc nulls last, o.domain)
                       from outreach o where (p_status is null or p_status='' or o.status=p_status) and (p_q is null or p_q='' or o.domain ilike '%'||p_q||'%' or coalesce(o.email,'') ilike '%'||p_q||'%')),'[]'::jsonb),
     'counts', (select jsonb_object_agg(status,n) from (select status, count(*) n from outreach group by status) c),
-    'templates', (select jsonb_object_agg(k, jsonb_build_object('subject',(select value from site_settings where key='outreach_subject_'||k),'body',(select value from site_settings where key='outreach_body_'||k))) from unnest(array['intro','followup','welcome']) k));
+    'templates', (select jsonb_object_agg(k, jsonb_build_object('subject',(select value from site_settings where key='outreach_subject_'||k),'body',(select value from site_settings where key='outreach_body_'||k))) from unnest(array['intro','followup','welcome','custom']) k));
 end $$;
 
 -- import: array of {domain, dr, traffic, name, email, source}
@@ -101,7 +103,7 @@ create or replace function iw_admin_outreach_template(p_token uuid, p_tpl text, 
 language plpgsql security definer set search_path = public, extensions as $$
 begin
   perform iw_admin(p_token);
-  if p_tpl not in ('intro','followup','welcome') then raise exception 'unknown template'; end if;
+  if p_tpl not in ('intro','followup','welcome','custom') then raise exception 'unknown template'; end if;
   insert into site_settings (key,value,updated_at) values ('outreach_subject_'||p_tpl,p_subject,now()) on conflict (key) do update set value=excluded.value, updated_at=now();
   insert into site_settings (key,value,updated_at) values ('outreach_body_'||p_tpl,p_body,now()) on conflict (key) do update set value=excluded.value, updated_at=now();
   return jsonb_build_object('ok',true);
@@ -114,7 +116,7 @@ language plpgsql security definer set search_path = public, extensions as $$
 declare o outreach%rowtype; v_sub text; v_body text; v_first text; v_site text;
 begin
   select * into o from outreach where domain=p_domain; if not found then raise exception 'unknown domain'; end if;
-  if p_tpl not in ('intro','followup','welcome') then p_tpl := 'intro'; end if;
+  if p_tpl not in ('intro','followup','welcome','custom') then p_tpl := 'intro'; end if;
   v_first := coalesce(nullif(split_part(coalesce(o.name,''),' ',1),''),'there');
   v_site := case when o.domain like '%@%' then 'your site' else o.domain end;
   v_sub := (select value from site_settings where key='outreach_subject_'||p_tpl); v_body := (select value from site_settings where key='outreach_body_'||p_tpl);
