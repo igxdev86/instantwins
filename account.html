@@ -11,7 +11,7 @@
     <button class="btn lime" id="depBtn">Deposit</button>
     <button class="btn ghost" id="wdBtn">Withdraw</button>
     <a class="btn" href="index.html#buy">Buy tickets</a>
-    <a class="btn ghost" href="game.html?g=quick">Reveal</a>
+    <a class="btn ghost" id="revealBtn" href="game.html?g=quick">Reveal</a>
   </div>
   <div class="acnote" id="acNote"></div>
 </div>
@@ -21,6 +21,13 @@
 
 <details class="acc" id="secMoney"><summary><span>Payments</span><em id="payCount"></em></summary>
   <div class="acc-b" id="payBox"><p>Loading&hellip;</p></div></details>
+
+<details class="acc" id="secTx"><summary><span>Transactions</span><em id="txSum"></em></summary>
+  <div class="acc-b">
+    <div class="txtot" id="txTot"></div>
+    <div class="txlist" id="txList"><p class="m">Loading&hellip;</p></div>
+    <button class="btn ghost slim" id="txMore" style="display:none;margin-top:10px">Show more</button>
+  </div></details>
 
 <details class="acc" id="secLimits"><summary><span>Spending limits</span><em id="limSum"></em></summary>
   <div class="acc-b">
@@ -69,7 +76,18 @@
   // Tickets
   let recent=[]; function paintTk(all){ const list=all?recent:recent.slice(0,6); $('recent').innerHTML=list.length?list.map(t=>'<div><span>Ticket #'+t.no.toLocaleString()+'</span>'+(t.prize_p?'<b>'+gbp(t.prize_p)+'</b>':'<span style="color:var(--soft)">no prize</span>')+'</div>').join(''):'<p class="m">No tickets revealed yet. <a href="game.html?g=quick">Reveal some</a> or <a href="index.html#buy">buy tickets</a>.</p>'; $('tkMore').style.display=recent.length>6&&!all?'':'none'; }
   $('tkMore').onclick=()=>paintTk(true);
-  C2.mine().then(m=>{ C2.header(m); $('aBal').textContent=gbp(m.balance_p); $('aBank').textContent=m.bank; $('aWon').textContent=gbp(m.won_p!=null?m.won_p:m.recent.reduce((a,t)=>a+t.prize_p,0)); recent=m.recent||[]; const wins=recent.filter(t=>t.prize_p).length; $('tkSum').textContent=recent.length?recent.length+' revealed \u00b7 '+wins+' won':'none yet'; paintTk(false); $('pfCounty').value=m.county||''; $('pfPub').checked=m.publish_wins!==false; $('pfMkt').checked=!!m.marketing_ok; $('pfSum').textContent=m.publish_wins===false?'off':'on'; }).catch(e=>{$('recent').innerHTML='<p>'+e.message+'</p>';});
+  C2.mine().then(m=>{ C2.header(m); $('aBal').textContent=gbp(m.balance_p); $('aBank').textContent=m.bank; $('revealBtn').classList.toggle('hot',m.bank>0); if(m.bank>0)$('revealBtn').textContent='Reveal '+m.bank; $('aWon').textContent=gbp(m.won_p!=null?m.won_p:m.recent.reduce((a,t)=>a+t.prize_p,0)); recent=m.recent||[]; const wins=recent.filter(t=>t.prize_p).length; $('tkSum').textContent=recent.length?recent.length+' revealed \u00b7 '+wins+' won':'none yet'; paintTk(false); $('pfCounty').value=m.county||''; $('pfPub').checked=m.publish_wins!==false; $('pfMkt').checked=!!m.marketing_ok; $('pfSum').textContent=m.publish_wins===false?'off':'on'; }).catch(e=>{$('recent').innerHTML='<p>'+e.message+'</p>';});
+
+  // Transactions
+  let txBefore=null; const TXI={tickets:'\u{1F3AB}',win:'\u{1F3C6}',enddraw:'\u{1F3C6}',deposit:'\u2B07\uFE0F',withdrawal:'\u2B06\uFE0F',refund:'\u21A9\uFE0F',adjust:'\u2699\uFE0F'};
+  function txRow(r){ const neg=r.delta_p<0; return '<div class="tx"><span class="txi">'+(TXI[r.kind]||'')+'</span><span class="txb"><b>'+r.label+'</b><small>'+new Date(r.at).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+(r.ref&&r.kind==='deposit'?' \u00b7 '+r.ref:'')+'</small></span><span class="txa '+(neg?'out':'in')+'"><b>'+(neg?'\u2212':'+')+gbp(Math.abs(r.delta_p))+'</b><small>'+gbp(r.bal_p)+'</small></span></div>'; }
+  async function loadTx(more){ try{ const d=await api('/api/auth',{action:'ledger',limit:40,before:more?txBefore:null}); const rows=d.rows||[];
+      if(!more){ const t=d.totals||{}; $('txTot').innerHTML='<div><small>Spent on tickets</small><b>'+gbp(t.spent_p||0)+'</b><i>'+(t.tickets||0).toLocaleString()+' tickets</i></div><div><small>This month</small><b>'+gbp(t.spent_month_p||0)+'</b></div><div><small>Won</small><b class="lime">'+gbp(t.won_p||0)+'</b></div><div><small>Deposited</small><b>'+gbp(t.deposited_p||0)+'</b><i>withdrawn '+gbp(t.withdrawn_p||0)+'</i></div>';
+        $('txSum').textContent=(t.spent_p?'spent '+gbp(t.spent_p):'none yet'); $('txList').innerHTML=rows.length?'':'<p class="m">No transactions yet.</p>'; }
+      $('txList').insertAdjacentHTML('beforeend',rows.map(txRow).join('')); if(rows.length)txBefore=rows[rows.length-1].id; $('txMore').style.display=d.more?'':'none';
+    }catch(e){ $('txList').innerHTML='<p class="m">'+e.message+'</p>'; } }
+  $('txMore').onclick=()=>loadTx(true); loadTx(false);
+  document.addEventListener('iw:sync',()=>{ txBefore=null; loadTx(false); });
 
   // Payments
   let PAY=null;

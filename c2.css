@@ -639,3 +639,10 @@ a.btn.lime,a.btn.lime:visited,.modal a.btn.lime{color:#0B0B10!important}a.btn:no
 .mbgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.mbgrid label{margin-top:0}.mbgrid .sel{margin:0}
 .mbprev{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px}.mbprev b{display:block;margin-bottom:8px;font-size:.9rem}.mbprev pre{margin:0;white-space:pre-wrap;font:500 .84rem/1.55 Inter,system-ui,sans-serif;color:var(--soft)}
 @media(max-width:480px){.mbgrid{grid-template-columns:1fr}}
+/* transactions */
+.txtot{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}.txtot div{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px}.txtot small{display:block;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft)}.txtot b{display:block;font:900 1.05rem Unbounded,sans-serif;margin-top:4px}.txtot b.lime{color:var(--lime)}.txtot i{display:block;font-style:normal;font-size:.72rem;color:var(--soft);margin-top:2px}
+.tx{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}.tx:last-child{border-bottom:0}.txi{flex:none;width:30px;text-align:center;font-size:1.05rem}.txb{flex:1;min-width:0}.txb b{display:block;font-size:.9rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.txb small{display:block;color:var(--soft);font-size:.74rem;margin-top:2px}
+.txa{flex:none;text-align:right}.txa b{display:block;font:800 .92rem Unbounded,sans-serif}.txa.in b{color:var(--lime)}.txa.out b{color:var(--ink)}.txa small{display:block;color:var(--soft);font-size:.7rem;margin-top:2px}
+/* reveal button pulses when there are tickets waiting */
+.acbtns .btn.hot{border-color:transparent;color:#fff;background:linear-gradient(135deg,#8a3dff,var(--pink) 55%,#ff7ab8);background-size:200% 200%;animation:hotpulse 1.6s ease-in-out infinite;box-shadow:0 10px 28px rgba(255,61,138,.45)}
+@keyframes hotpulse{0%,100%{background-position:0% 50%;box-shadow:0 10px 28px rgba(255,61,138,.35)}50%{background-position:100% 50%;box-shadow:0 10px 34px rgba(138,61,255,.65)}}

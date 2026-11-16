@@ -1,6 +1,6 @@
 // api/auth.js — signup / login / me / logout. Rate-limited per IP on the credential actions.
 const RPC = { signup:'iw_signup', login:'iw_login', code:'iw_code_request', codelogin:'iw_code_login', onboard:'iw_onboard', me:'iw_me', logout:'iw_logout', reset:'iw_reset_password',
-              limits:'iw_limits', setlimit:'iw_set_limit', setmlimit:'iw_set_monthly_limit', takebreak:'iw_take_break', close:'iw_close_account' };
+              limits:'iw_limits', setlimit:'iw_set_limit', setmlimit:'iw_set_monthly_limit', takebreak:'iw_take_break', close:'iw_close_account', ledger:'iw_my_ledger' };
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
   const KEY = process.env.SUPABASE_SERVICE_ROLE_KEY, URL = process.env.SUPABASE_URL;
@@ -19,6 +19,7 @@ export default async function handler(req, res) {
   else if (b.action === 'reset') args = { p_email: String(b.email||''), p_dob: String(b.dob||''), p_newpass: String(b.password||'') };
   else if (b.action === 'setmlimit') args = { p_token: String(b.token||''), p_limit_p: (b.limit_p===null||b.limit_p==='')?null:Math.max(parseInt(b.limit_p,10)||0,0) };
   else if (b.action === 'setlimit') args = { p_token: String(b.token||''), p_limit_p: (b.limit_p===null||b.limit_p==='')?null:Math.max(parseInt(b.limit_p,10)||0,0) };
+  else if (b.action === 'ledger') args = { p_token: String(b.token||''), p_limit: Math.min(parseInt(b.limit,10)||50,200), p_before: b.before?parseInt(b.before,10):null };
   else if (b.action === 'takebreak') args = { p_token: String(b.token||''), p_days: parseInt(b.days,10)||1 };
   else args = { p_token: String(b.token||'') };
   const r = await fetch(URL + '/rest/v1/rpc/' + fn, {
