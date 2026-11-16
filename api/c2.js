@@ -42,11 +42,11 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control','no-store'); return res.status(200).json(makeQ(e));
   } else {
     if (!await allow(e, 'state:' + ip(req), 120, 60)) return res.status(429).json({ error: 'slow down' });
-    r = await rpc(e, 'c2_state', {});
+    r = await rpc(e, 'c2_state_cached', {}); if (r.status === 404) r = await rpc(e, 'c2_state', {});
   }
   const data = await r.json();
-  if (req.method !== 'POST' && data && data.closed) { try { await rpc(e, 'c2_settle', {}); const r2 = await rpc(e, 'c2_state', {}); if (r2.ok) { const d2 = await r2.json(); res.setHeader('Cache-Control', 'no-store'); return res.status(200).json(d2); } } catch {} }
-  res.setHeader('Cache-Control', 'no-store');
+  if (req.method !== 'POST' && data && data.closed) { try { await rpc(e, 'c2_settle', {}); const r2 = await rpc(e, 'c2_state_cached', { p_max_age_s: 0 }); if (r2.ok) { const d2 = await r2.json(); res.setHeader('Cache-Control', 'no-store'); return res.status(200).json(d2); } } catch {} }
+  res.setHeader('Cache-Control', req.method === 'GET' && !req.query.q ? 'public, s-maxage=5, stale-while-revalidate=30' : 'no-store');
   if (!r.ok) return res.status(400).json({ error: friendly(data && data.message) });
   return res.status(200).json(data === null ? { ok: true } : data);
 }

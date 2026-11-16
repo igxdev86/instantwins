@@ -6,7 +6,8 @@ const C2=(()=>{
   const gbp=p=>p===0?'£0':p<100?p+'p':'£'+(p/100).toLocaleString('en-GB',{minimumFractionDigits:p%100?2:0,maximumFractionDigits:2});
   let S=null; try{S=JSON.parse(localStorage.getItem('iw_session'));}catch(e){} const TOKEN=S&&S.token;
   const post=(body)=>fetch('/api/c2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({token:TOKEN},body))}).then(async r=>{const d=await r.json(); if(!r.ok||d.error)throw new Error(String(d.error||'failed').replace(/insufficient credit/i,'not enough funds').replace(/not enough credit/i,'not enough funds')); return d;});
-  const state=()=>fetch('/api/c2',{cache:'no-store'}).then(r=>r.json()).then(d=>{ if(d&&d.round)window.__round=d.round; return d; });
+  const state=()=>fetch('/api/c2',{cache:'no-store'}).then(r=>r.json()).then(d=>{ if(d&&d.round){ window.__round=d.round; try{ localStorage.setItem('iw_state',JSON.stringify({at:Date.now(),d:{cap:d.cap,sold:d.sold,round:d.round,prizes_left:d.prizes_left,prize_left_p:d.prize_left_p,won_p:d.won_p,top_left:d.top_left,left:d.left,tiers:d.tiers,closes_at:d.closes_at,end_prize_p:d.end_prize_p,last:d.last,recent:d.recent}})); }catch(e){} } return d; });
+  const stateCached=()=>{ try{ const c=JSON.parse(localStorage.getItem('iw_state')||'null'); return c&&Date.now()-c.at<6*3600*1000?c.d:null; }catch(e){ return null; } };
   const mine=()=>TOKEN?post({action:'mine'}):Promise.resolve(null);
   const buy=n=>post({action:'buy',n});
   const buyBalance=()=>post({action:'buybal'});
@@ -74,7 +75,7 @@ const C2=(()=>{
     $('iwBuyGo').onclick=async()=>{ const b=$('iwBuyGo'); b.disabled=true; b.textContent='Buying…'; $('iwBuyErr').textContent='';
       try{ const r=sel==='bal'?await buyBalance():await buy(PACKS[sel][0]); if(typeof SND!=='undefined')SND.buy(); header({bank:r.bank,balance_p:r.balance_p}); close(); checkin(); if(onDone)onDone(r); }
       catch(e){ $('iwBuyErr').textContent=e.message; b.disabled=false; b.textContent='Buy'; paint(); } }; }
-  return {TABLE,CAP,PACKS,gbp,TOKEN,state,mine,buy,buyBalance,balQuote,cachedBal,reveal,revealAll,header,acceptTerms,profile,termsModal,onboardModal,checkin,buySheet};
+  return {TABLE,CAP,PACKS,gbp,TOKEN,state,stateCached,mine,buy,buyBalance,balQuote,cachedBal,reveal,revealAll,header,acceptTerms,profile,termsModal,onboardModal,checkin,buySheet};
 })();
 function __sync(){ if(!C2.TOKEN)return; C2.mine().then(m=>{ window.__me=m; window.__needOnboard=!!(m&&m.onboard); C2.header(m); if(m&&m.onboard)C2.onboardModal(m); else if(m&&m.terms_due)C2.termsModal(); document.dispatchEvent(new CustomEvent('iw:sync',{detail:m})); }).catch(()=>{}); }
 document.addEventListener('DOMContentLoaded',()=>{ C2.header(); __sync(); });
