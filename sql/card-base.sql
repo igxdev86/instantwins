@@ -1,3 +1,4 @@
+-- card-base.sql — the whole card-deposit layer (table + functions) incl. the Nochex lookup. Safe to re-run.
 -- cashflows.sql — card deposits through the card processor (hosted payment page). Credits the ledger only after the API has
 -- fetched the payment from the card processor and seen status Paid. Switch: site_settings card_on ('true' lets players use it;
 -- admins can always test). Keys live in Vercel env, never here.
@@ -45,6 +46,7 @@ begin
 end $$;
 
 -- called by the API after it has fetched the payment from the card processor. Credits once, whatever the number of calls.
+-- admin: recent card payments + totals
 create or replace function iw_admin_card_payments(p_token uuid) returns jsonb
 language plpgsql security definer set search_path = public, extensions as $$
 begin
@@ -66,6 +68,12 @@ begin
     'reference', coalesce(u.acct_no,'IW'||substr(u.id::text,1,8)), 'balance_p', iw_balance(u.id),
     'deposits', coalesce((select jsonb_agg(jsonb_build_object('id',id,'amount_p',amount_p,'reference',reference,'status',status,'created_at',created_at,'decided_at',decided_at,'note',note) order by created_at desc) from (select * from deposits where user_id=u.id order by created_at desc limit 20) d),'[]'::jsonb),
     'cards', coalesce((select jsonb_agg(jsonb_build_object('ref',ref,'amount_p',amount_p,'status',status,'created_at',created_at,'paid_at',paid_at) order by created_at desc) from (select * from card_payments where user_id=u.id and status<>'started' order by created_at desc limit 20) c),'[]'::jsonb),
+    'withdrawals', coalesce((select jsonb_agg(jsonb_build_object('id',id,'amount_p',amount_p,'status',status,'created_at',created_at,'decided_at',decided_at,'note',note,'last4',right(account_no,4)) order by created_at desc) from (select * from withdrawals where user_id=u.id order by created_at desc limit 20) w),'[]'::jsonb));
+end $$;
+
+grant execute on function iw_card_start(uuid,int), iw_card_link(text,text,text), iw_card_fail(text,text), iw_card_lookup(uuid,text), iw_card_update(text,text,text,text,int), iw_admin_card_payments(uuid), iw_my_payments(uuid) to service_role;
+
+
 create or replace function iw_card_lookup_ref(p_token uuid, p_ref text) returns jsonb
 language plpgsql security definer set search_path = public, extensions as $$
 declare u users%rowtype; c card_payments%rowtype;
