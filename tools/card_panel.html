@@ -1,5 +1,5 @@
-<div class="panel"><h2>Card payments (Cashflows)</h2>
-<p class="lead">Hosted payment page. Keys live in Vercel env: <code>CASHFLOWS_CONFIG_ID</code>, <code>CASHFLOWS_API_KEY</code>, <code>CASHFLOWS_ENV</code> (<code>int</code> sandbox or <code>live</code>). Webhook URL to give Cashflows: <code>https://instantwins.co.uk/api/cashflows</code>.</p>
+<div class="panel"><h2>Card payments (Nochex)</h2>
+<p class="lead">Nochex hosted payment page. Vercel env: <code>NOCHEX_MERCHANT_ID</code> (your Nochex merchant id), <code>NOCHEX_TEST=1</code> while testing (remove to go live). In Nochex &rarr; Payment Page Setup: Call back URL <code>https://instantwins.co.uk/api/nochex</code>, Success URL <code>https://instantwins.co.uk/account.html?pay=ok</code>, Cancel URL <code>https://instantwins.co.uk/account.html?pay=cancelled</code>. Every payment is verified with Nochex before it is credited.</p>
 <div class="row"><span>Gateway <small class="m" id="cfEnv">checking…</small></span><span class="pill" id="cfStat">—</span></div>
 <div class="row"><span>Card deposits open to players <small class="m">(off = admins only, for testing)</small></span><button class="sw" id="cardSw" aria-label="toggle card deposits"></button></div>
 <div class="row"><span>Taken today</span><span class="mono" id="cfToday">—</span></div>

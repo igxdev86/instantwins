@@ -7,6 +7,6 @@ async function loadCard(){ try{ const d=await api('/api/admin',{action:'cardpay'
   $('cfToday').textContent=money(d.paid_today_p||0); $('cf30').textContent=money(d.paid_30d_p||0);
   const rows=d.rows||[]; $('cfRows').innerHTML=rows.length?rows.map(x=>'<div class="krow"><span class="nm">'+money(x.amount_p)+' · <b>'+esc(x.ref)+'</b><small>'+esc(x.name||'')+' · '+esc(x.email||'')+' · '+when(x.created_at)+(x.job_ref?' · job '+esc(x.job_ref):'')+(x.note?' · '+esc(x.note):'')+'</small></span><span class="pill '+(x.status==='paid'?'ok':x.status==='pending'||x.status==='started'?'warn':'')+'">'+esc(x.status)+'</span></div>').join(''):'<span class="m">No card payments yet.</span>';
  }catch(e){ $('cfErr').textContent=e.message; } }
-fetch('/api/cashflows',{cache:'no-store'}).then(r=>r.json()).then(g=>{ $('cfEnv').textContent=g.env==='live'?'live':'sandbox (gateway-int)'; $('cfStat').textContent=g.enabled?'configured':'keys missing'; $('cfStat').className='pill '+(g.enabled?'ok':'warn'); }).catch(()=>{});
+fetch('/api/nochex',{cache:'no-store'}).then(r=>r.json()).then(g=>{ $('cfEnv').textContent=g.env==='live'?'live':'test transactions'; $('cfStat').textContent=g.enabled?'configured':'keys missing'; $('cfStat').className='pill '+(g.enabled?'ok':'warn'); }).catch(()=>{});
 (async()=>{ if(await guard()){ loadCard(); setInterval(loadCard,60000);} })();
 })();
