@@ -647,11 +647,26 @@ a.btn.lime,a.btn.lime:visited,.modal a.btn.lime{color:#0B0B10!important}a.btn:no
 .acbtns .btn.hot{border-color:transparent;color:#fff;background:linear-gradient(135deg,#8a3dff,var(--pink) 55%,#ff7ab8);background-size:200% 200%;animation:hotpulse 1.6s ease-in-out infinite;box-shadow:0 10px 28px rgba(255,61,138,.45)}
 @keyframes hotpulse{0%,100%{background-position:0% 50%;box-shadow:0 10px 28px rgba(255,61,138,.35)}50%{background-position:100% 50%;box-shadow:0 10px 34px rgba(138,61,255,.65)}}
 
-/* Nochex on-page card form (CopyandPay widget) inside the deposit modal */
-#cardWidget .wpwl-form{background:#fff;border-radius:16px;padding:14px 14px 6px;max-width:none;margin:0;box-shadow:none}
-#cardWidget .wpwl-label{color:#333;font-weight:700;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase}
-#cardWidget .wpwl-control{border-radius:10px;border:1px solid #d9d9e3;height:44px;font-size:16px}
-#cardWidget .wpwl-button-pay{background:var(--lime);border:0;color:#0B0B10;font-weight:900;border-radius:999px;padding:14px 20px;width:100%;font-size:1rem;margin-top:6px}
-#cardWidget .wpwl-button-pay:hover{background:var(--lime);filter:brightness(1.05)}
-#cardWidget .wpwl-group-brand{display:none}
-#cardWidget .wpwl-apple-pay-button{width:100%;height:46px;border-radius:999px;margin-bottom:10px}
+/* Nochex on-page card form (CopyandPay widget) inside the deposit modal — glossy card */
+#cardWidget{margin-top:6px}
+#cardWidget .wpwl-container{margin:0}
+#cardWidget .wpwl-form{position:relative;overflow:hidden;max-width:none;margin:0;padding:18px 16px 10px;border-radius:18px;background:linear-gradient(160deg,#ffffff 0%,#eef0f7 55%,#e2e6f2 100%);box-shadow:0 18px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(0,0,0,.08);border:1px solid rgba(255,255,255,.6)}
+#cardWidget .wpwl-form:before{content:"";position:absolute;left:-20%;top:-60%;width:140%;height:70%;background:linear-gradient(180deg,rgba(255,255,255,.75),rgba(255,255,255,0));transform:rotate(-6deg);pointer-events:none}
+#cardWidget .wpwl-group{margin-bottom:12px}
+#cardWidget .wpwl-label{color:#3a3a4a;font-weight:800;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding:0 0 6px;width:100%;float:none;display:block}
+#cardWidget .wpwl-wrapper{width:100%;float:none;display:block}
+#cardWidget .wpwl-control,#cardWidget input.wpwl-control,#cardWidget select.wpwl-control,#cardWidget .wpwl-control-iframe{display:block;width:100%;height:46px;padding:0 14px;border-radius:12px;border:1px solid #cfd3e0;background:#fff;color:#0B0B10 !important;-webkit-text-fill-color:#0B0B10;font-size:16px;box-shadow:inset 0 2px 4px rgba(0,0,0,.06);caret-color:#0B0B10}
+#cardWidget .wpwl-control::placeholder{color:#8a8a9a}
+#cardWidget .wpwl-control:focus,#cardWidget .wpwl-control-iframe.wpwl-has-focus{outline:none;border-color:var(--lime);box-shadow:0 0 0 3px rgba(198,255,61,.35)}
+#cardWidget .wpwl-control-cardHolder{text-transform:none}
+#cardWidget .wpwl-group-expiry,#cardWidget .wpwl-group-cvv{width:48%;float:left}
+#cardWidget .wpwl-group-cvv{margin-left:4%}
+#cardWidget .wpwl-group-submit{clear:both;padding-top:4px}
+#cardWidget .wpwl-button-pay{display:block;width:100%;margin:6px 0 0;padding:15px 20px;border:0;border-radius:999px;background:linear-gradient(180deg,#d9ff6a,var(--lime) 55%,#a8e52a);color:#0B0B10;font-weight:900;font-size:1.05rem;letter-spacing:.01em;box-shadow:0 10px 24px rgba(198,255,61,.35),inset 0 1px 0 rgba(255,255,255,.7);text-shadow:0 1px 0 rgba(255,255,255,.35)}
+#cardWidget .wpwl-button-pay:hover,#cardWidget .wpwl-button-pay:focus{background:linear-gradient(180deg,#e4ff8a,var(--lime) 55%,#b4f035);color:#0B0B10}
+#cardWidget .wpwl-button-pay[disabled]{opacity:.55}
+#cardWidget .wpwl-group-brand,#cardWidget .wpwl-brand-card,#cardWidget .wpwl-apple-pay-button{display:none !important}
+#cardWidget .wpwl-hint,#cardWidget .wpwl-message{color:#3a3a4a;font-size:.8rem}
+#cardWidget .wpwl-has-error .wpwl-control{border-color:#ff4d8d}
+#cardWidget .wpwl-hint-cardNumberError,#cardWidget .wpwl-hint-expiryMonthError,#cardWidget .wpwl-hint-expiryYearError,#cardWidget .wpwl-hint-cardHolderError,#cardWidget .wpwl-hint-cvvError{color:#d8286b;font-size:.78rem;margin-top:4px}
+#cardWidget .wpwl-cvv-hint-wrapper{right:10px}
