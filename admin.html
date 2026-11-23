@@ -28,7 +28,7 @@
   <div class="panel"><h2>Users</h2><p class="lead">Tap a user to fill the credit box.</p><div id="users"><span class="m">Loading…</span></div></div>
 </div>
 <div class="ap" id="ap-payments"><div class="panel"><h2>Card payments (Nochex)</h2>
-<p class="lead">Nochex hosted payment page. Vercel env: <code>NOCHEX_MERCHANT_ID</code> (your Nochex merchant id), <code>NOCHEX_TEST=1</code> while testing (remove to go live). In Nochex &rarr; Payment Page Setup: Call back URL <code>https://instantwins.co.uk/api/nochex</code>, Success URL <code>https://instantwins.co.uk/account.html?pay=ok</code>, Cancel URL <code>https://instantwins.co.uk/account.html?pay=cancelled</code>. Every payment is verified with Nochex before it is credited.</p>
+<p class="lead">Nochex hosted payment page. Vercel env: <code>NOCHEX_MERCHANT_ID</code> (hosted page) and/or <code>NOCHEX_ENTITY_ID</code> + <code>NOCHEX_BEARER</code> (on-page card form, preferred &mdash; Nochex supply both for test and live), <code>NOCHEX_TEST=1</code> while testing (remove to go live). In Nochex &rarr; Payment Page Setup: Call back URL <code>https://instantwins.co.uk/api/nochex</code>, Success URL <code>https://instantwins.co.uk/account.html?pay=ok</code>, Cancel URL <code>https://instantwins.co.uk/account.html?pay=cancelled</code>. Every payment is verified with Nochex before it is credited.</p>
 <div class="row"><span>Gateway <small class="m" id="cfEnv">checking…</small></span><span class="pill" id="cfStat">—</span></div>
 <div class="row"><span>Card deposits open to players <small class="m">(off = admins only, for testing)</small></span><button class="sw" id="cardSw" aria-label="toggle card deposits"></button></div>
 <div class="row"><span>Taken today</span><span class="mono" id="cfToday">—</span></div>
@@ -290,7 +290,7 @@ async function loadCard(){ try{ const d=await api('/api/admin',{action:'cardpay'
   $('cfToday').textContent=money(d.paid_today_p||0); $('cf30').textContent=money(d.paid_30d_p||0);
   const rows=d.rows||[]; $('cfRows').innerHTML=rows.length?rows.map(x=>'<div class="krow"><span class="nm">'+money(x.amount_p)+' · <b>'+esc(x.ref)+'</b><small>'+esc(x.name||'')+' · '+esc(x.email||'')+' · '+when(x.created_at)+(x.job_ref?' · job '+esc(x.job_ref):'')+(x.note?' · '+esc(x.note):'')+'</small></span><span class="pill '+(x.status==='paid'?'ok':x.status==='pending'||x.status==='started'?'warn':'')+'">'+esc(x.status)+'</span></div>').join(''):'<span class="m">No card payments yet.</span>';
  }catch(e){ $('cfErr').textContent=e.message; } }
-fetch('/api/nochex',{cache:'no-store'}).then(r=>r.json()).then(g=>{ $('cfEnv').textContent=g.env==='live'?'live':'test transactions'; $('cfStat').textContent=g.enabled?'configured':'keys missing'; $('cfStat').className='pill '+(g.enabled?'ok':'warn'); }).catch(()=>{});
+fetch('/api/nochex',{cache:'no-store'}).then(r=>r.json()).then(g=>{ $('cfEnv').textContent=(g.env==='live'?'live':'test transactions')+(g.onpage?' · on-page form':' · hosted page'); $('cfStat').textContent=g.enabled?'configured':'keys missing'; $('cfStat').className='pill '+(g.enabled?'ok':'warn'); }).catch(()=>{});
 (async()=>{ if(await guard()){ loadCard(); setInterval(loadCard,60000);} })();
 })();
 
