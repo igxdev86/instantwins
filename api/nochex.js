@@ -60,6 +60,7 @@ export default async function handler(req, res) {
     let row; try { row = await rpcJ(e, 'iw_card_start', { p_token: token, p_amount_p: amt }); } catch (err) { return res.status(400).json({ error: err.message }); }
     const p = new URLSearchParams({ entityId: ENT().id, amount: (amt / 100).toFixed(2), currency: 'GBP', paymentType: 'DB', merchantTransactionId: row.ref, 'customer.email': row.email || '' });
     if (row.first) p.set('customer.givenName', row.first); if (row.last) p.set('customer.surname', row.last);
+    if (TEST() && process.env.NOCHEX_TESTMODE) p.set('testMode', process.env.NOCHEX_TESTMODE);   // INTERNAL (simulator) or EXTERNAL (acquirer test system)
     const r = await fetch(OPP() + '/v1/checkouts', { method: 'POST', headers: { Authorization: 'Bearer ' + ENT().bearer, 'Content-Type': 'application/x-www-form-urlencoded' }, body: p.toString() });
     const j = await r.json().catch(() => ({}));
     if (!r.ok || !j.id) { await rpc(e, 'iw_card_fail', { p_ref: row.ref, p_note: 'checkout ' + r.status + ' ' + JSON.stringify(j.result || j).slice(0, 300) }); return res.status(502).json({ error: 'card form could not be started' }); }
