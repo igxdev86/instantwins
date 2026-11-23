@@ -34,7 +34,7 @@ function wrapMail(subject, body, to){
 </td></tr>
 <tr><td style="padding:22px 8px 0;font:400 12px/1.6 ${F};color:#7c8190">
   <a href="${SITE}/support.html" style="color:#9aa0ad;text-decoration:none">Support</a> &nbsp;&middot;&nbsp; <a href="${SITE}/responsible-play.html" style="color:#9aa0ad;text-decoration:none">Responsible play</a> &nbsp;&middot;&nbsp; <a href="${SITE}/terms.html" style="color:#9aa0ad;text-decoration:none">Terms</a><br><br>
-  InstantWins.co.uk is operated by IGX Ltd, company no. 13057559, 20-22 Wenlock Road, London N1 7GU. Prize competitions with a free postal entry route under Schedule 2 of the Gambling Act 2005. 18+, Great Britain only. Prizes are a matter of luck and most tickets win nothing &mdash; please play within your means. GamCare 0808 8020 133.<br><br>
+  InstantWins.co.uk is operated by IGX Ltd, company no. 13057559, 20-22 Wenlock Road, London N1 7GU (post: PO Box 3, Avon House, 19 Stanwell Road, Penarth CF64 2EZ). Prize competitions with a free postal entry route under Schedule 2 of the Gambling Act 2005. 18+, Great Britain only. Prizes are a matter of luck and most tickets win nothing &mdash; please play within your means. GamCare 0808 8020 133.<br><br>
   Sent to ${esc(to)} because you have an InstantWins account.
 </td></tr>
 </table></td></tr></table></body></html>`;
