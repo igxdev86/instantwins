@@ -4,195 +4,223 @@
   "w": 300,
   "h": 250,
   "set": "offer",
-  "label": "300×250"
+  "label": "300\u00d7250",
+  "id": "001"
  },
  {
   "file": "instantwins-offer-336x280.png",
   "w": 336,
   "h": 280,
   "set": "offer",
-  "label": "336×280"
+  "label": "336\u00d7280",
+  "id": "002"
  },
  {
   "file": "instantwins-offer-728x90.png",
   "w": 728,
   "h": 90,
   "set": "offer",
-  "label": "728×90"
+  "label": "728\u00d790",
+  "id": "003"
  },
  {
   "file": "instantwins-offer-970x90.png",
   "w": 970,
   "h": 90,
   "set": "offer",
-  "label": "970×90"
+  "label": "970\u00d790",
+  "id": "004"
  },
  {
   "file": "instantwins-offer-970x250.png",
   "w": 970,
   "h": 250,
   "set": "offer",
-  "label": "970×250"
+  "label": "970\u00d7250",
+  "id": "005"
  },
  {
   "file": "instantwins-offer-160x600.png",
   "w": 160,
   "h": 600,
   "set": "offer",
-  "label": "160×600"
+  "label": "160\u00d7600",
+  "id": "006"
  },
  {
   "file": "instantwins-offer-300x600.png",
   "w": 300,
   "h": 600,
   "set": "offer",
-  "label": "300×600"
+  "label": "300\u00d7600",
+  "id": "007"
  },
  {
   "file": "instantwins-offer-320x50.png",
   "w": 320,
   "h": 50,
   "set": "offer",
-  "label": "320×50"
+  "label": "320\u00d750",
+  "id": "008"
  },
  {
   "file": "instantwins-offer-320x100.png",
   "w": 320,
   "h": 100,
   "set": "offer",
-  "label": "320×100"
+  "label": "320\u00d7100",
+  "id": "009"
  },
  {
   "file": "instantwins-offer-468x60.png",
   "w": 468,
   "h": 60,
   "set": "offer",
-  "label": "468×60"
+  "label": "468\u00d760",
+  "id": "010"
  },
  {
   "file": "instantwins-offer-120x60.png",
   "w": 120,
   "h": 60,
   "set": "offer",
-  "label": "120×60"
+  "label": "120\u00d760",
+  "id": "011"
  },
  {
   "file": "instantwins-offer-1080x1080.png",
   "w": 1080,
   "h": 1080,
   "set": "offer",
-  "label": "1080×1080"
+  "label": "1080\u00d71080",
+  "id": "012"
  },
  {
   "file": "instantwins-offer-1200x628.png",
   "w": 1200,
   "h": 628,
   "set": "offer",
-  "label": "1200×628"
+  "label": "1200\u00d7628",
+  "id": "013"
  },
  {
   "file": "instantwins-offer-1080x1920.png",
   "w": 1080,
   "h": 1920,
   "set": "offer",
-  "label": "1080×1920"
+  "label": "1080\u00d71920",
+  "id": "014"
  },
  {
   "file": "instantwins-brand-300x250.png",
   "w": 300,
   "h": 250,
   "set": "brand",
-  "label": "300×250"
+  "label": "300\u00d7250",
+  "id": "015"
  },
  {
   "file": "instantwins-brand-336x280.png",
   "w": 336,
   "h": 280,
   "set": "brand",
-  "label": "336×280"
+  "label": "336\u00d7280",
+  "id": "016"
  },
  {
   "file": "instantwins-brand-728x90.png",
   "w": 728,
   "h": 90,
   "set": "brand",
-  "label": "728×90"
+  "label": "728\u00d790",
+  "id": "017"
  },
  {
   "file": "instantwins-brand-970x90.png",
   "w": 970,
   "h": 90,
   "set": "brand",
-  "label": "970×90"
+  "label": "970\u00d790",
+  "id": "018"
  },
  {
   "file": "instantwins-brand-970x250.png",
   "w": 970,
   "h": 250,
   "set": "brand",
-  "label": "970×250"
+  "label": "970\u00d7250",
+  "id": "019"
  },
  {
   "file": "instantwins-brand-160x600.png",
   "w": 160,
   "h": 600,
   "set": "brand",
-  "label": "160×600"
+  "label": "160\u00d7600",
+  "id": "020"
  },
  {
   "file": "instantwins-brand-300x600.png",
   "w": 300,
   "h": 600,
   "set": "brand",
-  "label": "300×600"
+  "label": "300\u00d7600",
+  "id": "021"
  },
  {
   "file": "instantwins-brand-320x50.png",
   "w": 320,
   "h": 50,
   "set": "brand",
-  "label": "320×50"
+  "label": "320\u00d750",
+  "id": "022"
  },
  {
   "file": "instantwins-brand-320x100.png",
   "w": 320,
   "h": 100,
   "set": "brand",
-  "label": "320×100"
+  "label": "320\u00d7100",
+  "id": "023"
  },
  {
   "file": "instantwins-brand-468x60.png",
   "w": 468,
   "h": 60,
   "set": "brand",
-  "label": "468×60"
+  "label": "468\u00d760",
+  "id": "024"
  },
  {
   "file": "instantwins-brand-120x60.png",
   "w": 120,
   "h": 60,
   "set": "brand",
-  "label": "120×60"
+  "label": "120\u00d760",
+  "id": "025"
  },
  {
   "file": "instantwins-brand-1080x1080.png",
   "w": 1080,
   "h": 1080,
   "set": "brand",
-  "label": "1080×1080"
+  "label": "1080\u00d71080",
+  "id": "026"
  },
  {
   "file": "instantwins-brand-1200x628.png",
   "w": 1200,
   "h": 628,
   "set": "brand",
-  "label": "1200×628"
+  "label": "1200\u00d7628",
+  "id": "027"
  },
  {
   "file": "instantwins-brand-1080x1920.png",
   "w": 1080,
   "h": 1920,
   "set": "brand",
-  "label": "1080×1920"
+  "label": "1080\u00d71920",
+  "id": "028"
  }
 ]
