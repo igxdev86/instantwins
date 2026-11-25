@@ -36,6 +36,21 @@
  ],
  "redirects": [
   {
+   "source": "/play",
+   "destination": "/game.html?g=quick&demo=1",
+   "permanent": false
+  },
+  {
+   "source": "/demo",
+   "destination": "/game.html?g=quick&demo=1",
+   "permanent": false
+  },
+  {
+   "source": "/try",
+   "destination": "/game.html?g=quick&demo=1",
+   "permanent": false
+  },
+  {
    "source": "/balloonburst-instantwins.html",
    "destination": "/",
    "permanent": true
